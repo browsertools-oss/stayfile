@@ -353,7 +353,9 @@ const canonical = new URL(path, SITE.url).href;
   td { border-bottom: 1px solid var(--line); padding: 8px 16px; vertical-align: top; white-space: nowrap; max-width: 280px; overflow: hidden; text-overflow: ellipsis; font-family: var(--mono); font-size: 13px; color: var(--muted); }
 
   /* reserved for a future ad; stays empty and quiet until then */
-  .ad-slot { min-height: 120px; margin: 40px 0 8px; border: 1px dashed var(--line); border-radius: var(--r); }
+  /* Hidden while empty; filling it with an ad unit shows it. */
+  .ad-slot { margin: 40px 0 8px; }
+  .ad-slot:empty { display: none; }
   [hidden] { display: none !important; }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
