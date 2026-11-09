@@ -1,3 +1,3 @@
-- Open /excel-to-csv/ in a browser with a multi-sheet workbook and a file with dates, then move Excel to CSV to Shipped in the roadmap.
-- Find out whether the chunk-size warning in the build predates the Excel page, and whether SheetJS is what makes that chunk large.
-- Build PDF to JPG with pdf.js (Apache-2.0), lazy-loaded on that page only.
+- Build PDF to JPG with pdf.js (Apache-2.0, `npm install pdfjs-dist`), lazy-loaded on that page only, with a test for the page-to-image step.
+- Add a test in test/core.test.ts for Excel to CSV with a multi-sheet workbook and date cells, then move it to Shipped in the roadmap.
+- Find out whether the build's chunk-size warning comes from SheetJS, and split it out if so.
