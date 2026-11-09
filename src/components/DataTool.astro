@@ -1,0 +1,167 @@
+---
+import Drop from './Drop.astro';
+import type { Tool } from '../site';
+interface Props { tool: Tool }
+const { tool } = Astro.props;
+const fromJson = tool === 'json-to-csv';
+const accept = fromJson ? '.json,.jsonl,.ndjson,application/json,text/plain' : '.csv,.tsv,.txt,text/csv,text/plain';
+const what = fromJson ? 'a JSON file' : 'a CSV file';
+const placeholder = fromJson ? '[{"name": "Ada", "age": 36}, {"name": "Grace", "age": 85}]' : 'name,age\nAda,36\nGrace,85';
+const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .csv', 'csv-to-xlsx': 'Download .xlsx' }[tool as string];
+---
+<section class="tool" data-tool={tool}>
+  <Drop accept={accept} main={`Drop ${what} here, or <u>choose one</u>`} sub="or paste below" />
+  <ul class="files" id="list"></ul>
+  <label class="hint" for="input" style="display:block;margin:12px 0 6px">Or paste {fromJson ? 'JSON' : 'CSV'}</label>
+  <textarea id="input" rows="6" spellcheck="false" placeholder={placeholder}></textarea>
+
+  <div class="opts">
+    {!fromJson && (
+      <>
+        <label>Separator
+          <select id="delim">
+            <option value="">Detect</option>
+            <option value=",">Comma ,</option>
+            <option value=";">Semicolon ;</option>
+            <option value="&#9;">Tab</option>
+            <option value="|">Pipe |</option>
+          </select>
+        </label>
+        <label class="check"><input type="checkbox" id="header" checked /> First row is column names</label>
+        <label class="check"><input type="checkbox" id="text" /> Keep all values as text</label>
+      </>
+    )}
+    {fromJson && (
+      <label>Separator
+        <select id="delim">
+          <option value=",">Comma ,</option>
+          <option value=";">Semicolon ; (Excel in much of Europe)</option>
+          <option value="&#9;">Tab</option>
+        </select>
+      </label>
+    )}
+  </div>
+
+  <div class="actions">
+    <button type="button" class="primary" id="go" disabled>{outLabel}</button>
+    {tool !== 'csv-to-xlsx' && <button type="button" class="secondary" id="copy" disabled>Copy</button>}
+    <span class="status" id="status" aria-live="polite"></span>
+  </div>
+  <p class="error" id="err" role="alert" hidden></p>
+
+  <div class="preview" id="tableWrap" hidden><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
+  {tool === 'csv-to-json' && <textarea id="output" rows="12" readonly spellcheck="false" aria-label="JSON output" hidden style="margin-top:14px"></textarea>}
+</section>
+
+<script>
+  import { parseCsv, csvToJson, jsonRows, columns, jsonToCsv, type CsvOptions } from '../lib/data';
+  import { save, baseName } from '../lib/save';
+
+  const root = document.querySelector<HTMLElement>('.tool')!;
+  const tool = root.dataset.tool!;
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
+  const input = $<HTMLTextAreaElement>('input')!, drop = $('drop')!, go = $<HTMLButtonElement>('go')!, copy = $<HTMLButtonElement>('copy');
+  const status = $('status')!, err = $('err')!, list = $('list')!, out = $<HTMLTextAreaElement>('output');
+  const MAX_ROWS = 50;
+  let name = 'data';
+  let result = '';
+
+  const opts = (): CsvOptions => ({
+    delimiter: $<HTMLSelectElement>('delim')!.value,
+    header: $<HTMLInputElement>('header')?.checked ?? true,
+    typed: !($<HTMLInputElement>('text')?.checked ?? false),
+  });
+
+  function table(head: string[], rows: unknown[][]) {
+    const th = $('thead')!, tb = $('tbody')!;
+    th.innerHTML = ''; tb.innerHTML = '';
+    if (head.length) {
+      const tr = document.createElement('tr');
+      for (const h of head) { const c = document.createElement('th'); c.textContent = h; tr.append(c); }
+      th.append(tr);
+    }
+    for (const r of rows.slice(0, MAX_ROWS)) {
+      const tr = document.createElement('tr');
+      for (const v of r) { const c = document.createElement('td'); c.textContent = v == null ? '' : String(v); c.title = c.textContent; tr.append(c); }
+      tb.append(tr);
+    }
+    $('tableWrap')!.hidden = !rows.length;
+  }
+
+  function update() {
+    err.hidden = true;
+    const text = input.value;
+    result = '';
+    go.disabled = true;
+    if (copy) copy.disabled = true;
+    if (!text.trim()) { status.textContent = ''; table([], []); if (out) out.hidden = true; return; }
+    try {
+      if (tool === 'json-to-csv') {
+        const rows = jsonRows(text);
+        const cols = columns(rows);
+        result = jsonToCsv(text, { delimiter: $<HTMLSelectElement>('delim')!.value });
+        table(cols, rows.map((r) => cols.map((c) => r[c])));
+        status.textContent = `${rows.length} row${rows.length === 1 ? '' : 's'}, ${cols.length} column${cols.length === 1 ? '' : 's'}${rows.length > MAX_ROWS ? `. Preview shows the first ${MAX_ROWS}.` : '.'}`;
+      } else {
+        const o = opts();
+        const p = parseCsv(text, o);
+        const head = o.header ? p.fields : [];
+        const rows = o.header ? (p.rows as Record<string, unknown>[]).map((r) => head.map((h) => r[h])) : (p.rows as unknown[][]);
+        table(head, rows);
+        if (tool === 'csv-to-json') {
+          result = csvToJson(text, o);
+          out!.value = result.length > 200_000 ? result.slice(0, 200_000) + '\n… (preview cut short; the download has everything)' : result;
+          out!.hidden = false;
+        } else result = 'xlsx';
+        const sep = { ',': 'comma', ';': 'semicolon', '\t': 'tab', '|': 'pipe' }[p.delimiter] ?? `"${p.delimiter}"`;
+        status.textContent = `${rows.length} row${rows.length === 1 ? '' : 's'}, ${o.header ? `${head.length} columns, ` : ''}${sep}-separated${rows.length > MAX_ROWS ? `. Preview shows the first ${MAX_ROWS}.` : '.'}`;
+        if (p.warnings.length) { err.textContent = `Check these rows: ${p.warnings.join(' · ')}`; err.hidden = false; }
+      }
+      go.disabled = false;
+      if (copy) copy.disabled = false;
+    } catch (e) {
+      table([], []);
+      if (out) out.hidden = true;
+      status.textContent = '';
+      err.textContent = (e as Error).message;
+      err.hidden = false;
+    }
+  }
+
+  let timer = 0;
+  input.addEventListener('input', () => { clearTimeout(timer); timer = window.setTimeout(update, 250); });
+  root.querySelectorAll('select, input[type=checkbox]').forEach((el) => el.addEventListener('change', update));
+
+  drop.addEventListener('files', async (e) => {
+    const f = (e as CustomEvent<File[]>).detail[0];
+    name = baseName(f.name);
+    list.innerHTML = '';
+    const li = document.createElement('li');
+    li.innerHTML = '<span class="name"></span>';
+    li.querySelector('.name')!.textContent = f.name;
+    list.append(li);
+    input.value = await f.text();
+    update();
+  });
+
+  go.addEventListener('click', async () => {
+    if (tool === 'csv-to-json') save(new Blob([result], { type: 'application/json' }), `${name}.json`);
+    else if (tool === 'json-to-csv') save(new Blob(['﻿' + result], { type: 'text/csv' }), `${name}.csv`); // BOM so Excel reads UTF-8
+    else {
+      go.disabled = true;
+      status.textContent = 'Building workbook…';
+      try {
+        const { csvToXlsx } = await import('../lib/xlsx');
+        save(csvToXlsx(input.value, { ...opts(), sheetName: name }), `${name}.xlsx`, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        status.textContent = `Saved ${name}.xlsx.`;
+      } catch (e) {
+        err.textContent = (e as Error).message; err.hidden = false;
+      } finally { go.disabled = false; }
+    }
+  });
+
+  copy?.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(result); copy.textContent = 'Copied'; setTimeout(() => (copy.textContent = 'Copy'), 1500); }
+    catch { err.textContent = 'Your browser blocked copying. Use the download instead.'; err.hidden = false; }
+  });
+</script>

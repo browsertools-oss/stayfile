@@ -1,0 +1,39 @@
+---
+// File picker + drop target. Tool scripts listen for the 'files' event on #drop.
+interface Props {
+  accept: string;
+  multiple?: boolean;
+  main: string;
+  sub: string;
+}
+const { accept, multiple = false, main, sub } = Astro.props;
+---
+<label class="drop" id="drop" data-accept={accept}>
+  <input type="file" id="file" accept={accept} multiple={multiple} hidden />
+  <span class="drop-main" set:html={main} />
+  <span class="drop-sub">{sub}</span>
+</label>
+
+<script>
+  const drop = document.getElementById('drop')!;
+  const input = document.getElementById('file') as HTMLInputElement;
+  const emit = (list: FileList | null) => {
+    if (!list || !list.length) return;
+    drop.dispatchEvent(new CustomEvent('files', { detail: [...list] }));
+    input.value = '';
+  };
+  input.addEventListener('change', () => emit(input.files));
+  drop.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    drop.classList.add('over');
+  });
+  drop.addEventListener('dragleave', () => drop.classList.remove('over'));
+  drop.addEventListener('drop', (e) => {
+    e.preventDefault();
+    drop.classList.remove('over');
+    emit(e.dataTransfer?.files ?? null);
+  });
+  // Dropping a file anywhere else on the page would navigate away from it.
+  window.addEventListener('dragover', (e) => e.preventDefault());
+  window.addEventListener('drop', (e) => e.preventDefault());
+</script>

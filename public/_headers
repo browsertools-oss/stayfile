@@ -1,0 +1,6 @@
+# Cloudflare Pages headers. Cross-origin isolation lets the AVIF encoder use several threads.
+/*
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin

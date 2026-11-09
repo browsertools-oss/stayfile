@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://stayfile.example/sitemap-index.xml

@@ -1,0 +1,14 @@
+---
+import Base from '../../layouts/Base.astro';
+import { SITE } from '../../site';
+---
+<Base title={`Privacy | ${SITE.name}`} description="How Stayfile handles your files: they are processed in your browser and never uploaded." path="/privacy/">
+  <h1>Privacy</h1>
+  <p class="lede">The files you open on {SITE.name} are processed by your own browser. They are not uploaded, stored or seen by anyone running this site.</p>
+  <h2>Your files</h2>
+  <p>Each tool reads your file into the memory of the browser tab, does its work there, and gives you the result as a download. When you close the tab, the data is gone. There is no account and nothing to sign in to.</p>
+  <h2>What the site itself collects</h2>
+  <p>The site is made of plain static pages. Like any website, it is served by a web host that may keep standard request logs, such as IP address and browser type. We do not run analytics or ads, and the site sets no cookies.</p>
+  <h2>Changes</h2>
+  <p>If we ever add visit counting or ads, this page will be updated first. Your files will still never be uploaded.</p>
+</Base>

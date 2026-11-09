@@ -1,0 +1,70 @@
+name: daily-agent
+on:
+  schedule:
+    - cron: '47 14 * * *' # 6:47am Pacific, 30 min after SubFixer
+  workflow_dispatch:
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+concurrency: daily-agent
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm ci
+      - id: prompt
+        run: |
+          { echo 'text<<PROMPT_EOF'; cat .github/agent/daily.md; echo 'PROMPT_EOF'; } >> "$GITHUB_OUTPUT"
+      - uses: anthropics/claude-code-action@v1
+        env:
+          # OpenRouter's Anthropic-compatible endpoint. To move to Claude direct later:
+          # delete these three lines and set anthropic_api_key to an Anthropic key.
+          ANTHROPIC_BASE_URL: https://openrouter.ai/api
+          ANTHROPIC_AUTH_TOKEN: ${{ secrets.OPENROUTER_API_KEY }}
+          ANTHROPIC_API_KEY: ''
+          # Keep Claude Code's background calls on the same model so nothing bills elsewhere.
+          ANTHROPIC_DEFAULT_HAIKU_MODEL: ${{ vars.AGENT_MODEL || 'cohere/north-mini-code:free' }}
+          ANTHROPIC_DEFAULT_SONNET_MODEL: ${{ vars.AGENT_MODEL || 'cohere/north-mini-code:free' }}
+        with:
+          anthropic_api_key: ${{ secrets.OPENROUTER_API_KEY }}
+          prompt: ${{ steps.prompt.outputs.text }}
+          github_token: ${{ github.token }}
+          show_full_output: true
+          claude_args: >-
+            --model ${{ vars.AGENT_MODEL || 'cohere/north-mini-code:free' }}
+            --max-turns 60
+            --allowedTools "Bash(npm run build),Bash(npm test),Bash(git *),Bash(gh issue *),Read,Edit,Write,Glob,Grep"
+      - name: Commit the agent's work if tests and build pass
+        if: always()
+        run: |
+          git config user.name "stayfile-agent"
+          git config user.email "stayfile-agent@users.noreply.github.com"
+          if [ -n "$(git status --porcelain)" ]; then
+            if npm test && npm run build; then
+              git add -A
+              git commit -qm "Agent: daily update $(date -u +%F)" && git push -q
+            else
+              echo "Agent changes failed tests/build; discarded." | tee -a ops/discarded.txt
+              git checkout -- . && git clean -fdq -e ops/discarded.txt
+            fi
+          fi
+      - name: Daily report
+        if: always()
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create report --color 0E8A16 2>/dev/null || true
+          gh label create decision --color D93F0B 2>/dev/null || true
+          git pull --rebase -q || true
+          node scripts/report.mjs
+          git config user.name "stayfile-agent"
+          git config user.email "stayfile-agent@users.noreply.github.com"
+          git add ops/metrics.csv ops/.llm_usage_total 2>/dev/null || true
+          git commit -qm "Daily metrics $(date -u +%F)" -- ops/metrics.csv ops/.llm_usage_total && git push -q || true

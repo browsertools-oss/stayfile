@@ -1,0 +1,4 @@
+- Wait for the owner to pick a domain; until then, no deploy and no copy that names a URL.
+- Add a "PDF to JPG" page (needs pdf.js, Apache-2.0) only if the owner approves the extra ~1 MB bundle.
+- Look for rough edges in the image tools on large phone photos (memory, slow AVIF on browsers without threads).
+- Check every FAQ answer against what the code actually does.

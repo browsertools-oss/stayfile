@@ -1,0 +1,216 @@
+---
+import Drop from './Drop.astro';
+import type { Tool, Preset } from '../site';
+interface Props { tool: Tool; preset?: Preset }
+const { tool, preset = {} } = Astro.props;
+const accept = preset.accept ?? 'image/*,.jpg,.jpeg,.png,.webp,.gif,.avif,.bmp';
+const keepable = tool !== 'img-convert';
+const out = preset.out ?? (keepable ? 'keep' : 'image/jpeg');
+const formats = [
+  ...(keepable ? [{ v: 'keep', l: 'Same as original' }] : []),
+  { v: 'image/jpeg', l: 'JPG' },
+  { v: 'image/png', l: 'PNG' },
+  { v: 'image/webp', l: 'WebP' },
+  { v: 'image/avif', l: 'AVIF' },
+];
+const quality = tool === 'img-compress' ? 70 : 85;
+const action = { 'img-convert': 'Convert', 'img-compress': 'Compress', 'img-resize': 'Resize' }[tool as string];
+---
+<section class="tool" data-tool={tool}>
+  <ul class="files" id="list"></ul>
+  <Drop accept={accept} multiple main="Drop images here, or <u>choose files</u>" sub="JPG · PNG · WebP · GIF · AVIF" />
+
+  <div id="work" hidden>
+    <div class="opts">
+      <label>Save as
+        <select id="fmt">{formats.map((f) => <option value={f.v} selected={f.v === out}>{f.l}</option>)}</select>
+      </label>
+      <label id="qWrap">Quality <span><input type="range" id="q" min="10" max="100" step="1" value={quality} /> <output id="qv">{quality}</output></span></label>
+      {tool === 'img-compress' && (
+        <label>Maximum width
+          <select id="maxw">
+            <option value="">Keep size</option>
+            <option value="3840">3840 px</option>
+            <option value="2560">2560 px</option>
+            <option value="1920" selected>1920 px</option>
+            <option value="1280">1280 px</option>
+            <option value="800">800 px</option>
+          </select>
+        </label>
+      )}
+      {tool === 'img-resize' && (
+        <>
+          <div class="seg" role="radiogroup" aria-label="Resize by">
+            <label><input type="radio" name="by" value="px" checked /><span>Pixels</span></label>
+            <label><input type="radio" name="by" value="pct" /><span>Percent</span></label>
+          </div>
+          <label data-by="px">Width <input type="number" id="w" min="1" inputmode="numeric" placeholder="auto" /></label>
+          <label data-by="px">Height <input type="number" id="h" min="1" inputmode="numeric" placeholder="auto" /></label>
+          <label data-by="pct" hidden>Percent <input type="number" id="pct" min="1" max="1000" value="50" inputmode="numeric" /></label>
+          <label class="check" data-by="px"><input type="checkbox" id="keep" checked /> Keep proportions</label>
+          <label class="check" data-by="px"><input type="checkbox" id="up" /> Allow enlarging</label>
+        </>
+      )}
+      <p class="hint" id="fmtHint"></p>
+    </div>
+    <div class="actions">
+      <button type="button" class="primary" id="go">{action}</button>
+      <button type="button" class="secondary" id="all" hidden>Download all (.zip)</button>
+      <button type="button" class="link" id="reset">Start over</button>
+      <span class="status" id="status" aria-live="polite"></span>
+    </div>
+  </div>
+  <p class="error" id="err" role="alert" hidden></p>
+</section>
+
+<script>
+  import { process, renameTo, formatBytes, sizeChange, LOSSY, type OutType, type ResizeSpec } from '../lib/image';
+  import { save, zip } from '../lib/save';
+
+  const root = document.querySelector<HTMLElement>('.tool')!;
+  const tool = root.dataset.tool!;
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
+  const list = $('list')!, drop = $('drop')!, work = $('work')!, go = $<HTMLButtonElement>('go')!;
+  const status = $('status')!, err = $('err')!, all = $<HTMLButtonElement>('all')!;
+  const fmt = $<HTMLSelectElement>('fmt')!, q = $<HTMLInputElement>('q')!;
+
+  type Result = { blob: Blob; name: string; width: number; height: number; srcWidth: number; srcHeight: number; bigger: boolean };
+  type Item = { file: File; url: string; result?: Result; error?: string };
+  let items: Item[] = [];
+
+  const fail = (m: string) => { err.textContent = m; err.hidden = false; };
+  const outType = (f: File): OutType => {
+    if (fmt.value !== 'keep') return fmt.value as OutType;
+    return (['image/jpeg', 'image/png', 'image/webp', 'image/avif'].includes(f.type) ? f.type : 'image/png') as OutType;
+  };
+
+  function syncOpts() {
+    const v = fmt.value;
+    const lossy = v === 'keep' ? items.some((i) => i.file.type !== 'image/png') || !items.length : LOSSY.has(v as OutType);
+    $('qWrap')!.hidden = !lossy;
+    $('qv')!.textContent = q.value;
+    const hasPng = items.some((i) => i.file.type === 'image/png');
+    $('fmtHint')!.textContent =
+      v === 'image/avif' ? 'AVIF makes the smallest files but takes a few seconds per large photo.'
+      : v === 'image/jpeg' ? 'JPG has no transparency; transparent areas turn white.'
+      : tool === 'img-compress' && hasPng && (v === 'keep' || v === 'image/png') ? 'PNG is lossless, so it barely shrinks. Pick WebP, or JPG for photos, to save real space.'
+      : '';
+    if (tool === 'img-resize') {
+      const pct = root.querySelector<HTMLInputElement>('input[name=by]:checked')!.value === 'pct';
+      root.querySelectorAll<HTMLElement>('[data-by]').forEach((el) => (el.hidden = (el.dataset.by === 'pct') !== pct));
+    }
+  }
+  root.querySelectorAll('select, input').forEach((el) => el.addEventListener('input', () => { syncOpts(); markStale(); }));
+
+  function markStale() {
+    if (items.some((i) => i.result)) { items.forEach((i) => { i.result = undefined; i.error = undefined; }); render(); }
+  }
+
+  function render() {
+    list.innerHTML = '';
+    items.forEach((it, i) => {
+      const li = document.createElement('li');
+      const img = document.createElement('img');
+      img.className = 'thumb'; img.src = it.url; img.alt = '';
+      const name = document.createElement('span');
+      name.className = 'name'; name.textContent = it.result ? it.result.name : it.file.name;
+      const meta = document.createElement('span');
+      meta.className = 'meta';
+      if (it.error) { meta.className += ' warn'; meta.textContent = it.error; }
+      else if (it.result) {
+        const r = it.result;
+        const dims = r.width !== r.srcWidth ? `${r.srcWidth}×${r.srcHeight} → ${r.width}×${r.height} · ` : `${r.width}×${r.height} · `;
+        meta.innerHTML = `${dims}${formatBytes(it.file.size)} → ${formatBytes(r.blob.size)} <span class="${tool !== "img-compress" ? "" : r.bigger ? "warn" : "ok"}">${sizeChange(it.file.size, r.blob.size)}</span>`;
+      } else meta.textContent = formatBytes(it.file.size);
+      li.append(img, name, meta);
+      if (it.result) {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'icon'; b.textContent = 'Save';
+        b.setAttribute('aria-label', `Save ${it.result.name}`);
+        b.onclick = () => save(it.result!.blob, it.result!.name);
+        li.append(b);
+      }
+      const x = document.createElement('button');
+      x.type = 'button'; x.className = 'icon'; x.textContent = '✕'; x.title = 'Remove';
+      x.setAttribute('aria-label', `Remove ${it.file.name}`);
+      x.onclick = () => { URL.revokeObjectURL(it.url); items.splice(i, 1); render(); };
+      li.append(x);
+      list.append(li);
+    });
+    work.hidden = !items.length;
+    drop.classList.toggle('compact', items.length > 0);
+    const done = items.filter((i) => i.result);
+    all.hidden = done.length < 2;
+    syncOpts();
+  }
+
+  drop.addEventListener('files', (e) => {
+    err.hidden = true;
+    for (const file of (e as CustomEvent<File[]>).detail) {
+      if (!file.type.startsWith('image/') && !/\.(jpe?g|png|webp|gif|avif|bmp|heic)$/i.test(file.name)) { fail(`${file.name} is not an image.`); continue; }
+      items.push({ file, url: URL.createObjectURL(file) });
+    }
+    render();
+  });
+
+  $('reset')!.addEventListener('click', () => { items.forEach((i) => URL.revokeObjectURL(i.url)); items = []; err.hidden = true; status.textContent = ''; render(); });
+
+  function spec(): ResizeSpec | undefined {
+    if (tool === 'img-compress') {
+      const w = +$<HTMLSelectElement>('maxw')!.value;
+      return w ? { width: w, height: w * 4 } : undefined; // limit the long-ish side without forcing height
+    }
+    if (tool === 'img-resize') {
+      if (root.querySelector<HTMLInputElement>('input[name=by]:checked')!.value === 'pct') return { percent: +$<HTMLInputElement>('pct')!.value || 100 };
+      return {
+        width: +$<HTMLInputElement>('w')!.value || undefined,
+        height: +$<HTMLInputElement>('h')!.value || undefined,
+        keepAspect: $<HTMLInputElement>('keep')!.checked,
+        allowUpscale: $<HTMLInputElement>('up')!.checked,
+      };
+    }
+    return undefined;
+  }
+
+  go.addEventListener('click', async () => {
+    err.hidden = true;
+    const s = spec();
+    if (tool === 'img-resize' && s && !s.percent && !s.width && !s.height) return fail('Type a width, a height or both.');
+    go.disabled = true;
+    const t0 = performance.now();
+    let n = 0;
+    for (const it of items) {
+      n++;
+      status.textContent = `Working on ${n} of ${items.length}…`;
+      try {
+        const type = outType(it.file);
+        const r = await process(it.file, type, +q.value / 100, s);
+        const suffix = tool === 'img-compress' ? '-small' : tool === 'img-resize' ? `-${r.width}x${r.height}` : '';
+        const bigger = r.blob.size >= it.file.size;
+        // Compressing an already-small file in the same format can make it bigger. Hand back the original instead.
+        if (tool === 'img-compress' && bigger && type === it.file.type && r.width === r.srcWidth) {
+          it.result = { ...r, blob: it.file, name: it.file.name, bigger: false };
+        } else {
+          it.result = { ...r, name: renameTo(it.file.name, type, suffix), bigger };
+        }
+        it.error = undefined;
+      } catch (e) {
+        it.error = (e as Error).message;
+      }
+      render();
+    }
+    const ok = items.filter((i) => i.result);
+    const before = ok.reduce((a, i) => a + i.file.size, 0), after = ok.reduce((a, i) => a + i.result!.blob.size, 0);
+    status.textContent = ok.length
+      ? `${ok.length} done in ${((performance.now() - t0) / 1000).toFixed(1)} s. ${formatBytes(before)} → ${formatBytes(after)}.${tool === 'img-compress' && ok.some((i) => i.result!.bigger) ? ' Some files came out larger; keep the originals for those.' : ''}`
+      : '';
+    // Compress shows the new size first and lets you choose; the other tools save a single result right away.
+    if (ok.length === 1 && tool !== 'img-compress') save(ok[0].result!.blob, ok[0].result!.name);
+    go.disabled = false;
+  });
+
+  all.addEventListener('click', async () => {
+    const ok = items.filter((i) => i.result);
+    save(await zip(ok.map((i) => ({ name: i.result!.name, data: i.result!.blob }))), 'images.zip', 'application/zip');
+  });
+</script>

@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, PAGES, GROUPS } from '../site';
+const jsonld = [
+  { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: PAGES.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p.h1, url: new URL(`/${p.slug}/`, SITE.url).href })),
+  },
+];
+---
+<Base
+  title="Stayfile: PDF, image and CSV tools that never upload your files"
+  description="Merge and split PDFs, convert and compress images, and turn CSV into JSON or Excel. Everything runs in your browser, so your files stay on your device."
+  path="/"
+  jsonld={jsonld}
+>
+  <h1>File tools that keep your files on your device</h1>
+  <p class="lede">Each tool here runs inside your browser tab. The files you open are read and changed on your own computer, and none of them is uploaded.</p>
+  {GROUPS.map((g) => (
+    <section class="group">
+      <h2>{g}</h2>
+      <div class="grid">
+        {PAGES.filter((p) => p.group === g).map((p) => (
+          <a class="card" href={`/${p.slug}/`}>
+            <span class="t">{p.card}</span>
+            <span class="b">{p.blurb}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  ))}
+  <h2>How can it work without uploading?</h2>
+  <p class="prose">Your browser can already read files and run code, so the page brings the code to your file instead of sending your file to a server. When you open a PDF here, it is read into memory in this tab, changed there, and handed back to you as a download. Close the tab and it is gone. You can check this yourself: open your browser's developer tools, switch to the Network tab and watch while you use a tool. No file goes out.</p>
+</Base>
+<style>
+  .group h2 { margin-top: 40px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .card { display: flex; flex-direction: column; gap: 2px; padding: 14px 16px; background: var(--card); border: 1px solid var(--line); border-radius: calc(var(--radius) * 2); text-decoration: none; color: var(--ink); transition: border-color .15s, transform .15s; }
+  .card:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .card .t { font-weight: 650; }
+  .card .b { color: var(--muted); font-size: 14px; }
+  .prose { max-width: 66ch; color: var(--muted); }
+</style>
