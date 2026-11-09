@@ -1,8 +1,8 @@
 ---
 import Drop from './Drop.astro';
 import type { Tool, Preset } from '../site';
-interface Props { tool: Tool; preset?: Preset }
-const { tool, preset = {} } = Astro.props;
+interface Props { tool: Tool; preset?: Preset; slug: string }
+const { tool, preset = {}, slug } = Astro.props;
 const accept = preset.accept ?? 'image/*,.jpg,.jpeg,.png,.webp,.gif,.avif,.bmp';
 // Only the HEIC page loads the HEIC decoder.
 const heic = accept.includes('heic');
@@ -16,9 +16,8 @@ const formats = [
   { v: 'image/avif', l: 'AVIF' },
 ];
 const quality = tool === 'img-compress' ? 70 : 85;
-const action = { 'img-convert': 'Convert', 'img-compress': 'Compress', 'img-resize': 'Resize' }[tool as string];
 ---
-<section class="tool" data-tool={tool} data-heic={heic ? '' : undefined}>
+<section class="tool" data-tool={tool} data-heic={heic ? '' : undefined} data-slug={slug}>
   <ul class="files" id="list"></ul>
   <Drop accept={accept} multiple main="Drop images here, or <u>choose files</u>" sub={heic ? 'HEIC and HEIF photos from an iPhone or iPad' : 'JPG · PNG · WebP · GIF · AVIF'} />
 
@@ -56,30 +55,33 @@ const action = { 'img-convert': 'Convert', 'img-compress': 'Compress', 'img-resi
       <p class="hint" id="fmtHint"></p>
     </div>
     <div class="actions">
-      <button type="button" class="primary" id="go">{action}</button>
-      <button type="button" class="secondary" id="all" hidden>Download all (.zip)</button>
+      <button type="button" class="primary" id="go" disabled>Save</button>
       <button type="button" class="link" id="reset">Start over</button>
       <span class="status" id="status" aria-live="polite"></span>
     </div>
   </div>
+  <div class="done" id="done" role="status" hidden></div>
   <p class="error" id="err" role="alert" hidden></p>
 </section>
 
 <script>
   import { process, renameTo, formatBytes, sizeChange, LOSSY, type OutType, type ResizeSpec } from '../lib/image';
   import { save, zip } from '../lib/save';
+  import { savedLine } from '../lib/route';
+  import { showDone, hideDone } from '../lib/done';
 
   const root = document.querySelector<HTMLElement>('.tool')!;
   const tool = root.dataset.tool!;
   const heic = 'heic' in root.dataset;
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
   const list = $('list')!, drop = $('drop')!, work = $('work')!, go = $<HTMLButtonElement>('go')!;
-  const status = $('status')!, err = $('err')!, all = $<HTMLButtonElement>('all')!;
+  const status = $('status')!, err = $('err')!, doneEl = $('done')!;
   const fmt = $<HTMLSelectElement>('fmt')!, q = $<HTMLInputElement>('q')!;
 
   type Result = { blob: Blob; name: string; width: number; height: number; srcWidth: number; srcHeight: number; bigger: boolean };
   type Item = { file: File; url: string; result?: Result; resultUrl?: string; error?: string };
   let items: Item[] = [];
+  let busy = false, gen = 0, timer = 0;
 
   const fail = (m: string) => { err.textContent = m; err.hidden = false; };
   const outType = (f: File): OutType => {
@@ -98,6 +100,8 @@ const action = { 'img-convert': 'Convert', 'img-compress': 'Compress', 'img-resi
       : v === 'image/jpeg' ? 'JPG has no transparency; transparent areas turn white.'
       : tool === 'img-compress' && hasPng && (v === 'keep' || v === 'image/png') ? 'PNG is lossless, so it barely shrinks. Pick WebP, or JPG for photos, to save real space.'
       : '';
+    const maxw = $<HTMLSelectElement>('maxw')?.value;
+    if (maxw) $('fmtHint')!.textContent = `Photos wider than ${maxw} px are also scaled down to ${maxw} px. ${$('fmtHint')!.textContent}`.trim();
     if (tool === 'img-resize') {
       const pct = root.querySelector<HTMLInputElement>('input[name=by]:checked')!.value === 'pct';
       root.querySelectorAll<HTMLElement>('[data-by]').forEach((el) => (el.hidden = (el.dataset.by === 'pct') !== pct));
@@ -107,8 +111,11 @@ const action = { 'img-convert': 'Convert', 'img-compress': 'Compress', 'img-resi
 
   const forget = (it: Item) => { URL.revokeObjectURL(it.url); if (it.resultUrl) URL.revokeObjectURL(it.resultUrl); };
 
+  // Results are made as soon as files arrive and again whenever a setting changes, so the only button left is Save.
   function markStale() {
-    if (items.some((i) => i.result)) { items.forEach((i) => { i.result = undefined; i.error = undefined; }); render(); }
+    items.forEach((i) => { i.result = undefined; i.error = undefined; });
+    render();
+    schedule();
   }
 
   function render() {
@@ -128,7 +135,8 @@ const action = { 'img-convert': 'Convert', 'img-compress': 'Compress', 'img-resi
       else if (it.result) {
         const r = it.result;
         const dims = r.width !== r.srcWidth ? `${r.srcWidth}×${r.srcHeight} → ${r.width}×${r.height} · ` : `${r.width}×${r.height} · `;
-        meta.innerHTML = `${dims}${formatBytes(it.file.size)} → ${formatBytes(r.blob.size)} <span class="${tool !== "img-compress" ? "" : r.bigger ? "warn" : "ok"}">${sizeChange(it.file.size, r.blob.size)}</span>`;
+        // The percentage only matters when the point is a smaller file.
+        meta.innerHTML = `${dims}${formatBytes(it.file.size)} → ${formatBytes(r.blob.size)}${tool === 'img-compress' ? ` <span class="${r.bigger ? 'warn' : 'ok'}">${sizeChange(it.file.size, r.blob.size)}</span>` : ''}`;
       } else meta.textContent = formatBytes(it.file.size);
       li.append(img, name, meta);
       if (it.result) {
@@ -148,7 +156,9 @@ const action = { 'img-convert': 'Convert', 'img-compress': 'Compress', 'img-resi
     work.hidden = !items.length;
     drop.classList.toggle('compact', items.length > 0);
     const done = items.filter((i) => i.result);
-    all.hidden = done.length < 2;
+    go.disabled = !done.length || busy;
+    go.textContent = done.length > 1 ? `Save ${done.length} images (.zip)` : 'Save';
+    hideDone(doneEl);
     syncOpts();
   }
 
@@ -159,9 +169,10 @@ const action = { 'img-convert': 'Convert', 'img-compress': 'Compress', 'img-resi
       items.push({ file, url: URL.createObjectURL(file) });
     }
     render();
+    schedule(0);
   });
 
-  $('reset')!.addEventListener('click', () => { items.forEach(forget); items = []; err.hidden = true; status.textContent = ''; render(); });
+  $('reset')!.addEventListener('click', () => { gen++; busy = false; clearTimeout(timer); items.forEach(forget); items = []; err.hidden = true; status.textContent = ''; render(); });
 
   function spec(): ResizeSpec | undefined {
     if (tool === 'img-compress') {
@@ -180,19 +191,25 @@ const action = { 'img-convert': 'Convert', 'img-compress': 'Compress', 'img-resi
     return undefined;
   }
 
-  go.addEventListener('click', async () => {
+  function schedule(ms = 350) { clearTimeout(timer); timer = window.setTimeout(run, ms); }
+
+  async function run() {
     err.hidden = true;
+    if (!items.length) return;
     const s = spec();
-    if (tool === 'img-resize' && s && !s.percent && !s.width && !s.height) return fail('Type a width, a height or both.');
-    go.disabled = true;
+    if (tool === 'img-resize' && s && !s.percent && !s.width && !s.height) { status.textContent = 'Type a width, a height or both.'; return; }
+    const my = ++gen;
+    busy = true;
     const t0 = performance.now();
     let n = 0;
-    for (const it of items) {
+    const todo = items.filter((i) => !i.result && !i.error);
+    for (const it of todo) {
       n++;
-      status.textContent = `Working on ${n} of ${items.length}…`;
+      status.textContent = `Working on ${n} of ${todo.length}…`;
       try {
         const type = outType(it.file);
         const r = await process(it.file, type, +q.value / 100, s, heic);
+        if (my !== gen) return; // a setting changed meanwhile; the newer run takes over
         const suffix = tool === 'img-compress' ? '-small' : tool === 'img-resize' ? `-${r.width}x${r.height}` : '';
         const bigger = r.blob.size >= it.file.size;
         // Compressing an already-small file in the same format can make it bigger. Hand back the original instead.
@@ -204,22 +221,36 @@ const action = { 'img-convert': 'Convert', 'img-compress': 'Compress', 'img-resi
         if (heic) { if (it.resultUrl) URL.revokeObjectURL(it.resultUrl); it.resultUrl = URL.createObjectURL(it.result.blob); }
         it.error = undefined;
       } catch (e) {
+        if (my !== gen) return;
         it.error = (e as Error).message;
       }
       render();
     }
+    if (my !== gen) return;
+    busy = false;
     const ok = items.filter((i) => i.result);
     const before = ok.reduce((a, i) => a + i.file.size, 0), after = ok.reduce((a, i) => a + i.result!.blob.size, 0);
     status.textContent = ok.length
-      ? `${ok.length} done in ${((performance.now() - t0) / 1000).toFixed(1)} s. ${formatBytes(before)} → ${formatBytes(after)}.${tool === 'img-compress' && ok.some((i) => i.result!.bigger) ? ' Some files came out larger; keep the originals for those.' : ''}`
+      ? `Ready${n ? ` in ${((performance.now() - t0) / 1000).toFixed(1)} s` : ''}. ${formatBytes(before)} → ${formatBytes(after)}.${tool === 'img-compress' && ok.some((i) => i.result!.bigger) ? ' Some files came out larger; keep the originals for those.' : ''}`
       : '';
-    // Compress shows the new size first and lets you choose; the other tools save a single result right away.
-    if (ok.length === 1 && tool !== 'img-compress') save(ok[0].result!.blob, ok[0].result!.name);
-    go.disabled = false;
-  });
+    render();
+  }
 
-  all.addEventListener('click', async () => {
+  go.addEventListener('click', async () => {
     const ok = items.filter((i) => i.result);
-    save(await zip(ok.map((i) => ({ name: i.result!.name, data: i.result!.blob }))), 'images.zip', 'application/zip');
+    if (!ok.length) return;
+    let again: () => void, line: string, result: File | undefined;
+    if (ok.length === 1) {
+      const r = ok[0].result!;
+      again = () => save(r.blob, r.name);
+      line = savedLine(r.name);
+      result = new File([r.blob], r.name, { type: r.blob.type });
+    } else {
+      const data = await zip(ok.map((i) => ({ name: i.result!.name, data: i.result!.blob })));
+      again = () => save(data, 'images.zip', 'application/zip');
+      line = savedLine('images.zip', ok.length);
+    }
+    again();
+    showDone({ el: doneEl, slug: root.dataset.slug!, line, again, result });
   });
 </script>

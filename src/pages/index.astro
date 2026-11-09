@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Silhouette from '../components/Silhouette.astro';
+import Drop from '../components/Drop.astro';
 import { SITE, PAGES, GROUPS, GROUP_ID } from '../site';
 const jsonld = [
   { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url },
@@ -21,6 +22,15 @@ const jsonld = [
     <div class="wall">
       <h1>File tools that keep your files on your device</h1>
       <p class="lede">Each tool here runs inside your browser tab. The files you open are read and changed on your own computer, and none of them is uploaded.</p>
+      <section class="tool start" data-family="any" aria-label="Start with your files">
+        <Drop accept=".pdf,image/*,.heic,.heif,.csv,.tsv,.json,.jsonl,.ndjson" multiple take={false} main="Drop files here, or <u>choose files</u>" sub="PDF · images · iPhone photos · CSV · JSON. You pick what to do next." />
+        <div class="routes" id="routes" hidden>
+          <p class="routes-line" id="routesLine" aria-live="polite"></p>
+          <div class="routes-row" id="routesRow"></div>
+          <button type="button" class="link" id="routesReset">Choose other files</button>
+        </div>
+      </section>
+      <p class="or">Or pick a tool</p>
       <div class="zones">
         {GROUPS.map((g) => (
           <section class="zone" id={GROUP_ID[g]} aria-labelledby={`g-${GROUP_ID[g]}`}>
@@ -58,7 +68,52 @@ const jsonld = [
     </div>
   </section>
 </Base>
+<script>
+  import { suggestTools, describeDrop } from '../lib/route';
+  import { handOff } from '../lib/handoff';
+  const drop = document.getElementById('drop')!;
+  const routes = document.getElementById('routes')!;
+  const row = document.getElementById('routesRow')!;
+  const line = document.getElementById('routesLine')!;
+  let held: File[] = [];
+  function show(files: File[]) {
+    held = files;
+    const opts = suggestTools(files);
+    row.innerHTML = '';
+    if (!opts.length) {
+      line.textContent = 'No single tool here takes all of these together. Try one kind of file at a time.';
+    } else if (opts.length === 1) {
+      // Only one thing to do, so do it.
+      line.textContent = `Opening ${opts[0].label.toLowerCase()}…`;
+      handOff(files, opts[0].slug);
+    } else {
+      line.textContent = describeDrop(files);
+      for (const [i, r] of opts.entries()) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = i === 0 ? 'primary' : 'chip';
+        b.textContent = r.label;
+        b.onclick = () => { b.disabled = true; handOff(held, r.slug); };
+        row.append(b);
+      }
+    }
+    routes.hidden = false;
+    drop.classList.add('compact');
+    row.querySelector<HTMLButtonElement>('button')?.focus();
+  }
+  drop.addEventListener('files', (e) => show((e as CustomEvent<File[]>).detail));
+  document.getElementById('routesReset')!.addEventListener('click', () => {
+    held = []; routes.hidden = true; drop.classList.remove('compact');
+    (document.getElementById('file') as HTMLInputElement).click();
+  });
+</script>
 <style>
+  .start { margin: 0 0 12px; }
+  .routes { padding-top: 16px; display: grid; gap: 12px; justify-items: start; }
+  .routes-line { margin: 0; font-weight: 700; }
+  .routes-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .routes .link { height: 36px; padding: 0; }
+  .or { margin: 28px 0 16px; font-weight: 700; font-stretch: 108%; color: var(--paint-muted); }
   .home { padding-bottom: 56px; }
   .zones { display: grid; gap: 28px; }
   .zone { display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 16px 24px; align-items: start; }

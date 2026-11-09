@@ -1,19 +1,22 @@
 ---
 import Drop from './Drop.astro';
 import type { Tool } from '../site';
-interface Props { tool: Tool }
-const { tool } = Astro.props;
+interface Props { tool: Tool; slug: string }
+const { tool, slug } = Astro.props;
 const fromJson = tool === 'json-to-csv';
 const accept = fromJson ? '.json,.jsonl,.ndjson,application/json,text/plain' : '.csv,.tsv,.txt,text/csv,text/plain';
 const what = fromJson ? 'a JSON file' : 'a CSV file';
 const placeholder = fromJson ? '[{"name": "Ada", "age": 36}, {"name": "Grace", "age": 85}]' : 'name,age\nAda,36\nGrace,85';
 const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .csv', 'csv-to-xlsx': 'Download .xlsx' }[tool as string];
 ---
-<section class="tool" data-tool={tool}>
+<section class="tool" data-tool={tool} data-slug={slug}>
   <Drop accept={accept} main={`Drop ${what} here, or <u>choose one</u>`} sub="or paste below" />
   <ul class="files" id="list"></ul>
-  <label class="hint" for="input" style="display:block;margin:12px 0 6px">Or paste {fromJson ? 'JSON' : 'CSV'}</label>
-  <textarea id="input" rows="6" spellcheck="false" placeholder={placeholder}></textarea>
+  <div id="pasteWrap">
+    <label class="hint" for="input" style="display:block;margin:12px 0 6px">Or paste {fromJson ? 'JSON' : 'CSV'}</label>
+    <textarea id="input" rows="6" spellcheck="false" placeholder={placeholder}></textarea>
+  </div>
+  <button type="button" class="link" id="showText" hidden>Edit the text</button>
 
   <div class="opts">
     {!fromJson && (
@@ -47,6 +50,7 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
     {tool !== 'csv-to-xlsx' && <button type="button" class="secondary" id="copy" disabled>Copy</button>}
     <span class="status" id="status" aria-live="polite"></span>
   </div>
+  <div class="done" id="done" role="status" hidden></div>
   <p class="error" id="err" role="alert" hidden></p>
 
   <div class="preview" id="tableWrap" hidden><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
@@ -56,6 +60,8 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
 <script>
   import { parseCsv, csvToJson, jsonRows, columns, jsonToCsv, type CsvOptions } from '../lib/data';
   import { save, baseName } from '../lib/save';
+  import { savedLine } from '../lib/route';
+  import { showDone, hideDone } from '../lib/done';
 
   const root = document.querySelector<HTMLElement>('.tool')!;
   const tool = root.dataset.tool!;
@@ -90,6 +96,7 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
 
   function update() {
     err.hidden = true;
+    hideDone($('done'));
     const text = input.value;
     result = '';
     go.disabled = true;
@@ -141,19 +148,40 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
     li.querySelector('.name')!.textContent = f.name;
     list.append(li);
     input.value = await f.text();
+    // The file is loaded: shrink the drop zone and fold the raw text away so Download sits right under the settings.
+    drop.classList.add('compact');
+    $('pasteWrap')!.hidden = true;
+    $('showText')!.hidden = false;
     update();
   });
+  $('showText')!.addEventListener('click', () => {
+    $('pasteWrap')!.hidden = false;
+    $('showText')!.hidden = true;
+    input.focus();
+  });
 
+  const done = (blob: Blob, file: string) => {
+    save(blob, file);
+    showDone({
+      el: $('done')!, slug: root.dataset.slug!, line: savedLine(file), again: () => save(blob, file),
+      reset: () => {
+        input.value = ''; list.innerHTML = ''; name = 'data';
+        drop.classList.remove('compact'); $('pasteWrap')!.hidden = false; $('showText')!.hidden = true;
+        update();
+      },
+    });
+  };
   go.addEventListener('click', async () => {
-    if (tool === 'csv-to-json') save(new Blob([result], { type: 'application/json' }), `${name}.json`);
-    else if (tool === 'json-to-csv') save(new Blob(['﻿' + result], { type: 'text/csv' }), `${name}.csv`); // BOM so Excel reads UTF-8
+    if (tool === 'csv-to-json') done(new Blob([result], { type: 'application/json' }), `${name}.json`);
+    else if (tool === 'json-to-csv') done(new Blob(['﻿' + result], { type: 'text/csv' }), `${name}.csv`); // BOM so Excel reads UTF-8
     else {
       go.disabled = true;
       status.textContent = 'Building workbook…';
       try {
         const { csvToXlsx } = await import('../lib/xlsx');
-        save(csvToXlsx(input.value, { ...opts(), sheetName: name }), `${name}.xlsx`, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        status.textContent = `Saved ${name}.xlsx.`;
+        const bytes = csvToXlsx(input.value, { ...opts(), sheetName: name });
+        status.textContent = '';
+        done(new Blob([bytes as BlobPart], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), `${name}.xlsx`);
       } catch (e) {
         err.textContent = (e as Error).message; err.hidden = false;
       } finally { go.disabled = false; }
