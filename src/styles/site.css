@@ -224,7 +224,7 @@ output { font-family: var(--font-outlier); font-weight: 600; font-variant-numeri
 .routes .primary { min-height: 44px; font-size: var(--text-md); padding: 0 var(--space-lg); }
 
 /* results */
-.done { margin-top: var(--space-md); padding: var(--space-sm) var(--space-md); background: var(--color-field); border: 2px solid var(--color-ink); border-top-width: var(--rule-bar); display: grid; gap: var(--space-xs); }
+.done { margin-top: var(--space-md); padding: var(--space-sm) var(--space-md); background: var(--color-field); border: 2px solid var(--color-ink); border-left-width: 8px; display: grid; gap: var(--space-xs); }
 .done-line { margin: 0; font-weight: 700; color: var(--color-ink); }
 .done-row { display: flex; flex-wrap: wrap; gap: var(--space-xs) var(--space-sm); align-items: center; }
 .done-row .link { padding: 0 var(--space-2xs); }
