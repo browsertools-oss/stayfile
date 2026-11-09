@@ -1,6 +1,7 @@
 ---
 import Drop from './Drop.astro';
 import type { Tool, Preset } from '../site';
+import { splitButtons } from '../lib/route';
 interface Props { tool: Tool; preset?: Preset; slug: string }
 const { tool, preset = {}, slug } = Astro.props;
 const multi = tool === 'pdf-merge' || tool === 'img-to-pdf';
@@ -9,6 +10,12 @@ const accept = isImg ? 'image/*,.jpg,.jpeg,.png,.webp,.gif,.avif,.heic' : 'appli
 const main = multi ? `Drop ${isImg ? 'images' : 'PDF files'} here, or <u>choose files</u>` : 'Drop a PDF here, or <u>choose one</u>';
 const sub = isImg ? 'JPG · PNG · WebP · GIF' : multi ? 'Add as many as you like' : 'One PDF';
 const split = preset.split ?? 'ranges';
+// Rotate and split: each choice is its own button that does the job, so there is no pick-then-confirm step.
+const runs = tool === 'pdf-rotate'
+  ? [{ v: '90', l: '↻ Turn right' }, { v: '270', l: '↺ Turn left' }, { v: '180', l: 'Turn upside down' }]
+  : tool === 'pdf-split'
+    ? splitButtons(split)
+    : [];
 const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? 'Extract pages' : 'Split PDF', 'pdf-rotate': 'Rotate and save', 'img-to-pdf': 'Make PDF' }[tool as string];
 ---
 <section class="tool" data-tool={tool} data-split={split} data-slug={slug}>
@@ -18,11 +25,6 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
   <div id="work" hidden>
     {tool === 'pdf-split' && (
       <div class="opts">
-        <div class="seg" role="radiogroup" aria-label="How to split">
-          <label><input type="radio" name="split" value="extract" checked={split === 'extract'} /><span>Pages into one PDF</span></label>
-          <label><input type="radio" name="split" value="ranges" checked={split === 'ranges'} /><span>Each range a file</span></label>
-          <label><input type="radio" name="split" value="every" checked={split === 'every'} /><span>Every page a file</span></label>
-        </div>
         <label class="full" id="rangeWrap">Pages
           <input id="ranges" placeholder="e.g. 1-3, 5, 8-" autocomplete="off" />
         </label>
@@ -31,11 +33,6 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
     )}
     {tool === 'pdf-rotate' && (
       <div class="opts">
-        <div class="seg" role="radiogroup" aria-label="Rotation">
-          <label><input type="radio" name="rot" value="90" checked /><span>↻ 90° right</span></label>
-          <label><input type="radio" name="rot" value="180" /><span>180°</span></label>
-          <label><input type="radio" name="rot" value="270" /><span>↺ 90° left</span></label>
-        </div>
         <label>Pages <input id="ranges" placeholder="All pages" autocomplete="off" /></label>
         <p class="hint">Leave pages empty to turn every page, or type some, like 2, 4-6.</p>
       </div>
@@ -60,7 +57,9 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
       </div>
     )}
     <div class="actions">
-      <button type="button" class="primary" id="go">{action}</button>
+      {runs.length
+        ? runs.map((r, i) => <button type="button" class={i === 0 ? 'primary' : 'secondary'} data-run={r.v}>{r.l}</button>)
+        : <button type="button" class="primary" id="go" data-run="">{action}</button>}
       <button type="button" class="link" id="reset">Start over</button>
       <span class="status" id="status" aria-live="polite"></span>
     </div>
@@ -81,7 +80,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
   const multi = tool === 'pdf-merge' || tool === 'img-to-pdf';
   const isImg = tool === 'img-to-pdf';
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
-  const list = $('list')!, drop = $('drop')!, work = $('work')!, go = $<HTMLButtonElement>('go')!;
+  const list = $('list')!, drop = $('drop')!, work = $('work')!, runBtns = [...root.querySelectorAll<HTMLButtonElement>('[data-run]')];
   const status = $('status')!, err = $('err')!;
   const ranges = $<HTMLInputElement>('ranges');
 
@@ -126,7 +125,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
     drop.classList.toggle('compact', items.length > 0);
     drop.hidden = !multi && items.length > 0;
     const need = tool === 'pdf-merge' ? 2 : 1;
-    go.disabled = items.length < need;
+    runBtns.forEach((b) => (b.disabled = items.length < need));
     if (tool === 'pdf-merge' && items.length === 1) status.textContent = 'Add at least one more PDF.';
     else if (!status.dataset.busy) status.textContent = '';
     updateHint();
@@ -154,19 +153,15 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
 
   $('reset')!.addEventListener('click', () => { items.forEach((i) => i.url && URL.revokeObjectURL(i.url)); items = []; clear(); render(); });
 
-  const mode = () => (root.querySelector<HTMLInputElement>('input[name=split]:checked')?.value ?? 'ranges');
+  // Which button was pressed: a split mode or a rotation in degrees.
+  let choice = '';
+  const mode = () => choice || 'ranges';
   function updateHint() {
     if (tool !== 'pdf-split') return;
-    const m = mode();
-    $('rangeWrap')!.hidden = m === 'every';
     const n = items[0]?.pages;
-    $('splitHint')!.textContent =
-      m === 'extract' ? 'Type the pages to keep, in the order you want them. Example: 1-3, 7.'
-      : m === 'ranges' ? 'Each range becomes its own PDF. Example: 1-5, 6-10, 11-.'
-      : n ? `You will get ${n} one-page PDFs in a zip.` : 'Each page becomes its own PDF.';
+    $('splitHint')!.textContent = `Type pages like 1-3, 7, then save them as one PDF or each range as its own file.${n ? ` Every page a file gives ${n} one-page PDFs in a zip.` : ''}`;
   }
   $('size')?.addEventListener('change', () => ($('marginWrap')!.hidden = $<HTMLSelectElement>('size')!.value === 'fit'));
-  root.querySelectorAll('input[name=split]').forEach((r) => r.addEventListener('change', updateHint));
 
   // PDF can hold JPG and PNG directly. Anything else is redrawn and saved as a high-quality JPG.
   async function asPdfImage(f: File): Promise<ImageInput> {
@@ -186,11 +181,13 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
   let last: { data: Uint8Array; name: string; type: string; count: number } | null = null;
   const put = (data: Uint8Array, name: string, type: string, count = 1) => { last = { data, name, type, count }; save(data, name, type); };
 
-  go.addEventListener('click', async () => {
+  runBtns.forEach((b) => b.addEventListener('click', () => run(b.dataset.run!)));
+  async function run(pressed: string) {
+    choice = pressed;
     clear();
     hideDone($('done'));
     last = null;
-    go.disabled = true;
+    runBtns.forEach((b) => (b.disabled = true));
     status.dataset.busy = '1';
     status.textContent = 'Working…';
     const t0 = performance.now();
@@ -204,7 +201,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
         put(out, mergedName(first.file.name), pdf);
         done = `Merged ${items.length} files, ${items.reduce((a, i) => a + (i.pages ?? 0), 0)} pages.`;
       } else if (tool === 'pdf-rotate') {
-        const by = +(root.querySelector<HTMLInputElement>('input[name=rot]:checked')!.value);
+        const by = +choice || 90;
         const sel = ranges!.value.trim() ? parseRanges(ranges!.value, first.pages!).flat() : undefined;
         put(await rotate(await first.file.arrayBuffer(), by, sel), `${name}-rotated.pdf`, pdf);
         done = `Rotated ${sel ? sel.length : first.pages} page${(sel ? sel.length : first.pages) === 1 ? '' : 's'}.`;
@@ -256,7 +253,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
       fail((e as Error).message || 'Something went wrong with this file.');
     } finally {
       delete status.dataset.busy;
-      go.disabled = false;
+      runBtns.forEach((b) => (b.disabled = false));
     }
-  });
+  }
 </script>

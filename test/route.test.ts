@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { kindOf, suggestTools, describeDrop, nextTools, mergedName, savedLine } from '../src/lib/route';
+import { kindOf, suggestTools, describeDrop, nextTools, mergedName, savedLine, splitButtons } from '../src/lib/route';
 import { PAGES } from '../src/site';
 
 const f = (name: string, type = '') => ({ name, type });
@@ -87,5 +87,17 @@ describe('names and lines', () => {
   test('copy has no em or en dashes', () => {
     const text = [describeDrop([f('a.pdf')]), ...PAGES.flatMap((p) => nextTools(p.slug).map((r) => r.label)), ...suggestTools([f('a.jpg')]).map((r) => r.label)];
     for (const t of text) expect(t).not.toMatch(/[–—]/);
+  });
+});
+
+describe('splitButtons', () => {
+  test('gives one save button per split mode, with the page preset first', () => {
+    expect(splitButtons('ranges').map((b) => b.v)).toEqual(['ranges', 'extract', 'every']);
+    expect(splitButtons('extract').map((b) => b.v)).toEqual(['extract', 'ranges', 'every']);
+    expect(splitButtons('every')[0].v).toBe('every');
+    expect(splitButtons('nonsense')[0].v).toBe('ranges');
+  });
+  test('labels each button with what it saves, so no confirm step is needed', () => {
+    for (const b of splitButtons('ranges')) expect(b.l).toMatch(/^Save /);
   });
 });

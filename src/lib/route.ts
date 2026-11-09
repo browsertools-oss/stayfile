@@ -95,3 +95,17 @@ export function mergedName(first: string): string {
 export function savedLine(name: string, count = 1): string {
   return count > 1 ? `Saved ${name} with ${count} files inside.` : `Saved ${name}.`;
 }
+
+/**
+ * The split page's save buttons. Each one does the job in one click; the page's own mode comes first
+ * so the extract preset leads with "one PDF" and the split preset with "each range".
+ */
+export function splitButtons(preset: string): { v: string; l: string }[] {
+  const all = [
+    { v: 'ranges', l: 'Save each range as a file' },
+    { v: 'extract', l: 'Save pages as one PDF' },
+    { v: 'every', l: 'Save every page as a file' },
+  ];
+  const lead = all.find((b) => b.v === preset) ?? all[0];
+  return [lead, ...all.filter((b) => b !== lead)];
+}
