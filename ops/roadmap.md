@@ -8,8 +8,10 @@ Same model as SubFixer: free tools for traffic, a paid tier later on the tools t
 
 ## Next tools (in order, each must stay client-side and permissively licensed)
 - PDF to JPG and PDF page previews (pdf.js, Apache-2.0).
-- HEIC to JPG (heic-to, LGPL-3.0: allowed if served as a separate, unmodified file with a notice; owner to confirm).
 - Excel to CSV (SheetJS, already bundled).
+
+## Shipped
+- HEIC to JPG (Nov 8th, 2026) at /heic-to-jpg/. Decoder is libheif-js 1.23.5 (LGPL-3.0), served unmodified as its own file at /vendor/libheif/1.23.5/ with its license and a notice. It is copied there from node_modules at build time and only loaded on that page when the browser can't open the photo itself.
 
 ## Not allowed
 - AGPL or GPL code (MuPDF, Ghostscript, BentoPDF, AGPL wasm builds of any of these).

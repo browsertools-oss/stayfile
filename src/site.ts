@@ -273,6 +273,42 @@ export const PAGES: ToolPage[] = [
     ],
   },
   {
+    slug: 'heic-to-jpg',
+    tool: 'img-convert',
+    group: 'Images',
+    card: 'HEIC to JPG',
+    blurb: 'Turn iPhone photos into JPG',
+    preset: { out: 'image/jpeg', accept: 'image/heic,image/heif,.heic,.heif' },
+    title: 'HEIC to JPG converter for iPhone photos',
+    h1: 'Convert HEIC to JPG',
+    lede: "iPhones save photos as HEIC, which many Windows apps and upload forms won't open. Turn them into ordinary JPG files, one photo or a whole batch.",
+    description: 'Convert iPhone HEIC photos to JPG in your browser, one at a time or in a batch. Your photos are never uploaded.',
+    steps: [
+      'Drop in your .heic files.',
+      'JPG is already selected. Move the quality slider if you want smaller files.',
+      'Click Convert, then save each photo or all of them as a zip.',
+    ],
+    faq: [
+      {
+        q: 'Why does my iPhone save HEIC photos?',
+        a: "A HEIC file is about half the size of a JPG at the same quality, so it takes less room on the phone. Many apps outside Apple's still can't open them, though.",
+      },
+      {
+        q: 'Will the JPG look worse?',
+        a: 'Slightly, as with any JPG. At the default quality of 85 the difference is hard to see. Move the slider up to 95 to keep more detail.',
+      },
+      {
+        q: 'Does the JPG keep the location and camera details?',
+        a: 'No. The JPG is drawn fresh from the pixels, so the date, location and camera details are left out.',
+      },
+      {
+        q: 'Why does the first photo take longer?',
+        a: "Most browsers can't read HEIC on their own, so the page downloads a decoder the first time you convert. Safari reads HEIC itself and skips this step.",
+      },
+      PRIVATE,
+    ],
+  },
+  {
     slug: 'jpg-to-webp',
     tool: 'img-convert',
     group: 'Images',

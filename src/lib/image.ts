@@ -1,6 +1,8 @@
 // Image helpers. The math and naming are pure (tested); encode/decode use the browser's canvas,
 // with jSquash (Apache-2.0, Squoosh's codecs) for AVIF and for WebP where the browser can't encode it.
 
+import { isHeic, decodeHeic, loadHeif } from './heic';
+
 export type OutType = 'image/jpeg' | 'image/png' | 'image/webp' | 'image/avif';
 
 export const EXT: Record<OutType, string> = {
@@ -71,10 +73,15 @@ export const avifQuality = (q: number) => Math.max(1, Math.min(100, Math.round(q
 
 // ---------- browser-only below ----------
 
-export async function decode(file: Blob): Promise<ImageBitmap> {
+/** heic: let HEIC files fall back to libheif when the browser can't open them (Safari can; Chrome and Firefox can't). */
+export async function decode(file: Blob, heic = false): Promise<ImageBitmap> {
   try {
     return await createImageBitmap(file);
   } catch {
+    if (heic && isHeic(file as File)) {
+      const px = await decodeHeic(await loadHeif(), new Uint8Array(await file.arrayBuffer()));
+      return createImageBitmap(new ImageData(px.data, px.width, px.height));
+    }
     throw new Error('This browser cannot open that image. Try a JPG, PNG, WebP, GIF or AVIF file.');
   }
 }
@@ -133,8 +140,8 @@ export async function encode(c: HTMLCanvasElement, type: OutType, quality = 0.8)
 }
 
 /** Full pipeline for one file. JPEG has no transparency, so it gets a white background. */
-export async function process(file: Blob, type: OutType, quality: number, size?: ResizeSpec): Promise<{ blob: Blob; width: number; height: number; srcWidth: number; srcHeight: number }> {
-  const bmp = await decode(file);
+export async function process(file: Blob, type: OutType, quality: number, size?: ResizeSpec, heic = false): Promise<{ blob: Blob; width: number; height: number; srcWidth: number; srcHeight: number }> {
+  const bmp = await decode(file, heic);
   const t = size ? targetSize(bmp.width, bmp.height, size) : { width: bmp.width, height: bmp.height };
   const c = draw(bmp, t.width, t.height, type === 'image/jpeg');
   const blob = await encode(c, type, quality);

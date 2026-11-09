@@ -4,6 +4,8 @@ import type { Tool, Preset } from '../site';
 interface Props { tool: Tool; preset?: Preset }
 const { tool, preset = {} } = Astro.props;
 const accept = preset.accept ?? 'image/*,.jpg,.jpeg,.png,.webp,.gif,.avif,.bmp';
+// Only the HEIC page loads the HEIC decoder.
+const heic = accept.includes('heic');
 const keepable = tool !== 'img-convert';
 const out = preset.out ?? (keepable ? 'keep' : 'image/jpeg');
 const formats = [
@@ -16,9 +18,9 @@ const formats = [
 const quality = tool === 'img-compress' ? 70 : 85;
 const action = { 'img-convert': 'Convert', 'img-compress': 'Compress', 'img-resize': 'Resize' }[tool as string];
 ---
-<section class="tool" data-tool={tool}>
+<section class="tool" data-tool={tool} data-heic={heic ? '' : undefined}>
   <ul class="files" id="list"></ul>
-  <Drop accept={accept} multiple main="Drop images here, or <u>choose files</u>" sub="JPG · PNG · WebP · GIF · AVIF" />
+  <Drop accept={accept} multiple main="Drop images here, or <u>choose files</u>" sub={heic ? 'HEIC and HEIF photos from an iPhone or iPad' : 'JPG · PNG · WebP · GIF · AVIF'} />
 
   <div id="work" hidden>
     <div class="opts">
@@ -69,13 +71,14 @@ const action = { 'img-convert': 'Convert', 'img-compress': 'Compress', 'img-resi
 
   const root = document.querySelector<HTMLElement>('.tool')!;
   const tool = root.dataset.tool!;
+  const heic = 'heic' in root.dataset;
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
   const list = $('list')!, drop = $('drop')!, work = $('work')!, go = $<HTMLButtonElement>('go')!;
   const status = $('status')!, err = $('err')!, all = $<HTMLButtonElement>('all')!;
   const fmt = $<HTMLSelectElement>('fmt')!, q = $<HTMLInputElement>('q')!;
 
   type Result = { blob: Blob; name: string; width: number; height: number; srcWidth: number; srcHeight: number; bigger: boolean };
-  type Item = { file: File; url: string; result?: Result; error?: string };
+  type Item = { file: File; url: string; result?: Result; resultUrl?: string; error?: string };
   let items: Item[] = [];
 
   const fail = (m: string) => { err.textContent = m; err.hidden = false; };
@@ -102,6 +105,8 @@ const action = { 'img-convert': 'Convert', 'img-compress': 'Compress', 'img-resi
   }
   root.querySelectorAll('select, input').forEach((el) => el.addEventListener('input', () => { syncOpts(); markStale(); }));
 
+  const forget = (it: Item) => { URL.revokeObjectURL(it.url); if (it.resultUrl) URL.revokeObjectURL(it.resultUrl); };
+
   function markStale() {
     if (items.some((i) => i.result)) { items.forEach((i) => { i.result = undefined; i.error = undefined; }); render(); }
   }
@@ -111,7 +116,10 @@ const action = { 'img-convert': 'Convert', 'img-compress': 'Compress', 'img-resi
     items.forEach((it, i) => {
       const li = document.createElement('li');
       const img = document.createElement('img');
-      img.className = 'thumb'; img.src = it.url; img.alt = '';
+      img.className = 'thumb'; img.alt = '';
+      // Chrome and Firefox can't preview HEIC, so the thumbnail stays blank until the converted copy exists.
+      img.onerror = () => img.removeAttribute('src');
+      img.src = it.resultUrl ?? it.url;
       const name = document.createElement('span');
       name.className = 'name'; name.textContent = it.result ? it.result.name : it.file.name;
       const meta = document.createElement('span');
@@ -133,7 +141,7 @@ const action = { 'img-convert': 'Convert', 'img-compress': 'Compress', 'img-resi
       const x = document.createElement('button');
       x.type = 'button'; x.className = 'icon'; x.textContent = '✕'; x.title = 'Remove';
       x.setAttribute('aria-label', `Remove ${it.file.name}`);
-      x.onclick = () => { URL.revokeObjectURL(it.url); items.splice(i, 1); render(); };
+      x.onclick = () => { forget(it); items.splice(i, 1); render(); };
       li.append(x);
       list.append(li);
     });
@@ -147,13 +155,13 @@ const action = { 'img-convert': 'Convert', 'img-compress': 'Compress', 'img-resi
   drop.addEventListener('files', (e) => {
     err.hidden = true;
     for (const file of (e as CustomEvent<File[]>).detail) {
-      if (!file.type.startsWith('image/') && !/\.(jpe?g|png|webp|gif|avif|bmp|heic)$/i.test(file.name)) { fail(`${file.name} is not an image.`); continue; }
+      if (!file.type.startsWith('image/') && !/\.(jpe?g|png|webp|gif|avif|bmp|heic|heif)$/i.test(file.name)) { fail(`${file.name} is not an image.`); continue; }
       items.push({ file, url: URL.createObjectURL(file) });
     }
     render();
   });
 
-  $('reset')!.addEventListener('click', () => { items.forEach((i) => URL.revokeObjectURL(i.url)); items = []; err.hidden = true; status.textContent = ''; render(); });
+  $('reset')!.addEventListener('click', () => { items.forEach(forget); items = []; err.hidden = true; status.textContent = ''; render(); });
 
   function spec(): ResizeSpec | undefined {
     if (tool === 'img-compress') {
@@ -184,7 +192,7 @@ const action = { 'img-convert': 'Convert', 'img-compress': 'Compress', 'img-resi
       status.textContent = `Working on ${n} of ${items.length}…`;
       try {
         const type = outType(it.file);
-        const r = await process(it.file, type, +q.value / 100, s);
+        const r = await process(it.file, type, +q.value / 100, s, heic);
         const suffix = tool === 'img-compress' ? '-small' : tool === 'img-resize' ? `-${r.width}x${r.height}` : '';
         const bigger = r.blob.size >= it.file.size;
         // Compressing an already-small file in the same format can make it bigger. Hand back the original instead.
@@ -193,6 +201,7 @@ const action = { 'img-convert': 'Convert', 'img-compress': 'Compress', 'img-resi
         } else {
           it.result = { ...r, name: renameTo(it.file.name, type, suffix), bigger };
         }
+        if (heic) { if (it.resultUrl) URL.revokeObjectURL(it.resultUrl); it.resultUrl = URL.createObjectURL(it.result.blob); }
         it.error = undefined;
       } catch (e) {
         it.error = (e as Error).message;

@@ -5,6 +5,9 @@
   "type": "module",
   "scripts": {
     "test": "vitest run",
+    "vendor": "node scripts/vendor.mjs",
+    "predev": "node scripts/vendor.mjs",
+    "prebuild": "node scripts/vendor.mjs",
     "build": "astro build",
     "dev": "astro dev",
     "preview": "astro preview"
@@ -16,6 +19,7 @@
     "@jsquash/webp": "^1.5.0",
     "astro": "^7.4.7",
     "fflate": "^0.8.3",
+    "libheif-js": "1.23.5",
     "papaparse": "^5.7.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },

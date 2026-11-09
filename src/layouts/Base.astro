@@ -235,6 +235,9 @@ const canonical = new URL(path, SITE.url).href;
     .files li { row-gap: 4px; }
     .files .name { flex: 1 1 calc(100% - 64px); }
     .files .meta { margin-right: auto; }
+    /* Image rows: thumb, name, Save and remove on one line; sizes on the line below, under the name. */
+    .files li:has(.thumb) .name { flex: 1 1 0; min-width: 0; }
+    .files li:has(.thumb) .meta { order: 9; flex-basis: 100%; padding-left: 52px; }
   }
   .drop.compact .drop-sub { font-size: 12px; }
   .files { list-style: none; margin: 0 0 16px; padding: 0; background: var(--field); }
