@@ -16,8 +16,13 @@ Same model as SubFixer: free tools for traffic, a paid tier later on the tools t
 - AGPL or GPL code (MuPDF, Ghostscript, BentoPDF, AGPL wasm builds of any of these).
 - Any server-side processing of user files.
 
-## Paid tier (later)
-- Batch limits lifted, saved presets. Lemon Squeezy, owner creates the account. Start only after steady traffic (about 1,000 visits a month).
+## Paid tier (Stayfile Pro)
+- Offer: batch processing (many files at once, zip in and out) and saved presets. About $4/month or $24/year.
+- Checkout: Lemon Squeezy (merchant of record, handles sales tax). Costs nothing until someone pays. The license key only unlocks features; files never leave the browser.
+- Trigger: 1,000 or more visits in the last 30 days, summed from the visitors column of ops/metrics.csv. Check it every morning run.
+- Only owner decision: when the trigger is hit, open one `decision` issue titled "Paid tier ready: create the Lemon Squeezy account and product" (it needs his identity, bank and tax details). Never sign up yourself, and don't open it twice.
+- Everything else is yours to decide: the offer, the price, the copy and the build. Before the trigger, build the batch feature behind a flag and test it, but show no pricing.
+- After he creates the product: wire the checkout and license key check, keep files client-side, and turn the flag on.
 
 ## Ads (first revenue)
 - Trigger: about 300 visits a month in ops/metrics.csv and most tool pages indexed. Then open one `decision` issue asking the owner to apply for Google AdSense (it needs his identity and tax details). Never sign up yourself.
