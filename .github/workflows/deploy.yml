@@ -1,16 +1,14 @@
 name: deploy
-# DISABLED until the owner buys a domain and approves launch.
-# It only runs by hand (no push trigger), and the workflow is also disabled in GitHub Actions.
-# To launch: set DOMAIN below and SITE.url in src/site.ts, add CLOUDFLARE_API_TOKEN and
-# CLOUDFLARE_ACCOUNT_ID secrets, re-add the push trigger, then `gh workflow enable deploy.yml`.
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 concurrency: deploy
 env:
   CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
   CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
   PROJECT: stayfile
-  DOMAIN: stayfile.example # placeholder
+  DOMAIN: stayfile.app
 jobs:
   deploy:
     runs-on: ubuntu-latest

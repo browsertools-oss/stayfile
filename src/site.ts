@@ -2,7 +2,7 @@ export const SITE = {
   name: 'Stayfile',
   tagline: 'File tools that run on your own device',
   // Placeholder until the owner picks and buys a domain. Change here, in astro.config.mjs and public/robots.txt.
-  url: 'https://stayfile.example',
+  url: 'https://stayfile.app',
 };
 
 export type Tool =
