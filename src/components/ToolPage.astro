@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import PdfTool from './PdfTool.astro';
 import ImageTool from './ImageTool.astro';
 import DataTool from './DataTool.astro';
+import Silhouette from './Silhouette.astro';
 import { SITE, PAGES, GROUP_ID, type ToolPage } from '../site';
 interface Props { page: ToolPage }
 const { page } = Astro.props;
@@ -35,12 +36,22 @@ const jsonld = [
 ];
 ---
 <Base title={page.title} description={page.description} path={path} jsonld={jsonld}>
-  <nav class="crumbs" aria-label="Breadcrumb"><a href="/">{SITE.name}</a><span aria-hidden="true">/</span><a href={`/#${GROUP_ID[page.group]}`}>{page.group}</a></nav>
-  <h1>{page.h1}</h1>
-  <p class="lede">{page.lede}</p>
-  {family === 'pdf' && <PdfTool tool={page.tool} preset={page.preset} />}
-  {family === 'img' && <ImageTool tool={page.tool} preset={page.preset} />}
-  {family === 'data' && <DataTool tool={page.tool} />}
+  <div class="board bleed band" data-family={family}>
+    <div class="wall">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="/">{SITE.name}</a><span aria-hidden="true">/</span><a href={`/#${GROUP_ID[page.group]}`}>{page.group}</a></nav>
+      <div class="head">
+        <div>
+          <h1>{page.h1}</h1>
+          <p class="lede">{page.lede}</p>
+        </div>
+        <Silhouette slug={page.slug} class="mark-big" />
+      </div>
+      {family === 'pdf' && <PdfTool tool={page.tool} preset={page.preset} />}
+      {family === 'img' && <ImageTool tool={page.tool} preset={page.preset} />}
+      {family === 'data' && <DataTool tool={page.tool} />}
+    </div>
+  </div>
+  <aside class="ad-slot" aria-hidden="true" data-ad-slot></aside>
   <section class="row first">
     <h2>How to use it</h2>
     <ol class="steps">{page.steps.map((s) => <li>{s}</li>)}</ol>
@@ -52,21 +63,29 @@ const jsonld = [
   {related.length > 0 && (
     <section class="row">
       <h2>Other {page.group === 'Spreadsheets and data' ? 'data' : page.group === 'PDF' ? 'PDF' : 'image'} tools</h2>
-      <p class="related">{related.map((p) => <a href={`/${p.slug}/`}>{p.card}</a>)}</p>
+      <ul class="related">{related.map((p) => <li><a href={`/${p.slug}/`}><Silhouette slug={p.slug} /><span>{p.card}</span></a></li>)}</ul>
     </section>
   )}
 </Base>
 <style>
-  .crumbs { display: flex; gap: 8px; margin-top: 32px; font-size: 14px; color: var(--muted); }
-  .crumbs a { text-decoration: none; }
-  .crumbs a:hover { text-decoration: underline; }
-  .crumbs + h1 { margin-top: 8px; }
-  .lede { margin-bottom: 24px; }
-  .first { margin-top: 48px; }
-  @media (max-width: 640px) { .first { margin-top: 32px; } }
-  .related { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
-  .related a { display: inline-flex; align-items: center; height: 40px; padding: 0 16px; border: 1px solid var(--line-strong); text-decoration: none; color: var(--ink); font-size: 14px; }
-  .related a:hover { background: var(--layer); border-color: var(--accent); color: var(--ink); }
-  details:first-of-type { border-top: 0; }
-  details:first-of-type summary { padding-top: 2px; min-height: 0; padding-bottom: 12px; }
+  .band { padding-bottom: 40px; }
+  .crumbs { display: flex; gap: 8px; align-items: center; padding-top: 28px; font-size: 14px; font-weight: 600; color: var(--paint-muted); }
+  .crumbs a { color: var(--paint); text-decoration: none; }
+  .crumbs a:hover { color: #ffffff; text-decoration: underline; }
+  .head { display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 24px; align-items: end; }
+  .head h1 { margin-top: 12px; }
+  .head .lede { margin-bottom: 28px; }
+  .head :global(.mark-big) { width: 200px; margin-bottom: 24px; color: var(--paint); }
+  .first { border-top: 0; }
+  .related { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: 12px; }
+  .related a { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 8px; border-radius: var(--r); color: var(--board); text-decoration: none; font-size: 14px; font-weight: 700; text-align: center; }
+  .related a :global(.sil) { width: 100%; max-width: 104px; --cut: var(--ground); }
+  .related a span { color: var(--ink); }
+  .related a:hover { background: var(--tray); --ground: var(--tray); }
+  details:first-of-type summary { padding-top: 0; min-height: 0; padding-bottom: 12px; }
+  @media (max-width: 760px) {
+    .head { grid-template-columns: 1fr; }
+    .head :global(.mark-big) { display: none; }
+    .related { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
 </style>

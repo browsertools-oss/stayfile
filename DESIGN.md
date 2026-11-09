@@ -1,45 +1,44 @@
-# Stayfile design
+# Stayfile design: shadow board
 
-Base system: IBM Carbon (white theme for light mode, Gray 100 for dark). It fits a fast utility:
-dense, flat and calm, with hierarchy carried by hairlines and surface changes, not shadows or color.
+Stayfile is a workshop wall. Each tool hangs on a green pegboard as a pale painted outline, the way a
+shop paints the shape of every tool so you can see where it goes. Names sit on label-maker tape. One
+safety-yellow tag marks whatever is active or finished: a hovered tool, a converted file's Save, the
+download-all button.
 
-One deliberate change from Carbon: the accent is Carbon's green ramp, not Carbon blue, so the site
-keeps its existing green. Everything else uses Carbon values.
-
-## Tokens (defined in `src/layouts/Base.astro`)
+## Tokens (src/layouts/Base.astro)
 
 | Role | Light | Dark |
 |---|---|---|
-| Page `--bg` | #ffffff | #161616 |
-| Layer `--layer` (tool panel, footer) | #f4f4f4 | #262626 |
-| Field `--field` (inputs, file list) | #ffffff | #393939 |
-| Hairline `--line` | #e0e0e0 | #393939 |
-| Strong border `--line-strong` (field underline, dashed drop) | #8d8d8d | #6f6f6f |
-| Text `--ink` / `--muted` / `--helper` | #161616 / #525252 / #6f6f6f | #f4f4f4 / #c6c6c6 / #a8a8a8 |
-| Primary button `--accent` (green 60, hover 70, press 80) | #198038 | #198038 |
-| Link `--link` | #198038 | #42be65 (green 40) |
-| Secondary button `--btn2` | #393939 | #6f6f6f |
-| Focus `--focus` | #198038 | #ffffff |
-| Error `--bad` | #da1e28 | #ff8389 |
+| board | #1d6a3b, 24px hole grid at rgba(0,0,0,.3) | #123a24, holes at .5 |
+| paint (silhouettes, text on board) | #eef5ec | #e3eee5 |
+| tape (labels, primary button) | #141414 on white | #050806 with a light 1px ring |
+| tag (active or finished only) | #ffd23f, ink #1a1a10 | same |
+| ground / tray / field | #f3f5f1 / #e7ece5 / #fff | #0b1410 / #13231a / #1a2e22 |
+| ink / muted | #102117 / #44564a | #e6efe8 / #a9bcae |
 
-- Type: IBM Plex Sans, one self-hosted variable file (`public/fonts`, latin subset, 45 KB, OFL).
-  Display h1 42px weight 300 (32px on phones). Section heads 20px/400. Body 16px with 0.16px tracking.
-  Labels and helper text 12px with 0.32px tracking. Numbers and data cells use the system mono.
-- Spacing: 4px grid (4, 8, 12, 16, 24, 32, 48). Content width 1120px, 16px gutter.
-- Corners: 0 everywhere. No shadows. No gradients.
-- Controls: buttons 48px tall, label left-aligned with 64px right padding (Carbon). Fields 40px tall with a
-  bottom rule only. Segmented choices are Carbon content switchers (selected = inverse fill).
-- Motion: only color/transform transitions of 70 to 110ms on hover and the accordion chevron.
+Corners: 6px (routed hardboard), 3px on tape, 10px on the tool tray.
 
-## Layout
+## Type
 
-- Header: 48px bar, brand, group links, "Files stay on this device" on the right (hidden on phones).
-- Home: left-aligned h1 and lede, then the tool index as labelled rows (group name left, two-column
-  list of tools right). No cards.
-- Tool page: breadcrumb, h1, lede, then the tool panel (gray layer, white dashed drop zone) above the
-  fold. "How to use it", "Questions" and related tools sit in the same label-left rows as the home index.
+Archivo variable, self-hosted (`/fonts/archivo-var.woff2`, wght 100-900, wdth 62-125%). Display is
+heavy and wide (800, 116%). Tape is 700 at 112% in caps with 0.06em tracking. Body is 400 at normal
+width.
+
+## Components
+
+- Silhouette (`src/components/Silhouette.astro`): one SVG per tool slug, viewBox 120x96. Fill is
+  currentColor; `.cut` lines are routed back to the surface color (`--cut`); `.ink` lines are painted
+  strokes. Layers paint back to front.
+- Home: a full-bleed board. Each group is a zone with a tape label; its first tool hangs larger.
+  Hovering one tool dims the rest and turns its tape yellow.
+- Tool page: a board band holding breadcrumb, h1, lede, the large silhouette and the tool tray. The
+  drop zone shows the family icon via `data-family` (pdf, img, data). An empty `.ad-slot` sits under
+  the band. Steps hang as paper tags; related tools repeat as small silhouettes on the ground.
+- Buttons: primary is black tape, secondary is the yellow tag, Save on a converted file is a
+  tag-shaped button with a punched hole.
 
 ## Rules
 
-- Do not add rounded corners, shadows, pills, emoji, a second accent color or a second font family.
-- Keep the drop zone the largest thing on a tool page until a file is loaded.
+- Yellow means active or finished. Never use it for decoration.
+- No gradients on text, no hard offset shadows, no scroll effects, no images beyond inline SVG.
+- Focus is a 3px outline: ink on the ground, yellow on the board.

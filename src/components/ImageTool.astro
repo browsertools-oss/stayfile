@@ -133,7 +133,7 @@ const action = { 'img-convert': 'Convert', 'img-compress': 'Compress', 'img-resi
       li.append(img, name, meta);
       if (it.result) {
         const b = document.createElement('button');
-        b.type = 'button'; b.className = 'icon'; b.textContent = 'Save';
+        b.type = 'button'; b.className = 'icon save'; b.textContent = 'Save';
         b.setAttribute('aria-label', `Save ${it.result.name}`);
         b.onclick = () => save(it.result!.blob, it.result!.name);
         li.append(b);
