@@ -78,6 +78,12 @@ export async function rotate(b: Bytes, by: number, pages?: number[]): Promise<Ui
   return doc.save();
 }
 
+/** File name for one page of a PDF turned into JPGs, e.g. "report-page-03.jpg". Pads to the width of the page count. */
+export function jpgPageName(base: string, page: number, total: number): string {
+  const width = String(total).length;
+  return `${base}-page-${String(page).padStart(Math.max(2, width), '0')}.jpg`;
+}
+
 export const PAGE_SIZES = {
   fit: null,
   a4: [595.28, 841.89],

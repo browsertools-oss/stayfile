@@ -9,3 +9,10 @@ Changed: added Excel to CSV at /excel-to-csv/. xlsxToCsv() in src/lib/xlsx.ts co
 Not checked: I did not open the page in a browser. The drop, preview and download path is checked by reading the code and by the build only. The build prints a chunk-size warning; I did not check whether it was there before this change.
 Roadmap: Excel to CSV is still under "Next tools". The owner should move it to Shipped after a browser check.
 Next: a browser check of /excel-to-csv/, then the items in next.md.
+
+2026-11-09 (ops run, second): Checked first. npm test passed (45 tests) and npm run build passed (19 pages). The roadmap's next tool is PDF to JPG, so I built it.
+Changed: added PDF to JPG at /pdf-to-jpg/ (slug pdf-to-jpg, tool pdf-to-jpg, in the PDF group). Installed pdfjs-dist 5.7.284 (Apache-2.0), pinned exactly in package.json. It is loaded with a dynamic import in src/lib/pdf-render.ts only when someone clicks Convert, so no other page pays for it. In the build it is a separate 409 kB chunk plus a 2.1 MB worker that only that chunk references; no HTML page references the worker. The page renders each page on a white canvas at 96, 150 or 300 dpi (150 default) and saves JPG at quality 0.92. One page gives one JPG; more pages come back as a zip of numbered JPGs, named with jpgPageName() in src/lib/pdf.ts. New test/pdf-jpg.test.ts covers the naming (47 tests). Nothing is uploaded.
+Choices: 150 dpi default and a 0.92 JPG quality, because that reads well on screens without big files; the zip name uses the same base name as the PDF.
+Not checked: I did not open /pdf-to-jpg/ in a browser, so the drop, the progress text and the zip download are checked by reading the code and by the build only. The renderer itself is not unit tested because the tests run in Node with no canvas.
+Roadmap: PDF to JPG is still under "Next tools". The owner should move it to Shipped after a browser check, same as Excel to CSV.
+Next: a browser check of /pdf-to-jpg/ and /excel-to-csv/, then the items in next.md.

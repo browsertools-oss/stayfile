@@ -1,3 +1,4 @@
-- Build PDF to JPG with pdf.js (Apache-2.0, `npm install pdfjs-dist`), lazy-loaded on that page only, with a test for the page-to-image step.
-- Add a test in test/core.test.ts for Excel to CSV with a multi-sheet workbook and date cells, then move it to Shipped in the roadmap.
-- Find out whether the build's chunk-size warning comes from SheetJS, and split it out if so.
+- Check /pdf-to-jpg/ in a real browser with a multi-page PDF: the zip names, the progress text and the 150 dpi default.
+- Add a test in test/core.test.ts for Excel to CSV with a multi-sheet workbook and date cells, then move Excel to CSV and PDF to JPG to Shipped in the roadmap.
+- Find out whether the build's chunk-size warning comes from SheetJS or pdf-lib, and split it out if so.
+- Next roadmap item: PDF page previews, which can reuse the pdf.js renderer now in src/lib/pdf-render.ts.

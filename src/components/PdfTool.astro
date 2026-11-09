@@ -16,7 +16,7 @@ const runs = tool === 'pdf-rotate'
   : tool === 'pdf-split'
     ? splitButtons(split)
     : [];
-const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? 'Extract pages' : 'Split PDF', 'pdf-rotate': 'Rotate and save', 'img-to-pdf': 'Make PDF' }[tool as string];
+const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? 'Extract pages' : 'Split PDF', 'pdf-rotate': 'Rotate and save', 'img-to-pdf': 'Make PDF', 'pdf-to-jpg': 'Convert to JPG' }[tool as string];
 ---
 <section class="tool" data-tool={tool} data-split={split} data-slug={slug}>
   <ul class="files" id="list"></ul>
@@ -35,6 +35,18 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
       <div class="opts">
         <label>Pages <input id="ranges" placeholder="All pages" autocomplete="off" /></label>
         <p class="hint">Leave pages empty to turn every page, or type some, like 2, 4-6.</p>
+      </div>
+    )}
+    {tool === 'pdf-to-jpg' && (
+      <div class="opts">
+        <label>Resolution
+          <select id="dpi">
+            <option value="96">Screen (96 dpi)</option>
+            <option value="150" selected>Good (150 dpi)</option>
+            <option value="300">Print (300 dpi)</option>
+          </select>
+        </label>
+        <p class="hint">Higher numbers make sharper pages and bigger files. Every page becomes its own JPG.</p>
       </div>
     )}
     {isImg && (
@@ -69,7 +81,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
 </section>
 
 <script>
-  import { pageCount, parseRanges, merge, extract, split, burst, rotate, imagesToPdf, type ImageInput, type PageSize } from '../lib/pdf';
+  import { pageCount, parseRanges, merge, extract, split, burst, rotate, imagesToPdf, jpgPageName, type ImageInput, type PageSize } from '../lib/pdf';
   import { decode, draw, formatBytes } from '../lib/image';
   import { save, zip, baseName } from '../lib/save';
   import { mergedName, savedLine } from '../lib/route';
@@ -224,8 +236,18 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
           else put(await zip(parts.map((d, i) => ({ name: label(i), data: d }))), `${name}-split.zip`, 'application/zip', parts.length);
           done = `Made ${parts.length} PDF${parts.length === 1 ? '' : 's'}.`;
         }
+      } else if (tool === 'pdf-to-jpg') {
+        const dpi = +$<HTMLSelectElement>('dpi')!.value;
+        const { pdfToJpgs } = await import('../lib/pdf-render'); // pdf.js loads only on this page, when it runs
+        const pages = await pdfToJpgs(new Uint8Array(await first.file.arrayBuffer()), dpi, (i, n) => {
+          status.textContent = `Drawing page ${i} of ${n}…`;
+        });
+        const n = pages.length;
+        if (n === 1) put(pages[0], `${name}.jpg`, 'image/jpeg');
+        else put(await zip(pages.map((d, i) => ({ name: jpgPageName(name, i + 1, n), data: d }))), `${name}-jpg.zip`, 'application/zip', n);
+        done = `Made ${n} JPG${n === 1 ? '' : 's'} at ${dpi} dpi.`;
       } else if (isImg) {
-        const size = ($<HTMLSelectElement>('size')!.value) as PageSize;
+        const size =($<HTMLSelectElement>('size')!.value) as PageSize;
         const margin = +$<HTMLSelectElement>('margin')!.value;
         const imgs: ImageInput[] = [];
         for (const [i, it] of items.entries()) {

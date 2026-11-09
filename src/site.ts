@@ -9,6 +9,7 @@ export type Tool =
   | 'pdf-merge'
   | 'pdf-split'
   | 'pdf-rotate'
+  | 'pdf-to-jpg'
   | 'img-to-pdf'
   | 'img-convert'
   | 'img-compress'
@@ -161,6 +162,37 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Is the page re-rendered?',
         a: 'No. Only the rotation setting of each page changes. Text stays selectable and image quality is untouched.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'pdf-to-jpg',
+    tool: 'pdf-to-jpg',
+    group: 'PDF',
+    card: 'PDF to JPG',
+    blurb: 'Turn each PDF page into a picture',
+    title: 'PDF to JPG: turn each page into an image',
+    h1: 'Convert PDF to JPG',
+    lede: 'Turn each page of a PDF into a JPG picture, for sending, pasting into a form or putting in a slide. A one-page PDF gives one JPG; a longer one comes back as a zip of numbered JPGs.',
+    description: 'Convert every page of a PDF to a JPG image in your browser, at 96, 150 or 300 dpi. The PDF is not uploaded.',
+    steps: [
+      'Drop in the PDF.',
+      'Pick a resolution. 150 dpi suits most screens, and 300 dpi is better for printing.',
+      'Click Convert to JPG and save the image, or the zip of images for a longer PDF.',
+    ],
+    faq: [
+      {
+        q: 'Why does each page become its own JPG?',
+        a: 'A JPG holds one picture, so every page needs a file of its own. A PDF with several pages comes back as a zip file, with one JPG per page numbered in order.',
+      },
+      {
+        q: 'Can I still read the text?',
+        a: 'Yes, at 150 dpi or higher. The page is saved as a picture, though, so the text can no longer be selected or searched. Keep the original PDF if you need that.',
+      },
+      {
+        q: 'Which resolution should I choose?',
+        a: '150 dpi is plenty for reading on a screen or sending in a message. Choose 300 dpi when the pages will be printed. Higher numbers give bigger files.',
       },
       PRIVATE,
     ],
