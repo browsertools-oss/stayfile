@@ -1,1 +1,6 @@
-{ "monthly": {} }
+{
+  "monthly": {},
+  "purchases": [
+    { "date": "2026-11-08", "item": "stayfile.app domain, 1 year", "usd": 8.20, "kind": "domain" }
+  ]
+}
