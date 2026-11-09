@@ -23,7 +23,7 @@ Every tool runs inside the browser tab. Files are never uploaded, there is no si
 ## Capabilities and Constraints
 
 - 15 tool pages across PDF, Images, and Spreadsheets and data; URLs, titles, meta and structured data must not change.
-- Fully static and client-side (Astro). Cross-origin isolated (COOP/COEP), so fonts and scripts are same-origin.
+- Fully static and client-side (Astro). Not cross-origin isolated (COOP/COEP were removed Nov 9th, 2026 so AdSense can load); the AVIF encoder runs single-threaded.
 - Ads come later: layouts must leave room for an empty ad slot without breaking.
 - No scroll effects, 3D, heavy animation or large images.
 - Copy rules in `.github/agent/daily.md`: plain specific sentences, no sales words, no dashes, never claim something the site does not do.
