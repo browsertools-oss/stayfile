@@ -5,16 +5,19 @@ interface Props {
   multiple?: boolean;
   main: string;
   sub: string;
+  /** Pick up files handed over from the home page or the previous tool. Off on the home page itself. */
+  take?: boolean;
 }
-const { accept, multiple = false, main, sub } = Astro.props;
+const { accept, multiple = false, main, sub, take = true } = Astro.props;
 ---
-<label class="drop" id="drop" data-accept={accept}>
+<label class="drop" id="drop" data-accept={accept} data-take={take ? '' : undefined}>
   <input type="file" id="file" accept={accept} multiple={multiple} hidden />
   <span class="drop-main" set:html={main} />
   <span class="drop-sub">{sub}</span>
 </label>
 
 <script>
+  import { takeHandoff } from '../lib/handoff';
   const drop = document.getElementById('drop')!;
   const input = document.getElementById('file') as HTMLInputElement;
   const emit = (list: FileList | null) => {
@@ -36,4 +39,16 @@ const { accept, multiple = false, main, sub } = Astro.props;
   // Dropping a file anywhere else on the page would navigate away from it.
   window.addEventListener('dragover', (e) => e.preventDefault());
   window.addEventListener('drop', (e) => e.preventDefault());
+  // Files carried over from another page arrive as if they had been dropped here.
+  // Wait for DOMContentLoaded: it fires after every module script on the page, so the tool is listening by then.
+  if ('take' in drop.dataset) {
+    // Module scripts run while readyState is already 'interactive', so listen for whichever event is still to come.
+    const ready = document.readyState === 'complete' ? Promise.resolve() : new Promise((r) => {
+      document.addEventListener('DOMContentLoaded', r, { once: true });
+      window.addEventListener('load', r, { once: true });
+    });
+    Promise.all([takeHandoff(), ready]).then(([files]) => {
+      if (files.length) drop.dispatchEvent(new CustomEvent('files', { detail: files }));
+    });
+  }
 </script>

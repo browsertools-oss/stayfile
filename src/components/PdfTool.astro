@@ -1,8 +1,8 @@
 ---
 import Drop from './Drop.astro';
 import type { Tool, Preset } from '../site';
-interface Props { tool: Tool; preset?: Preset }
-const { tool, preset = {} } = Astro.props;
+interface Props { tool: Tool; preset?: Preset; slug: string }
+const { tool, preset = {}, slug } = Astro.props;
 const multi = tool === 'pdf-merge' || tool === 'img-to-pdf';
 const isImg = tool === 'img-to-pdf';
 const accept = isImg ? 'image/*,.jpg,.jpeg,.png,.webp,.gif,.avif,.heic' : 'application/pdf,.pdf';
@@ -11,7 +11,7 @@ const sub = isImg ? 'JPG · PNG · WebP · GIF' : multi ? 'Add as many as you li
 const split = preset.split ?? 'ranges';
 const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? 'Extract pages' : 'Split PDF', 'pdf-rotate': 'Rotate and save', 'img-to-pdf': 'Make PDF' }[tool as string];
 ---
-<section class="tool" data-tool={tool} data-split={split}>
+<section class="tool" data-tool={tool} data-split={split} data-slug={slug}>
   <ul class="files" id="list"></ul>
   <Drop accept={accept} multiple={multi} main={main} sub={sub} />
 
@@ -65,6 +65,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
       <span class="status" id="status" aria-live="polite"></span>
     </div>
   </div>
+  <div class="done" id="done" role="status" hidden></div>
   <p class="error" id="err" role="alert" hidden></p>
 </section>
 
@@ -72,6 +73,8 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
   import { pageCount, parseRanges, merge, extract, split, burst, rotate, imagesToPdf, type ImageInput, type PageSize } from '../lib/pdf';
   import { decode, draw, formatBytes } from '../lib/image';
   import { save, zip, baseName } from '../lib/save';
+  import { mergedName, savedLine } from '../lib/route';
+  import { showDone, hideDone } from '../lib/done';
 
   const root = document.querySelector<HTMLElement>('.tool')!;
   const tool = root.dataset.tool!;
@@ -89,6 +92,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
   const clear = () => { err.hidden = true; };
 
   function render() {
+    hideDone($('done'));
     list.innerHTML = '';
     items.forEach((it, i) => {
       const li = document.createElement('li');
@@ -178,8 +182,14 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
     return { bytes: new Uint8Array(await blob.arrayBuffer()), type: 'image/jpeg' };
   }
 
+  // Every save goes through here so the done panel can offer it again and pass it on.
+  let last: { data: Uint8Array; name: string; type: string; count: number } | null = null;
+  const put = (data: Uint8Array, name: string, type: string, count = 1) => { last = { data, name, type, count }; save(data, name, type); };
+
   go.addEventListener('click', async () => {
     clear();
+    hideDone($('done'));
+    last = null;
     go.disabled = true;
     status.dataset.busy = '1';
     status.textContent = 'Working…';
@@ -191,19 +201,19 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
       let done = '';
       if (tool === 'pdf-merge') {
         const out = await merge(await Promise.all(items.map((i) => i.file.arrayBuffer())));
-        save(out, 'merged.pdf', pdf);
+        put(out, mergedName(first.file.name), pdf);
         done = `Merged ${items.length} files, ${items.reduce((a, i) => a + (i.pages ?? 0), 0)} pages.`;
       } else if (tool === 'pdf-rotate') {
         const by = +(root.querySelector<HTMLInputElement>('input[name=rot]:checked')!.value);
         const sel = ranges!.value.trim() ? parseRanges(ranges!.value, first.pages!).flat() : undefined;
-        save(await rotate(await first.file.arrayBuffer(), by, sel), `${name}-rotated.pdf`, pdf);
+        put(await rotate(await first.file.arrayBuffer(), by, sel), `${name}-rotated.pdf`, pdf);
         done = `Rotated ${sel ? sel.length : first.pages} page${(sel ? sel.length : first.pages) === 1 ? '' : 's'}.`;
       } else if (tool === 'pdf-split') {
         const buf = await first.file.arrayBuffer();
         const m = mode();
         if (m === 'extract') {
           const pages = parseRanges(ranges!.value, first.pages!).flat();
-          save(await extract(buf, pages), `${name}-pages.pdf`, pdf);
+          put(await extract(buf, pages), `${name}-pages.pdf`, pdf);
           done = `Saved ${pages.length} page${pages.length === 1 ? '' : 's'} as a new PDF.`;
         } else {
           const groups = m === 'every' ? null : parseRanges(ranges!.value, first.pages!);
@@ -213,8 +223,8 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
             const g = groups[i];
             return `${name}-p${g[0] + 1}${g.length > 1 ? `-${g[g.length - 1] + 1}` : ''}.pdf`;
           };
-          if (parts.length === 1) save(parts[0], label(0), pdf);
-          else save(await zip(parts.map((d, i) => ({ name: label(i), data: d }))), `${name}-split.zip`, 'application/zip');
+          if (parts.length === 1) put(parts[0], label(0), pdf);
+          else put(await zip(parts.map((d, i) => ({ name: label(i), data: d }))), `${name}-split.zip`, 'application/zip', parts.length);
           done = `Made ${parts.length} PDF${parts.length === 1 ? '' : 's'}.`;
         }
       } else if (isImg) {
@@ -227,11 +237,21 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
         }
         status.textContent = 'Building PDF…';
         const out = await imagesToPdf(imgs, size, size === 'fit' ? 0 : margin);
-        save(out, items.length === 1 ? `${name}.pdf` : 'images.pdf', pdf);
+        put(out, items.length === 1 ? `${name}.pdf` : `${name}-and-${items.length - 1}-more.pdf`, pdf);
         done = `Made a ${items.length}-page PDF (${formatBytes(out.length)}).`;
       }
       const secs = (performance.now() - t0) / 1000;
-      status.textContent = secs >= 0.5 ? `${done} Took ${secs.toFixed(1)} s.` : done;
+      status.textContent = '';
+      const got = last as typeof last;
+      if (got) {
+        showDone({
+          el: $('done')!,
+          slug: root.dataset.slug!,
+          line: `${done}${secs >= 0.5 ? ` Took ${secs.toFixed(1)} s.` : ''} ${savedLine(got.name, got.count)}`,
+          again: () => save(got.data, got.name, got.type),
+          result: got.count === 1 && got.type === pdf ? new File([got.data as BlobPart], got.name, { type: pdf }) : undefined
+        });
+      }
     } catch (e) {
       fail((e as Error).message || 'Something went wrong with this file.');
     } finally {

@@ -46,9 +46,9 @@ const jsonld = [
         </div>
         <Silhouette slug={page.slug} class="mark-big" />
       </div>
-      {family === 'pdf' && <PdfTool tool={page.tool} preset={page.preset} />}
-      {family === 'img' && <ImageTool tool={page.tool} preset={page.preset} />}
-      {family === 'data' && <DataTool tool={page.tool} />}
+      {family === 'pdf' && <PdfTool tool={page.tool} preset={page.preset} slug={page.slug} />}
+      {family === 'img' && <ImageTool tool={page.tool} preset={page.preset} slug={page.slug} />}
+      {family === 'data' && <DataTool tool={page.tool} slug={page.slug} />}
     </div>
   </div>
   <aside class="ad-slot" aria-hidden="true" data-ad-slot></aside>
