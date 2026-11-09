@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { SITE, PAGES, GROUPS } from '../site';
+import { SITE, PAGES, GROUPS, GROUP_ID } from '../site';
 const jsonld = [
   { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url },
   {
@@ -18,28 +18,43 @@ const jsonld = [
 >
   <h1>File tools that keep your files on your device</h1>
   <p class="lede">Each tool here runs inside your browser tab. The files you open are read and changed on your own computer, and none of them is uploaded.</p>
-  {GROUPS.map((g) => (
-    <section class="group">
-      <h2>{g}</h2>
-      <div class="grid">
-        {PAGES.filter((p) => p.group === g).map((p) => (
-          <a class="card" href={`/${p.slug}/`}>
-            <span class="t">{p.card}</span>
-            <span class="b">{p.blurb}</span>
-          </a>
-        ))}
-      </div>
-    </section>
-  ))}
-  <h2>How can it work without uploading?</h2>
-  <p class="prose">Your browser can already read files and run code, so the page brings the code to your file instead of sending your file to a server. When you open a PDF here, it is read into memory in this tab, changed there, and handed back to you as a download. Close the tab and it is gone. You can check this yourself: open your browser's developer tools, switch to the Network tab and watch while you use a tool. No file goes out.</p>
+  <div class="index">
+    {GROUPS.map((g) => (
+      <section class="row" id={GROUP_ID[g]} aria-labelledby={`g-${GROUP_ID[g]}`}>
+        <h2 id={`g-${GROUP_ID[g]}`}>{g}</h2>
+        <ul class="list">
+          {PAGES.filter((p) => p.group === g).map((p) => (
+            <li>
+              <a href={`/${p.slug}/`}>
+                <span class="t">{p.card}</span>
+                <span class="b">{p.blurb}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+  <section class="row">
+    <h2>How can it work without uploading?</h2>
+    <p class="prose">Your browser can already read files and run code, so the page brings the code to your file instead of sending your file to a server. When you open a PDF here, it is read into memory in this tab, changed there, and handed back to you as a download. Close the tab and it is gone. You can check this yourself: open your browser's developer tools, switch to the Network tab and watch while you use a tool. No file goes out.</p>
+  </section>
 </Base>
 <style>
-  .group h2 { margin-top: 40px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
-  .card { display: flex; flex-direction: column; gap: 2px; padding: 14px 16px; background: var(--card); border: 1px solid var(--line); border-radius: calc(var(--radius) * 2); text-decoration: none; color: var(--ink); transition: border-color .15s, transform .15s; }
-  .card:hover { border-color: var(--accent); transform: translateY(-1px); }
-  .card .t { font-weight: 650; }
-  .card .b { color: var(--muted); font-size: 14px; }
-  .prose { max-width: 66ch; color: var(--muted); }
+  .index { margin-bottom: 8px; }
+  .list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; }
+  .list a { display: grid; grid-template-columns: minmax(0, 1fr) 16px; grid-template-areas: 't arrow' 'b arrow'; align-items: center; gap: 2px 12px; padding: 12px 12px 12px 0; border-bottom: 1px solid var(--line); color: var(--ink); text-decoration: none; height: 100%; }
+  .list a::after { content: '\2192'; grid-area: arrow; color: var(--link); opacity: 0; transform: translateX(-4px); transition: opacity .11s, transform .11s cubic-bezier(.2, 0, .38, .9); font-family: system-ui, sans-serif; }
+  .list a:hover { background: var(--layer); padding-left: 12px; margin-left: -12px; padding-right: 0; margin-right: -12px; }
+  .list a:hover::after { opacity: 1; transform: none; }
+  .list li:last-child a, .list li:nth-last-child(2):nth-child(odd) a { border-bottom: 0; }
+  .index .row > h2 { padding-top: 12px; }
+  .t { grid-area: t; font-weight: 600; font-size: 16px; }
+  .b { grid-area: b; color: var(--muted); font-size: 14px; }
+  .prose { max-width: 66ch; color: var(--muted); margin: 0; }
+  @media (max-width: 900px) {
+    .list { grid-template-columns: 1fr; }
+    .list li:nth-last-child(2):nth-child(odd) a { border-bottom: 1px solid var(--line); }
+  }
+  @media (max-width: 760px) { .index .row > h2 { padding-top: 0; margin-bottom: 0; } }
 </style>

@@ -432,3 +432,7 @@ export const PAGES: ToolPage[] = [
 ];
 
 export const GROUPS: Group[] = ['PDF', 'Images', 'Spreadsheets and data'];
+
+// Anchor ids on the home page and short labels for the header nav.
+export const GROUP_ID: Record<Group, string> = { PDF: 'pdf', Images: 'images', 'Spreadsheets and data': 'data' };
+export const GROUP_SHORT: Record<Group, string> = { PDF: 'PDF', Images: 'Images', 'Spreadsheets and data': 'Data' };
