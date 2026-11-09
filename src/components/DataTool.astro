@@ -1,5 +1,4 @@
 ---
-// avoid-ai-design-ignore-file: K7 (every :focus-visible rule lives in src/styles/site.css, loaded by Base.astro)
 import Drop from './Drop.astro';
 import type { Tool } from '../site';
 interface Props { tool: Tool; slug: string }
@@ -14,7 +13,7 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
   <Drop accept={accept} main={`Drop ${what} here, or <u>choose one</u>`} sub="or paste below" />
   <ul class="files" id="list"></ul>
   <div id="pasteWrap">
-    <label class="hint paste-label" for="input">Or paste {fromJson ? 'JSON' : 'CSV'}</label>
+    <label class="hint" for="input" style="display:block;margin:12px 0 6px">Or paste {fromJson ? 'JSON' : 'CSV'}</label>
     <textarea id="input" rows="6" spellcheck="false" placeholder={placeholder}></textarea>
   </div>
   <button type="button" class="link" id="showText" hidden>Edit the text</button>
@@ -55,7 +54,7 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
   <p class="error" id="err" role="alert" hidden></p>
 
   <div class="preview" id="tableWrap" hidden><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
-  {tool === 'csv-to-json' && <textarea id="output" rows="12" readonly spellcheck="false" aria-label="JSON output" hidden class="output"></textarea>}
+  {tool === 'csv-to-json' && <textarea id="output" rows="12" readonly spellcheck="false" aria-label="JSON output" hidden style="margin-top:14px"></textarea>}
 </section>
 
 <script>
@@ -123,7 +122,7 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
         } else result = 'xlsx';
         const sep = { ',': 'comma', ';': 'semicolon', '\t': 'tab', '|': 'pipe' }[p.delimiter] ?? `"${p.delimiter}"`;
         status.textContent = `${rows.length} row${rows.length === 1 ? '' : 's'}, ${o.header ? `${head.length} columns, ` : ''}${sep}-separated${rows.length > MAX_ROWS ? `. Preview shows the first ${MAX_ROWS}.` : '.'}`;
-        if (p.warnings.length) { err.textContent = `Check these rows: ${p.warnings.join('; ')}`; err.hidden = false; }
+        if (p.warnings.length) { err.textContent = `Check these rows: ${p.warnings.join(' · ')}`; err.hidden = false; }
       }
       go.disabled = false;
       if (copy) copy.disabled = false;

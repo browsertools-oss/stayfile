@@ -1,47 +1,44 @@
-# Stayfile design: Formwork
+# Stayfile design: shadow board
 
-Stayfile is cast, not painted. The wall is warm grey concrete with a speck grain, the type is
-near-black ink, and one safety orange marks the only things that act: the primary button, the
-"choose files" underline, the drag-over outline and the tab in the "how it works" diagram. Each
-tool is a stencilled ink outline on a hairline grid. The tool itself sits in a cast plate with a
-hard 6px shadow, and the drop well is pressed into that plate.
+Stayfile is a workshop wall. Each tool hangs on a green pegboard as a pale painted outline, the way a
+shop paints the shape of every tool so you can see where it goes. Names sit on label-maker tape. One
+safety-yellow tag marks whatever is active or finished: a hovered tool, a converted file's Save, the
+download-all button.
 
-Built with Hallmark (theme Formwork, deal 2/3). Stamp and waivers: top of `src/styles/site.css`.
+## Tokens (src/layouts/Base.astro)
 
-## Files
-
-- `src/styles/tokens.css`: Formwork tokens, Stayfile app tokens, and the night pour (dark).
-- `src/styles/base.css`: shared base rules from the scaffold.
-- `src/styles/site.css`: every page style. Imported once by `src/layouts/Base.astro`.
-- Scoped styles stay in `ToolPage.astro` (band, crumbs, related grid) and `index.astro` (routes, stencil board, diagram).
-
-## Colour
-
-| Role | Cast (light) | Night pour (dark) |
+| Role | Light | Dark |
 |---|---|---|
-| paper (wall) | oklch(74% .008 80) | oklch(27% .006 270) |
-| paper-2 (tool band, darker pour) | oklch(69% .009 80) | oklch(23% .006 270) |
-| plate (the tool) | oklch(82% .007 80) | oklch(32% .006 270) |
-| ink | oklch(18% .005 270) | oklch(95% .006 80) |
-| accent (safety orange) | oklch(66% .21 38), dark ink text | oklch(70% .21 40) |
-| band (footer) | oklch(18%) with light text | oklch(16%) with light text |
+| board | #1d6a3b, 24px hole grid at rgba(0,0,0,.3) | #123a24, holes at .5 |
+| paint (silhouettes, text on board) | #eef5ec | #e3eee5 |
+| tape (labels, primary button) | #141414 on white | #050806 with a light 1px ring |
+| tag (active or finished only) | #ffd23f, ink #1a1a10 | same |
+| ground / tray / field | #f3f5f1 / #e7ece5 / #fff | #0b1410 / #13231a / #1a2e22 |
+| ink / muted | #102117 / #44564a | #e6efe8 / #a9bcae |
 
-Grain: an SVG speck at 0.09, multiplied (0.045, screened, at night). Orange stays under 5% of a screen.
+Corners: 6px (routed hardboard), 3px on tape, 10px on the tool tray.
 
 ## Type
 
-- Display: Overpass 800 to 900, uppercase for heads (h1, h2, h3, drop head, wordmark). Overpass
-  is the open-source Highway Gothic, the lettering on road and site signs. Buttons use it in
-  sentence case, the way signs do.
-- Body: Archivo 400 and 600, normal width.
-- Figures: Archivo Narrow, tabular, for sizes, page counts and table cells.
-- No tracked capitals, no mono except the JSON/CSV text areas.
+Archivo variable, self-hosted (`/fonts/archivo-var.woff2`, wght 100-900, wdth 62-125%). Display is
+heavy and wide (800, 116%). Tape is 700 at 112% in caps with 0.06em tracking. Body is 400 at normal
+width.
 
-## Surfaces and controls
+## Components
 
-- Radius 0 everywhere. Rules: 3px ink bar at the top of a section, 1px paper-3 hairline between rows.
-- Primary: orange on a hard `0 3px 0` accent-deep shadow, presses down 3px. Secondary and chips:
-  pressed in, 2px ink border. Inputs are pressed in like the secondary.
-- Save on a converted file: small ink button with a hard shadow.
-- Focus: 3px ring in `--color-focus`, instant.
-- Motion: presses only, 120ms. Nothing on scroll.
+- Silhouette (`src/components/Silhouette.astro`): one SVG per tool slug, viewBox 120x96. Fill is
+  currentColor; `.cut` lines are routed back to the surface color (`--cut`); `.ink` lines are painted
+  strokes. Layers paint back to front.
+- Home: a full-bleed board. Each group is a zone with a tape label; its first tool hangs larger.
+  Hovering one tool dims the rest and turns its tape yellow.
+- Tool page: a board band holding breadcrumb, h1, lede, the large silhouette and the tool tray. The
+  drop zone shows the family icon via `data-family` (pdf, img, data). An empty `.ad-slot` sits under
+  the band. Steps hang as paper tags; related tools repeat as small silhouettes on the ground.
+- Buttons: primary is black tape, secondary is the yellow tag, Save on a converted file is a
+  tag-shaped button with a punched hole.
+
+## Rules
+
+- Yellow means active or finished. Never use it for decoration.
+- No gradients on text, no hard offset shadows, no scroll effects, no images beyond inline SVG.
+- Focus is a 3px outline: ink on the ground, yellow on the board.

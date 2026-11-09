@@ -1,5 +1,4 @@
 ---
-// avoid-ai-design-ignore-file: K7 (every :focus-visible rule lives in src/styles/site.css, loaded by Base.astro)
 import Base from '../layouts/Base.astro';
 import Silhouette from '../components/Silhouette.astro';
 import Drop from '../components/Drop.astro';
@@ -24,7 +23,7 @@ const jsonld = [
       <h1>File tools that keep your files on your device</h1>
       <p class="lede">Each tool here runs inside your browser tab. The files you open are read and changed on your own computer, and none of them is uploaded.</p>
       <section class="tool start" data-family="any" aria-label="Start with your files">
-        <Drop accept=".pdf,image/*,.heic,.heif,.csv,.tsv,.json,.jsonl,.ndjson" multiple take={false} main="Drop files here, or <u>choose files</u>" sub="PDFs, images, iPhone photos, CSV or JSON. You pick what to do next." />
+        <Drop accept=".pdf,image/*,.heic,.heif,.csv,.tsv,.json,.jsonl,.ndjson" multiple take={false} main="Drop files here, or <u>choose files</u>" sub="PDF · images · iPhone photos · CSV · JSON. You pick what to do next." />
         <div class="routes" id="routes" hidden>
           <p class="routes-line" id="routesLine" aria-live="polite"></p>
           <div class="routes-row" id="routesRow"></div>
@@ -35,7 +34,7 @@ const jsonld = [
       <div class="zones">
         {GROUPS.map((g) => (
           <section class="zone" id={GROUP_ID[g]} aria-labelledby={`g-${GROUP_ID[g]}`}>
-            <h2 id={`g-${GROUP_ID[g]}`}>{g}</h2>
+            <h2 id={`g-${GROUP_ID[g]}`} class="tape">{g}</h2>
             <ul class="hooks">
               {PAGES.filter((p) => p.group === g).map((p) => (
                 <li>
@@ -65,7 +64,7 @@ const jsonld = [
         </svg>
         <figcaption><span>Your file</span><span>This tab</span><span>Your download</span></figcaption>
       </figure>
-      <p class="prose">Your browser can already read files and run code, so the page brings the code to your file instead of sending your file to a server. When you open a PDF here, it is read into memory in this tab, changed there, and handed back to you as a download. Close the tab and it is gone. You can check this yourself: open your browser’s developer tools, switch to the Network tab and watch while you use a tool. No file goes out.</p>
+      <p class="prose">Your browser can already read files and run code, so the page brings the code to your file instead of sending your file to a server. When you open a PDF here, it is read into memory in this tab, changed there, and handed back to you as a download. Close the tab and it is gone. You can check this yourself: open your browser's developer tools, switch to the Network tab and watch while you use a tool. No file goes out.</p>
     </div>
   </section>
 </Base>
@@ -109,55 +108,51 @@ const jsonld = [
   });
 </script>
 <style>
-  .start { margin: 0 0 var(--space-sm); }
-  .routes { padding-top: var(--space-md); display: grid; gap: var(--space-sm); justify-items: start; }
-  .routes-line { margin: 0; font-weight: 700; color: var(--color-ink); }
-  .routes-row { display: flex; flex-wrap: wrap; gap: var(--space-sm); align-items: center; }
-  .routes .link { padding: 0; }
-  .or { margin: var(--space-2xl) 0 var(--space-md); padding-top: var(--space-sm); border-top: var(--rule-bar) solid var(--color-ink); font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: clamp(1.8rem, 3.6vw, 2.6rem); line-height: 1; color: var(--color-ink); }
-  .home { padding-bottom: var(--space-2xl); }
-  .home h1 { max-width: 24ch; font-size: clamp(2.3rem, 5.4vw, 4.75rem); }
-  .zones { display: grid; gap: var(--space-xl); }
-  .zone { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: var(--space-sm) var(--space-lg); align-items: start; scroll-margin-top: var(--space-md); }
-  .zone > h2 { font-size: var(--text-lg); margin: var(--space-sm) 0 0; max-width: 12ch; text-wrap: balance; }
-  /* the stencil board: tools on hairlines */
-  .hooks { list-style: none; margin: 0; padding: 0 1px 1px 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); }
-  .hooks li { border: var(--rule-hair) solid var(--color-ink); margin: 0 -1px -1px 0; }
+  .start { margin: 0 0 12px; }
+  .routes { padding-top: 16px; display: grid; gap: 12px; justify-items: start; }
+  .routes-line { margin: 0; font-weight: 700; }
+  .routes-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .routes .link { height: 36px; padding: 0; }
+  .or { margin: 28px 0 16px; font-weight: 700; font-stretch: 108%; color: var(--paint-muted); }
+  .home { padding-bottom: 56px; }
+  .zones { display: grid; gap: 28px; }
+  .zone { display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 16px 24px; align-items: start; }
+  .zone > h2 { justify-self: start; font-size: 14px; margin: 18px 0 0; }
+  .hooks { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 12px 16px; }
   .hooks li:first-child { grid-column: span 2; grid-row: span 2; }
-  @media (min-width: 1000px) { .hooks { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
-  .hook { display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: var(--space-xs); height: 100%; padding: var(--space-md) var(--space-xs) var(--space-sm); color: var(--color-ink); text-decoration: none; --cut: var(--color-paper-2); transition: background-color var(--dur-micro) var(--ease-out); }
-  .hook :global(.sil) { width: 100%; max-width: 112px; margin-block: auto; }
-  li:first-child > .hook :global(.sil) { max-width: 240px; }
-  .hook .t { font-weight: 600; font-size: var(--text-sm); line-height: 1.25; text-align: center; }
-  li:first-child > .hook .t { font-family: var(--font-display); font-weight: 800; text-transform: uppercase; font-size: var(--text-lg); line-height: 1; }
-  .hook:hover { background: var(--color-plate); color: var(--color-ink); --cut: var(--color-plate); }
-  .hook:hover .t { text-decoration: underline; text-decoration-color: var(--color-accent); text-decoration-thickness: 3px; text-underline-offset: 0.2em; }
-  .hook:active { background: var(--color-paper-3); --cut: var(--color-paper-3); }
-  .hook:focus-visible { outline: 3px solid var(--color-focus); outline-offset: -3px; }
+  @media (min-width: 1000px) { .hooks { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+  .hook { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 14px 8px 12px; color: var(--paint); text-decoration: none; border-radius: var(--r); transition: opacity .16s cubic-bezier(.2, 0, .2, 1), background-color .16s; height: 100%; }
+  .hook::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--peg); box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35); flex: none; }
+  .hook .sil { width: 100%; max-width: 132px; }
+  li:first-child > .hook .sil { max-width: 260px; }
+  .hook .t { font-weight: 700; font-stretch: 110%; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; line-height: 1; padding: 6px 8px 5px; border-radius: 3px; background: var(--tape); color: var(--on-tape); text-align: center; }
+  li:first-child > .hook .t { font-size: 15px; }
+  .hook:hover, .hook:focus-visible { color: #ffffff; background: rgba(0, 0, 0, 0.16); }
+  .hook:hover .t, .hook:focus-visible .t { background: var(--tag); color: var(--on-tag); }
+  .zones:has(.hook:hover) .hook:not(:hover) { opacity: .55; }
 
-  .trip { margin: 0 0 var(--space-lg); max-width: 560px; }
+  .trip { margin: 0 0 20px; max-width: 560px; }
   .trip svg { display: block; width: 100%; }
-  .trip .body { fill: var(--color-ink); }
-  .trip .tagged { fill: var(--color-accent); }
-  .trip .cut { fill: none; stroke: var(--color-paper); stroke-width: 3; stroke-linecap: square; }
-  .trip .wire { stroke: var(--color-ink); stroke-width: 3; stroke-dasharray: 8 6; }
-  .trip .head { fill: none; stroke: var(--color-ink); stroke-width: 3; stroke-linejoin: miter; }
-  .trip figcaption { position: relative; height: 1.5em; font-size: var(--text-sm); font-weight: 600; color: var(--color-ink); margin-top: var(--space-xs); }
-  .trip figcaption span { position: absolute; top: 0; translate: -50% 0; white-space: nowrap; }
-  .trip figcaption span:nth-child(1) { left: 9.1%; translate: -30% 0; }
-  .trip figcaption span:nth-child(2) { left: 50%; }
-  .trip figcaption span:nth-child(3) { left: 90.9%; translate: -70% 0; }
-  .prose { max-width: 66ch; margin: 0; }
-  .how { margin-top: 0; }
+  .trip .body { fill: var(--link); }
+  .trip .tagged { fill: var(--tag); }
+  .trip .cut { fill: none; stroke: var(--ground); stroke-width: 3; stroke-linecap: round; }
+  .trip .wire { stroke: var(--line-strong); stroke-width: 3; stroke-dasharray: 2 7; stroke-linecap: round; }
+  .trip .head { fill: none; stroke: var(--line-strong); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  .trip figcaption { display: grid; grid-template-columns: 102fr 70fr 168fr 70fr 150fr; font-size: 13px; font-weight: 700; color: var(--muted); margin-top: 6px; }
+  .trip figcaption span:nth-child(1) { grid-column: 1; }
+  .trip figcaption span:nth-child(2) { grid-column: 3; text-align: center; }
+  .trip figcaption span:nth-child(3) { grid-column: 5; text-align: right; }
+  .prose { max-width: 66ch; color: var(--muted); margin: 0; }
+  .how { margin-top: 24px; border-top: 0; }
 
   @media (max-width: 760px) {
     .zone { grid-template-columns: 1fr; }
-    .zone > h2 { margin-top: 0; max-width: none; }
-    .hooks { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .zone > h2 { margin-top: 0; }
+    .hooks { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
     .hooks li:first-child { grid-column: span 3; grid-row: auto; }
-    li:first-child > .hook :global(.sil) { max-width: 150px; }
-    .hook { padding: var(--space-sm) var(--space-2xs); }
-    .hook .t { font-size: var(--text-xs); }
-    li:first-child > .hook .t { font-size: var(--text-md); }
+    li:first-child > .hook .sil { max-width: 150px; }
+    .hook { padding: 10px 2px; }
+    .hook .t { font-size: 11px; padding: 5px 6px 4px; }
+    li:first-child > .hook .t { font-size: 13px; }
   }
 </style>
