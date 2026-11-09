@@ -18,3 +18,7 @@ Same model as SubFixer: free tools for traffic, a paid tier later on the tools t
 
 ## Paid tier (later)
 - Batch limits lifted, saved presets. Lemon Squeezy, owner creates the account. Start only after steady traffic (about 1,000 visits a month).
+
+## Ads (first revenue)
+- Trigger: about 300 visits a month in ops/metrics.csv and most tool pages indexed. Then open one `decision` issue asking the owner to apply for Google AdSense (it needs his identity and tax details). Never sign up yourself.
+- After approval: fill the existing empty ad slot below the tool, one unit per page, never above the drop zone.
