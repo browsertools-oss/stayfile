@@ -1,4 +1,3 @@
 - Open /excel-to-csv/ in a browser with a multi-sheet workbook and a file with dates, then move Excel to CSV to Shipped in the roadmap.
 - Find out whether the chunk-size warning in the build predates the Excel page, and whether SheetJS is what makes that chunk large.
-- Wait for the owner to pick a domain; until then, no deploy and no copy that names a URL.
-- Add a "PDF to JPG" page only if the owner approves the extra ~1 MB pdf.js bundle (a decision issue).
+- Build PDF to JPG with pdf.js (Apache-2.0), lazy-loaded on that page only.

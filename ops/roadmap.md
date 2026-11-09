@@ -1,16 +1,15 @@
-# Roadmap (draft, needs owner approval)
+# Roadmap (owner-approved, Nov 9th, 2026)
 
 Same model as SubFixer: free tools for traffic, a paid tier later on the tools that get traffic.
 
-## Before launch (owner)
-- Pick and buy a domain (suggestions in the build report). Set it in src/site.ts, public/robots.txt and deploy.yml.
-- Add Cloudflare secrets and enable deploy.yml.
+## Launched
+- stayfile.app is live on Cloudflare Pages (Nov 9th, 2026). Deploys run on every push to main.
 
 ## Next tools (in order, each must stay client-side and permissively licensed)
 - PDF to JPG and PDF page previews (pdf.js, Apache-2.0).
-- Excel to CSV (SheetJS, already bundled).
 
 ## Shipped
+- Excel to CSV (Nov 9th, 2026) at /excel-to-csv/.
 - HEIC to JPG (Nov 8th, 2026) at /heic-to-jpg/. Decoder is libheif-js 1.23.5 (LGPL-3.0), served unmodified as its own file at /vendor/libheif/1.23.5/ with its license and a notice. It is copied there from node_modules at build time and only loaded on that page when the browser can't open the photo itself.
 
 ## Not allowed
