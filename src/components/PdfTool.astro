@@ -159,7 +159,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
   function updateHint() {
     if (tool !== 'pdf-split') return;
     const n = items[0]?.pages;
-    $('splitHint')!.textContent = `Type pages like 1-3, 7, then save them as one PDF or each range as its own file.${n ? ` Every page a file gives ${n} one-page PDFs in a zip.` : ''}`;
+    $('splitHint')!.textContent = `Type pages like 1-3, 7, then save them as one PDF or each range as its own file.${n && n > 1 ? ` Every page a file gives ${n} one-page PDFs in a zip.` : ''}`;
   }
   $('size')?.addEventListener('change', () => ($('marginWrap')!.hidden = $<HTMLSelectElement>('size')!.value === 'fit'));
 
