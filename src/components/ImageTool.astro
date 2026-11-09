@@ -1,4 +1,5 @@
 ---
+// avoid-ai-design-ignore-file: K7 (every :focus-visible rule lives in src/styles/site.css, loaded by Base.astro)
 import Drop from './Drop.astro';
 import type { Tool, Preset } from '../site';
 interface Props { tool: Tool; preset?: Preset; slug: string }
@@ -19,7 +20,7 @@ const quality = tool === 'img-compress' ? 70 : 85;
 ---
 <section class="tool" data-tool={tool} data-heic={heic ? '' : undefined} data-slug={slug}>
   <ul class="files" id="list"></ul>
-  <Drop accept={accept} multiple main="Drop images here, or <u>choose files</u>" sub={heic ? 'HEIC and HEIF photos from an iPhone or iPad' : 'JPG · PNG · WebP · GIF · AVIF'} />
+  <Drop accept={accept} multiple main="Drop images here, or <u>choose files</u>" sub={heic ? 'HEIC and HEIF photos from an iPhone or iPad' : 'JPG, PNG, WebP, GIF or AVIF'} />
 
   <div id="work" hidden>
     <div class="opts">
@@ -134,7 +135,7 @@ const quality = tool === 'img-compress' ? 70 : 85;
       if (it.error) { meta.className += ' warn'; meta.textContent = it.error; }
       else if (it.result) {
         const r = it.result;
-        const dims = r.width !== r.srcWidth ? `${r.srcWidth}×${r.srcHeight} → ${r.width}×${r.height} · ` : `${r.width}×${r.height} · `;
+        const dims = r.width !== r.srcWidth ? `${r.srcWidth}×${r.srcHeight} → ${r.width}×${r.height}, ` : `${r.width}×${r.height}, `;
         // The percentage only matters when the point is a smaller file.
         meta.innerHTML = `${dims}${formatBytes(it.file.size)} → ${formatBytes(r.blob.size)}${tool === 'img-compress' ? ` <span class="${r.bigger ? 'warn' : 'ok'}">${sizeChange(it.file.size, r.blob.size)}</span>` : ''}`;
       } else meta.textContent = formatBytes(it.file.size);

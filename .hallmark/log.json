@@ -1,0 +1,26 @@
+[
+ {
+  "shape": "app screen",
+  "theme": "formwork",
+  "axes": "mid/display-condensed/warm",
+  "hero": "tool first: head, one sentence, the drop well in a cast plate",
+  "nav": "wordmark, three group links, on-device note over a bar rule",
+  "footer": "ink band with three tool columns",
+  "imagery": "stencilled ink tool outlines, no photographs",
+  "photos": [],
+  "entry": "redesign full",
+  "fingerprint": "stayfile-formwork-cast",
+  "sections": [
+   "tool",
+   "stencil board",
+   "how it works"
+  ],
+  "signature": "the drop well pressed into a concrete plate",
+  "waived": [
+   "80"
+  ],
+  "prompt": "redesign stayfile: fonts and design still look AI",
+  "date": "2026-11-09",
+  "mode": "build"
+ }
+]

@@ -4,6 +4,7 @@ import PdfTool from './PdfTool.astro';
 import ImageTool from './ImageTool.astro';
 import DataTool from './DataTool.astro';
 import Silhouette from './Silhouette.astro';
+// avoid-ai-design-ignore-file: K7 (every :focus-visible rule lives in src/styles/site.css, loaded by Base.astro)
 import { SITE, PAGES, GROUP_ID, type ToolPage } from '../site';
 interface Props { page: ToolPage }
 const { page } = Astro.props;
@@ -68,21 +69,22 @@ const jsonld = [
   )}
 </Base>
 <style>
-  .band { padding-bottom: 40px; }
-  .crumbs { display: flex; gap: 8px; align-items: center; padding-top: 28px; font-size: 14px; font-weight: 600; color: var(--paint-muted); }
-  .crumbs a { color: var(--paint); text-decoration: none; }
-  .crumbs a:hover { color: #ffffff; text-decoration: underline; }
-  .head { display: grid; grid-template-columns: minmax(0, 1fr) 200px; gap: 24px; align-items: end; }
-  .head h1 { margin-top: 12px; }
-  .head .lede { margin-bottom: 28px; }
-  .head :global(.mark-big) { width: 200px; margin-bottom: 24px; color: var(--paint); }
-  .first { border-top: 0; }
-  .related { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: 12px; }
-  .related a { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 8px; border-radius: var(--r); color: var(--board); text-decoration: none; font-size: 14px; font-weight: 700; text-align: center; }
-  .related a :global(.sil) { width: 100%; max-width: 104px; --cut: var(--ground); }
-  .related a span { color: var(--ink); }
-  .related a:hover { background: var(--tray); --ground: var(--tray); }
-  details:first-of-type summary { padding-top: 0; min-height: 0; padding-bottom: 12px; }
+  .band { padding-bottom: var(--space-2xl); }
+  .crumbs { display: flex; gap: var(--space-xs); align-items: center; padding-top: var(--space-lg); font-size: var(--text-sm); font-weight: 400; color: var(--color-ink-2); }
+  .crumbs a { text-decoration: none; }
+  .crumbs a:hover { text-decoration: underline; }
+  .head { display: grid; grid-template-columns: minmax(0, 1fr) 180px; gap: var(--space-lg); align-items: end; }
+  .head h1 { margin-top: var(--space-sm); text-wrap: balance; }
+  .head .lede { margin-bottom: var(--space-lg); }
+  .head :global(.mark-big) { width: 180px; margin-bottom: var(--space-lg); color: var(--color-ink); --cut: var(--color-paper-2); }
+  .first { border-top-width: var(--rule-bar); }
+  .related { list-style: none; margin: 0; padding: 0 1px 1px 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); }
+  .related li { border: var(--rule-hair) solid var(--color-ink); margin: 0 -1px -1px 0; }
+  .related a { display: flex; flex-direction: column; align-items: center; gap: var(--space-xs); height: 100%; padding: var(--space-md) var(--space-xs); color: var(--color-ink); text-decoration: none; font-size: var(--text-sm); font-weight: 600; text-align: center; --cut: var(--color-paper); }
+  .related a :global(.sil) { width: 100%; max-width: 96px; }
+  .related a:hover { background: var(--color-paper-2); --cut: var(--color-paper-2); }
+  .related a:hover span { text-decoration: underline; text-underline-offset: 0.25em; }
+  details:first-of-type summary { padding-top: 0; min-height: 0; padding-bottom: var(--space-sm); }
   @media (max-width: 760px) {
     .head { grid-template-columns: 1fr; }
     .head :global(.mark-big) { display: none; }

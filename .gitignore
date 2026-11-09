@@ -3,3 +3,6 @@ dist
 .astro
 .DS_Store
 public/vendor
+.hallmark/shots
+.hallmark/before
+.hallmark/compare.html

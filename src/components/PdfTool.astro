@@ -1,4 +1,5 @@
 ---
+// avoid-ai-design-ignore-file: K7 (every :focus-visible rule lives in src/styles/site.css, loaded by Base.astro)
 import Drop from './Drop.astro';
 import type { Tool, Preset } from '../site';
 import { splitButtons } from '../lib/route';
@@ -8,7 +9,7 @@ const multi = tool === 'pdf-merge' || tool === 'img-to-pdf';
 const isImg = tool === 'img-to-pdf';
 const accept = isImg ? 'image/*,.jpg,.jpeg,.png,.webp,.gif,.avif,.heic' : 'application/pdf,.pdf';
 const main = multi ? `Drop ${isImg ? 'images' : 'PDF files'} here, or <u>choose files</u>` : 'Drop a PDF here, or <u>choose one</u>';
-const sub = isImg ? 'JPG · PNG · WebP · GIF' : multi ? 'Add as many as you like' : 'One PDF';
+const sub = isImg ? 'JPG, PNG, WebP or GIF' : multi ? 'Add as many as you like' : 'One PDF';
 const split = preset.split ?? 'ranges';
 // Rotate and split: each choice is its own button that does the job, so there is no pick-then-confirm step.
 const runs = tool === 'pdf-rotate'
@@ -105,7 +106,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
       name.className = 'name'; name.textContent = it.file.name;
       const meta = document.createElement('span');
       meta.className = 'meta';
-      meta.textContent = [it.pages != null ? `${it.pages} page${it.pages === 1 ? '' : 's'}` : '', formatBytes(it.file.size)].filter(Boolean).join(' · ');
+      meta.textContent = [it.pages != null ? `${it.pages} page${it.pages === 1 ? '' : 's'}` : '', formatBytes(it.file.size)].filter(Boolean).join(', ');
       li.append(name, meta);
       if (multi) {
         const mk = (label: string, title: string, fn: () => void, disabled = false) => {
