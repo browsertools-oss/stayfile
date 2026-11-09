@@ -4,22 +4,25 @@ import type { Tool } from '../site';
 interface Props { tool: Tool; slug: string }
 const { tool, slug } = Astro.props;
 const fromJson = tool === 'json-to-csv';
-const accept = fromJson ? '.json,.jsonl,.ndjson,application/json,text/plain' : '.csv,.tsv,.txt,text/csv,text/plain';
-const what = fromJson ? 'a JSON file' : 'a CSV file';
+const fromXlsx = tool === 'xlsx-to-csv';
+const accept = fromXlsx
+  ? '.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  : fromJson ? '.json,.jsonl,.ndjson,application/json,text/plain' : '.csv,.tsv,.txt,text/csv,text/plain';
+const what = fromXlsx ? 'an Excel file' : fromJson ? 'a JSON file' : 'a CSV file';
 const placeholder = fromJson ? '[{"name": "Ada", "age": 36}, {"name": "Grace", "age": 85}]' : 'name,age\nAda,36\nGrace,85';
-const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .csv', 'csv-to-xlsx': 'Download .xlsx' }[tool as string];
+const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .csv', 'csv-to-xlsx': 'Download .xlsx', 'xlsx-to-csv': 'Download .csv' }[tool as string];
 ---
 <section class="tool" data-tool={tool} data-slug={slug}>
-  <Drop accept={accept} main={`Drop ${what} here, or <u>choose one</u>`} sub="or paste below" />
+  <Drop accept={accept} main={`Drop ${what} here, or <u>choose one</u>`} sub={fromXlsx ? 'Only the first sheet is converted' : 'or paste below'} />
   <ul class="files" id="list"></ul>
-  <div id="pasteWrap">
+  <div id="pasteWrap" hidden={fromXlsx}>
     <label class="hint" for="input" style="display:block;margin:12px 0 6px">Or paste {fromJson ? 'JSON' : 'CSV'}</label>
     <textarea id="input" rows="6" spellcheck="false" placeholder={placeholder}></textarea>
   </div>
   <button type="button" class="link" id="showText" hidden>Edit the text</button>
 
   <div class="opts">
-    {!fromJson && (
+    {!fromJson && !fromXlsx && (
       <>
         <label>Separator
           <select id="delim">
@@ -65,12 +68,14 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
 
   const root = document.querySelector<HTMLElement>('.tool')!;
   const tool = root.dataset.tool!;
+  const fromXlsx = tool === 'xlsx-to-csv';
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
   const input = $<HTMLTextAreaElement>('input')!, drop = $('drop')!, go = $<HTMLButtonElement>('go')!, copy = $<HTMLButtonElement>('copy');
   const status = $('status')!, err = $('err')!, list = $('list')!, out = $<HTMLTextAreaElement>('output');
   const MAX_ROWS = 50;
   let name = 'data';
   let result = '';
+  let sheetInfo = ''; // Excel only: says how many sheets were left out
 
   const opts = (): CsvOptions => ({
     delimiter: $<HTMLSelectElement>('delim')!.value,
@@ -109,6 +114,13 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
         result = jsonToCsv(text, { delimiter: $<HTMLSelectElement>('delim')!.value });
         table(cols, rows.map((r) => cols.map((c) => r[c])));
         status.textContent = `${rows.length} row${rows.length === 1 ? '' : 's'}, ${cols.length} column${cols.length === 1 ? '' : 's'}${rows.length > MAX_ROWS ? `. Preview shows the first ${MAX_ROWS}.` : '.'}`;
+      } else if (fromXlsx) {
+        // The text is the first sheet already converted to CSV, so the download is the text itself.
+        const rows = parseCsv(text, { delimiter: ',', header: false, typed: false }).rows as unknown[][];
+        const cols = rows.reduce((m, r) => Math.max(m, r.length), 0);
+        result = text;
+        table([], rows);
+        status.textContent = `${rows.length} row${rows.length === 1 ? '' : 's'}, ${cols} column${cols === 1 ? '' : 's'}, comma-separated.${sheetInfo ? ` ${sheetInfo}` : ''}${rows.length > MAX_ROWS ? ` Preview shows the first ${MAX_ROWS}.` : ''}`;
       } else {
         const o = opts();
         const p = parseCsv(text, o);
@@ -147,7 +159,23 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
     li.innerHTML = '<span class="name"></span>';
     li.querySelector('.name')!.textContent = f.name;
     list.append(li);
-    input.value = await f.text();
+    if (fromXlsx) {
+      try {
+        const { xlsxToCsv } = await import('../lib/xlsx');
+        const wb = xlsxToCsv(new Uint8Array(await f.arrayBuffer()));
+        input.value = wb.csv;
+        sheetInfo = wb.sheets.length > 1 ? `Converted the first of ${wb.sheets.length} sheets (${wb.sheets[0]}).` : '';
+      } catch (e) {
+        input.value = '';
+        sheetInfo = '';
+        update();
+        err.textContent = (e as Error).message;
+        err.hidden = false;
+        return;
+      }
+    } else {
+      input.value = await f.text();
+    }
     // The file is loaded: shrink the drop zone and fold the raw text away so Download sits right under the settings.
     drop.classList.add('compact');
     $('pasteWrap')!.hidden = true;
@@ -165,15 +193,15 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
     showDone({
       el: $('done')!, slug: root.dataset.slug!, line: savedLine(file), again: () => save(blob, file),
       reset: () => {
-        input.value = ''; list.innerHTML = ''; name = 'data';
-        drop.classList.remove('compact'); $('pasteWrap')!.hidden = false; $('showText')!.hidden = true;
+        input.value = ''; list.innerHTML = ''; name = 'data'; sheetInfo = '';
+        drop.classList.remove('compact'); $('pasteWrap')!.hidden = fromXlsx; $('showText')!.hidden = true;
         update();
       },
     });
   };
   go.addEventListener('click', async () => {
     if (tool === 'csv-to-json') done(new Blob([result], { type: 'application/json' }), `${name}.json`);
-    else if (tool === 'json-to-csv') done(new Blob(['﻿' + result], { type: 'text/csv' }), `${name}.csv`); // BOM so Excel reads UTF-8
+    else if (tool === 'json-to-csv' || fromXlsx) done(new Blob(['﻿' + result], { type: 'text/csv' }), `${name}.csv`); // BOM so Excel reads UTF-8
     else {
       go.disabled = true;
       status.textContent = 'Building workbook…';

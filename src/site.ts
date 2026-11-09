@@ -15,7 +15,8 @@ export type Tool =
   | 'img-resize'
   | 'csv-to-json'
   | 'json-to-csv'
-  | 'csv-to-xlsx';
+  | 'csv-to-xlsx'
+  | 'xlsx-to-csv';
 
 export type Group = 'PDF' | 'Images' | 'Spreadsheets and data';
 
@@ -461,6 +462,33 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Will long ID numbers be kept exactly?',
         a: 'Yes. Numbers longer than 15 digits and values with leading zeros are stored as text, so Excel will not round them or show them in scientific notation.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'excel-to-csv',
+    tool: 'xlsx-to-csv',
+    group: 'Spreadsheets and data',
+    card: 'Excel to CSV',
+    blurb: 'Save the first sheet of a workbook as CSV',
+    title: 'Excel to CSV converter: save XLSX as CSV online',
+    h1: 'Convert Excel to CSV',
+    lede: 'Save the first sheet of an Excel workbook as a CSV file. Each cell is written the way it is shown in the sheet, so a formatted date or number comes out as you see it.',
+    description: 'Convert Excel .xlsx files to CSV in your browser. Saves the first sheet as comma-separated text. Your workbook is never uploaded.',
+    steps: ['Drop in an .xlsx file.', 'Check the preview. Only the first sheet is converted.', 'Download the CSV or copy it.'],
+    faq: [
+      {
+        q: 'What happens to the other sheets?',
+        a: 'Only the first sheet is converted, and the page tells you how many other sheets the workbook has. To get another sheet, drag its tab to the front in Excel, save, and drop the file here again.',
+      },
+      {
+        q: 'Are formulas kept?',
+        a: 'No. The CSV holds the value each cell shows when the workbook was last saved, not the formula behind it.',
+      },
+      {
+        q: 'What about commas and line breaks inside a cell?',
+        a: 'The cell is wrapped in quotes, which is how CSV keeps a comma or a line break inside one value.',
       },
       PRIVATE,
     ],

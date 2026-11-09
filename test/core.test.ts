@@ -3,7 +3,8 @@ import { PDFDocument, degrees } from '@cantoo/pdf-lib';
 import { deflateSync } from 'node:zlib';
 import { parseRanges, merge, extract, split, burst, rotate, imagesToPdf, placeImage, pageCount } from '../src/lib/pdf';
 import { typeValue, parseCsv, csvToJson, jsonToCsv, jsonRows, flatten } from '../src/lib/data';
-import { csvToXlsx, xlsxToRows } from '../src/lib/xlsx';
+import * as XLSX from 'xlsx';
+import { csvToXlsx, xlsxToRows, xlsxToCsv } from '../src/lib/xlsx';
 import { targetSize, renameTo, formatBytes, sizeChange, avifQuality } from '../src/lib/image';
 
 // A PDF whose pages are 100, 200, 300... points wide, so we can tell pages apart after a transform.
@@ -188,6 +189,16 @@ describe('csv and json', () => {
       ['Ada', 36, 'London, UK'],
       ['Grace', 85, 'New "York"'],
     ]);
+  });
+
+  test('xlsxToCsv converts only the first sheet and lists all sheet names', () => {
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['a', 'b'], [1, 'x, y']]), 'First');
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['z']]), 'Second');
+    const bytes = new Uint8Array(XLSX.write(wb, { type: 'array', bookType: 'xlsx' }) as ArrayBuffer);
+    const out = xlsxToCsv(bytes);
+    expect(out.csv.trimEnd()).toBe('a,b\n1,"x, y"');
+    expect(out.sheets).toEqual(['First', 'Second']);
   });
 });
 

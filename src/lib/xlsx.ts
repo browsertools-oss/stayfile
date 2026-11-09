@@ -11,6 +11,19 @@ export function csvToXlsx(text: string, o: CsvOptions & { sheetName?: string } =
   return new Uint8Array(XLSX.write(wb, { type: 'array', bookType: 'xlsx', compression: true }) as ArrayBuffer);
 }
 
+/** First sheet of an .xlsx as CSV text, plus every sheet name so the page can say what was left out. */
+export function xlsxToCsv(bytes: Uint8Array): { csv: string; sheets: string[] } {
+  let wb: XLSX.WorkBook;
+  try {
+    wb = XLSX.read(bytes, { type: 'array' });
+  } catch {
+    throw new Error('This file could not be read as an Excel workbook.');
+  }
+  const first = wb.SheetNames[0];
+  if (!first) throw new Error('This workbook has no sheets.');
+  return { csv: XLSX.utils.sheet_to_csv(wb.Sheets[first]), sheets: wb.SheetNames };
+}
+
 /** Read back the first sheet of an .xlsx as arrays (used by tests and the preview). */
 export function xlsxToRows(bytes: Uint8Array): unknown[][] {
   const wb = XLSX.read(bytes, { type: 'array' });
