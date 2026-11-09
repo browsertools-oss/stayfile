@@ -4,7 +4,8 @@ Same model as SubFixer: free tools for traffic, a paid tier later on the tools t
 
 
 ## Accounts (Nov 9th, 2026)
-- The owner is signing up for Google AdSense and Lemon Squeezy now, ahead of the traffic triggers. Don't open decision issues for either signup.
+- AdSense account created (the owner's personal Google account, publisher pub-3033001375409079). The script and ads.txt are live on both sites; both sites were submitted for review on Nov 9th, 2026. Ads appear only after Google approves.
+- Lemon Squeezy store "SubFixer" (subfixer.lemonsqueezy.com) exists in test mode. The owner still has to verify identity and connect a bank to activate it. Don't open decision issues for either signup.
 - Ads go live once the owner adds the AdSense publisher ID (ca-pub-...) to the repo, and the paid tier once the Lemon Squeezy product exists. Traffic triggers below still decide when ads or pricing are shown.
 ## Launched
 - stayfile.app is live on Cloudflare Pages (Nov 9th, 2026). Deploys run on every push to main.
