@@ -7,7 +7,7 @@ Where things are: page copy and the list of tool pages in src/site.ts; tools in 
 Each run:
 1. Run `npm test` and `npm run build`. If either fails, fix it on a branch and open a PR; never push a broken main.
 2. Read ops/log.md for context from earlier runs, and ops/roadmap.md for the plan.
-3. Do one small improvement, in this order of preference:
+3. Traffic is the goal until there is revenue. If tests and build already pass and no tool has a known bug, prefer adding one new page that targets a real search phrase. Otherwise do one small improvement, in this order of preference:
    - fix a bug or a rough edge in a tool, with a test when the fix is in src/lib,
    - add or improve one tool page in src/site.ts that targets a real search phrase (a new tool is fine when it is next on ops/roadmap.md),
    - tighten copy, titles or FAQs on an existing page.
