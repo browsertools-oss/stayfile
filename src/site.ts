@@ -476,6 +476,30 @@ export const PAGES: ToolPage[] = [
     ],
   },
   {
+    slug: 'gif-to-png',
+    tool: 'img-convert',
+    group: 'Images',
+    card: 'GIF to PNG',
+    blurb: 'Save a GIF as a PNG image',
+    preset: { out: 'image/png', accept: 'image/gif,.gif' },
+    title: 'GIF to PNG converter: save a GIF as PNG online',
+    h1: 'Convert GIF to PNG',
+    lede: 'Save a GIF as a PNG image. Only the first frame of an animated GIF is kept, because PNG holds a single picture.',
+    description: 'Convert GIF images to PNG in your browser. Only the first frame of an animated GIF is kept. Your files are never uploaded.',
+    steps: ['Drop in your .gif files.', 'PNG is already selected.', 'Click Convert, then save each image or all of them as a zip.'],
+    faq: [
+      {
+        q: 'What happens to the animation?',
+        a: 'It is dropped. The PNG is the first frame of the GIF, and PNG cannot store the other frames. To keep the animation, use the GIF file itself.',
+      },
+      {
+        q: 'Does PNG keep the colors exactly?',
+        a: 'PNG keeps every pixel of the frame exactly. A GIF has at most 256 colors, so the picture looks the same, and PNG files are usually a little larger than the GIF.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
     slug: 'webp-to-png',
     tool: 'img-convert',
     group: 'Images',
