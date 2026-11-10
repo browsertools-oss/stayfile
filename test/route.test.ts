@@ -101,6 +101,9 @@ describe('splitButtons', () => {
     expect(splitButtons('every')[0].v).toBe('every');
     expect(splitButtons('nonsense')[0].v).toBe('ranges');
   });
+  test('the remove preset gives one Remove button only', () => {
+    expect(splitButtons('remove').map((b) => b.v)).toEqual(['remove']);
+  });
   test('labels each button with what it saves, so no confirm step is needed', () => {
     for (const b of splitButtons('ranges')) expect(b.l).toMatch(/^Save /);
   });
