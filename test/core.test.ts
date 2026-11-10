@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest';
 import { PDFDocument, degrees } from '@cantoo/pdf-lib';
 import { deflateSync } from 'node:zlib';
-import { parseRanges, merge, extract, split, burst, rotate, imagesToPdf, placeImage, pageCount } from '../src/lib/pdf';
+import { parseRanges, merge, extract, split, burst, rotate, imagesToPdf, placeImage, pageCount, pagesToKeep } from '../src/lib/pdf';
 import { typeValue, parseCsv, csvToJson, jsonToCsv, jsonRows, flatten } from '../src/lib/data';
 import * as XLSX from 'xlsx';
 import { csvToXlsx, xlsxToRows, xlsxToCsv } from '../src/lib/xlsx';
@@ -72,6 +72,12 @@ describe('pdf', () => {
     expect(await widths(out)).toEqual([100, 200, 100, 200, 300]);
   });
 
+  test('pagesToKeep drops the removed pages and keeps the rest in order', () => {
+    expect(pagesToKeep([3], 5)).toEqual([0, 1, 2, 4]);
+    expect(pagesToKeep([4, 0, 0], 5)).toEqual([1, 2, 3]);
+    expect(pagesToKeep([], 3)).toEqual([0, 1, 2]);
+    expect(pagesToKeep([0, 1, 2], 3)).toEqual([]);
+  });
   test('extract copies chosen pages in the given order', async () => {
     const out = await extract(await makePdf(5), [4, 0, 2]);
     expect(await widths(out)).toEqual([500, 100, 300]);

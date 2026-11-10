@@ -108,6 +108,7 @@ export function splitButtons(preset: string): { v: string; l: string }[] {
     { v: 'extract', l: 'Save pages as one PDF' },
     { v: 'every', l: 'Save every page as a file' },
   ];
+  if (preset === 'remove') return [{ v: 'remove', l: 'Remove these pages and save the rest' }];
   const lead = all.find((b) => b.v === preset) ?? all[0];
   return [lead, ...all.filter((b) => b !== lead)];
 }

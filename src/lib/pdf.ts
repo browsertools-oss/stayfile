@@ -43,6 +43,14 @@ export async function merge(files: Bytes[]): Promise<Uint8Array> {
 }
 
 /** Copy the given zero-based pages, in order, into a new PDF. */
+/** The 0-based page indexes left after removing the given ones, in page order. */
+export function pagesToKeep(remove: number[], total: number): number[] {
+  const drop = new Set(remove);
+  const keep: number[] = [];
+  for (let p = 0; p < total; p++) if (!drop.has(p)) keep.push(p);
+  return keep;
+}
+
 export async function extract(b: Bytes, pages: number[]): Promise<Uint8Array> {
   const src = await load(b);
   const out = await PDFDocument.create();

@@ -25,7 +25,7 @@ export type Tool =
 export type Group = 'PDF' | 'Images' | 'Spreadsheets and data';
 
 export interface Preset {
-  split?: 'extract' | 'ranges' | 'every';
+  split?: 'extract' | 'ranges' | 'every' | 'remove';
   out?: 'image/jpeg' | 'image/png' | 'image/webp' | 'image/avif';
   accept?: string; // narrows the file picker on single-format pages
 }
@@ -138,6 +138,34 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Can I change the page order?',
         a: 'Yes. The new file follows the order you type, so 3, 1, 2 puts page three first. A range written backwards, like 10-1, reverses those pages.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'remove-pages-from-pdf',
+    tool: 'pdf-split',
+    group: 'PDF',
+    card: 'Remove PDF pages',
+    blurb: 'Delete the pages you do not need',
+    preset: { split: 'remove' },
+    title: 'Remove pages from a PDF online and save the rest as a new PDF',
+    h1: 'Remove pages from a PDF',
+    lede: 'Take out the pages you do not want and save everything else as a new PDF. Your original file is not changed.',
+    description: 'Delete pages from a PDF in your browser. Type the pages to remove and download the rest. Your files are never uploaded.',
+    steps: ['Drop in your PDF.', 'Type the pages to remove, for example 2, 5-7.', 'Click Remove pages and save the new PDF.'],
+    faq: [
+      {
+        q: 'Does this change my original PDF?',
+        a: 'No. The new file is a copy with those pages left out. The file you dropped stays as it was.',
+      },
+      {
+        q: 'Can I remove a range of pages?',
+        a: 'Yes. Type 5-7 to remove pages 5, 6 and 7. You can list single pages and ranges together, like 2, 5-7.',
+      },
+      {
+        q: 'What if I remove every page?',
+        a: 'This page stops you, because a PDF needs at least one page. Leave one page in and save again.',
       },
       PRIVATE,
     ],
