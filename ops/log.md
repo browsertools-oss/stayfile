@@ -23,3 +23,18 @@ Choices: the PNG page offers the same 96, 150 and 300 dpi choices and paints a w
 Not checked: I did not open /pdf-to-png/ in a browser. The build renders the page; the drop, progress text and zip download are checked by reading the code only.
 Roadmap: PDF to PNG is not in ops/roadmap.md yet. The owner can add it to Shipped after a browser check.
 Next: a browser check of /pdf-to-png/ and /pdf-to-jpg/, then the items in next.md.
+
+2026-11-10 (ops run, second): Checked first. npm test passed (48 tests) and npm run build passed (21 pages). Session started 04:25 UTC.
+Changed, in order:
+- Added a test for Excel to CSV with date cells and tab order (xlsxToCsv writes 2026-11-06 for a date formatted yyyy-mm-dd, keeps the first tab Orders over Notes). Committed.
+- Added Excel to JSON at /excel-to-json/ (tool xlsx-to-json). It reads the first sheet as CSV, then runs csvToJson with the first row as keys and typed values, so plain numbers are numbers and 02134 stays text. Chose this because it reuses the existing paths and needs no new dependency. Test covers the keys and checks that the leading zero in 02134 is kept. Committed.
+- Routed a dropped .xlsx on the home page to Excel to CSV and Excel to JSON. Before this, Excel files were classed as "other" and the home page said no tool takes them. Added an 'xlsx' kind in src/lib/route.ts with tests. Committed.
+- Added JSON to Excel at /json-to-excel/ (tool json-to-xlsx). The preview is the JSON-to-CSV output, and Download builds the workbook from it with csvToXlsx. Test covers keys as headings and numbers as numbers. Committed.
+- A dropped .json file on the home page now also offers JSON to Excel. Committed.
+- Added PNG to PDF at /png-to-pdf/. It uses the existing images to PDF tool (img-to-pdf), with copy for PNG: the file is embedded without a JPG resave, so text stays sharp. Chose a separate page because "png to pdf" is a real search phrase; the tool is the same, so the copy and FAQ are what differ. No test, since no logic changed. Committed.
+Build is now 24 pages; npm test passes 52 tests.
+Chunk-size warning: it comes from neither SheetJS nor pdf.js. The chunk over 500 kB is the PDF tool page script (about 565 kB), which holds @cantoo/pdf-lib used by merge, split, rotate and the image-to-PDF pages. SheetJS is 485 kB and pdf.js is 409 kB, both under the limit. I did not split pdf-lib or raise the limit; the warning is a size note, not a failure. Left as is.
+Choices: Excel to JSON reads the first sheet only, like Excel to CSV, and says how many other sheets there are. JSON to Excel uses the same delimiter choice as the JSON page.
+Not checked: no browser check. No headless browser is installed here, and I did not install one. The four new pages (/excel-to-json/, /json-to-excel/) and the home-page routing are checked by tests and the build only. The earlier pages (/pdf-to-jpg/, /pdf-to-png/, /excel-to-csv/) are still waiting for a browser check.
+Roadmap: not edited. Excel to JSON and JSON to Excel are not in ops/roadmap.md; the owner can add them to Shipped after a browser check, as with the others.
+Next: a browser check of the new Excel and JSON pages and the earlier PDF pages, then the items in next.md.
