@@ -1,4 +1,4 @@
 - Decide the scope of PDF page previews: only on the PDF to JPG and PDF to PNG pages, so merge, split and rotate do not load pdf.js.
-- Browser check of /heic-to-png/, /pdf-to-png/, /pdf-to-jpg/, /excel-to-csv/ and the Excel and JSON pages, if a headless browser can be set up.
+- Browser check of /webp-to-pdf/, /heic-to-png/, /pdf-to-png/, /pdf-to-jpg/ and /excel-to-csv/, if a headless browser can be set up.
 - Check the Make PDF page with a HEIC file in Chrome, since the decode fix so far is checked only by the build.
-- Look for another search phrase with no page yet, such as "webp to pdf", once the preview decision is made.
+- Look for another search phrase with no page yet, such as "jpg to webp to pdf" variants or "pdf to webp", after the preview decision.

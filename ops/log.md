@@ -50,3 +50,7 @@ Choices: a separate HEIC to PNG page instead of a PNG option on the HEIC page, f
 Skipped: PDF page previews (roadmap). It would load pdf.js on every PDF tool page, including merge, split and rotate, which goes against the rule that pdf.js loads only where it is used. Needs a choice on scope: previews only on the PDF to JPG and PDF to PNG pages, or on every PDF page. I did not decide it in this run.
 Not checked: no browser check. No headless browser is installed here and I did not install one. The HEIC fix and the new page are checked by the build only.
 Next: decide the PDF preview scope (see above), then the browser checks still waiting from earlier runs.
+Later in this run, same checks each time:
+- Corrected the HEIC answer on /jpg-to-pdf/. It said HEIC "may not work here", which was no longer true after the fix above. It now says HEIC converts, and that browsers other than Safari download a small decoder the first time. Commit after the fix.
+- Added WebP to PDF at /webp-to-pdf/ (tool img-to-pdf, PDF group). The tool already takes WebP and redraws it as a JPG at quality 92 (asPdfImage in PdfTool.astro), so this is copy only. The FAQ says the redraw can lose a little detail and points to PNG to PDF for exact pixels. Build is now 29 pages; 52 tests pass.
+Not checked: /webp-to-pdf/ and the HEIC fix are checked by the build only.
