@@ -1,4 +1,4 @@
-- Run a browser check on /excel-to-json/, /json-to-excel/, /png-to-pdf/, /pdf-to-png/ and /pdf-to-jpg/ with sample files, if a headless browser can be set up.
+- Run a browser check on /excel-to-json/, /json-to-excel/, /png-to-pdf/, /jpg-to-png/, /webp-to-png/, /png-to-webp/, /pdf-to-png/ and /pdf-to-jpg/ with sample files, if a headless browser can be set up.
 - Re-read the new Excel and JSON page copy against the style rules and tighten any sentence that sounds like an ad.
 - Next roadmap item: PDF page previews, reusing pdfToImages() in src/lib/pdf-render.ts.
 - Leave the chunk-size warning alone: it is pdf-lib in the PDF tool page, not SheetJS or pdf.js.

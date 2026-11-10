@@ -32,9 +32,11 @@ Changed, in order:
 - Added JSON to Excel at /json-to-excel/ (tool json-to-xlsx). The preview is the JSON-to-CSV output, and Download builds the workbook from it with csvToXlsx. Test covers keys as headings and numbers as numbers. Committed.
 - A dropped .json file on the home page now also offers JSON to Excel. Committed.
 - Added PNG to PDF at /png-to-pdf/. It uses the existing images to PDF tool (img-to-pdf), with copy for PNG: the file is embedded without a JPG resave, so text stays sharp. Chose a separate page because "png to pdf" is a real search phrase; the tool is the same, so the copy and FAQ are what differ. No test, since no logic changed. Committed.
-Build is now 24 pages; npm test passes 52 tests.
+- Added JPG to PNG, WebP to PNG and PNG to WebP, each on the existing image convert tool with a preset for the output format (/jpg-to-png/, /webp-to-png/, /png-to-webp/). Copy says PNG keeps every pixel but cannot restore lost JPG detail, and that PNG files are usually larger. I did not state file sizes as numbers because I have not measured them. Committed.
+Build is now 27 pages; npm test passes 52 tests.
 Chunk-size warning: it comes from neither SheetJS nor pdf.js. The chunk over 500 kB is the PDF tool page script (about 565 kB), which holds @cantoo/pdf-lib used by merge, split, rotate and the image-to-PDF pages. SheetJS is 485 kB and pdf.js is 409 kB, both under the limit. I did not split pdf-lib or raise the limit; the warning is a size note, not a failure. Left as is.
 Choices: Excel to JSON reads the first sheet only, like Excel to CSV, and says how many other sheets there are. JSON to Excel uses the same delimiter choice as the JSON page.
 Not checked: no browser check. No headless browser is installed here, and I did not install one. The four new pages (/excel-to-json/, /json-to-excel/) and the home-page routing are checked by tests and the build only. The earlier pages (/pdf-to-jpg/, /pdf-to-png/, /excel-to-csv/) are still waiting for a browser check.
 Roadmap: not edited. Excel to JSON and JSON to Excel are not in ops/roadmap.md; the owner can add them to Shipped after a browser check, as with the others.
-Next: a browser check of the new Excel and JSON pages and the earlier PDF pages, then the items in next.md.
+Also not checked: the new image pages (/jpg-to-png/, /webp-to-png/, /png-to-webp/) and /png-to-pdf/ were checked only by the build. Their presets reuse ImageTool's existing output paths; I read that code but did not run it.
+Next: a browser check of the new pages and the earlier PDF pages, then the items in next.md.
