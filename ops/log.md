@@ -16,3 +16,10 @@ Choices: 150 dpi default and a 0.92 JPG quality, because that reads well on scre
 Not checked: I did not open /pdf-to-jpg/ in a browser, so the drop, the progress text and the zip download are checked by reading the code and by the build only. The renderer itself is not unit tested because the tests run in Node with no canvas.
 Roadmap: PDF to JPG is still under "Next tools". The owner should move it to Shipped after a browser check, same as Excel to CSV.
 Next: a browser check of /pdf-to-jpg/ and /excel-to-csv/, then the items in next.md.
+
+2026-11-10 (ops run): Checked first. npm test passed (47 tests) and npm run build passed (20 pages). The roadmap's next item is PDF page previews. "pdf to png" is a real search phrase with no page yet, and it reuses the same pdf.js renderer, so I built that page now and left previews for a later run.
+Changed: added PDF to PNG at /pdf-to-png/ (slug pdf-to-png, tool pdf-to-png, in the PDF group). The renderer in src/lib/pdf-render.ts is now pdfToImages(bytes, dpi, format, onPage) and draws JPG or PNG; the pdf.js import still loads on the PDF page only. jpgPageName() became pageImageName(base, page, total, ext) in src/lib/pdf.ts, and test/pdf-jpg.test.ts covers the PNG extension (48 tests). Nothing is uploaded.
+Choices: the PNG page offers the same 96, 150 and 300 dpi choices and paints a white background first, because PDF pages are opaque and white is what people expect. The copy says PNG keeps text sharp and makes bigger files; I did not put file sizes in the copy because I have not measured them.
+Not checked: I did not open /pdf-to-png/ in a browser. The build renders the page; the drop, progress text and zip download are checked by reading the code only.
+Roadmap: PDF to PNG is not in ops/roadmap.md yet. The owner can add it to Shipped after a browser check.
+Next: a browser check of /pdf-to-png/ and /pdf-to-jpg/, then the items in next.md.

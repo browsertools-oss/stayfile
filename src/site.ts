@@ -10,6 +10,7 @@ export type Tool =
   | 'pdf-split'
   | 'pdf-rotate'
   | 'pdf-to-jpg'
+  | 'pdf-to-png'
   | 'img-to-pdf'
   | 'img-convert'
   | 'img-compress'
@@ -193,6 +194,37 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Which resolution should I choose?',
         a: '150 dpi is plenty for reading on a screen or sending in a message. Choose 300 dpi when the pages will be printed. Higher numbers give bigger files.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'pdf-to-png',
+    tool: 'pdf-to-png',
+    group: 'PDF',
+    card: 'PDF to PNG',
+    blurb: 'Turn each PDF page into a sharp PNG image',
+    title: 'PDF to PNG: turn each page into an image',
+    h1: 'Convert PDF to PNG',
+    lede: 'Turn each page of a PDF into a PNG picture. PNG keeps text and lines sharp, so it suits pages with small print or diagrams. A one-page PDF gives one PNG; a longer one comes back as a zip of numbered PNGs.',
+    description: 'Convert every page of a PDF to a PNG image in your browser, at 96, 150 or 300 dpi. The PDF is not uploaded.',
+    steps: [
+      'Drop in the PDF.',
+      'Pick a resolution. 150 dpi suits most screens, and 300 dpi is better for printing.',
+      'Click Convert to PNG and save the image, or the zip of images for a longer PDF.',
+    ],
+    faq: [
+      {
+        q: 'Why does each page become its own PNG?',
+        a: 'A PNG holds one picture, so every page needs a file of its own. A PDF with several pages comes back as a zip file, with one PNG per page numbered in order.',
+      },
+      {
+        q: 'PNG or JPG: which should I choose?',
+        a: 'PNG keeps text and lines sharp, so it is the better choice for documents and diagrams. JPG makes smaller files, which suits photos or pages you only need to send.',
+      },
+      {
+        q: 'Why are the PNG files bigger?',
+        a: 'PNG stores every pixel exactly, which is why a page of text makes a larger file than the same page as a JPG. Choose 96 or 150 dpi unless the pages will be printed.',
       },
       PRIVATE,
     ],

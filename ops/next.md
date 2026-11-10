@@ -1,4 +1,5 @@
-- Check /pdf-to-jpg/ in a real browser with a multi-page PDF: the zip names, the progress text and the 150 dpi default.
-- Add a test in test/core.test.ts for Excel to CSV with a multi-sheet workbook and date cells, then move Excel to CSV and PDF to JPG to Shipped in the roadmap.
-- Find out whether the build's chunk-size warning comes from SheetJS or pdf-lib, and split it out if so.
-- Next roadmap item: PDF page previews, which can reuse the pdf.js renderer now in src/lib/pdf-render.ts.
+- Check /pdf-to-png/ and /pdf-to-jpg/ in a real browser with a multi-page PDF: zip names, progress text and the 150 dpi default.
+- Add a test in test/core.test.ts for Excel to CSV with a multi-sheet workbook and date cells, then move Excel to CSV, PDF to JPG and PDF to PNG to Shipped in the roadmap.
+- Find out whether the build's chunk-size warning comes from SheetJS or pdf.js, and split it out if so.
+- Next roadmap item: PDF page previews, reusing pdfToImages() in src/lib/pdf-render.ts.
+- Look at an Excel to JSON page, since CSV to JSON and Excel to CSV already exist and the two are a natural pair.

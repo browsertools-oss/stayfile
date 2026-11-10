@@ -1,11 +1,12 @@
-// Draws PDF pages to JPG with pdf.js. Loaded with a dynamic import from the PDF tool page only,
+// Draws PDF pages to JPG or PNG with pdf.js. Loaded with a dynamic import from the PDF tool page only,
 // so the library and its worker are downloaded when someone converts a file, not on every page.
 // Everything runs in the browser; the bytes never leave the device.
 
-/** Render each page of a PDF to a JPG, one Uint8Array per page, in page order. */
-export async function pdfToJpgs(
+/** Render each page of a PDF to a JPG or PNG, one Uint8Array per page, in page order. */
+export async function pdfToImages(
   bytes: Uint8Array,
   dpi: number,
+  format: 'jpg' | 'png',
   onPage?: (page: number, total: number) => void,
 ): Promise<Uint8Array[]> {
   const pdfjs = await import('pdfjs-dist');
@@ -28,8 +29,9 @@ export async function pdfToJpgs(
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       await page.render({ canvasContext: ctx, viewport, canvas }).promise;
+      const mime = format === 'png' ? 'image/png' : 'image/jpeg';
       const blob: Blob = await new Promise((resolve, reject) =>
-        canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('Could not save a page as JPG.'))), 'image/jpeg', 0.92),
+        canvas.toBlob((b) => (b ? resolve(b) : reject(new Error(`Could not save a page as ${format.toUpperCase()}.`))), mime, 0.92),
       );
       out.push(new Uint8Array(await blob.arrayBuffer()));
       page.cleanup();
