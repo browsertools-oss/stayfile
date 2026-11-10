@@ -182,7 +182,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
     const isPng = bytes[0] === 0x89 && bytes[1] === 0x50;
     if (isJpg) return { bytes, type: 'image/jpeg' };
     if (isPng) return { bytes, type: 'image/png' };
-    const bmp = await decode(f);
+    const bmp = await decode(f, true);
     const c = draw(bmp, bmp.width, bmp.height, true);
     bmp.close();
     const blob: Blob = await new Promise((r, j) => c.toBlob((b) => (b ? r(b) : j(new Error('Could not convert image.'))), 'image/jpeg', 0.92));
