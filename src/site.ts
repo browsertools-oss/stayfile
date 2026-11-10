@@ -424,6 +424,34 @@ export const PAGES: ToolPage[] = [
     ],
   },
   {
+    slug: 'heic-to-png',
+    tool: 'img-convert',
+    group: 'Images',
+    card: 'HEIC to PNG',
+    blurb: 'Turn iPhone photos into PNG',
+    preset: { out: 'image/png', accept: 'image/heic,image/heif,.heic,.heif' },
+    title: 'HEIC to PNG converter for iPhone photos',
+    h1: 'Convert HEIC to PNG',
+    lede: 'Turn iPhone HEIC photos into PNG files. PNG keeps every pixel, but its files are usually larger than HEIC or JPG, so use it when an app asks for PNG or when you plan to edit the photo.',
+    description: 'Convert iPhone HEIC photos to PNG in your browser, one at a time or in a batch. Your photos are never uploaded.',
+    steps: ['Drop in your .heic files.', 'PNG is already selected.', 'Click Convert, then save each photo or all of them as a zip.'],
+    faq: [
+      {
+        q: 'Is PNG better than JPG for photos?',
+        a: 'It depends on the photo. PNG is exact, so it suits screenshots, text and sharp graphics. For a photo you only want to share, JPG is usually the smaller choice.',
+      },
+      {
+        q: 'Does the PNG keep the location and camera details?',
+        a: 'No. The PNG is drawn fresh from the pixels, so the date, location and camera details are left out.',
+      },
+      {
+        q: 'Why does the first photo take longer?',
+        a: "Most browsers can't read HEIC on their own, so the page downloads a decoder the first time you convert. Safari reads HEIC itself and skips this step.",
+      },
+      PRIVATE,
+    ],
+  },
+  {
     slug: 'webp-to-png',
     tool: 'img-convert',
     group: 'Images',
