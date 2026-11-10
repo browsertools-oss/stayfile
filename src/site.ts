@@ -696,7 +696,7 @@ export const PAGES: ToolPage[] = [
     faq: [
       {
         q: 'What JSON shapes does it accept?',
-        a: 'An array of objects, a single object, an object with one array inside (such as {"data": [...]}), or JSON Lines with one object per line.',
+        a: 'An array of objects or a single object works. So does an object with one array inside, such as {"data": [...]}. JSON Lines, with one object per line, is accepted too.',
       },
       {
         q: 'Are nested fields kept?',
