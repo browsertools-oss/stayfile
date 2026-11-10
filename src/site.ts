@@ -18,7 +18,8 @@ export type Tool =
   | 'csv-to-json'
   | 'json-to-csv'
   | 'csv-to-xlsx'
-  | 'xlsx-to-csv';
+  | 'xlsx-to-csv'
+  | 'xlsx-to-json';
 
 export type Group = 'PDF' | 'Images' | 'Spreadsheets and data';
 
@@ -553,6 +554,33 @@ export const PAGES: ToolPage[] = [
       {
         q: 'What about commas and line breaks inside a cell?',
         a: 'The cell is wrapped in quotes, which is how CSV keeps a comma or a line break inside one value.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'excel-to-json',
+    tool: 'xlsx-to-json',
+    group: 'Spreadsheets and data',
+    card: 'Excel to JSON',
+    blurb: 'First sheet of a workbook as a JSON array',
+    title: 'Excel to JSON converter: XLSX to JSON online',
+    h1: 'Convert Excel to JSON',
+    lede: 'Turn the first sheet of an Excel workbook into a JSON array. The column headings become the keys, and each row after the heading becomes one object.',
+    description: 'Convert Excel .xlsx files to JSON in your browser. Uses the first sheet and its header row as keys. Your workbook is never uploaded.',
+    steps: ['Drop in an .xlsx file.', 'Check the preview. Only the first sheet is converted.', 'Download the JSON or copy it.'],
+    faq: [
+      {
+        q: 'Do the column headings have to be in the first row?',
+        a: 'Yes. The first row of the sheet is read as the keys, so the headings should sit in row one with the data underneath. If your sheet has a title above the table, delete it or cut the table into a new sheet.',
+      },
+      {
+        q: 'How are dates and formatted numbers written?',
+        a: 'Each cell is read the way Excel shows it. A date formatted as 2026-11-06 comes out as that text. Plain numbers come out as numbers.',
+      },
+      {
+        q: 'What happens to the other sheets?',
+        a: 'Only the first sheet is converted, and the page lists the other sheet names. To get another sheet, drag its tab to the front in Excel, save, and drop the file here again.',
       },
       PRIVATE,
     ],

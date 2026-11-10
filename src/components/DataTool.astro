@@ -4,13 +4,13 @@ import type { Tool } from '../site';
 interface Props { tool: Tool; slug: string }
 const { tool, slug } = Astro.props;
 const fromJson = tool === 'json-to-csv';
-const fromXlsx = tool === 'xlsx-to-csv';
+const fromXlsx = tool === 'xlsx-to-csv' || tool === 'xlsx-to-json';
 const accept = fromXlsx
   ? '.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   : fromJson ? '.json,.jsonl,.ndjson,application/json,text/plain' : '.csv,.tsv,.txt,text/csv,text/plain';
 const what = fromXlsx ? 'an Excel file' : fromJson ? 'a JSON file' : 'a CSV file';
 const placeholder = fromJson ? '[{"name": "Ada", "age": 36}, {"name": "Grace", "age": 85}]' : 'name,age\nAda,36\nGrace,85';
-const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .csv', 'csv-to-xlsx': 'Download .xlsx', 'xlsx-to-csv': 'Download .csv' }[tool as string];
+const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .csv', 'csv-to-xlsx': 'Download .xlsx', 'xlsx-to-csv': 'Download .csv', 'xlsx-to-json': 'Download .json' }[tool as string];
 ---
 <section class="tool" data-tool={tool} data-slug={slug}>
   <Drop accept={accept} main={`Drop ${what} here, or <u>choose one</u>`} sub={fromXlsx ? 'Only the first sheet is converted' : 'or paste below'} />
@@ -57,7 +57,7 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
   <p class="error" id="err" role="alert" hidden></p>
 
   <div class="preview" id="tableWrap" hidden><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
-  {tool === 'csv-to-json' && <textarea id="output" rows="12" readonly spellcheck="false" aria-label="JSON output" hidden style="margin-top:14px"></textarea>}
+  {(tool === 'csv-to-json' || tool === 'xlsx-to-json') && <textarea id="output" rows="12" readonly spellcheck="false" aria-label="JSON output" hidden style="margin-top:14px"></textarea>}
 </section>
 
 <script>
@@ -68,7 +68,7 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
 
   const root = document.querySelector<HTMLElement>('.tool')!;
   const tool = root.dataset.tool!;
-  const fromXlsx = tool === 'xlsx-to-csv';
+  const fromXlsx = tool === 'xlsx-to-csv' || tool === 'xlsx-to-json';
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
   const input = $<HTMLTextAreaElement>('input')!, drop = $('drop')!, go = $<HTMLButtonElement>('go')!, copy = $<HTMLButtonElement>('copy');
   const status = $('status')!, err = $('err')!, list = $('list')!, out = $<HTMLTextAreaElement>('output');
@@ -115,12 +115,21 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
         table(cols, rows.map((r) => cols.map((c) => r[c])));
         status.textContent = `${rows.length} row${rows.length === 1 ? '' : 's'}, ${cols.length} column${cols.length === 1 ? '' : 's'}${rows.length > MAX_ROWS ? `. Preview shows the first ${MAX_ROWS}.` : '.'}`;
       } else if (fromXlsx) {
-        // The text is the first sheet already converted to CSV, so the download is the text itself.
+        // The text is the first sheet already converted to CSV. CSV downloads are the text itself; JSON is built from it.
         const rows = parseCsv(text, { delimiter: ',', header: false, typed: false }).rows as unknown[][];
         const cols = rows.reduce((m, r) => Math.max(m, r.length), 0);
-        result = text;
-        table([], rows);
-        status.textContent = `${rows.length} row${rows.length === 1 ? '' : 's'}, ${cols} column${cols === 1 ? '' : 's'}, comma-separated.${sheetInfo ? ` ${sheetInfo}` : ''}${rows.length > MAX_ROWS ? ` Preview shows the first ${MAX_ROWS}.` : ''}`;
+        const json = tool === 'xlsx-to-json';
+        if (json) {
+          result = csvToJson(text, { delimiter: ',', header: true, typed: true });
+          out!.value = result.length > 200_000 ? result.slice(0, 200_000) + '\n… (preview cut short; the download has everything)' : result;
+          out!.hidden = false;
+          table(rows[0]?.map((h) => String(h ?? '')) ?? [], rows.slice(1));
+        } else {
+          result = text;
+          table([], rows);
+        }
+        const shape = json ? 'first row used as keys' : 'comma-separated';
+        status.textContent = `${rows.length} row${rows.length === 1 ? '' : 's'}, ${cols} column${cols === 1 ? '' : 's'}, ${shape}.${sheetInfo ? ` ${sheetInfo}` : ''}${rows.length > MAX_ROWS ? ` Preview shows the first ${MAX_ROWS}.` : ''}`;
       } else {
         const o = opts();
         const p = parseCsv(text, o);
@@ -200,7 +209,7 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
     });
   };
   go.addEventListener('click', async () => {
-    if (tool === 'csv-to-json') done(new Blob([result], { type: 'application/json' }), `${name}.json`);
+    if (tool === 'csv-to-json' || tool === 'xlsx-to-json') done(new Blob([result], { type: 'application/json' }), `${name}.json`);
     else if (tool === 'json-to-csv' || fromXlsx) done(new Blob(['﻿' + result], { type: 'text/csv' }), `${name}.csv`); // BOM so Excel reads UTF-8
     else {
       go.disabled = true;

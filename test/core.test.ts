@@ -211,6 +211,17 @@ describe('csv and json', () => {
     expect(out.csv.trimEnd()).toBe('when,n\n2026-11-06,3');
     expect(out.sheets).toEqual(['Orders', 'Notes']);
   });
+
+  test('Excel to JSON: first row becomes the keys and plain numbers stay numbers', () => {
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['name', 'age', 'zip'], ['Ada', 36, '02134'], ['Grace', 85, '10001']]), 'People');
+    const bytes = new Uint8Array(XLSX.write(wb, { type: 'array', bookType: 'xlsx' }) as ArrayBuffer);
+    const json = JSON.parse(csvToJson(xlsxToCsv(bytes).csv, { delimiter: ',', header: true, typed: true }));
+    expect(json).toEqual([
+      { name: 'Ada', age: 36, zip: '02134' },
+      { name: 'Grace', age: 85, zip: '10001' },
+    ]);
+  });
 });
 
 describe('image math', () => {
