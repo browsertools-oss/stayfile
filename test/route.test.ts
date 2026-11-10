@@ -37,7 +37,7 @@ describe('suggestTools', () => {
   });
   test('one CSV or JSON file maps to its converters', () => {
     expect(slugs(suggestTools([f('sales.csv')]))).toEqual(['csv-to-excel', 'csv-to-json']);
-    expect(slugs(suggestTools([f('rows.json')]))).toEqual(['json-to-csv']);
+    expect(slugs(suggestTools([f('rows.json')]))).toEqual(['json-to-csv', 'json-to-excel']);
   });
   test('one Excel file maps to the Excel converters', () => {
     expect(slugs(suggestTools([f('budget.xlsx')]))).toEqual(['excel-to-csv', 'excel-to-json']);

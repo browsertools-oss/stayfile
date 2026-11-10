@@ -51,7 +51,7 @@ export function suggestTools(files: Named[]): Route[] {
   }
   if (n > 1) return [];
   if (kinds.has('csv')) return [{ slug: 'csv-to-excel', label: 'Turn it into an Excel file' }, { slug: 'csv-to-json', label: 'Convert to JSON' }];
-  if (kinds.has('json')) return [{ slug: 'json-to-csv', label: 'Convert to CSV' }];
+  if (kinds.has('json')) return [{ slug: 'json-to-csv', label: 'Convert to CSV' }, { slug: 'json-to-excel', label: 'Turn it into an Excel file' }];
   if (kinds.has('xlsx')) return [{ slug: 'excel-to-csv', label: 'Convert to CSV' }, { slug: 'excel-to-json', label: 'Convert to JSON' }];
   return [];
 }
