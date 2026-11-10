@@ -494,7 +494,7 @@ export const PAGES: ToolPage[] = [
       },
       {
         q: 'Does PNG keep the colors exactly?',
-        a: 'PNG keeps every pixel of the frame exactly. A GIF has at most 256 colors, so the picture looks the same, and PNG files are usually a little larger than the GIF.',
+        a: 'PNG keeps every pixel of the frame exactly. A GIF has at most 256 colors, and PNG keeps those colors as they are, so the picture does not change. The file size can go either way.',
       },
       PRIVATE,
     ],
