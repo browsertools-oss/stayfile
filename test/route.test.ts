@@ -39,6 +39,10 @@ describe('suggestTools', () => {
     expect(slugs(suggestTools([f('sales.csv')]))).toEqual(['csv-to-excel', 'csv-to-json']);
     expect(slugs(suggestTools([f('rows.json')]))).toEqual(['json-to-csv']);
   });
+  test('one Excel file maps to the Excel converters', () => {
+    expect(slugs(suggestTools([f('budget.xlsx')]))).toEqual(['excel-to-csv', 'excel-to-json']);
+    expect(kindOf(f('budget.xlsx'))).toBe('xlsx');
+  });
   test('mixed or unknown sets get no suggestion', () => {
     expect(suggestTools([])).toEqual([]);
     expect(suggestTools([f('a.pdf'), f('b.jpg')])).toEqual([]);

@@ -1,7 +1,7 @@
 // Pure routing rules for the flow between tools: what a dropped set of files can become on the home page,
 // what makes sense after a save, and the names files get. Kept free of the DOM so they can be tested.
 
-export type Kind = 'pdf' | 'heic' | 'image' | 'csv' | 'json' | 'other';
+export type Kind = 'pdf' | 'heic' | 'image' | 'csv' | 'json' | 'xlsx' | 'other';
 export type Route = { slug: string; label: string };
 type Named = { name: string; type?: string };
 
@@ -13,6 +13,7 @@ export function kindOf(f: Named): Kind {
   if (t.startsWith('image/') || /\.(jpe?g|png|webp|gif|avif|bmp)$/.test(n)) return 'image';
   if (/\.(csv|tsv)$/.test(n) || t === 'text/csv') return 'csv';
   if (/\.(json|jsonl|ndjson)$/.test(n) || t === 'application/json') return 'json';
+  if (/\.xlsx$/.test(n) || t === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') return 'xlsx';
   return 'other';
 }
 
@@ -51,6 +52,7 @@ export function suggestTools(files: Named[]): Route[] {
   if (n > 1) return [];
   if (kinds.has('csv')) return [{ slug: 'csv-to-excel', label: 'Turn it into an Excel file' }, { slug: 'csv-to-json', label: 'Convert to JSON' }];
   if (kinds.has('json')) return [{ slug: 'json-to-csv', label: 'Convert to CSV' }];
+  if (kinds.has('xlsx')) return [{ slug: 'excel-to-csv', label: 'Convert to CSV' }, { slug: 'excel-to-json', label: 'Convert to JSON' }];
   return [];
 }
 
@@ -60,7 +62,7 @@ export function describeDrop(files: Named[]): string {
   if (!n) return '';
   const kinds = new Set(files.map(kindOf));
   const word = kinds.size > 1 ? (([...kinds].every((k) => k === 'image' || k === 'heic')) ? 'image' : 'file')
-    : ({ pdf: 'PDF', heic: 'iPhone photo', image: 'image', csv: 'CSV file', json: 'JSON file', other: 'file' } as const)[[...kinds][0]];
+    : ({ pdf: 'PDF', heic: 'iPhone photo', image: 'image', csv: 'CSV file', json: 'JSON file', xlsx: 'Excel file', other: 'file' } as const)[[...kinds][0]];
   return n === 1 ? `${files[0].name}. What should happen to it?` : `${n} ${word}s. What should happen to them?`;
 }
 
