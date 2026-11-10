@@ -59,3 +59,6 @@ Not checked: /webp-to-pdf/ and the HEIC fix are checked by the build only.
 - Adding a test for the remove preset on splitButtons(). Tests: 54 pass. Build: 32 pages.
 Choices: the remove page has one button only, because "save the rest" is the only thing that makes sense there; the other split modes stay on the split page.
 Skipped: PNG to ICO (favicon phrase) would need an ICO encoder; not started this run.
+- Added JPG to AVIF at /jpg-to-avif/ (preset image/avif, accepts JPG and PNG). AVIF encoding already exists in src/lib/image.ts through jSquash, so this is copy and preset only. The copy warns that some upload forms reject AVIF and points to AVIF to JPG. Build is now 33 pages; 54 tests pass.
+Not checked in a browser: /jpg-to-avif/ and /remove-pages-from-pdf/ (see above).
+Next: decide PDF preview scope, then the browser checks in next.md.

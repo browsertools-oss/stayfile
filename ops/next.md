@@ -1,4 +1,4 @@
 - Decide the scope of PDF page previews: only on the PDF to JPG and PDF to PNG pages, so merge, split and rotate do not load pdf.js.
-- Browser check of /remove-pages-from-pdf/, /webp-to-pdf/, /heic-to-png/ and the PDF pages, if a headless browser can be set up.
+- Browser check of /remove-pages-from-pdf/, /jpg-to-avif/, /webp-to-pdf/ and /heic-to-png/, if a headless browser can be set up.
 - Check the Make PDF page with a HEIC file in Chrome, since the decode fix so far is checked only by the build.
-- Consider a PNG to ICO page for the favicon phrase, if a small MIT or BSD encoder is found or the encoder is written in-house.
+- Consider a PNG to ICO page for the favicon phrase, if an encoder under MIT, BSD or ISC is found or one is written in-house.
