@@ -263,6 +263,30 @@ export const PAGES: ToolPage[] = [
     ],
   },
 
+  {
+    slug: 'png-to-pdf',
+    tool: 'img-to-pdf',
+    group: 'PDF',
+    card: 'PNG to PDF',
+    blurb: 'Put PNG screenshots or scans into one PDF',
+    title: 'PNG to PDF converter: put PNG images in a PDF online',
+    h1: 'Convert PNG to PDF',
+    lede: 'Make one PDF from PNG images, one image per page. PNG files go into the PDF as they are, so screenshots and scanned text keep their sharp edges.',
+    description: 'Convert PNG images to a PDF in your browser, one image per page. Pick A4, Letter or the image size. Your files are never uploaded.',
+    steps: ['Drop in your PNG files.', 'Put them in order and pick a page size and margin.', 'Click Make PDF and save it.'],
+    faq: [
+      {
+        q: 'Will my PNG screenshots still be sharp?',
+        a: 'Yes. PNG files are placed in the PDF without being resaved as JPG, so text and lines keep their sharp edges.',
+      },
+      {
+        q: 'Can I mix PNG and JPG files in one PDF?',
+        a: 'Yes. Drop them all in at once. Each image becomes one page, in the order shown in the list.',
+      },
+      PRIVATE,
+    ],
+  },
+
   // ---------- Images ----------
   {
     slug: 'convert-image',
