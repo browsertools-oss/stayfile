@@ -257,7 +257,7 @@ export const PAGES: ToolPage[] = [
       },
       {
         q: 'Can I add iPhone HEIC photos?',
-        a: 'Most browsers cannot open HEIC files, so they may not work here. On an iPhone you can have the camera save JPG instead under Settings, Camera, Formats, Most Compatible.',
+        a: 'Yes. Browsers other than Safari download a small decoder the first time a HEIC file is added, so that file takes a little longer. You can also have the iPhone save JPG instead under Settings, Camera, Formats, Most Compatible.',
       },
       PRIVATE,
     ],
