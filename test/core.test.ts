@@ -200,6 +200,17 @@ describe('csv and json', () => {
     expect(out.csv.trimEnd()).toBe('a,b\n1,"x, y"');
     expect(out.sheets).toEqual(['First', 'Second']);
   });
+
+  test('xlsxToCsv writes date cells as shown in Excel and keeps the first tab even when it is not Sheet1', () => {
+    const wb = XLSX.utils.book_new();
+    const dates = XLSX.utils.aoa_to_sheet([['when', 'n'], [{ t: 'n', v: 46332, z: 'yyyy-mm-dd' }, 3]]);
+    XLSX.utils.book_append_sheet(wb, dates, 'Orders');
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['other']]), 'Notes');
+    const bytes = new Uint8Array(XLSX.write(wb, { type: 'array', bookType: 'xlsx' }) as ArrayBuffer);
+    const out = xlsxToCsv(bytes);
+    expect(out.csv.trimEnd()).toBe('when,n\n2026-11-06,3');
+    expect(out.sheets).toEqual(['Orders', 'Notes']);
+  });
 });
 
 describe('image math', () => {
