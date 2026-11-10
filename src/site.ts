@@ -476,6 +476,34 @@ export const PAGES: ToolPage[] = [
     ],
   },
   {
+    slug: 'avif-to-jpg',
+    tool: 'img-convert',
+    group: 'Images',
+    card: 'AVIF to JPG',
+    blurb: 'Save AVIF images as JPG',
+    preset: { out: 'image/jpeg', accept: 'image/avif,.avif' },
+    title: 'AVIF to JPG converter: save AVIF images as JPG online',
+    h1: 'Convert AVIF to JPG',
+    lede: 'Save AVIF images as JPG files, which almost every app and upload form accepts. AVIF is a newer format, and many older programs still cannot open it.',
+    description: 'Convert AVIF images to JPG in your browser, one at a time or in a batch. Your images are never uploaded.',
+    steps: ['Drop in your .avif files.', 'JPG is already selected. Move the quality slider if you want smaller files.', 'Click Convert, then save each image or all of them as a zip.'],
+    faq: [
+      {
+        q: 'Why will my AVIF file not open?',
+        a: 'AVIF is newer than JPG and PNG, so older photo viewers, email apps and upload forms may not read it. A JPG opens nearly everywhere.',
+      },
+      {
+        q: 'Will the JPG look worse?',
+        a: 'Slightly, as with any JPG. At the default quality of 85 the difference is hard to see. Move the slider up to 95 to keep more detail.',
+      },
+      {
+        q: 'Does my browser need to open AVIF?',
+        a: 'Yes. The page draws the image with your browser, so it works in browsers that can show AVIF files. If a file does not open, try the newest version of your browser.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
     slug: 'gif-to-png',
     tool: 'img-convert',
     group: 'Images',
