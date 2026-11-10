@@ -1,4 +1,4 @@
-- Run a browser check on /excel-to-json/, /json-to-excel/, /png-to-pdf/, /jpg-to-png/, /webp-to-png/, /png-to-webp/, /pdf-to-png/ and /pdf-to-jpg/ with sample files, if a headless browser can be set up.
-- Re-read the new Excel and JSON page copy against the style rules and tighten any sentence that sounds like an ad.
-- Next roadmap item: PDF page previews, reusing pdfToImages() in src/lib/pdf-render.ts.
-- Leave the chunk-size warning alone: it is pdf-lib in the PDF tool page, not SheetJS or pdf.js.
+- Decide the scope of PDF page previews: only on the PDF to JPG and PDF to PNG pages, so merge, split and rotate do not load pdf.js.
+- Browser check of /heic-to-png/, /pdf-to-png/, /pdf-to-jpg/, /excel-to-csv/ and the Excel and JSON pages, if a headless browser can be set up.
+- Check the Make PDF page with a HEIC file in Chrome, since the decode fix so far is checked only by the build.
+- Look for another search phrase with no page yet, such as "webp to pdf", once the preview decision is made.

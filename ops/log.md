@@ -40,3 +40,13 @@ Not checked: no browser check. No headless browser is installed here, and I did 
 Roadmap: not edited. Excel to JSON and JSON to Excel are not in ops/roadmap.md; the owner can add them to Shipped after a browser check, as with the others.
 Also not checked: the new image pages (/jpg-to-png/, /webp-to-png/, /png-to-webp/) and /png-to-pdf/ were checked only by the build. Their presets reuse ImageTool's existing output paths; I read that code but did not run it.
 Next: a browser check of the new pages and the earlier PDF pages, then the items in next.md.
+
+2026-11-10 (ops run, third): Checked first. npm test passed (52 tests) and npm run build passed (27 pages). Session started 14:47 UTC. Checked the Excel and JSON page copy against the style rules.
+Changed, in order (each committed to main after test and build):
+- Tightened the JSON to Excel FAQ on accepted JSON shapes. The old answer listed three shapes in one run-on sentence. I checked the wording against jsonRows() in src/lib/data.ts, which accepts those shapes. Commit fe7d5bd.
+- Added HEIC to PNG at /heic-to-png/ (tool img-convert, preset image/png, accept HEIC). "heic to png" is a real search phrase. Same decode fallback as HEIC to JPG. Copy says PNG files are usually larger and gives no sizes. Build is now 28 pages.
+- Fixed a bug: on the Make PDF page (jpg-to-pdf, png-to-pdf), a HEIC file was accepted by the drop zone but decoded without the libheif fallback, so Chrome and Firefox rejected it. PdfTool.astro now calls decode(f, true). Not unit tested because the fix is in the component; the build passes.
+Choices: a separate HEIC to PNG page instead of a PNG option on the HEIC page, for the same reason as the other preset pages.
+Skipped: PDF page previews (roadmap). It would load pdf.js on every PDF tool page, including merge, split and rotate, which goes against the rule that pdf.js loads only where it is used. Needs a choice on scope: previews only on the PDF to JPG and PDF to PNG pages, or on every PDF page. I did not decide it in this run.
+Not checked: no browser check. No headless browser is installed here and I did not install one. The HEIC fix and the new page are checked by the build only.
+Next: decide the PDF preview scope (see above), then the browser checks still waiting from earlier runs.
