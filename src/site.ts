@@ -19,7 +19,8 @@ export type Tool =
   | 'json-to-csv'
   | 'csv-to-xlsx'
   | 'xlsx-to-csv'
-  | 'xlsx-to-json';
+  | 'xlsx-to-json'
+  | 'json-to-xlsx';
 
 export type Group = 'PDF' | 'Images' | 'Spreadsheets and data';
 
@@ -581,6 +582,29 @@ export const PAGES: ToolPage[] = [
       {
         q: 'What happens to the other sheets?',
         a: 'Only the first sheet is converted, and the page lists the other sheet names. To get another sheet, drag its tab to the front in Excel, save, and drop the file here again.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'json-to-excel',
+    tool: 'json-to-xlsx',
+    group: 'Spreadsheets and data',
+    card: 'JSON to Excel',
+    blurb: 'Save JSON rows as an .xlsx workbook',
+    title: 'JSON to Excel converter: save JSON as XLSX online',
+    h1: 'Convert JSON to Excel',
+    lede: 'Turn a JSON array or an API response into an Excel workbook. Each key becomes a column heading, and numbers stay numbers so you can sum them in Excel.',
+    description: 'Convert JSON to Excel .xlsx in your browser. Nested fields become columns and numbers stay numbers. Nothing leaves your device.',
+    steps: ['Drop in a .json file or paste the JSON.', 'Check the preview. Nested fields show up as columns like address.city.', 'Click Download to save the .xlsx file.'],
+    faq: [
+      {
+        q: 'What JSON shapes does it accept?',
+        a: 'An array of objects, a single object, an object with one array inside (such as {"data": [...]}), or JSON Lines with one object per line.',
+      },
+      {
+        q: 'Are nested fields kept?',
+        a: 'They are flattened into columns like address.city, the same as on the JSON to CSV page. A list inside a record is written into one cell as JSON text.',
       },
       PRIVATE,
     ],

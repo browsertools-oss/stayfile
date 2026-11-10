@@ -3,14 +3,14 @@ import Drop from './Drop.astro';
 import type { Tool } from '../site';
 interface Props { tool: Tool; slug: string }
 const { tool, slug } = Astro.props;
-const fromJson = tool === 'json-to-csv';
+const fromJson = tool === 'json-to-csv' || tool === 'json-to-xlsx';
 const fromXlsx = tool === 'xlsx-to-csv' || tool === 'xlsx-to-json';
 const accept = fromXlsx
   ? '.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   : fromJson ? '.json,.jsonl,.ndjson,application/json,text/plain' : '.csv,.tsv,.txt,text/csv,text/plain';
 const what = fromXlsx ? 'an Excel file' : fromJson ? 'a JSON file' : 'a CSV file';
 const placeholder = fromJson ? '[{"name": "Ada", "age": 36}, {"name": "Grace", "age": 85}]' : 'name,age\nAda,36\nGrace,85';
-const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .csv', 'csv-to-xlsx': 'Download .xlsx', 'xlsx-to-csv': 'Download .csv', 'xlsx-to-json': 'Download .json' }[tool as string];
+const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .csv', 'csv-to-xlsx': 'Download .xlsx', 'xlsx-to-csv': 'Download .csv', 'xlsx-to-json': 'Download .json', 'json-to-xlsx': 'Download .xlsx' }[tool as string];
 ---
 <section class="tool" data-tool={tool} data-slug={slug}>
   <Drop accept={accept} main={`Drop ${what} here, or <u>choose one</u>`} sub={fromXlsx ? 'Only the first sheet is converted' : 'or paste below'} />
@@ -50,7 +50,7 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
 
   <div class="actions">
     <button type="button" class="primary" id="go" disabled>{outLabel}</button>
-    {tool !== 'csv-to-xlsx' && <button type="button" class="secondary" id="copy" disabled>Copy</button>}
+    {tool !== 'csv-to-xlsx' && tool !== 'json-to-xlsx' && <button type="button" class="secondary" id="copy" disabled>Copy</button>}
     <span class="status" id="status" aria-live="polite"></span>
   </div>
   <div class="done" id="done" role="status" hidden></div>
@@ -108,7 +108,7 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
     if (copy) copy.disabled = true;
     if (!text.trim()) { status.textContent = ''; table([], []); if (out) out.hidden = true; return; }
     try {
-      if (tool === 'json-to-csv') {
+      if (tool === 'json-to-csv' || tool === 'json-to-xlsx') {
         const rows = jsonRows(text);
         const cols = columns(rows);
         result = jsonToCsv(text, { delimiter: $<HTMLSelectElement>('delim')!.value });
@@ -216,7 +216,8 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
       status.textContent = 'Building workbook…';
       try {
         const { csvToXlsx } = await import('../lib/xlsx');
-        const bytes = csvToXlsx(input.value, { ...opts(), sheetName: name });
+        // For JSON the workbook is built from the CSV the preview made, not from the JSON text.
+        const bytes = csvToXlsx(tool === 'json-to-xlsx' ? result : input.value, { ...opts(), sheetName: name });
         status.textContent = '';
         done(new Blob([bytes as BlobPart], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), `${name}.xlsx`);
       } catch (e) {

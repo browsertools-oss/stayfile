@@ -212,6 +212,15 @@ describe('csv and json', () => {
     expect(out.sheets).toEqual(['Orders', 'Notes']);
   });
 
+  test('JSON to Excel: the keys become headings and numbers stay numbers', () => {
+    const bytes = csvToXlsx(jsonToCsv('[{"name":"Ada","age":36},{"name":"Grace","age":85}]'));
+    expect(xlsxToRows(bytes)).toEqual([
+      ['name', 'age'],
+      ['Ada', 36],
+      ['Grace', 85],
+    ]);
+  });
+
   test('Excel to JSON: first row becomes the keys and plain numbers stay numbers', () => {
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['name', 'age', 'zip'], ['Ada', 36, '02134'], ['Grace', 85, '10001']]), 'People');
