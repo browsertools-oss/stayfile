@@ -287,6 +287,30 @@ export const PAGES: ToolPage[] = [
     ],
   },
 
+  {
+    slug: 'webp-to-pdf',
+    tool: 'img-to-pdf',
+    group: 'PDF',
+    card: 'WebP to PDF',
+    blurb: 'Put WebP images into one PDF',
+    title: 'WebP to PDF converter: put WebP images in a PDF online',
+    h1: 'Convert WebP to PDF',
+    lede: 'Make one PDF from WebP images, one image per page. PDF cannot hold WebP directly, so each file is redrawn as a high-quality JPG before it goes in.',
+    description: 'Convert WebP images to a PDF in your browser, one image per page. Pick A4, Letter or the image size. Your files are never uploaded.',
+    steps: ['Drop in your WebP files.', 'Put them in order and pick a page size and margin.', 'Click Make PDF and save it.'],
+    faq: [
+      {
+        q: 'Will the WebP images lose quality?',
+        a: 'Slightly, if they have fine detail. Each WebP is redrawn as a JPG at quality 92 before it goes into the PDF. If you need the pixels exactly, save the files as PNG first and use the PNG to PDF page.',
+      },
+      {
+        q: 'Can I mix WebP and JPG files in one PDF?',
+        a: 'Yes. Drop them all in at once. Each image becomes one page, in the order shown in the list.',
+      },
+      PRIVATE,
+    ],
+  },
+
   // ---------- Images ----------
   {
     slug: 'convert-image',
