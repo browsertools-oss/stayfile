@@ -532,6 +532,30 @@ export const PAGES: ToolPage[] = [
     ],
   },
   {
+    slug: 'jpg-to-avif',
+    tool: 'img-convert',
+    group: 'Images',
+    card: 'JPG to AVIF',
+    blurb: 'Make AVIF images from JPG photos',
+    preset: { out: 'image/avif', accept: 'image/jpeg,image/png,.jpg,.jpeg,.png' },
+    title: 'JPG to AVIF converter: save JPG photos as AVIF online',
+    h1: 'Convert JPG to AVIF',
+    lede: 'Save JPG photos as AVIF, a newer format that often makes smaller files. Check that the site or app you will upload to accepts AVIF first.',
+    description: 'Convert JPG and PNG photos to AVIF in your browser, one at a time or in a batch. Your photos are never uploaded.',
+    steps: ['Drop in your .jpg or .png files.', 'AVIF is already selected. Move the quality slider to change the file size.', 'Click Convert, then save each image or all of them as a zip.'],
+    faq: [
+      {
+        q: 'Will every app open AVIF?',
+        a: 'No. Many older programs and some upload forms still reject AVIF. If a site rejects the file, convert it back to JPG with the AVIF to JPG page.',
+      },
+      {
+        q: 'What does the quality slider do?',
+        a: 'Lower numbers make smaller files with more softening in fine detail. The default is set where most photos look good. Move the slider up if faces or text look soft.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
     slug: 'gif-to-png',
     tool: 'img-convert',
     group: 'Images',
