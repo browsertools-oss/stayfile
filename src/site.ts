@@ -11,6 +11,7 @@ export type Tool =
   | 'pdf-rotate'
   | 'pdf-to-jpg'
   | 'pdf-to-png'
+  | 'pdf-to-text'
   | 'img-to-pdf'
   | 'img-convert'
   | 'img-compress'
@@ -256,6 +257,33 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Why are the PNG files bigger?',
         a: 'PNG stores every pixel exactly, which is why a page of text makes a larger file than the same page as a JPG. Choose 96 or 150 dpi unless the pages will be printed.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'pdf-to-text',
+    tool: 'pdf-to-text',
+    group: 'PDF',
+    card: 'PDF to text',
+    blurb: 'Get the words out of a PDF as a .txt file',
+    title: 'PDF to text: extract text from a PDF online',
+    h1: 'Convert PDF to text',
+    lede: 'Pull the text out of a PDF and save it as a plain .txt file you can paste into anything. It works on PDFs with real text in them, and it cannot read scanned pages.',
+    description: 'Extract the text from a PDF in your browser and download it as a .txt file. Your PDF never leaves your device.',
+    steps: [
+      'Drop in the PDF.',
+      'Click Extract text and read the result in the box.',
+      'Save the .txt file and open it in any editor.',
+    ],
+    faq: [
+      {
+        q: 'Why did I get no text?',
+        a: 'The PDF was probably made by scanning pages to images. A scan holds pictures, not words, so there is no text to extract. Use the PDF to JPG page and an OCR program for those files.',
+      },
+      {
+        q: 'Does the layout come through?',
+        a: 'The words come through in reading order, with the line breaks. Tables lose their columns and become lines of words. For tables, open the PDF in a spreadsheet-capable program instead.',
       },
       PRIVATE,
     ],

@@ -123,6 +123,8 @@ const checks = [
   { slug: '/gif-to-png/', fixtures: [F('sample.gif')], click: 'Save', expect: '' },
   { slug: '/avif-to-jpg/', fixtures: [F('sample.avif')], click: 'Save', expect: '' },
   { slug: '/jpg-to-avif/', fixtures: [F('sample.jpg')], click: 'Save', expect: '' },
+  { slug: '/png-to-ico/', fixtures: [F('sample.png')], click: 'Save', expect: '' },
+  { slug: '/pdf-to-text/', fixtures: [F('sample.pdf')], click: 'Extract text', expect: 'Extracted' },
   { slug: '/heic-to-jpg/', name: 'heic-to-jpg (load only, no HEIC fixture)' },
   { slug: '/heic-to-png/', name: 'heic-to-png (load only, no HEIC fixture)' },
 ].filter((c) => !c.skip);

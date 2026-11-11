@@ -38,6 +38,33 @@ export async function pdfThumbnails(
   }
 }
 
+import { textItemsToString } from './text';
+
+/** Pull the text out of each page, in reading order, pages separated by a blank line. */
+export async function pdfToText(bytes: Uint8Array): Promise<{ text: string; pages: number; empty: boolean }> {
+  const pdfjs = await import('pdfjs-dist');
+  const workerSrc = (await import('pdfjs-dist/build/pdf.worker.mjs?url')).default;
+  pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
+
+  const doc = await pdfjs.getDocument({ data: bytes, isEvalSupported: false }).promise;
+  try {
+    const parts: string[] = [];
+    for (let i = 1; i <= doc.numPages; i++) {
+      const page = await doc.getPage(i);
+      const content = await page.getTextContent();
+      const items = content.items
+        .filter((it) => 'str' in it)
+        .map((it) => ({ str: (it as { str: string }).str, hasEOL: (it as { hasEOL?: boolean }).hasEOL }));
+      parts.push(textItemsToString(items));
+      page.cleanup();
+    }
+    const text = parts.join('\n\n').trim();
+    return { text, pages: doc.numPages, empty: text.length === 0 };
+  } finally {
+    await doc.destroy();
+  }
+}
+
 /** Render each page of a PDF to a JPG or PNG, one Uint8Array per page, in page order. */
 export async function pdfToImages(
   bytes: Uint8Array,

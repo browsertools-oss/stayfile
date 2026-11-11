@@ -16,7 +16,7 @@ const runs = tool === 'pdf-rotate'
   : tool === 'pdf-split'
     ? splitButtons(split)
     : [];
-const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? 'Extract pages' : split === 'remove' ? 'Remove pages' : 'Split PDF', 'pdf-rotate': 'Rotate and save', 'img-to-pdf': 'Make PDF', 'pdf-to-jpg': 'Convert to JPG', 'pdf-to-png': 'Convert to PNG' }[tool as string];
+const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? 'Extract pages' : split === 'remove' ? 'Remove pages' : 'Split PDF', 'pdf-rotate': 'Rotate and save', 'img-to-pdf': 'Make PDF', 'pdf-to-jpg': 'Convert to JPG', 'pdf-to-png': 'Convert to PNG', 'pdf-to-text': 'Extract text' }[tool as string];
 ---
 <section class="tool" data-tool={tool} data-split={split} data-slug={slug}>
   <ul class="files" id="list"></ul>
@@ -48,6 +48,11 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
           </select>
         </label>
         <p class="hint">Higher numbers make sharper pages and bigger files. Every page becomes its own {tool === 'pdf-to-png' ? 'PNG' : 'JPG'}.</p>
+      </div>
+    )}
+    {tool === 'pdf-to-text' && (
+      <div class="opts">
+        <textarea id="textOut" rows="12" readonly spellcheck="false" hidden aria-label="Extracted text"></textarea>
       </div>
     )}
     {isImg && (
@@ -187,6 +192,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
       list.append(li);
     });
     work.hidden = !items.length;
+    if (tool === 'pdf-to-text') { const out = $<HTMLTextAreaElement>('textOut'); if (out) { out.hidden = true; out.value = ''; } }
     drop.classList.toggle('compact', items.length > 0);
     drop.hidden = !multi && items.length > 0;
     const need = tool === 'pdf-merge' ? 2 : 1;
@@ -313,6 +319,15 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
         if (n === 1) put(pages[0], `${name}.${format}`, mime);
         else put(await zip(pages.map((d, i) => ({ name: pageImageName(name, i + 1, n, format), data: d }))), `${name}-${format}.zip`, 'application/zip', n);
         done = `Made ${n} ${format.toUpperCase()}${n === 1 ? '' : 's'} at ${dpi} dpi.`;
+      } else if (tool === 'pdf-to-text') {
+        const { pdfToText } = await import('../lib/pdf-render'); // pdf.js loads only on this page, when it runs
+        const result = await pdfToText(new Uint8Array(await first.file.arrayBuffer()));
+        if (result.empty) throw new Error('No text found. The PDF was probably made by scanning pages to images, so there is no text to extract.');
+        const out = $<HTMLTextAreaElement>('textOut')!;
+        out.value = result.text.length > 200_000 ? result.text.slice(0, 200_000) + '\n… (preview cut short; the download has everything)' : result.text;
+        out.hidden = false;
+        put(new TextEncoder().encode(result.text), `${name}.txt`, 'text/plain');
+        done = `Extracted text from ${result.pages} page${result.pages === 1 ? '' : 's'}.`;
       } else if (isImg) {
         const size =($<HTMLSelectElement>('size')!.value) as PageSize;
         const margin = +$<HTMLSelectElement>('margin')!.value;

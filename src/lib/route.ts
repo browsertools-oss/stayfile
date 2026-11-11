@@ -33,6 +33,7 @@ export function suggestTools(files: Named[]): Route[] {
           { slug: 'split-pdf', label: 'Split it' },
           { slug: 'extract-pages-from-pdf', label: 'Pull out some pages' },
           { slug: 'rotate-pdf', label: 'Rotate pages' },
+          { slug: 'pdf-to-text', label: 'Extract the text' },
         ];
   }
   if ([...kinds].every((k) => k === 'image' || k === 'heic')) {

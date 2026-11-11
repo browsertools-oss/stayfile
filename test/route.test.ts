@@ -24,8 +24,8 @@ describe('suggestTools', () => {
     expect(slugs(suggestTools([f('a.pdf'), f('b.pdf'), f('c.pdf')]))).toEqual(['merge-pdf']);
     expect(suggestTools([f('a.pdf'), f('b.pdf')])[0].label).toBe('Merge 2 PDFs into one');
   });
-  test('one PDF offers split, extract and rotate', () => {
-    expect(slugs(suggestTools([f('a.pdf')]))).toEqual(['split-pdf', 'extract-pages-from-pdf', 'rotate-pdf']);
+  test('one PDF offers split, extract, rotate and text', () => {
+    expect(slugs(suggestTools([f('a.pdf')]))).toEqual(['split-pdf', 'extract-pages-from-pdf', 'rotate-pdf', 'pdf-to-text']);
   });
   test('iPhone photos lead with HEIC to JPG', () => {
     expect(slugs(suggestTools([f('IMG_1.heic'), f('IMG_2.heic')]))).toEqual(['heic-to-jpg', 'jpg-to-pdf']);

@@ -82,6 +82,7 @@ const shapes: Record<string, Shape[]> = {
     { fill: [], cut: [hills(36, 20, 48, 54)], dots: [sun(36, 20, 48, 54)] },
   ),
   'png-to-ico': merge(P(14, 18, 60, 50), tag(80, 58)),
+  'pdf-to-text': [S(26, 12, 58, 72, 6)],
 };
 const layers = shapes[slug] ?? [S(36, 12, 48, 72)];
 ---
