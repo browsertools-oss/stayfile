@@ -124,7 +124,8 @@ export function columns(rows: Row[]): string[] {
 
 export function jsonToCsv(text: string, o: { delimiter?: string } = {}): string {
   const rows = jsonRows(text);
-  return Papa.unparse({ fields: columns(rows), data: rows.map((r) => columns(rows).map((c) => r[c] ?? '')) }, {
+  const cols = columns(rows);
+  return Papa.unparse({ fields: cols, data: rows.map((r) => cols.map((c) => r[c] ?? '')) }, {
     delimiter: o.delimiter || ',',
     newline: '\r\n',
   });
