@@ -303,6 +303,17 @@ const canonical = new URL(path, SITE.url).href;
   .files .ok { color: var(--ok); font-weight: 600; }
   .files .warn { color: var(--bad); }
   .files .thumb { width: 40px; height: 40px; object-fit: cover; border-radius: 4px; background: var(--tray); }
+  /* page preview strip on the single-PDF tools */
+  .thumbs { display: flex; gap: 10px; overflow-x: auto; padding: 2px 2px 12px; margin: -4px 0 12px; -webkit-overflow-scrolling: touch; }
+  .thumbs .pt { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 4px; border: 0; background: none; padding: 0; font: inherit; }
+  button.pt { cursor: pointer; border-radius: var(--r); }
+  button.pt:hover img { border-color: var(--link); }
+  button.pt:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .thumbs .pt img { width: 84px; border: 1px solid var(--line-strong); border-radius: 4px; background: var(--field); display: block; }
+  .thumbs .pt span { font-family: var(--mono); font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  button.pt:hover span { color: var(--ink); text-decoration: underline; }
+  .thumbs .note { flex: 0 0 auto; align-self: center; color: var(--muted); font-size: 12px; max-width: 150px; line-height: 1.4; }
+  .thumbs .busy { color: var(--muted); font-size: 12px; font-family: var(--mono); padding: 10px 2px; }
   .icon { font: inherit; font-size: 14px; font-weight: 600; line-height: 1; min-width: 36px; height: 36px; background: transparent; color: var(--ink); border: 0; border-radius: var(--r); padding: 0 10px; cursor: pointer; }
   .icon:hover:not(:disabled) { background: var(--tray); }
   .icon:disabled { opacity: .3; cursor: default; }

@@ -20,6 +20,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
 ---
 <section class="tool" data-tool={tool} data-split={split} data-slug={slug}>
   <ul class="files" id="list"></ul>
+  <div class="thumbs" id="thumbs" hidden aria-label="Page previews"></div>
   <Drop accept={accept} multiple={multi} main={main} sub={sub} />
 
   <div id="work" hidden>
@@ -96,6 +97,58 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
   const status = $('status')!, err = $('err')!;
   const ranges = $<HTMLInputElement>('ranges');
 
+  // Page previews. pdf.js is loaded the first time a PDF is dropped, not when the page opens.
+  const thumbs = $('thumbs')!;
+  const previews = tool !== 'pdf-merge' && !isImg;
+  const canInsert = tool === 'pdf-rotate' || tool === 'pdf-split'; // tools with a pages box
+  let thumbRun = 0;
+  function clearThumbs() { thumbRun++; thumbs.innerHTML = ''; thumbs.hidden = true; }
+  function insertPage(n: number) {
+    if (!ranges) return;
+    const v = ranges.value.trim();
+    ranges.value = v ? `${v}, ${n}` : String(n);
+    ranges.focus();
+  }
+  async function showThumbs(file: File) {
+    if (!previews) return;
+    const run = ++thumbRun;
+    thumbs.hidden = false;
+    thumbs.innerHTML = '<span class="busy">Drawing page previews…</span>';
+    try {
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      const { pdfThumbnails } = await import('../lib/pdf-render');
+      const { pages, total } = await pdfThumbnails(bytes);
+      if (run !== thumbRun) return; // a newer file replaced this one
+      thumbs.innerHTML = '';
+      pages.forEach((src, i) => {
+        const n = i + 1;
+        const clickable = canInsert && mode() !== 'every';
+        const cell = document.createElement(clickable ? 'button' : 'div');
+        cell.className = 'pt';
+        if (cell instanceof HTMLButtonElement) {
+          cell.type = 'button';
+          cell.title = `Add page ${n} to the pages box`;
+          cell.setAttribute('aria-label', `Add page ${n} to the pages box`);
+          cell.addEventListener('click', () => insertPage(n));
+        }
+        const img = document.createElement('img');
+        img.src = src; img.alt = ''; img.width = 84;
+        const num = document.createElement('span');
+        num.textContent = String(n);
+        cell.append(img, num);
+        thumbs.append(cell);
+      });
+      if (total > pages.length) {
+        const note = document.createElement('span');
+        note.className = 'note';
+        note.textContent = `First ${pages.length} of ${total} pages shown.`;
+        thumbs.append(note);
+      }
+    } catch {
+      if (run === thumbRun) clearThumbs(); // previews are a nicety, never block the tool
+    }
+  }
+
   type Item = { file: File; pages?: number; url?: string };
   let items: Item[] = [];
 
@@ -159,11 +212,15 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
       }
       if (!multi) items = items.slice(-1);
     }
+    if (!multi) {
+      const first = items[items.length - 1];
+      if (first && !isImg) showThumbs(first.file); else clearThumbs();
+    }
     render();
   }
   drop.addEventListener('files', (e) => add((e as CustomEvent<File[]>).detail));
 
-  $('reset')!.addEventListener('click', () => { items.forEach((i) => i.url && URL.revokeObjectURL(i.url)); items = []; clear(); render(); });
+  $('reset')!.addEventListener('click', () => { items.forEach((i) => i.url && URL.revokeObjectURL(i.url)); items = []; clear(); clearThumbs(); render(); });
 
   // Which button was pressed: a split mode or a rotation in degrees.
   let choice = '';
