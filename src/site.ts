@@ -754,7 +754,7 @@ export const PAGES: ToolPage[] = [
     preset: { out: 'image/png', accept: 'image/svg+xml,.svg' },
     title: 'SVG to PNG converter that works in your browser',
     h1: 'Convert SVG to PNG',
-    lede: 'Turn SVG files into plain PNG images. This works everywhere a browser does, so it is handy when an app or form refuses the SVG itself.',
+    lede: 'Turn SVG files into plain PNG images. Handy when an app or form refuses the SVG itself.',
     description: 'Convert SVG vector files to PNG in your browser. The PNG is made at the SVG\'s own size, transparency is kept. Your file is never uploaded.',
     steps: ['Drop in your .svg files.', 'PNG is already selected. Change it only if you need another format.', 'Click Convert and save.'],
     faq: [
