@@ -161,7 +161,8 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
   root.querySelectorAll('select, input[type=checkbox]').forEach((el) => el.addEventListener('change', update));
 
   drop.addEventListener('files', async (e) => {
-    const f = (e as CustomEvent<File[]>).detail[0];
+    const all = (e as CustomEvent<File[]>).detail;
+    const f = all[0];
     name = baseName(f.name);
     list.innerHTML = '';
     const li = document.createElement('li');
@@ -190,6 +191,7 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
     $('pasteWrap')!.hidden = true;
     $('showText')!.hidden = false;
     update();
+    if (all.length > 1 && err.hidden) { err.textContent = `One file at a time here, so I used ${f.name} and left ${all.length - 1} out.`; err.hidden = false; }
   });
   $('showText')!.addEventListener('click', () => {
     $('pasteWrap')!.hidden = false;
