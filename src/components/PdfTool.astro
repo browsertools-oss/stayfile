@@ -20,7 +20,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
 ---
 <section class="tool" data-tool={tool} data-split={split} data-slug={slug}>
   <ul class="files" id="list"></ul>
-  <div class="thumbs" id="thumbs" hidden aria-label="Page previews"></div>
+  <div class="thumbs" id="thumbs" hidden role="group" aria-label="Page previews"></div>
   <Drop accept={accept} multiple={multi} main={main} sub={sub} />
 
   <div id="work" hidden>
