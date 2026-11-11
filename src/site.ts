@@ -182,7 +182,7 @@ export const PAGES: ToolPage[] = [
     title: 'Rotate PDF pages online and save the result',
     h1: 'Rotate PDF pages',
     lede: 'Turn every page, or only the ones that came out of the scanner sideways, and save the PDF that way for good.',
-    description: 'Rotate all pages or selected pages of a PDF by 90 or 180 degrees and save it. Runs in your browser, so the file is not uploaded.',
+    description: 'Rotate all pages or selected pages of a PDF by 90, 180 or 270 degrees and save it. Runs in your browser, so the file is not uploaded.',
     steps: [
       'Drop in the PDF.',
       'Choose which way to turn it, and type page numbers if only some pages need it.',
