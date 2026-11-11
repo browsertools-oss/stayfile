@@ -227,6 +227,10 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
     if (!multi) {
       const first = items[items.length - 1];
       if (first && !isImg && !isTxt) showThumbs(first.file); else clearThumbs();
+      if (files.length > 1 && first && err.hidden) {
+        err.textContent = `One file at a time here, so I kept ${first.file.name}.`;
+        err.hidden = false;
+      }
     }
     render();
   }
