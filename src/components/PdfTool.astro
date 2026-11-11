@@ -88,7 +88,9 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
 </section>
 
 <script>
-  import { pageCount, parseRanges, pagesToKeep, merge, extract, split, burst, rotate, imagesToPdf, pageImageName, textToPdf, type ImageInput, type PageSize } from '../lib/pdf';
+  // pdf-lib is about half a megabyte, so it loads when a PDF is dropped, not when the page opens.
+  import type { ImageInput, PageSize } from '../lib/pdf';
+  const pdfLib = () => import('../lib/pdf');
   import { decode, draw, formatBytes } from '../lib/image';
   import { save, zip, baseName } from '../lib/save';
   import { mergedName, savedLine } from '../lib/route';
@@ -216,6 +218,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
         items.push({ file });
       } else {
         try {
+          const { pageCount } = await pdfLib();
           const pages = await pageCount(await file.arrayBuffer());
           items.push({ file, pages });
         } catch (e) {
@@ -282,6 +285,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
       const name = baseName(first.file.name);
       const pdf = 'application/pdf';
       let done = '';
+      const { parseRanges, pagesToKeep, merge, extract, split, burst, rotate, imagesToPdf, pageImageName, textToPdf } = await pdfLib();
       if (tool === 'pdf-merge') {
         const out = await merge(await Promise.all(items.map((i) => i.file.arrayBuffer())));
         put(out, mergedName(first.file.name), pdf);
