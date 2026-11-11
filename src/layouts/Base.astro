@@ -197,6 +197,8 @@ const canonical = new URL(path, SITE.url).href;
     .bar { gap: 6px; }
     .sections a { padding: 0 8px; font-size: 14px; }
     .local { display: none; }
+    /* The tool index is long; two narrow columns scroll less on a phone. */
+    footer .cols { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px 12px; }
   }
 
   /* main: a centred column; .bleed children run edge to edge */
