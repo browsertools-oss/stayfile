@@ -1,5 +1,6 @@
 // PDF transforms. Pure functions over bytes, so they run the same in the browser and in tests.
-import { PDFDocument, degrees } from '@cantoo/pdf-lib';
+import { PDFDocument, StandardFonts, degrees } from '@cantoo/pdf-lib';
+import { textPages } from './text';
 
 export type Bytes = Uint8Array | ArrayBuffer;
 
@@ -132,6 +133,32 @@ export async function imagesToPdf(images: ImageInput[], size: PageSize = 'fit', 
     }
     const page = doc.addPage([pw, ph]);
     page.drawImage(img, placeImage(w, h, pw, ph, margin));
+  }
+  return doc.save();
+}
+
+/** Build a one-column text PDF: Courier 10 pt on A4, 72 pt margins, hard-wrapped at the text width. */
+export async function textToPdf(text: string): Promise<Uint8Array> {
+  const doc = await PDFDocument.create();
+  const font = await doc.embedFont(StandardFonts.Courier);
+  const size = 10;
+  const lineHeight = 14;
+  const margin = 72;
+  const pageW = 595;
+  const pageH = 842;
+  const maxChars = 75; // Courier 10 pt: 6 pt per character, (595 - 144) / 6 = 75
+  const maxLines = Math.floor((pageH - 2 * margin) / lineHeight);
+  for (const pageLines of textPages(text, maxChars, maxLines)) {
+    const page = doc.addPage([pageW, pageH]);
+    pageLines.forEach((line, i) => {
+      const y = pageH - margin - i * lineHeight;
+      try {
+        page.drawText(line, { x: margin, y, size, font });
+      } catch {
+        // WinAnsi covers Latin-1. Swap anything outside it out rather than fail the whole file.
+        page.drawText(line.replace(/[^\x20-\xFF]/g, '?'), { x: margin, y, size, font });
+      }
+    });
   }
   return doc.save();
 }

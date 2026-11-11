@@ -52,6 +52,7 @@ for (const line of ['Page one', 'Page two', 'Page three']) {
   page.drawText(line, { x: 40, y: 340, size: 24, font });
 }
 await writeFile(join(fixtures, 'sample.pdf'), await pdf.save());
+await writeFile(join(fixtures, 'sample.txt'), 'Buy milk\nBuy eggs\nEmail the landlord about the lease\n');
 
 const XLSX = (await import('xlsx')).default ?? (await import('xlsx'));
 const wb = XLSX.utils.book_new();
@@ -125,6 +126,7 @@ const checks = [
   { slug: '/jpg-to-avif/', fixtures: [F('sample.jpg')], click: 'Save', expect: '' },
   { slug: '/png-to-ico/', fixtures: [F('sample.png')], click: 'Save', expect: '' },
   { slug: '/pdf-to-text/', fixtures: [F('sample.pdf')], click: 'Extract text', expect: 'Extracted' },
+  { slug: '/text-to-pdf/', fixtures: [F('sample.txt')], click: 'Make PDF', expect: 'Made' },
   { slug: '/heic-to-jpg/', name: 'heic-to-jpg (load only, no HEIC fixture)' },
   { slug: '/heic-to-png/', name: 'heic-to-png (load only, no HEIC fixture)' },
 ].filter((c) => !c.skip);

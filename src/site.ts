@@ -12,6 +12,7 @@ export type Tool =
   | 'pdf-to-jpg'
   | 'pdf-to-png'
   | 'pdf-to-text'
+  | 'text-to-pdf'
   | 'img-to-pdf'
   | 'img-convert'
   | 'img-compress'
@@ -284,6 +285,37 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Does the layout come through?',
         a: 'The words come through in reading order, with the line breaks. Tables lose their columns and become lines of words. For tables, open the PDF in a spreadsheet-capable program instead.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'text-to-pdf',
+    tool: 'text-to-pdf',
+    group: 'PDF',
+    card: 'Text to PDF',
+    blurb: 'Turn a plain text file into a PDF',
+    title: 'Text to PDF: convert a text file to PDF online',
+    h1: 'Convert text to PDF',
+    lede: 'Make a PDF from a plain text file, such as a .txt note, a Markdown file or a log. The text keeps its line breaks, long lines are wrapped to fit the page, and the fixed-width font keeps any columns lined up.',
+    description: 'Convert a plain text file to a PDF in your browser. The text file never leaves your device.',
+    steps: [
+      'Drop in the text file.',
+      'Click Make PDF.',
+      'Save the PDF and open it anywhere.',
+    ],
+    faq: [
+      {
+        q: 'Which files can I convert?',
+        a: 'Plain text files, such as .txt, .md and .log. A Word .docx file is not plain text, so it will not work here. Save it as .txt first, then convert it.',
+      },
+      {
+        q: 'How is the text laid out?',
+        a: 'The PDF uses a fixed-width font at 10 points, like a typewriter, so columns in the text line up. Each line is wrapped to fit the page width. A word longer than a full line is cut in half.',
+      },
+      {
+        q: 'What happens to unusual characters?',
+        a: 'The built-in font covers basic Latin letters, digits and common punctuation. Other characters, such as Chinese or Cyrillic letters, come out as question marks.',
       },
       PRIVATE,
     ],

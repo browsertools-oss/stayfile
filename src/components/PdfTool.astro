@@ -6,9 +6,10 @@ interface Props { tool: Tool; preset?: Preset; slug: string }
 const { tool, preset = {}, slug } = Astro.props;
 const multi = tool === 'pdf-merge' || tool === 'img-to-pdf';
 const isImg = tool === 'img-to-pdf';
-const accept = isImg ? 'image/*,.jpg,.jpeg,.png,.webp,.gif,.avif,.heic' : 'application/pdf,.pdf';
-const main = multi ? `Drop ${isImg ? 'images' : 'PDF files'} here, or <u>choose files</u>` : 'Drop a PDF here, or <u>choose one</u>';
-const sub = isImg ? 'JPG · PNG · WebP · GIF' : multi ? 'Add as many as you like' : 'One PDF';
+const isTxt = tool === 'text-to-pdf';
+const accept = isTxt ? '.txt,.md,.log,.markdown,text/plain' : isImg ? 'image/*,.jpg,.jpeg,.png,.webp,.gif,.avif,.heic' : 'application/pdf,.pdf';
+const main = isTxt ? 'Drop a text file here, or <u>choose one</u>' : multi ? `Drop ${isImg ? 'images' : 'PDF files'} here, or <u>choose files</u>` : 'Drop a PDF here, or <u>choose one</u>';
+const sub = isTxt ? 'Plain text, Markdown or log files' : isImg ? 'JPG · PNG · WebP · GIF' : multi ? 'Add as many as you like' : 'One PDF';
 const split = preset.split ?? 'ranges';
 // Rotate and split: each choice is its own button that does the job, so there is no pick-then-confirm step.
 const runs = tool === 'pdf-rotate'
@@ -16,7 +17,7 @@ const runs = tool === 'pdf-rotate'
   : tool === 'pdf-split'
     ? splitButtons(split)
     : [];
-const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? 'Extract pages' : split === 'remove' ? 'Remove pages' : 'Split PDF', 'pdf-rotate': 'Rotate and save', 'img-to-pdf': 'Make PDF', 'pdf-to-jpg': 'Convert to JPG', 'pdf-to-png': 'Convert to PNG', 'pdf-to-text': 'Extract text' }[tool as string];
+const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? 'Extract pages' : split === 'remove' ? 'Remove pages' : 'Split PDF', 'pdf-rotate': 'Rotate and save', 'img-to-pdf': 'Make PDF', 'pdf-to-jpg': 'Convert to JPG', 'pdf-to-png': 'Convert to PNG', 'pdf-to-text': 'Extract text', 'text-to-pdf': 'Make PDF' }[tool as string];
 ---
 <section class="tool" data-tool={tool} data-split={split} data-slug={slug}>
   <ul class="files" id="list"></ul>
@@ -87,7 +88,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
 </section>
 
 <script>
-  import { pageCount, parseRanges, pagesToKeep, merge, extract, split, burst, rotate, imagesToPdf, pageImageName, type ImageInput, type PageSize } from '../lib/pdf';
+  import { pageCount, parseRanges, pagesToKeep, merge, extract, split, burst, rotate, imagesToPdf, pageImageName, textToPdf, type ImageInput, type PageSize } from '../lib/pdf';
   import { decode, draw, formatBytes } from '../lib/image';
   import { save, zip, baseName } from '../lib/save';
   import { mergedName, savedLine } from '../lib/route';
@@ -97,6 +98,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
   const tool = root.dataset.tool!;
   const multi = tool === 'pdf-merge' || tool === 'img-to-pdf';
   const isImg = tool === 'img-to-pdf';
+  const isTxt = tool === 'text-to-pdf';
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
   const list = $('list')!, drop = $('drop')!, work = $('work')!, runBtns = [...root.querySelectorAll<HTMLButtonElement>('[data-run]')];
   const status = $('status')!, err = $('err')!;
@@ -104,7 +106,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
 
   // Page previews. pdf.js is loaded the first time a PDF is dropped, not when the page opens.
   const thumbs = $('thumbs')!;
-  const previews = tool !== 'pdf-merge' && !isImg;
+  const previews = tool !== 'pdf-merge' && !isImg && !isTxt;
   const canInsert = tool === 'pdf-rotate' || tool === 'pdf-split'; // tools with a pages box
   let thumbRun = 0;
   function clearThumbs() { thumbRun++; thumbs.innerHTML = ''; thumbs.hidden = true; }
@@ -208,6 +210,10 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
       if (isImg) {
         if (!file.type.startsWith('image/') && !/\.(jpe?g|png|webp|gif|avif|heic)$/i.test(file.name)) { fail(`${file.name} is not an image.`); continue; }
         items.push({ file, url: URL.createObjectURL(file) });
+      } else if (isTxt) {
+        const looksText = /^text\//.test(file.type) || file.type === 'application/markdown' || file.type === '' || /\.(txt|md|log|markdown)$/i.test(file.name);
+        if (!looksText) { fail(`${file.name} is not a text file.`); continue; }
+        items.push({ file });
       } else {
         try {
           const pages = await pageCount(await file.arrayBuffer());
@@ -220,7 +226,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
     }
     if (!multi) {
       const first = items[items.length - 1];
-      if (first && !isImg) showThumbs(first.file); else clearThumbs();
+      if (first && !isImg && !isTxt) showThumbs(first.file); else clearThumbs();
     }
     render();
   }
@@ -328,6 +334,11 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
         out.hidden = false;
         put(new TextEncoder().encode(result.text), `${name}.txt`, 'text/plain');
         done = `Extracted text from ${result.pages} page${result.pages === 1 ? '' : 's'}.`;
+      } else if (isTxt) {
+        const text = await first.file.text();
+        if (!text.trim()) throw new Error('That file is empty.');
+        put(await textToPdf(text), `${name}.pdf`, pdf);
+        done = 'Made a PDF from the text.';
       } else if (isImg) {
         const size =($<HTMLSelectElement>('size')!.value) as PageSize;
         const margin = +$<HTMLSelectElement>('margin')!.value;

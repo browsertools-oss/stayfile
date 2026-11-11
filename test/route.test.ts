@@ -15,6 +15,9 @@ describe('kindOf', () => {
     expect(kindOf(f('pic', 'image/webp'))).toBe('image');
     expect(kindOf(f('sales.csv'))).toBe('csv');
     expect(kindOf(f('rows.ndjson'))).toBe('json');
+    expect(kindOf(f('notes.txt'))).toBe('text');
+    expect(kindOf(f('notes', 'text/plain'))).toBe('text');
+    expect(kindOf(f('README.md'))).toBe('text');
     expect(kindOf(f('notes.docx'))).toBe('other');
   });
 });
@@ -42,6 +45,11 @@ describe('suggestTools', () => {
   test('one Excel file maps to the Excel converters', () => {
     expect(slugs(suggestTools([f('budget.xlsx')]))).toEqual(['excel-to-csv', 'excel-to-json']);
     expect(kindOf(f('budget.xlsx'))).toBe('xlsx');
+  });
+  test('one text file suggests text-to-pdf', () => {
+    expect(slugs(suggestTools([f('notes.txt')]))).toEqual(['text-to-pdf']);
+    expect(suggestTools([f('notes.txt')])[0].label).toBe('Turn it into a PDF');
+    expect(suggestTools([f('notes.txt'), f('log.md')])).toEqual([]);
   });
   test('mixed or unknown sets get no suggestion', () => {
     expect(suggestTools([])).toEqual([]);
@@ -73,7 +81,7 @@ describe('nextTools', () => {
     const all = [
       ...PAGES.flatMap((p) => nextTools(p.slug)),
       ...suggestTools([f('a.pdf')]), ...suggestTools([f('a.pdf'), f('b.pdf')]), ...suggestTools([f('a.jpg')]),
-      ...suggestTools([f('a.heic')]), ...suggestTools([f('a.csv')]), ...suggestTools([f('a.json')]),
+      ...suggestTools([f('a.heic')]), ...suggestTools([f('a.csv')]), ...suggestTools([f('a.json')]), ...suggestTools([f('notes.txt')]),
     ];
     for (const r of all) expect(real.has(r.slug)).toBe(true);
   });

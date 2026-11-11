@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest';
 import { PDFDocument, degrees } from '@cantoo/pdf-lib';
 import { deflateSync } from 'node:zlib';
-import { parseRanges, merge, extract, split, burst, rotate, imagesToPdf, placeImage, pageCount, pagesToKeep } from '../src/lib/pdf';
+import { parseRanges, merge, extract, split, burst, rotate, imagesToPdf, placeImage, pageCount, pagesToKeep, textToPdf } from '../src/lib/pdf';
 import { typeValue, parseCsv, csvToJson, jsonToCsv, jsonRows, flatten } from '../src/lib/data';
 import * as XLSX from 'xlsx';
 import { csvToXlsx, xlsxToRows, xlsxToCsv } from '../src/lib/xlsx';
@@ -119,6 +119,17 @@ describe('pdf', () => {
     const a4 = await PDFDocument.load(await imagesToPdf([{ bytes: png, type: 'image/png' }], 'a4', 36));
     expect(a4.getPage(0).getWidth()).toBeGreaterThan(a4.getPage(0).getHeight());
     await expect(imagesToPdf([])).rejects.toThrow();
+  });
+
+  test('textToPdf keeps line breaks, paginates, and survives odd characters', async () => {
+    const one = await PDFDocument.load(await textToPdf('one\ntwo\nthree'));
+    expect(one.getPageCount()).toBe(1);
+    expect(one.getPage(0).getSize()).toEqual({ width: 595, height: 842 });
+    const long = await textToPdf(Array.from({ length: 200 }, (_, i) => `line ${i + 1}`).join('\n'));
+    expect((await PDFDocument.load(long)).getPageCount()).toBeGreaterThan(1);
+    // Latin-1 passes through; characters outside it come out as question marks, not a crash.
+    const odd = await PDFDocument.load(await textToPdf('héllo 中文 wörld'));
+    expect(odd.getPageCount()).toBe(1);
   });
 });
 

@@ -8,7 +8,7 @@ import { SITE, PAGES, GROUP_ID, type ToolPage } from '../site';
 interface Props { page: ToolPage }
 const { page } = Astro.props;
 const path = `/${page.slug}/`;
-const family = page.tool.startsWith('pdf') || page.tool === 'img-to-pdf' ? 'pdf' : page.tool.startsWith('img') ? 'img' : 'data';
+const family = page.tool.startsWith('pdf') || page.tool === 'img-to-pdf' || page.tool === 'text-to-pdf' ? 'pdf' : page.tool.startsWith('img') ? 'img' : 'data';
 const related = PAGES.filter((p) => p.group === page.group && p.slug !== page.slug);
 const jsonld = [
   {
