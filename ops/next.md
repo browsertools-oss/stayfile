@@ -1,4 +1,5 @@
-- Run the browser checks: scripts/browser-check.mjs (about 33 pages) the next time node execution is allowed, or on a machine with a browser. Covers /text-to-pdf/, /pdf-to-text/, /png-to-ico/ and the new PDF page previews.
-- Move the finished items on ops/roadmap.md to Shipped once a browser check passes (PDF to JPG previews, PNG to ICO, PDF to text, Text to PDF).
+- Run the browser checks: scripts/browser-check.mjs (42 pages) the next time node execution is allowed, or on a machine with a browser. Covers /text-to-pdf/, /pdf-to-text/, /png-to-ico/, the PDF page previews and this run's new pages (/svg-to-png/, /svg-to-jpg/, /svg-to-pdf/, /gif-to-jpg/, /avif-to-png/, /heic-to-webp/).
+- Move the finished items on ops/roadmap.md to Shipped once a browser check passes (PDF to JPG, previews, PNG to ICO, PDF to text, Text to PDF, and the new pages).
 - Check the Make PDF page with a HEIC file in Chrome; the decode fix is still only build-checked.
-- Watch the metrics triggers (ads at about 300 visits in 30 days, paid tier at about 1000) and open one decision issue per trigger, only when hit.
+- Watch the metrics triggers (ads at about 300 visits in 30 days, paid tier at about 1000) and open one decision issue per trigger, only when hit. Visitors were 218 on 2026-11-09, blank on 2026-11-10.
+- If a browser check passes, spot-check the SVG pages first (they are the only new code path this run, all canvas-drawn, all unchecked).
