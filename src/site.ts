@@ -401,6 +401,54 @@ export const PAGES: ToolPage[] = [
   },
 
   {
+    slug: 'heic-to-pdf',
+    tool: 'img-to-pdf',
+    group: 'PDF',
+    card: 'HEIC to PDF',
+    blurb: 'Put iPhone photos into one PDF',
+    preset: { accept: 'image/heic,image/heif,.heic,.heif' },
+    title: 'HEIC to PDF converter for iPhone photos',
+    h1: 'Convert HEIC to PDF',
+    lede: 'Turn iPhone HEIC photos into one PDF, one photo per page. Useful for applications, records and printing.',
+    description: 'Convert HEIC photos from an iPhone to a PDF in your browser, one per page, in the order you choose. Your photos are never uploaded.',
+    steps: ['Drop in your .heic files.', 'Put them in order and pick a page size and margin.', 'Click Make PDF and save it.'],
+    faq: [
+      {
+        q: 'Why does the first photo take longer?',
+        a: "Most browsers can't read HEIC on their own, so the page downloads a decoder the first time you convert. Safari reads HEIC itself and skips this step.",
+      },
+      {
+        q: 'Do the photos lose quality?',
+        a: 'They are redrawn as JPG inside the PDF, at high quality. For an exact copy of a photo, convert it to PNG first and use the PNG to PDF page.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'gif-to-pdf',
+    tool: 'img-to-pdf',
+    group: 'PDF',
+    card: 'GIF to PDF',
+    blurb: 'Put GIF images into one PDF',
+    preset: { accept: 'image/gif,.gif' },
+    title: 'GIF to PDF converter that works in your browser',
+    h1: 'Convert GIF to PDF',
+    lede: 'Make one PDF from GIF images, one per page. Only the first frame of an animated GIF is kept, since PDF can hold a picture but not the animation.',
+    description: 'Convert GIF images to a PDF in your browser, one per page. Animated GIFs keep their first frame. Your files are never uploaded.',
+    steps: ['Drop in your .gif files.', 'Put them in order and pick a page size and margin.', 'Click Make PDF and save it.'],
+    faq: [
+      {
+        q: 'What happens to the animation?',
+        a: 'It is dropped. Each GIF keeps only its first frame as a picture in the PDF. To keep the motion, use the GIF file itself.',
+      },
+      {
+        q: 'Do the GIFs lose quality?',
+        a: 'They are redrawn as JPG inside the PDF, at high quality. GIFs with few colors or flat shapes can look soft on the edges. Save them as PNG first and use the PNG to PDF page for an exact copy.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
     slug: 'svg-to-pdf',
     tool: 'img-to-pdf',
     group: 'PDF',

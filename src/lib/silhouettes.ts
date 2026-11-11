@@ -76,6 +76,8 @@ export const shapes: Record<string, Shape[]> = {
   'png-to-pdf': merge(S(46, 10, 50, 72, 3), P(16, 34, 52, 40)),
   'webp-to-pdf': merge(S(46, 10, 50, 72, 3), P(16, 34, 52, 40)),
   'svg-to-pdf': merge(S(46, 10, 50, 72, 3), P(16, 34, 52, 40)),
+  'heic-to-pdf': merge(S(46, 10, 50, 72, 3), P(16, 34, 52, 40)),
+  'gif-to-pdf': merge(S(46, 10, 50, 72, 3), P(16, 34, 52, 40)),
   'jpg-to-png': merge(P(18, 18, 72, 56), tag(86, 62)),
   'gif-to-jpg': merge(P(18, 18, 72, 56), tag(86, 62)),
   'webp-to-png': merge(P(18, 18, 72, 56), tag(86, 62)),
