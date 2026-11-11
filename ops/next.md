@@ -1,4 +1,4 @@
-- Decide the scope of PDF page previews: only on the PDF to JPG and PDF to PNG pages, so merge, split and rotate do not load pdf.js.
-- Browser check of /remove-pages-from-pdf/, /jpg-to-avif/, /webp-to-pdf/ and /heic-to-png/, if a headless browser can be set up.
-- Check the Make PDF page with a HEIC file in Chrome, since the decode fix so far is checked only by the build.
-- Consider a PNG to ICO page for the favicon phrase, if an encoder under MIT, BSD or ISC is found or one is written in-house.
+- Run the browser checks: scripts/browser-check.mjs (about 33 pages) the next time node execution is allowed, or on a machine with a browser. Covers /text-to-pdf/, /pdf-to-text/, /png-to-ico/ and the new PDF page previews.
+- Move the finished items on ops/roadmap.md to Shipped once a browser check passes (PDF to JPG previews, PNG to ICO, PDF to text, Text to PDF).
+- Check the Make PDF page with a HEIC file in Chrome; the decode fix is still only build-checked.
+- Watch the metrics triggers (ads at about 300 visits in 30 days, paid tier at about 1000) and open one decision issue per trigger, only when hit.
