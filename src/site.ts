@@ -15,6 +15,7 @@ export type Tool =
   | 'img-convert'
   | 'img-compress'
   | 'img-resize'
+  | 'img-ico'
   | 'csv-to-json'
   | 'json-to-csv'
   | 'csv-to-xlsx'
@@ -551,6 +552,29 @@ export const PAGES: ToolPage[] = [
       {
         q: 'What does the quality slider do?',
         a: 'Lower numbers make smaller files with more softening in fine detail. The default is set where most photos look good. Move the slider up if faces or text look soft.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'png-to-ico',
+    tool: 'img-ico',
+    group: 'Images',
+    card: 'PNG to ICO',
+    blurb: 'Make a .ico favicon file from a PNG',
+    title: 'PNG to ICO converter: make a .ico favicon from a PNG',
+    h1: 'Convert PNG to ICO',
+    lede: 'Turn a PNG into a .ico file, the format browsers and desktops use for favicons and shortcuts. The file holds 16, 32 and 48 px versions of the image, and transparency is kept.',
+    description: 'Convert a PNG to a .ico favicon file in your browser. The file holds 16, 32 and 48 px sizes. Your image stays on your device.',
+    steps: ['Drop in your PNG files.', 'Nothing to set. The three sizes are made from your image.', 'Click Save to download the .ico file, or all of them as a zip.'],
+    faq: [
+      {
+        q: 'What sizes end up in the file?',
+        a: '16 by 16, 32 by 32 and 48 by 48 pixels. Each app picks the size it needs. If the PNG is not square, the image is centered on a transparent square instead of being stretched.',
+      },
+      {
+        q: 'Where does the .ico file go on my site?',
+        a: 'Save it as favicon.ico in the root folder of your site. Browsers that look for /favicon.ico will use it. A link tag that points at the file works too.',
       },
       PRIVATE,
     ],

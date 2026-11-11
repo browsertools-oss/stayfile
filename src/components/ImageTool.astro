@@ -3,6 +3,7 @@ import Drop from './Drop.astro';
 import type { Tool, Preset } from '../site';
 interface Props { tool: Tool; preset?: Preset; slug: string }
 const { tool, preset = {}, slug } = Astro.props;
+const ico = tool === 'img-ico'; // builds one .ico per image: 16, 32 and 48 px inside
 const accept = preset.accept ?? 'image/*,.jpg,.jpeg,.png,.webp,.gif,.avif,.bmp';
 // Only the HEIC page loads the HEIC decoder.
 const heic = accept.includes('heic');
@@ -23,10 +24,10 @@ const quality = tool === 'img-compress' ? 70 : 85;
 
   <div id="work" hidden>
     <div class="opts">
-      <label>Save as
+      <label hidden={ico}>Save as
         <select id="fmt">{formats.map((f) => <option value={f.v} selected={f.v === out}>{f.l}</option>)}</select>
       </label>
-      <label id="qWrap">Quality <span><input type="range" id="q" min="10" max="100" step="1" value={quality} /> <output id="qv">{quality}</output></span></label>
+      {!ico && <label id="qWrap">Quality <span><input type="range" id="q" min="10" max="100" step="1" value={quality} /> <output id="qv">{quality}</output></span></label>}
       {tool === 'img-compress' && (
         <label>Maximum width
           <select id="maxw">
@@ -65,7 +66,8 @@ const quality = tool === 'img-compress' ? 70 : 85;
 </section>
 
 <script>
-  import { process, renameTo, formatBytes, sizeChange, LOSSY, type OutType, type ResizeSpec } from '../lib/image';
+  import { process, renameTo, formatBytes, sizeChange, LOSSY, decode, type OutType, type ResizeSpec } from '../lib/image';
+  import { packIco, ICO_SIZES } from '../lib/ico';
   import { save, zip } from '../lib/save';
   import { savedLine } from '../lib/route';
   import { showDone, hideDone } from '../lib/done';
@@ -76,7 +78,8 @@ const quality = tool === 'img-compress' ? 70 : 85;
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
   const list = $('list')!, drop = $('drop')!, work = $('work')!, go = $<HTMLButtonElement>('go')!;
   const status = $('status')!, err = $('err')!, doneEl = $('done')!;
-  const fmt = $<HTMLSelectElement>('fmt')!, q = $<HTMLInputElement>('q')!;
+  const ico = tool === 'img-ico';
+  const fmt = $<HTMLSelectElement>('fmt')!, q = $<HTMLInputElement>('q');
 
   type Result = { blob: Blob; name: string; width: number; height: number; srcWidth: number; srcHeight: number; bigger: boolean };
   type Item = { file: File; url: string; result?: Result; resultUrl?: string; error?: string };
@@ -90,10 +93,14 @@ const quality = tool === 'img-compress' ? 70 : 85;
   };
 
   function syncOpts() {
+    if (ico) {
+      $('fmtHint')!.textContent = 'One .ico file holds 16, 32 and 48 px sizes. Transparency is kept.';
+      return;
+    }
     const v = fmt.value;
     const lossy = v === 'keep' ? items.some((i) => i.file.type !== 'image/png') || !items.length : LOSSY.has(v as OutType);
     $('qWrap')!.hidden = !lossy;
-    $('qv')!.textContent = q.value;
+    $('qv')!.textContent = q!.value;
     const hasPng = items.some((i) => i.file.type === 'image/png');
     $('fmtHint')!.textContent =
       v === 'image/avif' ? 'AVIF makes the smallest files but takes a few seconds per large photo.'
@@ -207,8 +214,32 @@ const quality = tool === 'img-compress' ? 70 : 85;
       n++;
       status.textContent = `Working on ${n} of ${todo.length}…`;
       try {
+        if (ico) {
+          const bmp = await decode(it.file, heic);
+          const sw = bmp.width, sh = bmp.height;
+          const pngs = [];
+          for (const size of ICO_SIZES) {
+            const k = size / Math.max(sw, sh);
+            const w = Math.max(1, Math.round(sw * k)), h = Math.max(1, Math.round(sh * k));
+            const c = document.createElement('canvas');
+            c.width = size; c.height = size;
+            const x = c.getContext('2d')!;
+            x.imageSmoothingQuality = 'high';
+            x.drawImage(bmp, Math.round((size - w) / 2), Math.round((size - h) / 2), w, h);
+            const blob = await new Promise<Blob | null>((r) => c.toBlob(r, 'image/png'));
+            if (!blob) throw new Error('This browser could not save the icon.');
+            pngs.push({ width: size, height: size, bytes: new Uint8Array(await blob.arrayBuffer()) });
+          }
+          bmp.close();
+          const blob = new Blob([packIco(pngs)], { type: 'image/x-icon' });
+          const base = it.file.name.replace(/\.[^./\\]+$/, '') || 'image';
+          it.result = { blob, name: `${base}.ico`, width: sw, height: sh, srcWidth: sw, srcHeight: sh, bigger: blob.size >= it.file.size };
+          it.error = undefined;
+          render();
+          continue;
+        }
         const type = outType(it.file);
-        const r = await process(it.file, type, +q.value / 100, s, heic);
+        const r = await process(it.file, type, +q!.value / 100, s, heic);
         if (my !== gen) return; // a setting changed meanwhile; the newer run takes over
         const suffix = tool === 'img-compress' ? '-small' : tool === 'img-resize' ? `-${r.width}x${r.height}` : '';
         const bigger = r.blob.size >= it.file.size;
