@@ -1,5 +1,5 @@
-- Run the browser checks: scripts/browser-check.mjs (42 pages) the next time node execution is allowed, or on a machine with a browser. Covers /text-to-pdf/, /pdf-to-text/, /png-to-ico/, the PDF page previews and this run's new pages (/svg-to-png/, /svg-to-jpg/, /svg-to-pdf/, /gif-to-jpg/, /avif-to-png/, /heic-to-webp/).
-- Move the finished items on ops/roadmap.md to Shipped once a browser check passes (PDF to JPG, previews, PNG to ICO, PDF to text, Text to PDF, and the new pages).
+- Run the browser checks: scripts/browser-check.mjs (44 pages) the next time node execution is allowed, or on a machine with a browser. Covers /text-to-pdf/, /pdf-to-text/, /png-to-ico/, the PDF page previews and this run's new pages (/svg-to-png/, /svg-to-jpg/, /svg-to-pdf/, /gif-to-jpg/, /avif-to-png/, /heic-to-webp/, /heic-to-pdf/, /gif-to-pdf/). Spot-check the SVG pages first; they are the only new code path, all canvas-drawn, all unchecked.
+- The roadmap "Next tools" list is empty apart from PDF to JPG and the previews, both built and waiting on a browser check. Move those, and the pages this run built, to Shipped once a browser check passes.
 - Check the Make PDF page with a HEIC file in Chrome; the decode fix is still only build-checked.
 - Watch the metrics triggers (ads at about 300 visits in 30 days, paid tier at about 1000) and open one decision issue per trigger, only when hit. Visitors were 218 on 2026-11-09, blank on 2026-11-10.
-- If a browser check passes, spot-check the SVG pages first (they are the only new code path this run, all canvas-drawn, all unchecked).
+- If node stays blocked, tighten copy or FAQs on existing pages; anything new must target a real search phrase the way the preset pages do.
