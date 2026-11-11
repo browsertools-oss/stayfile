@@ -7,9 +7,9 @@ const { tool, preset = {}, slug } = Astro.props;
 const multi = tool === 'pdf-merge' || tool === 'img-to-pdf';
 const isImg = tool === 'img-to-pdf';
 const isTxt = tool === 'text-to-pdf';
-const accept = isTxt ? '.txt,.md,.log,.markdown,text/plain' : isImg ? 'image/*,.jpg,.jpeg,.png,.webp,.gif,.avif,.heic' : 'application/pdf,.pdf';
+const accept = isTxt ? '.txt,.md,.log,.markdown,text/plain' : isImg ? (preset.accept ?? 'image/*,.jpg,.jpeg,.png,.webp,.gif,.avif,.heic,.heif,.bmp,.svg') : 'application/pdf,.pdf';
 const main = isTxt ? 'Drop a text file here, or <u>choose one</u>' : multi ? `Drop ${isImg ? 'images' : 'PDF files'} here, or <u>choose files</u>` : 'Drop a PDF here, or <u>choose one</u>';
-const sub = isTxt ? 'Plain text, Markdown or log files' : isImg ? 'JPG · PNG · WebP · GIF' : multi ? 'Add as many as you like' : 'One PDF';
+const sub = isTxt ? 'Plain text, Markdown or log files' : isImg ? 'JPG · PNG · WebP · GIF · SVG' : multi ? 'Add as many as you like' : 'One PDF';
 const split = preset.split ?? 'ranges';
 // Rotate and split: each choice is its own button that does the job, so there is no pick-then-confirm step.
 const runs = tool === 'pdf-rotate'
@@ -208,7 +208,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
     clear();
     for (const file of files) {
       if (isImg) {
-        if (!file.type.startsWith('image/') && !/\.(jpe?g|png|webp|gif|avif|heic)$/i.test(file.name)) { fail(`${file.name} is not an image.`); continue; }
+        if (!file.type.startsWith('image/') && !/\.(jpe?g|png|webp|gif|avif|bmp|svg|heic|heif)$/i.test(file.name)) { fail(`${file.name} is not an image.`); continue; }
         items.push({ file, url: URL.createObjectURL(file) });
       } else if (isTxt) {
         const looksText = /^text\//.test(file.type) || file.type === 'application/markdown' || file.type === '' || /\.(txt|md|log|markdown)$/i.test(file.name);

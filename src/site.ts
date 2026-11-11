@@ -400,6 +400,31 @@ export const PAGES: ToolPage[] = [
     ],
   },
 
+  {
+    slug: 'svg-to-pdf',
+    tool: 'img-to-pdf',
+    group: 'PDF',
+    card: 'SVG to PDF',
+    blurb: 'Put vector drawings into one PDF',
+    preset: { accept: 'image/svg+xml,.svg' },
+    title: 'SVG to PDF converter that works in your browser',
+    h1: 'Convert SVG to PDF',
+    lede: 'Make one PDF from SVG drawings, one drawing per page. Each SVG is drawn and saved inside the PDF as a picture.',
+    description: 'Convert SVG vector drawings to a PDF in your browser, one per page. Pick image size, A4 or Letter. Your file is never uploaded.',
+    steps: ['Drop in your .svg files.', "Pick a page size and margin, or keep the SVG's own size.", 'Click Make PDF and save it.'],
+    faq: [
+      {
+        q: 'Is the SVG still vector in the PDF?',
+        a: "No. Each SVG is drawn onto a canvas and saved as a JPG picture inside the PDF. It is drawn at the SVG's own size, so a small SVG will look soft if the PDF is scaled up. Use the Resize page to enlarge the drawing first if you need a bigger one.",
+      },
+      {
+        q: 'What happens to transparent areas?',
+        a: 'They come out white, because the SVG is saved as a JPG inside the PDF. If you need transparency, save the drawing as a PNG first and use the PNG to PDF page.',
+      },
+      PRIVATE,
+    ],
+  },
+
   // ---------- Images ----------
   {
     slug: 'convert-image',
