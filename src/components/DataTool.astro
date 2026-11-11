@@ -163,6 +163,13 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
   drop.addEventListener('files', async (e) => {
     const all = (e as CustomEvent<File[]>).detail;
     const f = all[0];
+    const looksData = /^text\//.test(f.type) || f.type === '' || f.type === 'application/json' || f.type === 'application/vnd.ms-excel' || /\.(csv|tsv|txt|json|jsonl|ndjson)$/i.test(f.name);
+    if (!fromXlsx && !looksData) {
+      list.innerHTML = '';
+      err.textContent = `${f.name} does not look like ${fromJson ? 'a JSON' : 'a CSV'} file.`;
+      err.hidden = false;
+      return;
+    }
     name = baseName(f.name);
     list.innerHTML = '';
     const li = document.createElement('li');
