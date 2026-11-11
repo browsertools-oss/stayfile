@@ -565,6 +565,34 @@ export const PAGES: ToolPage[] = [
     ],
   },
   {
+    slug: 'heic-to-webp',
+    tool: 'img-convert',
+    group: 'Images',
+    card: 'HEIC to WebP',
+    blurb: 'WebP files from iPhone photos',
+    preset: { out: 'image/webp', accept: 'image/heic,image/heif,.heic,.heif' },
+    title: 'HEIC to WebP converter for iPhone photos',
+    h1: 'Convert HEIC to WebP',
+    lede: 'Turn iPhone HEIC photos into WebP, which keeps files small and opens in every current browser.',
+    description: 'Convert iPhone HEIC photos to WebP in your browser, one at a time or in a batch. Your photos are never uploaded.',
+    steps: ['Drop in your .heic files.', 'WebP is already selected. Move the quality slider if you want smaller files.', 'Click Convert, then save each photo or all of them as a zip.'],
+    faq: [
+      {
+        q: 'Will older apps open WebP?',
+        a: 'Current browsers and newer apps can. Some older programs and upload forms still reject WebP. If one does, convert to JPG with the HEIC to JPG page instead.',
+      },
+      {
+        q: 'Does the WebP keep the location and camera details?',
+        a: 'No. The WebP is drawn fresh from the pixels, so the date, location and camera details are left out.',
+      },
+      {
+        q: 'Why does the first photo take longer?',
+        a: "Most browsers can't read HEIC on their own, so the page downloads a decoder the first time you convert. Safari reads HEIC itself and skips this step.",
+      },
+      PRIVATE,
+    ],
+  },
+  {
     slug: 'avif-to-jpg',
     tool: 'img-convert',
     group: 'Images',
@@ -588,6 +616,30 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Does my browser need to open AVIF?',
         a: 'Yes. The page draws the image with your browser, so it works in browsers that can show AVIF files. If a file does not open, try the newest version of your browser.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'avif-to-png',
+    tool: 'img-convert',
+    group: 'Images',
+    card: 'AVIF to PNG',
+    blurb: 'Open AVIF images anywhere',
+    preset: { out: 'image/png', accept: 'image/avif,.avif' },
+    title: 'AVIF to PNG converter that works in your browser',
+    h1: 'Convert AVIF to PNG',
+    lede: 'Turn AVIF images into PNG files that open anywhere. Transparency is kept.',
+    description: 'Convert AVIF images to PNG in your browser so they open in any app. Transparency is kept. Your file is never uploaded.',
+    steps: ['Drop in your .avif files.', 'PNG is already selected.', 'Click Convert, then save each image or all of them as a zip.'],
+    faq: [
+      {
+        q: 'What if the page cannot read my AVIF?',
+        a: 'Your browser has to open the AVIF first. Chrome, Firefox, Edge and recent Safari can. An older browser cannot, and the page says so instead of failing quietly.',
+      },
+      {
+        q: 'Will the PNG be bigger than the AVIF?',
+        a: 'Yes, usually. AVIF compresses photos hard, and PNG keeps every pixel. Expect the PNG to be larger than the AVIF.',
       },
       PRIVATE,
     ],
@@ -707,6 +759,30 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Does PNG keep the colors exactly?',
         a: 'PNG keeps every pixel of the frame exactly. A GIF has at most 256 colors, and PNG keeps those colors as they are, so the picture does not change. The file size can go either way.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'gif-to-jpg',
+    tool: 'img-convert',
+    group: 'Images',
+    card: 'GIF to JPG',
+    blurb: 'Save a GIF as a JPG image',
+    preset: { out: 'image/jpeg', accept: 'image/gif,.gif' },
+    title: 'GIF to JPG converter: save a GIF as JPG online',
+    h1: 'Convert GIF to JPG',
+    lede: 'Save a GIF as a JPG image. Only the first frame of an animated GIF is kept, and transparent areas are filled with white, since JPG holds a single opaque picture.',
+    description: 'Convert GIF images to JPG in your browser. The first frame is kept and transparency is filled with white. Your files are never uploaded.',
+    steps: ['Drop in your .gif files.', 'JPG is already selected. Move the quality slider if you want smaller files.', 'Click Convert, then save each image or all of them as a zip.'],
+    faq: [
+      {
+        q: 'What happens to the animation?',
+        a: 'It is dropped. The JPG is the first frame of the GIF, and JPG cannot store the other frames. To keep the animation, use the GIF file itself.',
+      },
+      {
+        q: 'Is the JPG smaller than the GIF?',
+        a: 'For photos, usually. For flat graphics with few colors the GIF can come out smaller, so check the result before you replace the original.',
       },
       PRIVATE,
     ],
