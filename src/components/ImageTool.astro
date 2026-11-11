@@ -20,7 +20,7 @@ const quality = tool === 'img-compress' ? 70 : 85;
 ---
 <section class="tool" data-tool={tool} data-heic={heic ? '' : undefined} data-slug={slug}>
   <ul class="files" id="list"></ul>
-  <Drop accept={accept} multiple main="Drop images here, or <u>choose files</u>" sub={heic ? 'HEIC and HEIF photos from an iPhone or iPad' : 'JPG · PNG · WebP · GIF · AVIF'} />
+  <Drop accept={accept} multiple main="Drop images here, or <u>choose files</u>" sub={heic ? 'HEIC and HEIF photos from an iPhone or iPad' : 'JPG · PNG · WebP · GIF · AVIF · SVG'} />
 
   <div id="work" hidden>
     <div class="opts">
@@ -172,7 +172,7 @@ const quality = tool === 'img-compress' ? 70 : 85;
   drop.addEventListener('files', (e) => {
     err.hidden = true;
     for (const file of (e as CustomEvent<File[]>).detail) {
-      if (!file.type.startsWith('image/') && !/\.(jpe?g|png|webp|gif|avif|bmp|heic|heif)$/i.test(file.name)) { fail(`${file.name} is not an image.`); continue; }
+      if (!file.type.startsWith('image/') && !/\.(jpe?g|png|webp|gif|avif|bmp|svg|heic|heif)$/i.test(file.name)) { fail(`${file.name} is not an image.`); continue; }
       items.push({ file, url: URL.createObjectURL(file) });
     }
     render();

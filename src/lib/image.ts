@@ -2,6 +2,7 @@
 // with jSquash (Apache-2.0, Squoosh's codecs) for AVIF and for WebP where the browser can't encode it.
 
 import { isHeic, decodeHeic, loadHeif } from './heic';
+import { svgIntrinsicSize, clampSize } from './svg';
 
 export type OutType = 'image/jpeg' | 'image/png' | 'image/webp' | 'image/avif';
 
@@ -73,8 +74,32 @@ export const avifQuality = (q: number) => Math.max(1, Math.min(100, Math.round(q
 
 // ---------- browser-only below ----------
 
+/** SVG: drawn onto a canvas at the SVG's own size (or its viewBox), then rasterised. Browsers disagree on
+ *  SVG in createImageBitmap, so this path works everywhere. Transparency is kept. */
+async function decodeSvg(file: Blob): Promise<ImageBitmap> {
+  const intrinsic = svgIntrinsicSize(await file.text());
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const el = new Image();
+      el.onload = () => resolve(el);
+      el.onerror = () => reject(new Error('This SVG could not be opened. It may reference fonts or images the browser blocked.'));
+      el.src = url;
+    });
+    const size = clampSize(intrinsic ?? { width: img.naturalWidth || 1024, height: img.naturalHeight || 768 }, 8192);
+    const c = document.createElement('canvas');
+    c.width = size.width;
+    c.height = size.height;
+    c.getContext('2d')!.drawImage(img, 0, 0, size.width, size.height);
+    return await createImageBitmap(c);
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
 /** heic: let HEIC files fall back to libheif when the browser can't open them (Safari can; Chrome and Firefox can't). */
 export async function decode(file: Blob, heic = false): Promise<ImageBitmap> {
+  if (file.type === 'image/svg+xml' || /\.svg$/i.test((file as File).name ?? '')) return decodeSvg(file);
   try {
     return await createImageBitmap(file);
   } catch {
