@@ -431,11 +431,11 @@ export const PAGES: ToolPage[] = [
     tool: 'img-convert',
     group: 'Images',
     card: 'Convert image',
-    blurb: 'Switch between JPG, PNG, WebP and AVIF',
+    blurb: 'Switch between image formats',
     title: 'Image converter: JPG, PNG, WebP and AVIF online',
     h1: 'Convert images',
-    lede: 'Change images between JPG, PNG, WebP and AVIF. Convert one file or a whole batch, with a quality setting for the formats that use one.',
-    description: 'Convert images between JPG, PNG, WebP and AVIF in your browser. Batch conversion, adjustable quality, and no uploads.',
+    lede: 'Change images between JPG, PNG, WebP and AVIF. You can drop in JPG, PNG, WebP, GIF, AVIF, SVG or BMP files. Convert one file or a whole batch, with a quality setting for the formats that use one.',
+    description: 'Convert images between JPG, PNG, WebP and AVIF in your browser. GIFs, SVGs and BMPs can be read too. Batch conversion, adjustable quality, and no uploads.',
     steps: [
       'Drop in one or more images.',
       'Pick the format you want and, for JPG, WebP or AVIF, a quality level.',
@@ -449,6 +449,10 @@ export const PAGES: ToolPage[] = [
       {
         q: 'What happens to transparent areas when I convert to JPG?',
         a: 'JPG has no transparency, so transparent areas become white.',
+      },
+      {
+        q: 'Can I convert a GIF or an SVG?',
+        a: 'Yes. Drop in a GIF, SVG or BMP and pick the format you want. Animated GIFs keep only their first frame, and an SVG is drawn onto a canvas at its own size. HEIC photos need their own page: use HEIC to JPG or HEIC to PNG.',
       },
       {
         q: 'Why does AVIF take longer?',
