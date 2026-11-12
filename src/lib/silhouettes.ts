@@ -75,6 +75,7 @@ export const shapes: Record<string, Shape[]> = {
   'remove-pages-from-pdf': merge(S(30, 12, 60, 72, 4), { fill: [], cut: [], ink: ['M42 48h36'] }),
   'png-to-pdf': merge(S(46, 10, 50, 72, 3), P(16, 34, 52, 40)),
   'webp-to-pdf': merge(S(46, 10, 50, 72, 3), P(16, 34, 52, 40)),
+  'bmp-to-pdf': merge(S(46, 10, 50, 72, 3), P(16, 34, 52, 40)),
   'svg-to-pdf': merge(S(46, 10, 50, 72, 3), P(16, 34, 52, 40)),
   'heic-to-pdf': merge(S(46, 10, 50, 72, 3), P(16, 34, 52, 40)),
   'gif-to-pdf': merge(S(46, 10, 50, 72, 3), P(16, 34, 52, 40)),

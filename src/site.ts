@@ -472,6 +472,30 @@ export const PAGES: ToolPage[] = [
       PRIVATE,
     ],
   },
+  {
+    slug: 'bmp-to-pdf',
+    tool: 'img-to-pdf',
+    group: 'PDF',
+    card: 'BMP to PDF',
+    blurb: 'Put BMP pictures into one PDF',
+    preset: { accept: 'image/bmp,.bmp' },
+    title: 'BMP to PDF converter that works in your browser',
+    h1: 'Convert BMP to PDF',
+    lede: 'Make one PDF from BMP pictures, one picture per page, in the order you choose. The converting happens in your browser, so the files stay on your own device.',
+    description: 'Convert BMP files to a PDF in your browser, one per page, in the order you choose. Pick a page size and margin. Your files are never uploaded.',
+    steps: ['Drop in your .bmp files.', 'Put them in order and pick a page size and margin.', 'Click Make PDF and save it.'],
+    faq: [
+      {
+        q: 'Do the pictures lose quality?',
+        a: 'They are redrawn as JPG inside the PDF at high quality, because PDF cannot hold a BMP as is. Flat colors and sharp edges can look soft. For an exact copy, convert each BMP to PNG first and use the PNG to PDF page.',
+      },
+      {
+        q: 'Why is my BMP file so big?',
+        a: 'BMP stores every pixel uncompressed, so even an ordinary picture can be several megabytes. The PDF keeps each page as a JPG, which is usually much smaller than the BMP it came from.',
+      },
+      PRIVATE,
+    ],
+  },
 
   // ---------- Images ----------
   {
