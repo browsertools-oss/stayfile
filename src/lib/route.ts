@@ -1,5 +1,6 @@
 // Pure routing rules for the flow between tools: what a dropped set of files can become on the home page,
-// what makes sense after a save, and the names files get. Kept free of the DOM so they can be tested.
+// what makes sense after a save, and the names files get. Kept free of the DOM and of the page copy in
+// site.ts so it can be tested and so client bundles stay small.
 
 export type Kind = 'pdf' | 'heic' | 'image' | 'csv' | 'json' | 'xlsx' | 'text' | 'other';
 export type Route = { slug: string; label: string };
@@ -84,7 +85,16 @@ export function nextTools(slug: string): Route[] {
     { slug: 'resize-image', label: 'Resize' },
     { slug: 'jpg-to-pdf', label: 'Turn into a PDF' },
   ];
-  if (['convert-image', 'png-to-jpg', 'webp-to-jpg', 'heic-to-jpg', 'jpg-to-webp', 'compress-image', 'resize-image'].includes(slug)) {
+  // Every page that saves an image, so the next step is one click after an image tool.
+  // A hand-kept list: the three multi-format tools plus every img-convert preset page.
+  const IMAGE_OUTPUT = new Set([
+    'convert-image', 'compress-image', 'resize-image',
+    'png-to-jpg', 'jpg-to-png', 'webp-to-jpg', 'heic-to-jpg', 'heic-to-png', 'heic-to-webp',
+    'avif-to-jpg', 'avif-to-png', 'jpg-to-avif', 'svg-to-png', 'svg-to-jpg',
+    'gif-to-png', 'gif-to-jpg', 'webp-to-png', 'png-to-webp', 'jpg-to-webp',
+    'ico-to-png', 'bmp-to-jpg', 'bmp-to-png',
+  ]);
+  if (IMAGE_OUTPUT.has(slug)) {
     return imgNext.filter((r) => r.slug !== slug);
   }
   return [];
