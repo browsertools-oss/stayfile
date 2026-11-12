@@ -480,7 +480,7 @@ export const PAGES: ToolPage[] = [
     group: 'Images',
     card: 'Convert image',
     blurb: 'Switch between image formats',
-    title: 'Image converter: JPG, PNG, WebP and AVIF online',
+    title: 'Image converter: JPG, PNG, GIF, WebP and AVIF online',
     h1: 'Convert images',
     lede: 'Change images between JPG, PNG, WebP and AVIF. You can drop in JPG, PNG, WebP, GIF, AVIF, SVG or BMP files. Convert one file or a whole batch, with a quality setting for the formats that use one.',
     description: 'Convert images between JPG, PNG, WebP and AVIF in your browser. GIFs, SVGs and BMPs can be read too. Batch conversion, adjustable quality, and no uploads.',
