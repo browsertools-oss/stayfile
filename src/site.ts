@@ -295,10 +295,10 @@ export const PAGES: ToolPage[] = [
     group: 'PDF',
     card: 'Text to PDF',
     blurb: 'Turn a plain text file into a PDF',
-    title: 'Text to PDF: convert a text file to PDF online',
+    title: 'Text to PDF: convert a text or Markdown file to PDF online',
     h1: 'Convert text to PDF',
     lede: 'Make a PDF from a plain text file, such as a .txt note, a Markdown file or a log. The text keeps its line breaks, long lines are wrapped to fit the page, and the fixed-width font keeps any columns lined up.',
-    description: 'Convert a plain text file to a PDF in your browser. The text file never leaves your device.',
+    description: 'Convert a plain text or Markdown file to a PDF in your browser. The file never leaves your device.',
     steps: [
       'Drop in the text file.',
       'Click Make PDF.',
@@ -812,6 +812,30 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Where does the .ico file go on my site?',
         a: 'Save it as favicon.ico in the root folder of your site. Browsers that look for /favicon.ico will use it. A link tag that points at the file works too.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'ico-to-png',
+    tool: 'img-convert',
+    group: 'Images',
+    card: 'ICO to PNG',
+    blurb: 'Save a .ico favicon as a PNG',
+    preset: { out: 'image/png', accept: 'image/x-icon,image/vnd.microsoft.icon,.ico' },
+    title: 'ICO to PNG converter: save a .ico file as PNG online',
+    h1: 'Convert ICO to PNG',
+    lede: 'Open a .ico favicon file and save it as a PNG. An ICO can hold several sizes of the same picture; the page uses the image your browser decodes, which is usually the largest size in the file.',
+    description: 'Convert a .ico favicon to a PNG image in your browser. Transparency is kept. The file never leaves your device.',
+    steps: ['Drop in your .ico files.', 'PNG is already selected.', 'Click Convert, then save each image or all of them as a zip.'],
+    faq: [
+      {
+        q: 'What happens to the other sizes in the file?',
+        a: 'An ICO can hold several sizes of the same picture. The page keeps the one your browser decodes from the file, which is usually the largest. The smaller sizes are dropped.',
+      },
+      {
+        q: 'Will transparency survive?',
+        a: 'Yes. ICO files hold 32 bit color with an alpha channel, and PNG keeps it. That is the usual reason to convert a favicon this way.',
       },
       PRIVATE,
     ],

@@ -10,7 +10,7 @@ export function kindOf(f: Named): Kind {
   const t = (f.type ?? '').toLowerCase();
   if (t === 'application/pdf' || n.endsWith('.pdf')) return 'pdf';
   if (/^image\/hei[cf]/.test(t) || /\.hei[cf]$/.test(n)) return 'heic';
-  if (t.startsWith('image/') || /\.(jpe?g|png|webp|gif|avif|bmp)$/.test(n)) return 'image';
+  if (t.startsWith('image/') || /\.(jpe?g|png|webp|gif|avif|bmp|ico)$/.test(n)) return 'image';
   if (/\.(csv|tsv)$/.test(n) || t === 'text/csv') return 'csv';
   if (/\.(json|jsonl|ndjson)$/.test(n) || t === 'application/json') return 'json';
   if (/\.(xlsx)$/.test(n) || t === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') return 'xlsx';

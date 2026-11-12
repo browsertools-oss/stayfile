@@ -110,7 +110,7 @@ export async function decode(file: Blob, heic = false): Promise<ImageBitmap> {
     if (isHeic(file as File)) {
       throw new Error('This is an iPhone HEIC photo, and this page does not open HEIC. Use the HEIC to JPG or HEIC to PNG page first.');
     }
-    throw new Error('This browser cannot open that image. Try a JPG, PNG, WebP, GIF, AVIF or BMP file.');
+    throw new Error('This browser cannot open that image. Try a JPG, PNG, WebP, GIF, AVIF, BMP or ICO file.');
   }
 }
 

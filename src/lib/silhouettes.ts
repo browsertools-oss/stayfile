@@ -97,6 +97,7 @@ export const shapes: Record<string, Shape[]> = {
     { fill: [], cut: [hills(36, 20, 48, 54)], dots: [sun(36, 20, 48, 54)] },
   ),
   'png-to-ico': merge(P(14, 18, 60, 50), tag(80, 58)),
+  'ico-to-png': merge(P(14, 18, 60, 50), tag(80, 58)),
   'jpg-to-ico': merge(P(14, 18, 60, 50), tag(80, 58)),
   'bmp-to-jpg': merge(P(18, 18, 72, 56), tag(86, 62)),
   'bmp-to-png': merge(P(18, 18, 72, 56), tag(86, 62)),

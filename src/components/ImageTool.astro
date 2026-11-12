@@ -8,7 +8,7 @@ const accept = preset.accept ?? 'image/*,.jpg,.jpeg,.png,.webp,.gif,.avif,.bmp';
 // Only the HEIC page loads the HEIC decoder.
 const heic = accept.includes('heic');
 // On a single-format preset page, say which format the page takes instead of the full list.
-const EXT_LABEL: Record<string, string> = { jpg: 'JPG', jpeg: 'JPG', png: 'PNG', webp: 'WebP', gif: 'GIF', avif: 'AVIF', bmp: 'BMP', svg: 'SVG' };
+const EXT_LABEL: Record<string, string> = { jpg: 'JPG', jpeg: 'JPG', png: 'PNG', webp: 'WebP', gif: 'GIF', avif: 'AVIF', bmp: 'BMP', svg: 'SVG', ico: 'ICO' };
 const presetExt = preset.accept?.split(',').map((s) => s.trim()).find((s) => s.startsWith('.'));
 const presetLabel = presetExt ? (EXT_LABEL[presetExt.slice(1).toLowerCase()] ?? presetExt.slice(1).toUpperCase()) : null;
 const subLine = heic
