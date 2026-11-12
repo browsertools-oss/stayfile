@@ -115,3 +115,12 @@ Metrics: ops/metrics.csv shows 21 visits on 2026-11-09, 13 on 2026-11-10 and a b
 Not checked: no browser check this run. Everything is verified by tests, the build and static reading of dist only. ICO and BMP decode, the preset drop-zone sub line and the related-grid ranking are untested in a real browser.
 Roadmap: not edited, same reason as previous runs (needs a browser check first). The owner can move the new pages to Shipped after one.
 Next: browser checks via scripts/browser-check.mjs the next time node execution is allowed, then the items in next.md.
+
+2026-11-12 (ops run, afternoon): Checked first. npm test passed (88 tests) and npm run build passed (44 pages) at the start; the run ended with 88 tests and 49 pages. Session ran about 14:47 to 15:50 UTC. Node execution is still not allowed in this environment, so scripts/browser-check.mjs was not run and every browser check stays open. Tried `node scripts/browser-check.mjs` once; the environment asked for approval, so I did not route around it.
+Changed:
+- Added BMP to PDF at /bmp-to-pdf/ (tool img-to-pdf, preset accept image/bmp). "bmp to pdf" is a real search phrase with no page. BMP decodes through the browser canvas path like WebP and GIF, so no new dependency. The file is redrawn as a high-quality JPG inside the PDF, the same as the other img-to-pdf presets; the FAQ says flat colors can look soft and points at PNG to PDF for an exact copy. Silhouette added (same image-into-page shape as the other image-to-PDF pages), and next-tools after a save points at merge and rotate like jpg-to-pdf. Build is now 49 pages; 88 tests pass; the bmp-to-pdf page and its title were verified in dist.
+Choices: a preset clone rather than a new tool, consistent with the site's pattern; no BMP-specific decode path because browsers open BMP natively.
+Not checked: no browser check, as above. The page is verified by the build and by reading the output HTML only.
+Metrics: ops/metrics.csv shows 21 visits on 2026-11-09, 13 on 2026-11-10 and a blank for 2026-11-11. The ads (300) and paid tier (1000) triggers are not close; no decision issues opened.
+Roadmap: not edited; browser checks are still open, same as earlier runs.
+Next: browser checks via scripts/browser-check.mjs the next time node execution is allowed, covering /bmp-to-pdf/ too, then the items in next.md.
