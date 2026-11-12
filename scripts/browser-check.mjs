@@ -92,6 +92,48 @@ const browser = await puppeteer.launch({
   await page.close();
 }
 
+// Wrap the generated sample.png in an .ico container (ICONDIR header plus a 96x72 PNG entry).
+const pngForIco = join(fixtures, 'sample.png');
+if (existsSync(pngForIco)) {
+  const pngBytes = await readFile(pngForIco);
+  const head = Buffer.alloc(22);
+  head.writeUInt16LE(0, 0); // reserved
+  head.writeUInt16LE(1, 2); // type: icon
+  head.writeUInt16LE(1, 4); // one image
+  head[6] = 96; head[7] = 72; // width, height (bytes, 0 would mean 256)
+  head[8] = 0; head[9] = 0; // palette, reserved
+  head.writeUInt16LE(1, 10); // planes
+  head.writeUInt16LE(32, 12); // bits per pixel
+  head.writeUInt32LE(pngBytes.length, 14);
+  head.writeUInt32LE(22, 18); // payload offset
+  await writeFile(join(fixtures, 'sample.ico'), Buffer.concat([head, pngBytes]));
+} else {
+  console.log('fixture sample.png missing, skipping sample.ico');
+}
+
+// Minimal 4x2 24-bit BMP. Rows are 12 bytes, aligned to 4 already, so no padding.
+{
+  const w = 4, h = 2, row = w * 3;
+  const px = Buffer.alloc(row * h);
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const i = y * row + x * 3;
+      px[i] = 0x30; px[i + 1] = 0x60 + x * 40; px[i + 2] = 0xaa; // BGR
+    }
+  }
+  const file = Buffer.alloc(54);
+  file.write('BM', 0, 'ascii');
+  file.writeUInt32LE(54 + px.length, 2);
+  file.writeUInt32LE(54, 10); // pixel data offset
+  file.writeUInt32LE(40, 14); // info header size
+  file.writeInt32LE(w, 18);
+  file.writeInt32LE(h, 22);
+  file.writeUInt16LE(1, 26); // planes
+  file.writeUInt16LE(24, 28); // bpp
+  file.writeUInt32LE(px.length, 34);
+  await writeFile(join(fixtures, 'sample.bmp'), Buffer.concat([file, px]));
+}
+
 // ---- Checks ----------------------------------------------------------------
 const F = (n) => join(fixtures, n);
 const checks = [
@@ -125,6 +167,13 @@ const checks = [
   { slug: '/avif-to-jpg/', fixtures: [F('sample.avif')], click: 'Save', expect: '' },
   { slug: '/jpg-to-avif/', fixtures: [F('sample.jpg')], click: 'Save', expect: '' },
   { slug: '/png-to-ico/', fixtures: [F('sample.png')], click: 'Save', expect: '' },
+  { slug: '/jpg-to-ico/', fixtures: [F('sample.jpg')], click: 'Save', expect: '' },
+  { slug: '/ico-to-png/', fixtures: [F('sample.ico')], click: 'Save', expect: '' },
+  { slug: '/bmp-to-jpg/', fixtures: [F('sample.bmp')], click: 'Save', expect: '' },
+  { slug: '/bmp-to-png/', fixtures: [F('sample.bmp')], click: 'Save', expect: '' },
+  { slug: '/svg-to-png/', name: 'svg-to-png (load only, no SVG fixture)' },
+  { slug: '/svg-to-jpg/', name: 'svg-to-jpg (load only, no SVG fixture)' },
+  { slug: '/svg-to-pdf/', name: 'svg-to-pdf (load only, no SVG fixture)' },
   { slug: '/pdf-to-text/', fixtures: [F('sample.pdf')], click: 'Extract text', expect: 'Extracted' },
   { slug: '/text-to-pdf/', fixtures: [F('sample.txt')], click: 'Make PDF', expect: 'Made' },
   { slug: '/heic-to-jpg/', name: 'heic-to-jpg (load only, no HEIC fixture)' },
