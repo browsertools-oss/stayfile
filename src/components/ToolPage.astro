@@ -9,7 +9,15 @@ interface Props { page: ToolPage }
 const { page } = Astro.props;
 const path = `/${page.slug}/`;
 const family = page.tool.startsWith('pdf') || page.tool === 'img-to-pdf' || page.tool === 'text-to-pdf' ? 'pdf' : page.tool.startsWith('img') ? 'img' : 'data';
-const related = PAGES.filter((p) => p.group === page.group && p.slug !== page.slug);
+// Show the pages that share a format with this one, then the rest, capped at eight so a
+// twenty-card group does not bury the page under its own related list.
+const STOP = new Set(['to', 'from', 'a', 'the']);
+const tokens = new Set(page.slug.split('-').filter((t) => !STOP.has(t)));
+const related = PAGES.filter((p) => p.group === page.group && p.slug !== page.slug)
+  .map((p, i) => ({ p, i, s: p.slug.split('-').filter((t) => tokens.has(t)).length }))
+  .sort((a, b) => b.s - a.s || a.i - b.i)
+  .slice(0, 8)
+  .map((x) => x.p);
 const jsonld = [
   {
     '@context': 'https://schema.org',
