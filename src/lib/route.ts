@@ -95,7 +95,7 @@ export function nextTools(slug: string): Route[] {
   // Every page that saves an image, so the next step is one click after an image tool.
   // A hand-kept list: the three multi-format tools plus every img-convert preset page.
   const IMAGE_OUTPUT = new Set([
-    'convert-image', 'compress-image', 'resize-image', 'compress-jpg', 'resize-jpg', 'resize-png',
+    'convert-image', 'compress-image', 'resize-image', 'compress-jpg', 'compress-png', 'resize-jpg', 'resize-png',
     'png-to-jpg', 'jpg-to-png', 'webp-to-jpg', 'heic-to-jpg', 'heic-to-png', 'heic-to-webp',
     'avif-to-jpg', 'avif-to-png', 'jpg-to-avif', 'svg-to-png', 'svg-to-jpg', 'png-to-avif', 'webp-to-avif', 'avif-to-webp',
     'gif-to-png', 'gif-to-jpg', 'webp-to-png', 'png-to-webp', 'jpg-to-webp', 'gif-to-webp',

@@ -64,6 +64,7 @@ export const shapes: Record<string, Shape[]> = {
   ),
   'compress-image': merge(P(36, 28, 48, 38), { fill: [], cut: [], ink: ['M14 12l16 12M106 12l-16 12M14 84l16 -12M106 84l-16 -12', 'M30 24h-9M30 24v-8M90 24h9M90 24v-8M30 72h-9M30 72v8M90 72h9M90 72v8'] }),
   'compress-jpg': merge(P(36, 28, 48, 38), { fill: [], cut: [], ink: ['M14 12l16 12M106 12l-16 12M14 84l16 -12M106 84l-16 -12', 'M30 24h-9M30 24v-8M90 24h9M90 24v-8M30 72h-9M30 72v8M90 72h9M90 72v8'] }),
+  'compress-png': merge(P(36, 28, 48, 38), { fill: [], cut: [], ink: ['M14 12l16 12M106 12l-16 12M14 84l16 -12M106 84l-16 -12', 'M30 24h-9M30 24v-8M90 24h9M90 24v-8M30 72h-9M30 72v8M90 72h9M90 72v8'] }),
   'resize-image': merge(P(16, 44, 46, 38), { fill: [], cut: [], ink: ['M16 34v-22h88v70h-30', 'M66 40l28 -20', 'M94 20h-11M94 20v11'] }),
   'resize-jpg': merge(P(16, 44, 46, 38), { fill: [], cut: [], ink: ['M16 34v-22h88v70h-30', 'M66 40l28 -20', 'M94 20h-11M94 20v11'] }),
   'resize-png': merge(P(16, 44, 46, 38), { fill: [], cut: [], ink: ['M16 34v-22h88v70h-30', 'M66 40l28 -20', 'M94 20h-11M94 20v11'] }),

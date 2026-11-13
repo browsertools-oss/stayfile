@@ -1313,6 +1313,38 @@ export const PAGES: ToolPage[] = [
     ],
   },
   {
+    slug: 'compress-png',
+    tool: 'img-compress',
+    group: 'Images',
+    card: 'Compress PNG',
+    blurb: 'Shrink PNGs for the web and upload forms',
+    preset: { accept: 'image/png,.png' },
+    title: 'Compress PNG online: make PNG files smaller in your browser',
+    h1: 'Compress PNG',
+    lede: 'Make a PNG small enough for a website, a README or an upload form. Set a maximum width and quality, and see the new size before you download. For a much smaller file, save as WebP instead; the page tells you when the PNG will barely shrink.',
+    description: 'Reduce PNG file size in your browser. Cap the width, compare sizes, and save. Optionally save as WebP for a much smaller file. Nothing leaves your device.',
+    steps: [
+      'Drop in one or more PNG files.',
+      'Set a maximum width. Re-saving at 1920 pixels or less is where most of the savings come from.',
+      'Click Compress, check the new sizes, and save. Switch "Save as" to WebP if you need the smallest file.',
+    ],
+    faq: [
+      {
+        q: 'Why did my PNG barely shrink?',
+        a: 'PNG is a lossless format, so there is little to remove without changing it. Setting a maximum width helps on large images. For a real size drop, pick WebP in "Save as", or JPG if the image has no transparency.',
+      },
+      {
+        q: 'Can I keep the file as a PNG and still shrink it?',
+        a: 'Yes. The tool re-saves the PNG with the maximum width you set. That is lossless, and it helps most on screenshots and images saved at very large dimensions.',
+      },
+      {
+        q: 'What if the compressed file comes out bigger?',
+        a: 'That can happen when an image was already well compressed. If the format and size stay the same and the result would be larger, you get your original file back unchanged.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
     slug: 'resize-image',
     tool: 'img-resize',
     group: 'Images',
