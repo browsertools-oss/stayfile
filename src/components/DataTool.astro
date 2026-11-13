@@ -219,6 +219,7 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
     save(blob, file);
     showDone({
       el: $('done')!, slug: root.dataset.slug!, line: savedLine(file), again: () => save(blob, file),
+      result: new File([blob], file, { type: blob.type }),
       reset: () => {
         input.value = ''; list.innerHTML = ''; name = 'data'; sheetInfo = '';
         drop.classList.remove('compact'); $('pasteWrap')!.hidden = fromXlsx; $('showText')!.hidden = true;

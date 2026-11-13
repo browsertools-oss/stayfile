@@ -87,6 +87,19 @@ export function nextTools(slug: string): Route[] {
     'avif-to-pdf': [{ slug: 'merge-pdf', label: 'Merge with other PDFs' }, { slug: 'rotate-pdf', label: 'Rotate pages' }],
   };
   if (pdfNext[slug]) return pdfNext[slug];
+  // After a data tool saves a file, offer the next step in the data chain. One click carries the file over.
+  const dataNext: Record<string, Route[]> = {
+    'csv-to-json': [{ slug: 'json-to-excel', label: 'Open it in Excel' }, { slug: 'json-to-csv', label: 'Convert back to CSV' }],
+    'tsv-to-json': [{ slug: 'json-to-excel', label: 'Open it in Excel' }],
+    'csv-to-markdown': [{ slug: 'text-to-pdf', label: 'Turn it into a PDF' }],
+    'json-to-csv': [{ slug: 'csv-to-excel', label: 'Open it in Excel' }],
+    'jsonl-to-csv': [{ slug: 'csv-to-excel', label: 'Open it in Excel' }],
+    'csv-to-xlsx': [{ slug: 'excel-to-json', label: 'Convert to JSON' }],
+    'xlsx-to-csv': [{ slug: 'csv-to-markdown', label: 'Make a Markdown table' }],
+    'xlsx-to-json': [{ slug: 'json-to-csv', label: 'Convert to CSV' }],
+    'json-to-xlsx': [{ slug: 'excel-to-csv', label: 'Convert to CSV' }],
+  };
+  if (dataNext[slug]) return dataNext[slug];
   const imgNext: Route[] = [
     { slug: 'compress-image', label: 'Make it smaller' },
     { slug: 'resize-image', label: 'Resize' },
