@@ -124,3 +124,16 @@ Not checked: no browser check, as above. The page is verified by the build and b
 Metrics: ops/metrics.csv shows 21 visits on 2026-11-09, 13 on 2026-11-10 and a blank for 2026-11-11. The ads (300) and paid tier (1000) triggers are not close; no decision issues opened.
 Roadmap: not edited; browser checks are still open, same as earlier runs.
 Next: browser checks via scripts/browser-check.mjs the next time node execution is allowed, covering /bmp-to-pdf/ too, then the items in next.md.
+
+2026-11-13 (ops run): Checked first. npm test passed (88 tests) and npm run build passed (49 pages) at the start; the run ended with 88 tests and 60 pages. Session started about 02:47 UTC; the clock moved slowly, so fewer items than usual fit. Node execution is still not allowed, so scripts/browser-check.mjs was not run and every browser check stays open, as in earlier runs.
+Changed, in order (each committed to main after test and build):
+- Added three AVIF conversion pages: /png-to-avif/, /webp-to-avif/, /avif-to-webp/. Preset clones on the image convert tool for real phrases; AVIF encoding already exists via jSquash and the browser does the decoding. Transparency claims only where AVIF and WebP alpha both apply. Commit 270bb52.
+- Added /gif-to-webp/ (first frame kept, transparency kept), /ico-to-jpg/ (largest size in the icon is used, transparency fills white) and /compress-jpg/ (img-compress with the drop zone narrowed to JPGs, copy tuned for quality 50 to 70 and a 1920 px width cap). Commit 065a251.
+- Added /avif-to-pdf/ (img-to-pdf preset; redrawn as JPG inside the PDF like the other img-to-pdf pages), /webp-to-ico/ and /svg-to-ico/ (favicon pages; the SVG is drawn at its intrinsic size first, and the FAQ says so). Also widened the next-step offer on every img-to-pdf page to merge and rotate, which only jpg-to-pdf and bmp-to-pdf had. Commit 1c9703c.
+- Named ICO support on the convert-image page: lede, description, FAQ and the drop-zone sub line now include ICO, and the picker accept lists .ico (image/* already covered it). The error message and route suggesters already knew ICO; the copy did not. Commit 5be98e2.
+- Added /resize-jpg/ and /resize-png/ (img-resize presets), same pattern as Compress JPG. Commit 27db50d.
+Choices: eleven new preset pages this run because preset clones are the cheapest real-search-phrase traffic the site can buy, and the roadmap's next-tools list is empty apart from the PDF items that are already built. ICO pages claim only what packIco and the browser decoder actually do. No new dependency was added anywhere.
+Not checked: no browser check this run. Everything is verified by the 88 tests, the build and reading dist HTML only (titles and preset sub lines checked; all 11 new pages are in dist at 60 pages). The SVG-to-ICO decode path and the AVIF pages are untested in a real browser.
+Metrics: ops/metrics.csv shows 20 on 2026-11-09, 10 on 2026-11-10, 20 on 2026-11-11 and a blank for 2026-11-12. The ads (300) and paid tier (1000) triggers are not close; no decision issues opened.
+Roadmap: not edited; browser checks are still open. The owner can move the pages built since 2026-11-09 to Shipped after one browser check.
+Next: browser checks via scripts/browser-check.mjs the next time node execution is allowed, now covering 60 pages including the 11 new ones, then the items in next.md.
