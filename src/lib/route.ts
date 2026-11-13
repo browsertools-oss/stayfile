@@ -78,7 +78,13 @@ export function nextTools(slug: string): Route[] {
     'extract-pages-from-pdf': [{ slug: 'rotate-pdf', label: 'Rotate pages' }, { slug: 'merge-pdf', label: 'Merge with other PDFs' }],
     'rotate-pdf': [{ slug: 'merge-pdf', label: 'Merge with other PDFs' }, { slug: 'extract-pages-from-pdf', label: 'Pull out pages' }],
     'jpg-to-pdf': [{ slug: 'merge-pdf', label: 'Merge with other PDFs' }, { slug: 'rotate-pdf', label: 'Rotate pages' }],
+    'png-to-pdf': [{ slug: 'merge-pdf', label: 'Merge with other PDFs' }, { slug: 'rotate-pdf', label: 'Rotate pages' }],
+    'webp-to-pdf': [{ slug: 'merge-pdf', label: 'Merge with other PDFs' }, { slug: 'rotate-pdf', label: 'Rotate pages' }],
+    'heic-to-pdf': [{ slug: 'merge-pdf', label: 'Merge with other PDFs' }, { slug: 'rotate-pdf', label: 'Rotate pages' }],
+    'gif-to-pdf': [{ slug: 'merge-pdf', label: 'Merge with other PDFs' }, { slug: 'rotate-pdf', label: 'Rotate pages' }],
+    'svg-to-pdf': [{ slug: 'merge-pdf', label: 'Merge with other PDFs' }, { slug: 'rotate-pdf', label: 'Rotate pages' }],
     'bmp-to-pdf': [{ slug: 'merge-pdf', label: 'Merge with other PDFs' }, { slug: 'rotate-pdf', label: 'Rotate pages' }],
+    'avif-to-pdf': [{ slug: 'merge-pdf', label: 'Merge with other PDFs' }, { slug: 'rotate-pdf', label: 'Rotate pages' }],
   };
   if (pdfNext[slug]) return pdfNext[slug];
   const imgNext: Route[] = [

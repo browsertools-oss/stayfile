@@ -496,6 +496,30 @@ export const PAGES: ToolPage[] = [
       PRIVATE,
     ],
   },
+  {
+    slug: 'avif-to-pdf',
+    tool: 'img-to-pdf',
+    group: 'PDF',
+    card: 'AVIF to PDF',
+    blurb: 'Put AVIF pictures into one PDF',
+    preset: { accept: 'image/avif,.avif' },
+    title: 'AVIF to PDF converter that works in your browser',
+    h1: 'Convert AVIF to PDF',
+    lede: 'Make one PDF from AVIF pictures, one picture per page, in the order you choose. The converting happens in your browser, so the files stay on your own device.',
+    description: 'Convert AVIF files to a PDF in your browser, one per page, in the order you choose. Pick a page size and margin. Your files are never uploaded.',
+    steps: ['Drop in your .avif files.', 'Put them in order and pick a page size and margin.', 'Click Make PDF and save it.'],
+    faq: [
+      {
+        q: 'Do the pictures lose quality?',
+        a: 'They are redrawn as JPG inside the PDF at high quality, because PDF cannot hold an AVIF as is. Fine detail can soften. For an exact copy of a picture, convert it to PNG first and use the PNG to PDF page.',
+      },
+      {
+        q: 'Can every browser open AVIF?',
+        a: 'Current Chrome, Firefox, Edge and Safari can. Older ones cannot, which is the usual reason to turn AVIFs into one PDF somebody else can open anywhere.',
+      },
+      PRIVATE,
+    ],
+  },
 
   // ---------- Images ----------
   {
@@ -956,6 +980,54 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Where does the .ico file go on my site?',
         a: 'Save it as favicon.ico in the root folder of your site. Browsers that look for /favicon.ico will use it. A link tag that points at the file works too.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'webp-to-ico',
+    tool: 'img-ico',
+    group: 'Images',
+    card: 'WebP to ICO',
+    blurb: 'Make a .ico favicon file from a WebP',
+    preset: { accept: 'image/webp,.webp' },
+    title: 'WebP to ICO converter: make a .ico favicon from a WebP',
+    h1: 'Convert WebP to ICO',
+    lede: 'Turn a WebP into a .ico file, the format browsers and desktops use for favicons and shortcuts. The file holds 16, 32 and 48 px versions of the image.',
+    description: 'Convert a WebP to a .ico favicon file in your browser. The file holds 16, 32 and 48 px sizes. Your image stays on your device.',
+    steps: ['Drop in your WebP files.', 'Nothing to set. The three sizes are made from your image.', 'Click Save to download the .ico file, or all of them as a zip.'],
+    faq: [
+      {
+        q: 'What sizes end up in the file?',
+        a: '16 by 16, 32 by 32 and 48 by 48 pixels. Each app picks the size it needs. If the WebP is not square, the image is centered on a square canvas instead of being stretched.',
+      },
+      {
+        q: 'Will the transparency survive?',
+        a: 'Yes. WebP holds an alpha channel and ICO files store 32 bit color with alpha, so a transparent background stays transparent.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'svg-to-ico',
+    tool: 'img-ico',
+    group: 'Images',
+    card: 'SVG to ICO',
+    blurb: 'Make a .ico favicon file from an SVG',
+    preset: { accept: 'image/svg+xml,.svg' },
+    title: 'SVG to ICO converter: make a .ico favicon from an SVG',
+    h1: 'Convert SVG to ICO',
+    lede: 'Turn an SVG into a .ico file, the format browsers and desktops use for favicons and shortcuts. The file holds 16, 32 and 48 px versions of the image.',
+    description: 'Convert an SVG to a .ico favicon file in your browser. The file holds 16, 32 and 48 px sizes. Your image stays on your device.',
+    steps: ['Drop in your .svg files.', 'Nothing to set. The three sizes are made from your image.', 'Click Save to download the .ico file, or all of them as a zip.'],
+    faq: [
+      {
+        q: 'Will the icon be sharp?',
+        a: 'The SVG is drawn at its own size first, then scaled into the 16, 32 and 48 px pictures. An SVG with a large or no width and height gives the cleanest small icons. An SVG drawn at 16 px will look soft.',
+      },
+      {
+        q: 'Why did my SVG fail to convert?',
+        a: 'An SVG that references outside images or fonts can be blocked. The usual fix is an SVG with everything inside it. If the SVG has no size information, it is drawn at 1024 by 768.',
       },
       PRIVATE,
     ],
