@@ -1496,6 +1496,70 @@ export const PAGES: ToolPage[] = [
     ],
   },
   {
+    slug: 'tsv-to-json',
+    tool: 'csv-to-json',
+    group: 'Spreadsheets and data',
+    card: 'TSV to JSON',
+    blurb: 'Tab-separated rows into JSON',
+    preset: { accept: '.tsv,text/tab-separated-values,text/plain' },
+    title: 'TSV to JSON converter online',
+    h1: 'Convert TSV to JSON',
+    lede: 'Turn a tab-separated file into JSON. This is the format you get from pasting cells out of a spreadsheet, and from many database exports. The tab separator is detected on its own.',
+    description: 'Convert TSV to JSON in your browser. Paste rows or drop a .tsv file, keep leading zeros as text, and download the result. Nothing is uploaded.',
+    steps: [
+      'Drop in a .tsv file, or copy cells from a spreadsheet and paste them into the box.',
+      'Check the options: header row, and whether numbers should stay as text.',
+      'Copy the JSON or download it as a file.',
+    ],
+    faq: [
+      {
+        q: 'Can I paste straight from Excel or Google Sheets?',
+        a: 'Yes. Copy the cells, paste them into the box, and the tabs between the columns are picked up as the separator. You will see a preview of the table before you convert.',
+      },
+      {
+        q: 'Why not just use the CSV converter?',
+        a: 'It works too. The TSV page exists so you land here from a search, and its picker is narrowed to .tsv files. The conversion, the options and the output are the same.',
+      },
+      {
+        q: 'Will zip codes and IDs keep their leading zeros?',
+        a: 'Yes. Values that start with a zero are kept as text. Tick "Keep all values as text" if you want no numbers at all.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'jsonl-to-csv',
+    tool: 'json-to-csv',
+    group: 'Spreadsheets and data',
+    card: 'JSONL to CSV',
+    blurb: 'JSON Lines into a spreadsheet',
+    preset: { accept: '.jsonl,.ndjson,application/x-ndjson,text/plain' },
+    title: 'JSONL to CSV converter online',
+    h1: 'Convert JSONL to CSV',
+    lede: 'Turn a JSON Lines file into a CSV that opens in Excel or Google Sheets. Each line of the file becomes one row, and nested fields get their own columns with dotted names like address.city.',
+    description: 'Convert JSON Lines (.jsonl, .ndjson) to CSV in your browser. Nested fields become dotted columns, lists stay as JSON text. Nothing leaves your device.',
+    steps: [
+      'Drop in a .jsonl or .ndjson file, or paste the lines.',
+      'Check the preview. Every line becomes one row.',
+      'Download the CSV or copy it.',
+    ],
+    faq: [
+      {
+        q: 'What is a JSONL file?',
+        a: 'A text file with one JSON object per line, also called newline-delimited JSON or NDJSON. It is the common output shape of API exports, log pipelines and LLM batch jobs.',
+      },
+      {
+        q: 'What happens to nested objects?',
+        a: 'They flatten into dotted columns, so {"address": {"city": "London"}} becomes a column called address.city. Lists are written into one cell as JSON text so nothing is lost.',
+      },
+      {
+        q: 'Can I paste a regular JSON array instead?',
+        a: 'Yes, the tool also accepts an array of objects and an object wrapping a single array, such as {"data": [...]}.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
     slug: 'json-to-csv',
     tool: 'json-to-csv',
     group: 'Spreadsheets and data',

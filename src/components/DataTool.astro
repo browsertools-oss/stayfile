@@ -1,19 +1,28 @@
 ---
 import Drop from './Drop.astro';
-import type { Tool } from '../site';
-interface Props { tool: Tool; slug: string }
-const { tool, slug } = Astro.props;
+import type { Tool, Preset } from '../site';
+interface Props { tool: Tool; slug: string; preset?: Preset }
+const { tool, slug, preset } = Astro.props;
 const fromJson = tool === 'json-to-csv' || tool === 'json-to-xlsx';
 const fromXlsx = tool === 'xlsx-to-csv' || tool === 'xlsx-to-json';
-const accept = fromXlsx
+const pExts = (preset?.accept ?? '').match(/\.[a-z0-9]+/gi)?.map((e) => e.slice(1).toUpperCase()) ?? [];
+const presetLabel = pExts.join(' · ');
+const isTsv = pExts.includes('TSV');
+const isJsonl = pExts.includes('JSONL') || pExts.includes('NDJSON');
+const accept = preset?.accept ?? (fromXlsx
   ? '.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-  : fromJson ? '.json,.jsonl,.ndjson,application/json,text/plain' : '.csv,.tsv,.txt,text/csv,text/plain';
-const what = fromXlsx ? 'an Excel file' : fromJson ? 'a JSON file' : 'a CSV file';
-const placeholder = fromJson ? '[{"name": "Ada", "age": 36}, {"name": "Grace", "age": 85}]' : 'name,age\nAda,36\nGrace,85';
+  : fromJson ? '.json,.jsonl,.ndjson,application/json,text/plain' : '.csv,.tsv,.txt,text/csv,text/plain');
+const what = isTsv ? 'a .tsv file' : isJsonl ? 'a .jsonl file' : fromXlsx ? 'an Excel file' : fromJson ? 'a JSON file' : 'a CSV file';
+const placeholder = isTsv
+  ? 'name\tage\nAda\t36\nGrace\t85'
+  : isJsonl
+    ? '{"name": "Ada", "age": 36}\n{"name": "Grace", "age": 85}'
+    : fromJson ? '[{"name": "Ada", "age": 36}, {"name": "Grace", "age": 85}]' : 'name,age\nAda,36\nGrace,85';
+const sub = presetLabel ? `${presetLabel} files, or paste below` : fromXlsx ? 'Only the first sheet is converted' : 'or paste below';
 const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .csv', 'csv-to-xlsx': 'Download .xlsx', 'xlsx-to-csv': 'Download .csv', 'xlsx-to-json': 'Download .json', 'json-to-xlsx': 'Download .xlsx', 'csv-to-markdown': 'Download .md' }[tool as string];
 ---
 <section class="tool" data-tool={tool} data-slug={slug}>
-  <Drop accept={accept} main={`Drop ${what} here, or <u>choose one</u>`} sub={fromXlsx ? 'Only the first sheet is converted' : 'or paste below'} />
+  <Drop accept={accept} main={`Drop ${what} here, or <u>choose one</u>`} sub={sub} />
   <ul class="files" id="list"></ul>
   <div id="pasteWrap" hidden={fromXlsx}>
     <label class="hint" for="input" style="display:block;margin:12px 0 6px">Or paste {fromJson ? 'JSON' : 'CSV'}</label>
