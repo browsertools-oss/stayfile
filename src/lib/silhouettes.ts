@@ -81,6 +81,7 @@ export const shapes: Record<string, Shape[]> = {
   'excel-to-csv': merge(S(62, 30, 44, 56, 3), G(12, 14, 56, 68, true)),
   'excel-to-json': merge(G(12, 14, 54, 68, true), { fill: ['M88 32q-6 0 -6 6v7q0 4 -4 4q4 0 4 4v7q0 6 6 6', 'M100 32q6 0 6 6v7q0 4 4 4q-4 0 -4 4v7q0 6 -6 6'], cut: [] }),
   'excel-to-markdown': merge(G(12, 14, 54, 68, true), { fill: [], cut: [], ink: ['M28 36h22', 'M28 48h34', 'M28 60h26'] }),
+  'excel-to-tsv': merge(G(12, 12, 56, 68, true), S(78, 28, 30, 46, 3)),
   'json-to-excel': merge(S(14, 12, 48, 70, 0), { fill: [], cut: ['M28 36q-5 0 -5 5v6q0 3 -3 3q3 0 3 3v6q0 5 5 5', 'M48 36q5 0 5 5v6q0 3 3 3q-3 0 -3 3v6q0 5 -5 5'] }, G(70, 26, 36, 52)),
   'pdf-to-jpg': merge(S(16, 12, 44, 62, 3), P(48, 36, 56, 44)),
   'pdf-to-png': merge(S(16, 12, 44, 62, 3), P(48, 36, 56, 44)),

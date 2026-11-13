@@ -25,6 +25,7 @@ export type Tool =
   | 'xlsx-to-csv'
   | 'xlsx-to-json'
   | 'xlsx-to-markdown'
+  | 'xlsx-to-tsv'
   | 'json-to-xlsx'
   | 'tsv-to-csv'
   | 'csv-to-tsv'
@@ -1840,6 +1841,37 @@ export const PAGES: ToolPage[] = [
       {
         q: 'What happens to the other sheets?',
         a: 'Only the first sheet is converted, and the page lists the other sheet names. To get another sheet, drag its tab to the front in Excel, save, and drop the file here again.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'excel-to-tsv',
+    tool: 'xlsx-to-tsv',
+    group: 'Spreadsheets and data',
+    card: 'Excel to TSV',
+    blurb: 'A sheet as a tab-separated file',
+    title: 'Excel to TSV converter online',
+    h1: 'Convert Excel to TSV',
+    lede: 'Turn the first sheet of an .xlsx workbook into a tab-separated file that pastes or pipes into other tools. Rows and columns pass through untouched apart from the delimiter change.',
+    description: 'Convert Excel .xlsx to TSV in your browser. The first sheet is read, quoting is handled for you, and nothing is uploaded.',
+    steps: [
+      'Drop in an .xlsx file. Its first sheet is read.',
+      'Check the preview.',
+      'Download the TSV.',
+    ],
+    faq: [
+      {
+        q: 'Which sheet is converted?',
+        a: 'Only the first sheet. Drag the tab you want to the front in Excel, save, and drop the file here again. Other sheets are not read.',
+      },
+      {
+        q: 'Why TSV and not CSV?',
+        a: 'Tabs survive commas inside cells without quoting, and some tools and pastes expect tab-separated text. If you want CSV instead, the Excel to CSV page does the same thing with commas.',
+      },
+      {
+        q: 'Are numbers and dates kept?',
+        a: 'Cells are read the way Excel shows them. A date formatted as 2026-11-06 comes out as that text, and plain numbers come out as plain numbers.',
       },
       PRIVATE,
     ],
