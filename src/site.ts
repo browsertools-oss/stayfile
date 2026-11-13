@@ -27,7 +27,9 @@ export type Tool =
   | 'xlsx-to-markdown'
   | 'json-to-xlsx'
   | 'tsv-to-csv'
-  | 'csv-to-tsv';
+  | 'csv-to-tsv'
+  | 'md-to-csv'
+  | 'md-to-xlsx';
 
 export type Group = 'PDF' | 'Images' | 'Spreadsheets and data';
 
@@ -1676,6 +1678,68 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Can I paste a regular JSON array instead?',
         a: 'Yes, the tool also accepts an array of objects and an object wrapping a single array, such as {"data": [...]}.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'markdown-to-csv',
+    tool: 'md-to-csv',
+    group: 'Spreadsheets and data',
+    card: 'Markdown to CSV',
+    blurb: 'A Markdown table into a CSV file',
+    title: 'Markdown to CSV converter online',
+    h1: 'Convert Markdown to CSV',
+    lede: 'Turn a Markdown table into a CSV that opens in Excel or any data tool. The first table in the file is read, prose around it is ignored, and escaped pipes and <br> cells are unwound.',
+    description: 'Convert Markdown tables to CSV in your browser. Prose lines are skipped, the alignment row is dropped, and nothing is uploaded.',
+    steps: [
+      'Drop in a .md file, or paste the Markdown.',
+      'Check the preview of the table.',
+      'Download the CSV or copy it.',
+    ],
+    faq: [
+      {
+        q: 'Which table is converted?',
+        a: 'The first table in the file. Other Markdown around it, headings, paragraphs and code blocks, is skipped. If the file holds no table, you get an error that says so.',
+      },
+      {
+        q: 'What happens to escaped pipes and line breaks in cells?',
+        a: '\\| becomes | again, and <br> becomes a line break inside the cell, the reverse of what the CSV to Markdown page does.',
+      },
+      {
+        q: 'Is the header row kept?',
+        a: 'Yes. The first row of the table stays as the first line of the CSV, and the alignment row (| --- | --- |) is dropped.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'markdown-to-excel',
+    tool: 'md-to-xlsx',
+    group: 'Spreadsheets and data',
+    card: 'Markdown to Excel',
+    blurb: 'A Markdown table into an .xlsx workbook',
+    title: 'Markdown to Excel converter online',
+    h1: 'Convert Markdown to Excel',
+    lede: 'Turn a Markdown table into an .xlsx workbook. The first table in the file is read, prose around it is ignored, and numbers come out as numbers so you can sum them in Excel.',
+    description: 'Convert Markdown tables to Excel .xlsx in your browser. The first table is used, prose is skipped, and nothing is uploaded.',
+    steps: [
+      'Drop in a .md file, or paste the Markdown.',
+      'Check the preview of the table.',
+      'Download the .xlsx workbook.',
+    ],
+    faq: [
+      {
+        q: 'Which table is converted?',
+        a: 'The first table in the file. Other Markdown around it is skipped. If the file holds no table, you get an error that says so.',
+      },
+      {
+        q: 'Are numbers kept as numbers?',
+        a: 'Yes, plain numbers come out as numbers, so you can sum and sort them in Excel. Leading-zero values such as zip codes stay text.',
+      },
+      {
+        q: 'How is the sheet named?',
+        a: 'After the file name, the same as every other page here that saves an Excel workbook.',
       },
       PRIVATE,
     ],

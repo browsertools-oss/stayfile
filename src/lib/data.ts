@@ -127,6 +127,27 @@ export function flatten(obj: unknown, prefix = '', out: Row = {}): Row {
 }
 
 /** Accepts an array of objects, a single object, an object wrapping one array ({"data":[...]}), or JSON Lines. */
+/** Parse the first GitHub-flavored Markdown table in a text into rows of cells.
+ *  Prose lines and the alignment row are dropped, \| becomes |, <br> becomes a newline. */
+export function markdownTableRows(text: string): string[][] {
+  const rows: string[][] = [];
+  for (const raw of text.split(/\r?\n/)) {
+    const line = raw.trim();
+    if (!line.includes('|')) continue;
+    const inner = line.replace(/^\|/, '').replace(/\|$/, '');
+    const cells = inner.split(/(?<!\\)\|/).map((c) => c.trim().replace(/\\\|/g, '|').replace(/<br\s*\/?>/gi, '\n'));
+    rows.push(cells);
+  }
+  const body = rows.filter((r) => !r.every((c) => /^:?-+:?$/.test(c)));
+  if (!body.length) throw new Error('No Markdown table found in the text.');
+  return body;
+}
+
+/** Markdown table → CSV text, the same shape the Excel path uses downstream. */
+export function markdownToCsv(text: string): string {
+  return Papa.unparse(markdownTableRows(text), { delimiter: ',', newline: '\r\n' });
+}
+
 export function jsonRows(text: string): Row[] {
   const t = text.replace(/^﻿/, '').trim();
   if (!t) throw new Error('The file is empty.');

@@ -70,6 +70,8 @@ export const shapes: Record<string, Shape[]> = {
   'resize-png': merge(P(16, 44, 46, 38), { fill: [], cut: [], ink: ['M16 34v-22h88v70h-30', 'M66 40l28 -20', 'M94 20h-11M94 20v11'] }),
   'csv-to-json': merge(G(16, 16, 54, 66, true), { fill: [`M84 30q-6 0 -6 6v8q0 4 -4 4q4 0 4 4v8q0 6 6 6`, `M96 30q6 0 6 6v8q0 4 4 4q-4 0 -4 4v8q0 6 -6 6`], cut: [] }),
   'csv-to-markdown': merge(G(14, 14, 60, 68, true), { fill: [], cut: [], ink: ['M30 34h24', 'M30 47h36', 'M30 60h30'] }),
+  'markdown-to-csv': merge(G(14, 12, 56, 68, true), S(78, 30, 30, 44, 3)),
+  'markdown-to-excel': merge(S(78, 22, 34, 52, 3), G(14, 16, 50, 64, true)),
   'tsv-to-json': merge(G(16, 16, 54, 66, true), { fill: [`M84 30q-6 0 -6 6v8q0 4 -4 4q4 0 4 4v8q0 6 6 6`, `M96 30q6 0 6 6v8q0 4 4 4q-4 0 -4 4v8q0 6 -6 6`], cut: [] }),
   'tsv-to-csv': merge(G(14, 12, 56, 68, true), S(78, 30, 30, 44, 3)),
   'csv-to-tsv': merge(S(14, 22, 40, 54, 3), G(56, 12, 50, 70, true)),
