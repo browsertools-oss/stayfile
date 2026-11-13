@@ -118,3 +118,18 @@ describe('splitButtons', () => {
     for (const b of splitButtons('ranges')) expect(b.l).toMatch(/^Save /);
   });
 });
+
+describe('site copy', () => {
+  const allText = PAGES.flatMap((p) => [
+    p.card, p.blurb, p.title, p.h1, p.lede, p.description,
+    ...p.steps,
+    ...p.faq.flatMap((f) => [f.q, f.a]),
+  ]);
+  test('no em or en dashes anywhere', () => {
+    for (const t of allText) expect(t).not.toMatch(/[–—]/);
+  });
+  test('no sales words', () => {
+    const banned = /\b(seamless|effortless|powerful|robust|vibrant|ultimate)\b/i;
+    for (const t of allText) expect(t).not.toMatch(banned);
+  });
+});
