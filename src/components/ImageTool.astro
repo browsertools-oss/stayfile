@@ -4,7 +4,7 @@ import type { Tool, Preset } from '../site';
 interface Props { tool: Tool; preset?: Preset; slug: string }
 const { tool, preset = {}, slug } = Astro.props;
 const ico = tool === 'img-ico'; // builds one .ico per image: 16, 32 and 48 px inside
-const accept = preset.accept ?? 'image/*,.jpg,.jpeg,.png,.webp,.gif,.avif,.bmp';
+const accept = preset.accept ?? 'image/*,.jpg,.jpeg,.png,.webp,.gif,.avif,.bmp,.ico';
 // Only the HEIC page loads the HEIC decoder.
 const heic = accept.includes('heic');
 // On a single-format preset page, say which formats the page takes instead of the full list.
@@ -18,7 +18,7 @@ const subLine = heic
   ? 'HEIC and HEIF photos from an iPhone or iPad'
   : presetLabel
     ? `${presetLabel} files`
-    : 'JPG · PNG · WebP · GIF · AVIF · SVG';
+    : 'JPG · PNG · WebP · GIF · AVIF · SVG · ICO';
 const keepable = tool !== 'img-convert';
 const out = preset.out ?? (keepable ? 'keep' : 'image/jpeg');
 const formats = [

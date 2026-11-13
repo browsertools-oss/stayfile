@@ -530,8 +530,8 @@ export const PAGES: ToolPage[] = [
     blurb: 'Switch between image formats',
     title: 'Image converter: JPG, PNG, GIF, WebP and AVIF online',
     h1: 'Convert images',
-    lede: 'Change images between JPG, PNG, WebP and AVIF. You can drop in JPG, PNG, WebP, GIF, AVIF, SVG or BMP files. Convert one file or a whole batch, with a quality setting for the formats that use one.',
-    description: 'Convert images between JPG, PNG, WebP and AVIF in your browser. GIFs, SVGs and BMPs can be read too. Batch conversion, adjustable quality, and no uploads.',
+    lede: 'Change images between JPG, PNG, WebP and AVIF. You can drop in JPG, PNG, WebP, GIF, AVIF, SVG, BMP or ICO files. Convert one file or a whole batch, with a quality setting for the formats that use one.',
+    description: 'Convert images between JPG, PNG, WebP and AVIF in your browser. GIFs, SVGs, BMPs and ICO files can be read too. Batch conversion, adjustable quality, and no uploads.',
     steps: [
       'Drop in one or more images.',
       'Pick the format you want and, for JPG, WebP or AVIF, a quality level.',
@@ -548,7 +548,7 @@ export const PAGES: ToolPage[] = [
       },
       {
         q: 'Can I convert a GIF or an SVG?',
-        a: 'Yes. Drop in a GIF, SVG or BMP and pick the format you want. Animated GIFs keep only their first frame, and an SVG is drawn onto a canvas at its own size. HEIC photos need their own page: use HEIC to JPG or HEIC to PNG.',
+        a: 'Yes. Drop in a GIF, SVG, BMP or ICO and pick the format you want. Animated GIFs keep only their first frame, and an SVG is drawn onto a canvas at its own size. An ICO icon is read at the largest size it stores. HEIC photos need their own page: use HEIC to JPG or HEIC to PNG.',
       },
       {
         q: 'Why does AVIF take longer?',
