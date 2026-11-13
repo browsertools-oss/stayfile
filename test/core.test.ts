@@ -2,7 +2,7 @@ import { describe, test, expect } from 'vitest';
 import { PDFDocument, degrees } from '@cantoo/pdf-lib';
 import { deflateSync } from 'node:zlib';
 import { parseRanges, merge, extract, split, burst, rotate, imagesToPdf, placeImage, pageCount, pagesToKeep, textToPdf } from '../src/lib/pdf';
-import { typeValue, parseCsv, csvToJson, csvToMarkdown, jsonToCsv, jsonRows, flatten } from '../src/lib/data';
+import { typeValue, parseCsv, csvToJson, csvToMarkdown, tsvToCsv, jsonToCsv, jsonRows, flatten } from '../src/lib/data';
 import * as XLSX from 'xlsx';
 import { csvToXlsx, xlsxToRows, xlsxToCsv } from '../src/lib/xlsx';
 import { targetSize, renameTo, formatBytes, sizeChange, avifQuality } from '../src/lib/image';
@@ -200,6 +200,11 @@ describe('csv and json', () => {
   test('csvToMarkdown without headers generates Column cells, and keeps text columns left-aligned', () => {
     expect(csvToMarkdown('02134,x\n10001,y', { header: false })).toBe('| Column 1 | Column 2 |\n| --- | --- |\n| 02134 | x |\n| 10001 | y |\n');
     expect(() => csvToMarkdown('   \n')).toThrow(/No rows/);
+  });
+
+  test('tsvToCsv quotes commas and doubles quotes', () => {
+    expect(tsvToCsv('a\tb\n1,2\t3\nhe said "hi"\tbye')).toBe('a,b\r\n"1,2",3\r\n"he said ""hi""",bye');
+    expect(tsvToCsv('one\ttwo\n1\t2')).toBe('one,two\r\n1,2');
   });
 
   test('round trip CSV → JSON → CSV', () => {

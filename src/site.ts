@@ -25,7 +25,8 @@ export type Tool =
   | 'xlsx-to-csv'
   | 'xlsx-to-json'
   | 'xlsx-to-markdown'
-  | 'json-to-xlsx';
+  | 'json-to-xlsx'
+  | 'tsv-to-csv';
 
 export type Group = 'PDF' | 'Images' | 'Spreadsheets and data';
 
@@ -1548,6 +1549,37 @@ export const PAGES: ToolPage[] = [
       {
         q: 'My CSV has no header row.',
         a: 'Untick "First row is column names". The table gets generated header cells, Column 1, Column 2 and so on, because Markdown tables need a header row to render.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'tsv-to-csv',
+    tool: 'tsv-to-csv',
+    group: 'Spreadsheets and data',
+    card: 'TSV to CSV',
+    blurb: 'Tab-separated rows into CSV',
+    title: 'TSV to CSV converter online',
+    h1: 'Convert TSV to CSV',
+    lede: 'Turn a tab-separated file into a CSV that opens cleanly in Excel and every data tool. Cells with commas or quotes are quoted for you, and line endings are set for Windows.',
+    description: 'Convert TSV to CSV in your browser. Quoting is handled for you, and the file never leaves your device.',
+    steps: [
+      'Drop in a .tsv file, or paste the rows.',
+      'Check the preview.',
+      'Download the CSV.',
+    ],
+    faq: [
+      {
+        q: 'Why not just rename the file?',
+        a: 'Because the columns would not line up. The tab characters have to become commas, and any cell that holds a comma or a quote has to be wrapped in quotes with its quotes doubled. That is what this page does.',
+      },
+      {
+        q: 'Where do TSV files come from?',
+        a: 'Pasting cells from a spreadsheet gives you tab-separated text, and so do many database exports and log files. This page is the bridge between that and tools that only read CSV.',
+      },
+      {
+        q: 'What if my file is already comma-separated?',
+        a: 'Then you do not need this page. Use CSV to JSON to convert it, or open it in Excel and save it again.',
       },
       PRIVATE,
     ],

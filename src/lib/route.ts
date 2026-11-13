@@ -91,6 +91,7 @@ export function nextTools(slug: string): Route[] {
   const dataNext: Record<string, Route[]> = {
     'csv-to-json': [{ slug: 'json-to-excel', label: 'Open it in Excel' }, { slug: 'json-to-csv', label: 'Convert back to CSV' }],
     'tsv-to-json': [{ slug: 'json-to-excel', label: 'Open it in Excel' }],
+    'tsv-to-csv': [{ slug: 'csv-to-excel', label: 'Open it in Excel' }],
     'csv-to-markdown': [{ slug: 'text-to-pdf', label: 'Turn it into a PDF' }],
     'json-to-csv': [{ slug: 'csv-to-excel', label: 'Open it in Excel' }],
     'jsonl-to-csv': [{ slug: 'csv-to-excel', label: 'Open it in Excel' }],

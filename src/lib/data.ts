@@ -94,6 +94,12 @@ export function csvToMarkdown(text: string, o: CsvOptions = {}): string {
   return [line(head), sep, ...rows.map(line)].join('\n') + '\n';
 }
 
+/** TSV text → CSV text, quoting cells that contain commas or quotes as needed. */
+export function tsvToCsv(text: string): string {
+  const p = parseCsv(text, { delimiter: '\t', header: false, typed: false });
+  return Papa.unparse(p.rows as unknown[][], { delimiter: ',', newline: '\r\n' });
+}
+
 export function csvToJson(text: string, o: CsvOptions & { indent?: number } = {}): string {
   return JSON.stringify(parseCsv(text, o).rows, null, o.indent ?? 2);
 }
