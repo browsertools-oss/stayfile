@@ -1338,6 +1338,70 @@ export const PAGES: ToolPage[] = [
       PRIVATE,
     ],
   },
+  {
+    slug: 'resize-jpg',
+    tool: 'img-resize',
+    group: 'Images',
+    card: 'Resize JPG',
+    blurb: 'Set exact pixel sizes on JPGs',
+    preset: { accept: 'image/jpeg,.jpg,.jpeg' },
+    title: 'Resize JPG online: exact pixels or a percentage',
+    h1: 'Resize JPG',
+    lede: 'Change the width and height of one JPG or many. Type exact pixels or a percentage, and the proportions stay locked unless you unlock them.',
+    description: 'Resize JPG images to exact pixel dimensions or a percentage, in batches, right in your browser. Files are not uploaded.',
+    steps: [
+      'Drop in your JPG files.',
+      'Type a width, a height or a percentage. Leave one side empty to keep the proportions.',
+      'Click Resize and save the files.',
+    ],
+    faq: [
+      {
+        q: 'What happens if I enter both width and height?',
+        a: 'With proportions locked, the image is scaled to fit inside that box without stretching. Unlock proportions to force the exact size.',
+      },
+      {
+        q: 'Where does keeping proportions locked matter?',
+        a: 'For faces and products, where a stretched image is obvious. Keep proportions locked and type only the width you want, such as 1600 pixels for a website.',
+      },
+      {
+        q: 'Can I make a JPG bigger?',
+        a: 'Use a percentage above 100, or tick "Allow enlarging". Enlarging cannot add detail, so expect some softness.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'resize-png',
+    tool: 'img-resize',
+    group: 'Images',
+    card: 'Resize PNG',
+    blurb: 'Set exact pixel sizes on PNGs',
+    preset: { accept: 'image/png,.png' },
+    title: 'Resize PNG online: exact pixels or a percentage',
+    h1: 'Resize PNG',
+    lede: 'Change the width and height of one PNG or many. Type exact pixels or a percentage, and the proportions stay locked unless you unlock them.',
+    description: 'Resize PNG images to exact pixel dimensions or a percentage, in batches, right in your browser. Files are not uploaded.',
+    steps: [
+      'Drop in your PNG files.',
+      'Type a width, a height or a percentage. Leave one side empty to keep the proportions.',
+      'Click Resize and save the files.',
+    ],
+    faq: [
+      {
+        q: 'Are the pixels exactly as I set them?',
+        a: 'Yes, when you unlock proportions. With proportions locked, the PNG is scaled to fit inside the box without stretching, so one side may end up smaller.',
+      },
+      {
+        q: 'Does resizing keep transparency?',
+        a: 'Yes. PNG keeps its alpha channel, so a transparent background stays transparent.',
+      },
+      {
+        q: 'Can I make a PNG bigger?',
+        a: 'Use a percentage above 100, or tick "Allow enlarging". Enlarging cannot add detail, so expect some softness.',
+      },
+      PRIVATE,
+    ],
+  },
 
   // ---------- Data ----------
   {

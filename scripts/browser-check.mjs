@@ -156,6 +156,8 @@ const checks = [
   { slug: '/csv-to-excel/', fixtures: [F('sample.csv')], click: 'Download', expect: '' },
   { slug: '/excel-to-csv/', name: 'load-only repeat guard', skip: true },
   { slug: '/compress-image/', fixtures: [F('sample.jpg')], click: 'Save', expect: '' },
+  { slug: '/resize-jpg/', fixtures: [F('sample.jpg')], click: 'Save', expect: '' },
+  { slug: '/resize-png/', fixtures: [F('sample.png')], click: 'Save', expect: '' },
   { slug: '/resize-image/', fixtures: [F('sample.png')], click: 'Save', expect: '' },
   { slug: '/jpg-to-png/', fixtures: [F('sample.jpg')], click: 'Save', expect: '' },
   { slug: '/png-to-jpg/', fixtures: [F('sample.png')], click: 'Save', expect: '' },
