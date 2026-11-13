@@ -39,7 +39,7 @@ describe('suggestTools', () => {
     expect(suggestTools([f('a.jpg'), f('b.png')]).at(-1)!.label).toBe('Put them in one PDF');
   });
   test('one CSV or JSON file maps to its converters', () => {
-    expect(slugs(suggestTools([f('sales.csv')]))).toEqual(['csv-to-excel', 'csv-to-json']);
+    expect(slugs(suggestTools([f('sales.csv')]))).toEqual(['csv-to-excel', 'csv-to-json', 'csv-to-markdown']);
     expect(slugs(suggestTools([f('rows.json')]))).toEqual(['json-to-csv', 'json-to-excel']);
   });
   test('one Excel file maps to the Excel converters', () => {

@@ -2,7 +2,7 @@ import { describe, test, expect } from 'vitest';
 import { PDFDocument, degrees } from '@cantoo/pdf-lib';
 import { deflateSync } from 'node:zlib';
 import { parseRanges, merge, extract, split, burst, rotate, imagesToPdf, placeImage, pageCount, pagesToKeep, textToPdf } from '../src/lib/pdf';
-import { typeValue, parseCsv, csvToJson, jsonToCsv, jsonRows, flatten } from '../src/lib/data';
+import { typeValue, parseCsv, csvToJson, csvToMarkdown, jsonToCsv, jsonRows, flatten } from '../src/lib/data';
 import * as XLSX from 'xlsx';
 import { csvToXlsx, xlsxToRows, xlsxToCsv } from '../src/lib/xlsx';
 import { targetSize, renameTo, formatBytes, sizeChange, avifQuality } from '../src/lib/image';
@@ -190,6 +190,16 @@ describe('csv and json', () => {
   test('jsonToCsv unions columns and quotes when needed', () => {
     const csv = jsonToCsv('[{"name":"Ada","addr":{"city":"London, UK"}},{"name":"Grace","age":85}]');
     expect(csv).toBe('name,addr.city,age\r\nAda,"London, UK",\r\nGrace,,85');
+  });
+
+  test('csvToMarkdown writes a header, right-aligns number columns and escapes pipes', () => {
+    expect(csvToMarkdown('name,age\nAda,36\nGrace,85')).toBe('| name | age |\n| --- | ---: |\n| Ada | 36 |\n| Grace | 85 |\n');
+    expect(csvToMarkdown('a,b\n"x|y","l1\nl2"')).toBe('| a | b |\n| --- | --- |\n| x\\|y | l1<br>l2 |\n');
+  });
+
+  test('csvToMarkdown without headers generates Column cells, and keeps text columns left-aligned', () => {
+    expect(csvToMarkdown('02134,x\n10001,y', { header: false })).toBe('| Column 1 | Column 2 |\n| --- | --- |\n| 02134 | x |\n| 10001 | y |\n');
+    expect(() => csvToMarkdown('   \n')).toThrow(/No rows/);
   });
 
   test('round trip CSV → JSON → CSV', () => {

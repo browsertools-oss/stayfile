@@ -72,6 +72,28 @@ export function parseCsv(text: string, o: CsvOptions = {}): Parsed {
   };
 }
 
+/** CSV text → a GitHub-flavored Markdown table. Pipes in cells are escaped, line breaks
+ *  become <br>, and columns that hold only numbers are right-aligned. */
+export function csvToMarkdown(text: string, o: CsvOptions = {}): string {
+  const header = o.header ?? true;
+  const p = parseCsv(text, { ...o, typed: false });
+  const body: unknown[][] = header
+    ? (p.rows as Record<string, unknown>[]).map((r) => p.fields.map((f) => r[f]))
+    : (p.rows as unknown[][]);
+  const width = header ? p.fields.length : body.reduce((m, r) => Math.max(m, r.length), 0);
+  if (!width || !body.length) throw new Error('No rows found in the file.');
+  const head = header ? p.fields : Array.from({ length: width }, (_, i) => `Column ${i + 1}`);
+  const rows = body.map((r) => Array.from({ length: width }, (_, i) => String(r[i] ?? '')));
+  const right = Array.from({ length: width }, (_, i) => {
+    const vals = rows.map((r) => r[i].trim()).filter(Boolean);
+    return vals.length > 0 && vals.every((v) => NUM.test(v));
+  });
+  const esc = (v: string) => v.replace(/\|/g, '\\|').replace(/\r?\n/g, '<br>');
+  const line = (cells: string[]) => `| ${cells.map(esc).join(' | ')} |`;
+  const sep = `| ${right.map((r) => (r ? '---:' : '---')).join(' | ')} |`;
+  return [line(head), sep, ...rows.map(line)].join('\n') + '\n';
+}
+
 export function csvToJson(text: string, o: CsvOptions & { indent?: number } = {}): string {
   return JSON.stringify(parseCsv(text, o).rows, null, o.indent ?? 2);
 }

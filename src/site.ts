@@ -19,6 +19,7 @@ export type Tool =
   | 'img-resize'
   | 'img-ico'
   | 'csv-to-json'
+  | 'csv-to-markdown'
   | 'json-to-csv'
   | 'csv-to-xlsx'
   | 'xlsx-to-csv'
@@ -1427,6 +1428,37 @@ export const PAGES: ToolPage[] = [
       {
         q: 'My file uses semicolons, not commas.',
         a: 'The separator is detected automatically. If the preview still looks wrong, pick it by hand from the list.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'csv-to-markdown',
+    tool: 'csv-to-markdown',
+    group: 'Spreadsheets and data',
+    card: 'CSV to Markdown',
+    blurb: 'A Markdown table for READMEs and issues',
+    title: 'CSV to Markdown table converter online',
+    h1: 'Convert CSV to Markdown',
+    lede: 'Turn a CSV file or pasted rows into a Markdown table you can paste into a README, an issue or a pull request. Numbers come out right-aligned, and pipes inside cells are escaped so the table keeps its shape.',
+    description: 'Convert CSV to a Markdown table in your browser. Paste rows or drop a file, set the separator, and copy the table for GitHub or any Markdown editor. Nothing is uploaded.',
+    steps: [
+      'Drop in a .csv file or paste the rows.',
+      'Check the separator and whether the first row holds the column names.',
+      'Copy the Markdown or download it as a .md file.',
+    ],
+    faq: [
+      {
+        q: 'Will the table render on GitHub?',
+        a: 'Yes. The output is a GitHub-flavored Markdown table. Paste it into a README, an issue or a pull request and it renders as a table. Columns that hold only numbers are right-aligned.',
+      },
+      {
+        q: 'What if a cell contains a pipe or a line break?',
+        a: 'A pipe is written as \\| so it does not split the cell, and a line break inside a cell becomes <br>. Other text is left as it is.',
+      },
+      {
+        q: 'My CSV has no header row.',
+        a: 'Untick "First row is column names". The table gets generated header cells, Column 1, Column 2 and so on, because Markdown tables need a header row to render.',
       },
       PRIVATE,
     ],

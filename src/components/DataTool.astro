@@ -10,7 +10,7 @@ const accept = fromXlsx
   : fromJson ? '.json,.jsonl,.ndjson,application/json,text/plain' : '.csv,.tsv,.txt,text/csv,text/plain';
 const what = fromXlsx ? 'an Excel file' : fromJson ? 'a JSON file' : 'a CSV file';
 const placeholder = fromJson ? '[{"name": "Ada", "age": 36}, {"name": "Grace", "age": 85}]' : 'name,age\nAda,36\nGrace,85';
-const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .csv', 'csv-to-xlsx': 'Download .xlsx', 'xlsx-to-csv': 'Download .csv', 'xlsx-to-json': 'Download .json', 'json-to-xlsx': 'Download .xlsx' }[tool as string];
+const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .csv', 'csv-to-xlsx': 'Download .xlsx', 'xlsx-to-csv': 'Download .csv', 'xlsx-to-json': 'Download .json', 'json-to-xlsx': 'Download .xlsx', 'csv-to-markdown': 'Download .md' }[tool as string];
 ---
 <section class="tool" data-tool={tool} data-slug={slug}>
   <Drop accept={accept} main={`Drop ${what} here, or <u>choose one</u>`} sub={fromXlsx ? 'Only the first sheet is converted' : 'or paste below'} />
@@ -57,11 +57,11 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
   <p class="error" id="err" role="alert" hidden></p>
 
   <div class="preview" id="tableWrap" hidden><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
-  {(tool === 'csv-to-json' || tool === 'xlsx-to-json') && <textarea id="output" rows="12" readonly spellcheck="false" aria-label="JSON output" hidden style="margin-top:14px"></textarea>}
+  {(tool === 'csv-to-json' || tool === 'xlsx-to-json' || tool === 'csv-to-markdown') && <textarea id="output" rows="12" readonly spellcheck="false" aria-label="Output" hidden style="margin-top:14px"></textarea>}
 </section>
 
 <script>
-  import { parseCsv, csvToJson, jsonRows, columns, jsonToCsv, type CsvOptions } from '../lib/data';
+  import { parseCsv, csvToJson, csvToMarkdown, jsonRows, columns, jsonToCsv, type CsvOptions } from '../lib/data';
   import { save, baseName } from '../lib/save';
   import { savedLine } from '../lib/route';
   import { showDone, hideDone } from '../lib/done';
@@ -136,8 +136,8 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
         const head = o.header ? p.fields : [];
         const rows = o.header ? (p.rows as Record<string, unknown>[]).map((r) => head.map((h) => r[h])) : (p.rows as unknown[][]);
         table(head, rows);
-        if (tool === 'csv-to-json') {
-          result = csvToJson(text, o);
+        if (tool === 'csv-to-json' || tool === 'csv-to-markdown') {
+          result = tool === 'csv-to-json' ? csvToJson(text, o) : csvToMarkdown(text, o);
           out!.value = result.length > 200_000 ? result.slice(0, 200_000) + '\n… (preview cut short; the download has everything)' : result;
           out!.hidden = false;
         } else result = 'xlsx';
@@ -219,6 +219,7 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
   };
   go.addEventListener('click', async () => {
     if (tool === 'csv-to-json' || tool === 'xlsx-to-json') done(new Blob([result], { type: 'application/json' }), `${name}.json`);
+    else if (tool === 'csv-to-markdown') done(new Blob([result], { type: 'text/markdown' }), `${name}.md`);
     else if (tool === 'json-to-csv' || fromXlsx) done(new Blob(['﻿' + result], { type: 'text/csv' }), `${name}.csv`); // BOM so Excel reads UTF-8
     else {
       go.disabled = true;
