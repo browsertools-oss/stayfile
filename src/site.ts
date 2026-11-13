@@ -961,6 +961,30 @@ export const PAGES: ToolPage[] = [
     ],
   },
   {
+    slug: 'ico-to-jpg',
+    tool: 'img-convert',
+    group: 'Images',
+    card: 'ICO to JPG',
+    blurb: 'Save an ICO icon as a JPG image',
+    preset: { out: 'image/jpeg', accept: '.ico,image/x-icon,image/vnd.microsoft.icon' },
+    title: 'ICO to JPG converter that works in your browser',
+    h1: 'Convert ICO to JPG',
+    lede: 'Save an ICO icon as a JPG image. The largest size stored in the icon is used, and transparent areas are filled with white.',
+    description: 'Convert ICO icons to JPG in your browser. The largest size in the file is kept. Transparent areas turn white. Your files are never uploaded.',
+    steps: ['Drop in your .ico files.', 'JPG is already selected. Move the quality slider if you want a smaller file.', 'Click Convert, then save each image or all of them as a zip.'],
+    faq: [
+      {
+        q: 'Why is the JPG so small?',
+        a: 'An ICO file holds small pictures, usually 16 to 256 pixels on a side. This page uses the largest one it finds, so the JPG is never bigger than that.',
+      },
+      {
+        q: 'What happens to the transparency?',
+        a: 'JPG cannot store it, so transparent areas are filled with white. If you need the transparent background, use the ICO to PNG page instead.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
     slug: 'bmp-to-jpg',
     tool: 'img-convert',
     group: 'Images',
@@ -1051,6 +1075,30 @@ export const PAGES: ToolPage[] = [
       },
       {
         q: 'Is the JPG smaller than the GIF?',
+        a: 'For photos, usually. For flat graphics with few colors the GIF can come out smaller, so check the result before you replace the original.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'gif-to-webp',
+    tool: 'img-convert',
+    group: 'Images',
+    card: 'GIF to WebP',
+    blurb: 'Save a GIF as a WebP image',
+    preset: { out: 'image/webp', accept: 'image/gif,.gif' },
+    title: 'GIF to WebP converter: save a GIF as WebP online',
+    h1: 'Convert GIF to WebP',
+    lede: 'Save a GIF as a WebP image. Only the first frame of an animated GIF is kept, because WebP on this page holds a single picture. Transparency is kept.',
+    description: 'Convert GIF images to WebP in your browser. The first frame is kept and transparency is kept. Your files are never uploaded.',
+    steps: ['Drop in your .gif files.', 'WebP is already selected. Move the quality slider if you want smaller files.', 'Click Convert, then save each image or all of them as a zip.'],
+    faq: [
+      {
+        q: 'What happens to the animation?',
+        a: 'It is dropped. The WebP is the first frame of the GIF, since WebP stores one picture here. To keep the animation, use the GIF file itself.',
+      },
+      {
+        q: 'Is the WebP smaller than the GIF?',
         a: 'For photos, usually. For flat graphics with few colors the GIF can come out smaller, so check the result before you replace the original.',
       },
       PRIVATE,
@@ -1155,6 +1203,38 @@ export const PAGES: ToolPage[] = [
       {
         q: 'What if the compressed file comes out bigger?',
         a: 'That can happen when an image was already well compressed. If the format and size stay the same and the result would be larger, you get your original file back unchanged.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'compress-jpg',
+    tool: 'img-compress',
+    group: 'Images',
+    card: 'Compress JPG',
+    blurb: 'Shrink JPG photos for email and upload forms',
+    preset: { accept: 'image/jpeg,.jpg,.jpeg' },
+    title: 'Compress JPG online: make JPG files smaller in your browser',
+    h1: 'Compress JPG',
+    lede: 'Make JPG photos small enough for an email, an upload form or a website. You see the new size before you download, and the original is never changed.',
+    description: 'Reduce JPG file size in your browser. Set quality and maximum width, compare sizes, and save. No upload, and no sign-up.',
+    steps: [
+      'Drop in one or more JPG files.',
+      'Pick a quality level. Setting a maximum width as well saves the most space on large phone photos.',
+      'Click Compress, check the new sizes, and save.',
+    ],
+    faq: [
+      {
+        q: 'What quality should I use?',
+        a: 'Around 70 usually looks the same as the original on screen. Go lower, around 50, for an upload form with a strict size limit. The first thing to soften is fine detail, such as text and fabric.',
+      },
+      {
+        q: 'Why did my JPG barely shrink?',
+        a: 'It was probably already well compressed, for example a photo saved at low quality by a phone. Lower the quality slider or set a maximum width of 1920 pixels to save the most space.',
+      },
+      {
+        q: 'What if the compressed file comes out bigger?',
+        a: 'That can happen when an image was already well compressed. If the result would be larger, you get your original file back unchanged.',
       },
       PRIVATE,
     ],
