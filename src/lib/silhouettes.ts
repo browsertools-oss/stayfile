@@ -91,6 +91,9 @@ export const shapes: Record<string, Shape[]> = {
   'avif-to-jpg': merge(P(18, 18, 72, 56), tag(86, 62)),
   'avif-to-png': merge(P(18, 18, 72, 56), tag(86, 62)),
   'jpg-to-avif': merge(P(18, 18, 72, 56), tag(86, 62)),
+  'png-to-avif': merge(P(18, 18, 72, 56), tag(86, 62)),
+  'webp-to-avif': merge(P(18, 18, 72, 56), tag(86, 62)),
+  'avif-to-webp': merge(P(18, 18, 72, 56), tag(86, 62)),
   'svg-to-png': merge(P(14, 16, 74, 58), { fill: [], cut: [], ink: ['M20 58C40 22 62 22 82 58'], dots: [{ cx: 20, cy: 58, r: 3.2 }, { cx: 51, cy: 27, r: 3.2 }, { cx: 82, cy: 58, r: 3.2 }] }),
   'svg-to-jpg': merge(P(14, 16, 74, 58), { fill: [], cut: [], ink: ['M20 58C40 22 62 22 82 58'], dots: [{ cx: 20, cy: 58, r: 3.2 }, { cx: 51, cy: 27, r: 3.2 }, { cx: 82, cy: 58, r: 3.2 }] }),
   'heic-to-png': merge(
