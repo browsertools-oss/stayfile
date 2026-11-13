@@ -7,9 +7,9 @@ const { tool, preset = {}, slug } = Astro.props;
 const multi = tool === 'pdf-merge' || tool === 'img-to-pdf';
 const isImg = tool === 'img-to-pdf';
 const isTxt = tool === 'text-to-pdf';
-const accept = isTxt ? '.txt,.md,.log,.markdown,text/plain' : isImg ? (preset.accept ?? 'image/*,.jpg,.jpeg,.png,.webp,.gif,.avif,.heic,.heif,.bmp,.svg') : 'application/pdf,.pdf';
-const main = isTxt ? 'Drop a text file here, or <u>choose one</u>' : multi ? `Drop ${isImg ? 'images' : 'PDF files'} here, or <u>choose files</u>` : 'Drop a PDF here, or <u>choose one</u>';
-const sub = isTxt ? 'Plain text, Markdown or log files' : isImg ? 'JPG · PNG · WebP · GIF · SVG' : multi ? 'Add as many as you like' : 'One PDF';
+const accept = isTxt ? (preset.accept ?? '.txt,.md,.log,.markdown,text/plain') : isImg ? (preset.accept ?? 'image/*,.jpg,.jpeg,.png,.webp,.gif,.avif,.heic,.heif,.bmp,.svg') : 'application/pdf,.pdf';
+const main = isTxt ? (preset.accept ? 'Drop a Markdown file here, or <u>choose one</u>' : 'Drop a text file here, or <u>choose one</u>') : multi ? `Drop ${isImg ? 'images' : 'PDF files'} here, or <u>choose files</u>` : 'Drop a PDF here, or <u>choose one</u>';
+const sub = isTxt ? (preset.accept ? '.md and .markdown files' : 'Plain text, Markdown or log files') : isImg ? 'JPG · PNG · WebP · GIF · SVG' : multi ? 'Add as many as you like' : 'One PDF';
 const split = preset.split ?? 'ranges';
 // Rotate and split: each choice is its own button that does the job, so there is no pick-then-confirm step.
 const runs = tool === 'pdf-rotate'

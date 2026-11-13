@@ -323,6 +323,38 @@ export const PAGES: ToolPage[] = [
     ],
   },
   {
+    slug: 'markdown-to-pdf',
+    tool: 'text-to-pdf',
+    group: 'PDF',
+    card: 'Markdown to PDF',
+    blurb: 'Turn a .md file into a PDF',
+    preset: { accept: '.md,.markdown,text/markdown,text/plain' },
+    title: 'Markdown to PDF converter online',
+    h1: 'Convert Markdown to PDF',
+    lede: 'Make a PDF from a Markdown file. The text keeps its line breaks, long lines are wrapped to fit the page and the fixed-width font keeps any columns lined up. The PDF holds the Markdown as plain text, not restyled formatting.',
+    description: 'Convert Markdown (.md) to PDF in your browser. Fixed-width layout, line wrapping, and no upload. Good for archiving and sharing .md files.',
+    steps: [
+      'Drop in your .md or .markdown file.',
+      'Click Make PDF.',
+      'Save the PDF and open it anywhere.',
+    ],
+    faq: [
+      {
+        q: 'Does it render the Markdown?',
+        a: 'No. The PDF shows the Markdown source as text, the same way it shows any other plain text file. Headings, bold and links appear as written, not as styled output. If you want rendered output, copy the Markdown into a viewer that exports to PDF.',
+      },
+      {
+        q: 'How is the text laid out?',
+        a: 'The PDF uses a fixed-width font at 10 points, like a typewriter. Long lines are wrapped to fit the page. A word longer than a full line is cut in half.',
+      },
+      {
+        q: 'What characters come through?',
+        a: 'The built-in font covers basic Latin letters, digits and common punctuation. Other characters, such as Chinese or Cyrillic letters, come out as question marks.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
     slug: 'jpg-to-pdf',
     tool: 'img-to-pdf',
     group: 'PDF',

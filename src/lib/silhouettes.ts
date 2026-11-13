@@ -121,4 +121,5 @@ export const shapes: Record<string, Shape[]> = {
   'bmp-to-png': merge(P(18, 18, 72, 56), tag(86, 62)),
   'pdf-to-text': [S(26, 12, 58, 72, 6)],
   'text-to-pdf': merge(S(8, 14, 38, 64, 4), { fill: [], cut: [], ink: ['M48 46h15', 'M60 38l9 8-9 8'] }, { fill: [sheet(76, 14, 38, 64)], cut: [fold(76, 14, 38)] }),
+  'markdown-to-pdf': merge(S(8, 14, 38, 64, 4), { fill: [], cut: [], ink: ['M48 46h15', 'M60 38l9 8-9 8'] }, { fill: [sheet(76, 14, 38, 64)], cut: [fold(76, 14, 38)] }),
 };
