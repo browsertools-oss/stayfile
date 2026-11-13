@@ -71,10 +71,12 @@ describe('nextTools', () => {
   test('never offers the tool you are on', () => {
     for (const p of PAGES) expect(slugs(nextTools(p.slug))).not.toContain(p.slug);
   });
-  test('PDF results go to PDF tools and image results to image tools', () => {
+  test('PDF results go to PDF tools, image results to image tools, data results to data tools', () => {
     expect(slugs(nextTools('merge-pdf'))).toEqual(['rotate-pdf', 'extract-pages-from-pdf']);
     expect(slugs(nextTools('heic-to-jpg'))).toEqual(['compress-image', 'resize-image', 'jpg-to-pdf']);
-    expect(nextTools('csv-to-json')).toEqual([]);
+    expect(slugs(nextTools('csv-to-json'))).toEqual(['json-to-excel', 'json-to-csv']);
+    expect(slugs(nextTools('csv-to-markdown'))).toEqual(['text-to-pdf']);
+    expect(slugs(nextTools('jsonl-to-csv'))).toEqual(['csv-to-excel']);
   });
   test('every slug offered anywhere is a real page', () => {
     const real = new Set(PAGES.map((p) => p.slug));
