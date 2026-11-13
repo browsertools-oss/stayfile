@@ -85,8 +85,8 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
   const tool = root.dataset.tool!;
   const fromXlsx = tool === 'xlsx-to-csv' || tool === 'xlsx-to-json' || tool === 'xlsx-to-markdown';
   const fromTsv = tool === 'tsv-to-csv';
-const fromCsvTsv = tool === 'csv-to-tsv';
-const fromMd = tool === 'md-to-csv' || tool === 'md-to-xlsx';
+  const fromCsvTsv = tool === 'csv-to-tsv';
+  const fromMd = tool === 'md-to-csv' || tool === 'md-to-xlsx';
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
   const input = $<HTMLTextAreaElement>('input')!, drop = $('drop')!, go = $<HTMLButtonElement>('go')!, copy = $<HTMLButtonElement>('copy');
   const status = $('status')!, err = $('err')!, list = $('list')!, out = $<HTMLTextAreaElement>('output');
