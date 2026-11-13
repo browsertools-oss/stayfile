@@ -26,7 +26,8 @@ export type Tool =
   | 'xlsx-to-json'
   | 'xlsx-to-markdown'
   | 'json-to-xlsx'
-  | 'tsv-to-csv';
+  | 'tsv-to-csv'
+  | 'csv-to-tsv';
 
 export type Group = 'PDF' | 'Images' | 'Spreadsheets and data';
 
@@ -1580,6 +1581,37 @@ export const PAGES: ToolPage[] = [
       {
         q: 'What if my file is already comma-separated?',
         a: 'Then you do not need this page. Use CSV to JSON to convert it, or open it in Excel and save it again.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'csv-to-tsv',
+    tool: 'csv-to-tsv',
+    group: 'Spreadsheets and data',
+    card: 'CSV to TSV',
+    blurb: 'Comma-separated rows into TSV',
+    title: 'CSV to TSV converter online',
+    h1: 'Convert CSV to TSV',
+    lede: 'Turn a CSV file into a tab-separated file for tools that paste better with tabs. The separator is detected on its own, and cells are quoted when they hold a tab or a quote.',
+    description: 'Convert CSV to TSV in your browser. Quoting is handled for you, and the file never leaves your device.',
+    steps: [
+      'Drop in a .csv file, or paste the rows.',
+      'Check the preview.',
+      'Download the TSV.',
+    ],
+    faq: [
+      {
+        q: 'Why switch from CSV to TSV?',
+        a: 'Some tools expect tabs, and pasting tab-separated text into a spreadsheet lands one value per cell every time. TSV also lets cells hold commas without quoting.',
+      },
+      {
+        q: 'What happens to cells that contain a tab?',
+        a: 'They are wrapped in quotes, the same rule CSV uses for commas. Some strict TSV readers may not read quoted tabs back perfectly, but nothing is lost from the file itself.',
+      },
+      {
+        q: 'Will my columns stay in order?',
+        a: 'Yes. Rows and columns pass through untouched apart from the delimiter change.',
       },
       PRIVATE,
     ],

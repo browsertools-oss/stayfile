@@ -6,6 +6,7 @@ const { tool, slug, preset } = Astro.props;
 const fromJson = tool === 'json-to-csv' || tool === 'json-to-xlsx';
 const fromXlsx = tool === 'xlsx-to-csv' || tool === 'xlsx-to-json' || tool === 'xlsx-to-markdown';
 const fromTsv = tool === 'tsv-to-csv';
+const fromCsvTsv = tool === 'csv-to-tsv';
 const pExts = (preset?.accept ?? '').match(/\.[a-z0-9]+/gi)?.map((e) => e.slice(1).toUpperCase()) ?? [];
 const presetLabel = pExts.join(' · ');
 const isTsv = pExts.includes('TSV');
@@ -19,8 +20,8 @@ const placeholder = fromTsv || isTsv
   : isJsonl
     ? '{"name": "Ada", "age": 36}\n{"name": "Grace", "age": 85}'
     : fromJson ? '[{"name": "Ada", "age": 36}, {"name": "Grace", "age": 85}]' : 'name,age\nAda,36\nGrace,85';
-const sub = presetLabel ? `${presetLabel} files, or paste below` : fromXlsx ? 'Only the first sheet is converted' : fromTsv ? 'TSV files, or paste below' : 'or paste below';
-const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .csv', 'csv-to-xlsx': 'Download .xlsx', 'xlsx-to-csv': 'Download .csv', 'xlsx-to-json': 'Download .json', 'xlsx-to-markdown': 'Download .md', 'json-to-xlsx': 'Download .xlsx', 'csv-to-markdown': 'Download .md', 'tsv-to-csv': 'Download .csv' }[tool as string];
+const sub = presetLabel ? `${presetLabel} files, or paste below` : fromXlsx ? 'Only the first sheet is converted' : fromTsv ? 'TSV files, or paste below' : fromCsvTsv ? 'CSV files, or paste below' : 'or paste below';
+const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .csv', 'csv-to-xlsx': 'Download .xlsx', 'xlsx-to-csv': 'Download .csv', 'xlsx-to-json': 'Download .json', 'xlsx-to-markdown': 'Download .md', 'json-to-xlsx': 'Download .xlsx', 'csv-to-markdown': 'Download .md', 'tsv-to-csv': 'Download .csv', 'csv-to-tsv': 'Download .tsv' }[tool as string];
 ---
 <section class="tool" data-tool={tool} data-slug={slug}>
   <Drop accept={accept} main={`Drop ${what} here, or <u>choose one</u>`} sub={sub} />
@@ -32,7 +33,7 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
   <button type="button" class="link" id="showText" hidden>Edit the text</button>
 
   <div class="opts">
-    {!fromJson && !fromXlsx && !fromTsv && (
+    {!fromJson && !fromXlsx && !fromTsv && !fromCsvTsv && (
       <>
         <label>Separator
           <select id="delim">
@@ -71,7 +72,7 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
 </section>
 
 <script>
-  import { parseCsv, csvToJson, csvToMarkdown, tsvToCsv, jsonRows, columns, jsonToCsv, type CsvOptions } from '../lib/data';
+  import { parseCsv, csvToJson, csvToMarkdown, tsvToCsv, csvToTsv, jsonRows, columns, jsonToCsv, type CsvOptions } from '../lib/data';
   import { save, baseName } from '../lib/save';
   import { savedLine } from '../lib/route';
   import { showDone, hideDone } from '../lib/done';
@@ -80,6 +81,7 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
   const tool = root.dataset.tool!;
   const fromXlsx = tool === 'xlsx-to-csv' || tool === 'xlsx-to-json' || tool === 'xlsx-to-markdown';
   const fromTsv = tool === 'tsv-to-csv';
+const fromCsvTsv = tool === 'csv-to-tsv';
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
   const input = $<HTMLTextAreaElement>('input')!, drop = $('drop')!, go = $<HTMLButtonElement>('go')!, copy = $<HTMLButtonElement>('copy');
   const status = $('status')!, err = $('err')!, list = $('list')!, out = $<HTMLTextAreaElement>('output');
@@ -125,14 +127,16 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
         result = jsonToCsv(text, { delimiter: $<HTMLSelectElement>('delim')!.value });
         table(cols, rows.map((r) => cols.map((c) => r[c])));
         status.textContent = `${rows.length} row${rows.length === 1 ? '' : 's'}, ${cols.length} column${cols.length === 1 ? '' : 's'}${rows.length > MAX_ROWS ? `. Preview shows the first ${MAX_ROWS}.` : '.'}`;
-      } else if (fromTsv) {
-        // Tab-separated in, comma-separated out. No options: the delimiter is the point of the page.
-        const p = parseCsv(text, { delimiter: '\t', header: false, typed: false });
+      } else if (fromTsv || fromCsvTsv) {
+        // One delimiter in, the other out. No options: the delimiter is the point of the page.
+        const p = fromTsv
+          ? parseCsv(text, { delimiter: '\t', header: false, typed: false })
+          : parseCsv(text, { delimiter: '', header: false, typed: false }); // auto-detect
         const rows = p.rows as unknown[][];
         const cols = rows.reduce((m, r) => Math.max(m, r.length), 0);
-        result = tsvToCsv(text);
+        result = fromTsv ? tsvToCsv(text) : csvToTsv(text);
         table([], rows);
-        status.textContent = `${rows.length} row${rows.length === 1 ? '' : 's'}, ${cols} column${cols === 1 ? '' : 's'}, saved as comma-separated values.${rows.length > MAX_ROWS ? ` Preview shows the first ${MAX_ROWS}.` : ''}`;
+        status.textContent = `${rows.length} row${rows.length === 1 ? '' : 's'}, ${cols} column${cols === 1 ? '' : 's'}, saved as ${fromTsv ? 'comma' : 'tab'}-separated values.${rows.length > MAX_ROWS ? ` Preview shows the first ${MAX_ROWS}.` : ''}`;
         if (p.warnings.length) { err.textContent = `Check these rows: ${p.warnings.join(' · ')}`; err.hidden = false; }
       } else if (fromXlsx) {
         // The text is the first sheet already converted to CSV. CSV downloads are the text itself; JSON is built from it.
@@ -197,6 +201,12 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
       err.hidden = false;
       return;
     }
+    if (fromCsvTsv && /\.tsv$/i.test(f.name)) {
+      list.innerHTML = '';
+      err.textContent = `${f.name} is already tab-separated. This page converts comma-separated files.`;
+      err.hidden = false;
+      return;
+    }
     name = baseName(f.name);
     list.innerHTML = '';
     const li = document.createElement('li');
@@ -247,6 +257,7 @@ const outLabel = { 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .cs
   };
   go.addEventListener('click', async () => {
     if (tool === 'csv-to-json' || tool === 'xlsx-to-json') done(new Blob([result], { type: 'application/json' }), `${name}.json`);
+    else if (fromCsvTsv) done(new Blob(['﻿' + result], { type: 'text/tab-separated-values' }), `${name}.tsv`); // BOM so Excel reads UTF-8
     else if (tool === 'csv-to-markdown' || tool === 'xlsx-to-markdown') done(new Blob([result], { type: 'text/markdown' }), `${name}.md`);
     else if (tool === 'json-to-csv' || fromXlsx || fromTsv) done(new Blob(['﻿' + result], { type: 'text/csv' }), `${name}.csv`); // BOM so Excel reads UTF-8
     else {
