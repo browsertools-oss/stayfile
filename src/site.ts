@@ -24,6 +24,7 @@ export type Tool =
   | 'csv-to-xlsx'
   | 'xlsx-to-csv'
   | 'xlsx-to-json'
+  | 'xlsx-to-markdown'
   | 'json-to-xlsx';
 
 export type Group = 'PDF' | 'Images' | 'Spreadsheets and data';
@@ -1679,6 +1680,37 @@ export const PAGES: ToolPage[] = [
       {
         q: 'What happens to the other sheets?',
         a: 'Only the first sheet is converted, and the page lists the other sheet names. To get another sheet, drag its tab to the front in Excel, save, and drop the file here again.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'excel-to-markdown',
+    tool: 'xlsx-to-markdown',
+    group: 'Spreadsheets and data',
+    card: 'Excel to Markdown',
+    blurb: 'A sheet as a Markdown table',
+    title: 'Excel to Markdown table converter online',
+    h1: 'Convert Excel to Markdown',
+    lede: 'Turn the first sheet of an .xlsx workbook into a Markdown table for a README, an issue or a pull request. Numbers in a column are right-aligned, and the table is ready to paste.',
+    description: 'Convert Excel .xlsx to a Markdown table in your browser. The first sheet is used, nested content stays as text, and nothing is uploaded.',
+    steps: [
+      'Drop in an .xlsx file. Its first sheet is read.',
+      'Check the preview of the table.',
+      'Copy the Markdown or download it as a .md file.',
+    ],
+    faq: [
+      {
+        q: 'Which sheet is converted?',
+        a: 'Only the first sheet. Drag the tab you want to the front in Excel, save, and drop the file here again. Other sheets are not read.',
+      },
+      {
+        q: 'Will the table render on GitHub?',
+        a: 'Yes. The output is a GitHub-flavored Markdown table, and columns that hold only numbers are right-aligned. Pipes in cells are escaped so the table keeps its shape.',
+      },
+      {
+        q: 'How are dates and formatted numbers written?',
+        a: 'Each cell is read the way Excel shows it. A date formatted as 2026-11-06 comes out as that text. Plain numbers come out right-aligned, so columns of figures line up.',
       },
       PRIVATE,
     ],
