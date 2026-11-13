@@ -1058,6 +1058,30 @@ export const PAGES: ToolPage[] = [
     ],
   },
   {
+    slug: 'ico-to-webp',
+    tool: 'img-convert',
+    group: 'Images',
+    card: 'ICO to WebP',
+    blurb: 'Save an ICO icon as a WebP image',
+    preset: { out: 'image/webp', accept: '.ico,image/x-icon,image/vnd.microsoft.icon' },
+    title: 'ICO to WebP converter that works in your browser',
+    h1: 'Convert ICO to WebP',
+    lede: 'Save an ICO icon as a WebP image. The largest size stored in the icon is used, and transparency is kept. WebP files open in every current browser.',
+    description: 'Convert ICO icons to WebP in your browser. The largest size in the file is kept, transparency is kept, and nothing leaves your device.',
+    steps: ['Drop in your .ico files.', 'WebP is already selected. Move the quality slider if you want a smaller file.', 'Click Convert, then save each image or all of them as a zip.'],
+    faq: [
+      {
+        q: 'Why is the WebP so small?',
+        a: 'An ICO file holds small pictures, usually 16 to 256 pixels on a side. This page uses the largest one it finds, so the WebP is never bigger than that.',
+      },
+      {
+        q: 'Does the WebP keep the transparent background?',
+        a: 'Yes. WebP supports transparency, so the icon keeps its clear background. If you need the icon itself as an image with a transparency channel, ICO to PNG works the same way.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
     slug: 'bmp-to-jpg',
     tool: 'img-convert',
     group: 'Images',

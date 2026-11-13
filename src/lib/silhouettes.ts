@@ -115,6 +115,7 @@ export const shapes: Record<string, Shape[]> = {
   'webp-to-ico': merge(P(14, 18, 60, 50), tag(80, 58)),
   'svg-to-ico': merge(P(14, 18, 60, 50), tag(80, 58)),
   'ico-to-jpg': merge(P(14, 18, 60, 50), tag(80, 58)),
+  'ico-to-webp': merge(P(14, 18, 60, 50), tag(80, 58)),
   'bmp-to-jpg': merge(P(18, 18, 72, 56), tag(86, 62)),
   'bmp-to-png': merge(P(18, 18, 72, 56), tag(86, 62)),
   'pdf-to-text': [S(26, 12, 58, 72, 6)],
