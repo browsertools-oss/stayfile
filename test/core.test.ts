@@ -2,7 +2,7 @@ import { describe, test, expect } from 'vitest';
 import { PDFDocument, degrees } from '@cantoo/pdf-lib';
 import { deflateSync } from 'node:zlib';
 import { parseRanges, merge, extract, split, burst, rotate, imagesToPdf, placeImage, pageCount, pagesToKeep, textToPdf } from '../src/lib/pdf';
-import { typeValue, parseCsv, csvToJson, csvToMarkdown, tsvToCsv, csvToTsv, markdownTableRows, markdownToCsv, jsonToCsv, jsonRows, flatten } from '../src/lib/data';
+import { typeValue, parseCsv, csvToJson, csvToMarkdown, tsvToCsv, csvToTsv, markdownTableRows, markdownToCsv, jsonToCsv, jsonRows, flatten, jsonToMarkdown } from '../src/lib/data';
 import * as XLSX from 'xlsx';
 import { csvToXlsx, xlsxToRows, xlsxToCsv } from '../src/lib/xlsx';
 import { targetSize, renameTo, formatBytes, sizeChange, avifQuality } from '../src/lib/image';
@@ -217,6 +217,27 @@ describe('csv and json', () => {
     const md = '# Title\n\nSome words here.\n\n| Name | Age | City |\n| --- | ---: | :-: |\n| Ada | 36 | London |\n| Grace | 85 | New York |\n\nAfterword.';
     expect(markdownTableRows(md)).toEqual([['Name', 'Age', 'City'], ['Ada', '36', 'London'], ['Grace', '85', 'New York']]);
     expect(() => markdownTableRows('no table here')).toThrow(/No Markdown table/);
+  });
+
+  test('markdownTableRows ignores prose lines with pipes around the table', () => {
+    const md = 'See a | b for the background.\n\n| Name | Age |\n| --- | --- |\n| Ada | 36 |\n\nAfter: not | a row';
+    expect(markdownTableRows(md)).toEqual([['Name', 'Age'], ['Ada', '36']]);
+  });
+
+  test('markdownTableRows reads only the first table when the file has two', () => {
+    const md = '| A |\n| --- |\n| 1 |\n\nSome prose.\n\n| B |\n| --- |\n| 2 |';
+    expect(markdownTableRows(md)).toEqual([['A'], ['1']]);
+  });
+
+  test('jsonToMarkdown builds a GFM table with flattened keys and right-aligned numbers', () => {
+    const md = jsonToMarkdown('[{"name":"Ada","age":36,"address":{"city":"London"}},{"name":"Grace","age":85,"address":{"city":"New York"}}]');
+    expect(md).toBe('| name | age | address.city |\n| --- | ---: | --- |\n| Ada | 36 | London |\n| Grace | 85 | New York |\n');
+    expect(() => jsonToMarkdown('[]')).toThrow(/No rows/);
+  });
+
+  test('jsonToMarkdown escapes pipes in cells', () => {
+    const md = jsonToMarkdown('[{"a":"x|y","b":"ok"}]');
+    expect(md).toContain('| x\\|y | ok |');
   });
 
   test('markdownTableRows unescapes pipes and <br> cells', () => {

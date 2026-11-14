@@ -72,6 +72,20 @@ export function parseCsv(text: string, o: CsvOptions = {}): Parsed {
   };
 }
 
+/** Pipes in cells are escaped, in-cell line breaks become <br>, and a header line plus an
+ *  alignment row are written around the body. Numeric columns pass right=true and get ---: */
+function renderMarkdownTable(head: string[], rows: string[][], right: boolean[]): string {
+  const esc = (v: string) => v.replace(/\|/g, '\\|').replace(/\r?\n/g, '<br>');
+  const line = (cells: string[]) => `| ${cells.map(esc).join(' | ')} |`;
+  const sep = `| ${right.map((r) => (r ? '---:' : '---')).join(' | ')} |`;
+  return [line(head), sep, ...rows.map(line)].join('\n') + '\n';
+}
+const numericCols = (rows: string[][], width: number): boolean[] =>
+  Array.from({ length: width }, (_, i) => {
+    const vals = rows.map((r) => r[i].trim()).filter(Boolean);
+    return vals.length > 0 && vals.every((v) => NUM.test(v));
+  });
+
 /** CSV text → a GitHub-flavored Markdown table. Pipes in cells are escaped, line breaks
  *  become <br>, and columns that hold only numbers are right-aligned. */
 export function csvToMarkdown(text: string, o: CsvOptions = {}): string {
@@ -84,14 +98,7 @@ export function csvToMarkdown(text: string, o: CsvOptions = {}): string {
   if (!width || !body.length) throw new Error('No rows found in the file.');
   const head = header ? p.fields : Array.from({ length: width }, (_, i) => `Column ${i + 1}`);
   const rows = body.map((r) => Array.from({ length: width }, (_, i) => String(r[i] ?? '')));
-  const right = Array.from({ length: width }, (_, i) => {
-    const vals = rows.map((r) => r[i].trim()).filter(Boolean);
-    return vals.length > 0 && vals.every((v) => NUM.test(v));
-  });
-  const esc = (v: string) => v.replace(/\|/g, '\\|').replace(/\r?\n/g, '<br>');
-  const line = (cells: string[]) => `| ${cells.map(esc).join(' | ')} |`;
-  const sep = `| ${right.map((r) => (r ? '---:' : '---')).join(' | ')} |`;
-  return [line(head), sep, ...rows.map(line)].join('\n') + '\n';
+  return renderMarkdownTable(head, rows, numericCols(rows, width));
 }
 
 /** CSV text → TSV text, quoting cells that contain tabs or quotes as needed. */
@@ -127,20 +134,32 @@ export function flatten(obj: unknown, prefix = '', out: Row = {}): Row {
 }
 
 /** Accepts an array of objects, a single object, an object wrapping one array ({"data":[...]}), or JSON Lines. */
+/** The cells of one pipe line: \| becomes |, <br> becomes a newline, cells are trimmed. */
+function splitCells(line: string): string[] {
+  const inner = line.trim().replace(/^\|/, '').replace(/\|$/, '');
+  return inner.split(/(?<!\\)\|/).map((c) => c.trim().replace(/\\\|/g, '|').replace(/<br\s*\/?>/gi, '\n'));
+}
+const isAlignLine = (line: string): boolean =>
+  line.trim().includes('|') && splitCells(line).every((c) => /^:?-+:?$/.test(c));
+
 /** Parse the first GitHub-flavored Markdown table in a text into rows of cells.
- *  Prose lines and the alignment row are dropped, \| becomes |, <br> becomes a newline. */
+ *  The table is the header line above the first alignment row (| --- | --- |) plus the pipe lines
+ *  below it, so prose lines that happen to contain a pipe are skipped. Without an alignment row,
+ *  every pipe line counts, which matches how the page has always read loose tables.
+ *  Prose, code blocks and other tables are dropped, \| becomes |, <br> becomes a newline. */
 export function markdownTableRows(text: string): string[][] {
-  const rows: string[][] = [];
-  for (const raw of text.split(/\r?\n/)) {
-    const line = raw.trim();
-    if (!line.includes('|')) continue;
-    const inner = line.replace(/^\|/, '').replace(/\|$/, '');
-    const cells = inner.split(/(?<!\\)\|/).map((c) => c.trim().replace(/\\\|/g, '|').replace(/<br\s*\/?>/gi, '\n'));
-    rows.push(cells);
+  const lines = text.split(/\r?\n/);
+  const pipe = (l: string) => l.trim().includes('|');
+  const sep = lines.findIndex(isAlignLine);
+  let picked: string[] | null = null;
+  if (sep > 0 && pipe(lines[sep - 1]) && !isAlignLine(lines[sep - 1])) {
+    picked = [lines[sep - 1]];
+    for (let i = sep + 1; i < lines.length && pipe(lines[i]); i++) picked.push(lines[i]);
   }
-  const body = rows.filter((r) => !r.every((c) => /^:?-+:?$/.test(c)));
-  if (!body.length) throw new Error('No Markdown table found in the text.');
-  return body;
+  const source = picked ?? lines.filter(pipe);
+  const rows = source.map(splitCells).filter((r) => !r.every((c) => /^:?-+:?$/.test(c)));
+  if (!rows.length) throw new Error('No Markdown table found in the text.');
+  return rows;
 }
 
 /** Markdown table → CSV text, the same shape the Excel path uses downstream. */
@@ -184,5 +203,15 @@ export function jsonToCsv(text: string, o: { delimiter?: string } = {}): string 
     delimiter: o.delimiter || ',',
     newline: '\r\n',
   });
+}
+
+/** JSON rows → a GitHub-flavored Markdown table. Objects flatten to dotted keys, lists stay JSON text. */
+export function jsonToMarkdown(text: string): string {
+  const rows = jsonRows(text);
+  if (!rows.length) throw new Error('No rows found in the JSON.');
+  const cols = columns(rows);
+  if (!cols.length) throw new Error('No keys found in the JSON.');
+  const body = rows.map((r) => cols.map((c) => (r[c] == null ? '' : String(r[c]))));
+  return renderMarkdownTable(cols, body, numericCols(body, cols.length));
 }
 
