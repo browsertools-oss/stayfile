@@ -27,6 +27,7 @@ export type Tool =
   | 'xlsx-to-markdown'
   | 'xlsx-to-tsv'
   | 'json-to-xlsx'
+  | 'json-to-markdown'
   | 'tsv-to-csv'
   | 'csv-to-tsv'
   | 'md-to-csv'
@@ -1926,6 +1927,33 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Are nested fields kept?',
         a: 'They are flattened into columns like address.city, the same as on the JSON to CSV page. A list inside a record is written into one cell as JSON text.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'json-to-markdown',
+    tool: 'json-to-markdown',
+    group: 'Spreadsheets and data',
+    card: 'JSON to Markdown',
+    blurb: 'A Markdown table from JSON rows',
+    title: 'JSON to Markdown table converter online',
+    h1: 'Convert JSON to Markdown',
+    lede: 'Turn a JSON array, an API response or JSON Lines into a GitHub-flavored Markdown table. Nested objects become dotted columns, numbers are right-aligned, and the table is ready to paste into a README or an issue.',
+    description: 'Convert JSON to a Markdown table in your browser. Nested fields become dotted columns, lists stay as JSON text. Nothing is uploaded.',
+    steps: ['Drop in a .json file or paste the JSON.', 'Check the preview. Nested fields show up as columns like address.city.', 'Copy the Markdown or download it as a .md file.'],
+    faq: [
+      {
+        q: 'What JSON shapes does it accept?',
+        a: 'An array of objects, a single object, an object with one array inside (such as {"data": [...]}), or JSON Lines with one object per line.',
+      },
+      {
+        q: 'What happens to lists inside a record?',
+        a: 'They are written into a single cell as JSON text, for example ["red","blue"], so nothing is lost. Pipes inside values are escaped as \\| so the table keeps its shape.',
+      },
+      {
+        q: 'Will the table render on GitHub?',
+        a: 'Yes. The output is a GitHub-flavored Markdown table, and columns that hold only numbers are right-aligned. Paste it into a README, an issue or a pull request.',
       },
       PRIVATE,
     ],
