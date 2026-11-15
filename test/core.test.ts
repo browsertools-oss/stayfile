@@ -2,7 +2,7 @@ import { describe, test, expect } from 'vitest';
 import { PDFDocument, degrees } from '@cantoo/pdf-lib';
 import { deflateSync } from 'node:zlib';
 import { parseRanges, merge, extract, split, burst, rotate, imagesToPdf, placeImage, pageCount, pagesToKeep, textToPdf, addPageNumbers } from '../src/lib/pdf';
-import { typeValue, parseCsv, csvToJson, csvToMarkdown, tsvToCsv, csvToTsv, markdownTableRows, markdownToCsv, markdownToJson, jsonToCsv, jsonRows, flatten, jsonToMarkdown } from '../src/lib/data';
+import { typeValue, parseCsv, csvToJson, csvToMarkdown, tsvToCsv, csvToTsv, markdownTableRows, markdownToCsv, markdownToJson, jsonToCsv, jsonRows, flatten, jsonToMarkdown, csvToSql, sqlTableName } from '../src/lib/data';
 import * as XLSX from 'xlsx';
 import { csvToXlsx, xlsxToRows, xlsxToCsv } from '../src/lib/xlsx';
 import { targetSize, renameTo, formatBytes, sizeChange, avifQuality } from '../src/lib/image';
@@ -210,6 +210,32 @@ describe('csv and json', () => {
   test('csvToMarkdown without headers generates Column cells, and keeps text columns left-aligned', () => {
     expect(csvToMarkdown('02134,x\n10001,y', { header: false })).toBe('| Column 1 | Column 2 |\n| --- | --- |\n| 02134 | x |\n| 10001 | y |\n');
     expect(() => csvToMarkdown('   \n')).toThrow(/No rows/);
+  });
+
+  test('csvToSql writes one INSERT per row with typed values and doubled quotes', () => {
+    expect(csvToSql('name,note,zip\nAda,it\'s,02134\nGrace,,10001', { table: 'people' })).toBe(
+      "INSERT INTO people (name, note, zip) VALUES ('Ada', 'it''s', '02134');\n" +
+      "INSERT INTO people (name, note, zip) VALUES ('Grace', NULL, '10001');\n",
+    );
+    expect(csvToSql('name,age,ok\nAda,36,true\nGrace,85,false', { table: 'people' })).toBe(
+      "INSERT INTO people (name, age, ok) VALUES ('Ada', 36, TRUE);\n" +
+      "INSERT INTO people (name, age, ok) VALUES ('Grace', 85, FALSE);\n",
+    );
+  });
+
+  test('csvToSql sanitizes the table name and quotes non-simple identifiers', () => {
+    expect(csvToSql('my col,amount\n1,2', { table: "My Table!" })).toBe('INSERT INTO My_Table ("my col", amount) VALUES (1, 2);\n');
+    expect(csvToSql('a\n1', { table: '9lives' })).toContain('INSERT INTO t_9lives');
+    expect(csvToSql('a\n1', { table: '   ' })).toContain('INSERT INTO csv_table');
+    expect(sqlTableName('  ')).toBe('csv_table');
+    expect(sqlTableName('total_sales$2026')).toBe('total_sales$2026');
+  });
+
+  test('csvToSql without a header names columns column_N and keeps text as text when asked', () => {
+    expect(csvToSql('Ada,36', { table: 'people', header: false })).toBe("INSERT INTO people (column_1, column_2) VALUES ('Ada', 36);\n");
+    expect(csvToSql('num\n42', { table: 't', typed: false })).toBe("INSERT INTO t (num) VALUES ('42');\n");
+    expect(() => csvToSql('   \n', { table: 't' })).toThrow(/No rows/);
+    expect(() => csvToSql('a,b\n', { table: 't' })).toThrow(/No rows/);
   });
 
   test('csvToTsv round trips with tsvToCsv', () => {

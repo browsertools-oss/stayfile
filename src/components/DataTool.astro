@@ -30,7 +30,7 @@ const placeholder = fromYaml
       ? '{"name": "Ada", "age": 36}\n{"name": "Grace", "age": 85}'
       : fromJson ? '[{"name": "Ada", "age": 36}, {"name": "Grace", "age": 85}]' : 'name,age\nAda,36\nGrace,85';
 const sub = presetLabel ? `${presetLabel} files, or paste below` : fromYaml ? 'or paste below' : fromXlsx ? 'Only the first sheet is converted' : fromMd ? 'A Markdown table, or paste below' : fromTsv ? 'TSV files, or paste below' : fromCsvTsv ? 'CSV files, or paste below' : 'or paste below';
-const outLabel = { 'yaml-to-json': 'Download .json', 'yaml-to-csv': 'Download .csv', 'yaml-to-xlsx': 'Download .xlsx', 'json-to-yaml': 'Download .yaml', 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .csv', 'json-to-tsv': 'Download .tsv', 'csv-to-xlsx': 'Download .xlsx', 'xlsx-to-csv': 'Download .csv', 'xlsx-to-json': 'Download .json', 'xlsx-to-markdown': 'Download .md', 'json-to-markdown': 'Download .md', 'json-to-xlsx': 'Download .xlsx', 'csv-to-markdown': 'Download .md', 'tsv-to-csv': 'Download .csv', 'csv-to-tsv': 'Download .tsv', 'xlsx-to-tsv': 'Download .tsv', 'xlsx-to-yaml': 'Download .yaml', 'md-to-csv': 'Download .csv', 'md-to-json': 'Download .json', 'md-to-xlsx': 'Download .xlsx', 'csv-to-yaml': 'Download .yaml' }[tool as string];
+const outLabel = { 'yaml-to-json': 'Download .json', 'yaml-to-csv': 'Download .csv', 'yaml-to-xlsx': 'Download .xlsx', 'json-to-yaml': 'Download .yaml', 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .csv', 'json-to-tsv': 'Download .tsv', 'csv-to-xlsx': 'Download .xlsx', 'xlsx-to-csv': 'Download .csv', 'xlsx-to-json': 'Download .json', 'xlsx-to-markdown': 'Download .md', 'json-to-markdown': 'Download .md', 'json-to-xlsx': 'Download .xlsx', 'csv-to-markdown': 'Download .md', 'tsv-to-csv': 'Download .csv', 'csv-to-tsv': 'Download .tsv', 'xlsx-to-tsv': 'Download .tsv', 'xlsx-to-yaml': 'Download .yaml', 'md-to-csv': 'Download .csv', 'md-to-json': 'Download .json', 'md-to-xlsx': 'Download .xlsx', 'csv-to-yaml': 'Download .yaml', 'csv-to-sql': 'Download .sql' }[tool as string];
 ---
 <section class="tool" data-tool={tool} data-slug={slug}>
   <Drop accept={accept} main={`Drop ${what} here, or <u>choose one</u>`} sub={sub} />
@@ -54,6 +54,11 @@ const outLabel = { 'yaml-to-json': 'Download .json', 'yaml-to-csv': 'Download .c
           </select>
         </label>
         <label class="check"><input type="checkbox" id="header" checked /> First row is column names</label>
+        {tool === 'csv-to-sql' && (
+          <label>Table name
+            <input type="text" id="tableName" placeholder="csv_table" autocomplete="off" spellcheck="false" style="width: 12em" />
+          </label>
+        )}
         <label class="check"><input type="checkbox" id="text" /> Keep all values as text</label>
       </>
     )}
@@ -77,11 +82,11 @@ const outLabel = { 'yaml-to-json': 'Download .json', 'yaml-to-csv': 'Download .c
   <p class="error" id="err" role="alert" hidden></p>
 
   <div class="preview" id="tableWrap" hidden><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
-  {(tool === 'csv-to-json' || tool === 'xlsx-to-json' || tool === 'csv-to-markdown' || tool === 'xlsx-to-markdown' || tool === 'xlsx-to-tsv' || tool === 'xlsx-to-yaml' || tool === 'json-to-markdown' || tool === 'md-to-json' || tool === 'yaml-to-json' || tool === 'json-to-yaml' || tool === 'csv-to-yaml') && <textarea id="output" rows="12" readonly spellcheck="false" aria-label="Output" hidden style="margin-top:14px"></textarea>}
+  {(tool === 'csv-to-sql' || tool === 'csv-to-json' || tool === 'xlsx-to-json' || tool === 'csv-to-markdown' || tool === 'xlsx-to-markdown' || tool === 'xlsx-to-tsv' || tool === 'xlsx-to-yaml' || tool === 'json-to-markdown' || tool === 'md-to-json' || tool === 'yaml-to-json' || tool === 'json-to-yaml' || tool === 'csv-to-yaml') && <textarea id="output" rows="12" readonly spellcheck="false" aria-label="Output" hidden style="margin-top:14px"></textarea>}
 </section>
 
 <script>
-  import { parseCsv, csvToJson, csvToMarkdown, tsvToCsv, csvToTsv, markdownToCsv, markdownToJson, markdownTableRows, jsonRows, columns, jsonToCsv, jsonToMarkdown, type CsvOptions } from '../lib/data';
+  import { parseCsv, csvToJson, csvToMarkdown, tsvToCsv, csvToTsv, markdownToCsv, markdownToJson, markdownTableRows, jsonRows, columns, jsonToCsv, jsonToMarkdown, csvToSql, sqlTableName, type CsvOptions } from '../lib/data';
   import { save, baseName } from '../lib/save';
   import { savedLine } from '../lib/route';
   import { showDone, hideDone } from '../lib/done';
@@ -211,16 +216,21 @@ const outLabel = { 'yaml-to-json': 'Download .json', 'yaml-to-csv': 'Download .c
         const head = o.header ? p.fields : [];
         const rows = o.header ? (p.rows as Record<string, unknown>[]).map((r) => head.map((h) => r[h])) : (p.rows as unknown[][]);
         table(head, rows);
-        if (tool === 'csv-to-json' || tool === 'csv-to-markdown' || tool === 'csv-to-yaml') {
+        if (tool === 'csv-to-json' || tool === 'csv-to-markdown' || tool === 'csv-to-yaml' || tool === 'csv-to-sql') {
           if (tool === 'csv-to-yaml') {
             const { csvToYaml } = await loadYaml();
             result = csvToYaml(text, o);
+          } else if (tool === 'csv-to-sql') {
+            result = csvToSql(text, { ...o, table: $<HTMLInputElement>('tableName')?.value ?? '' });
+            out!.hidden = false;
           } else result = tool === 'csv-to-json' ? csvToJson(text, o) : csvToMarkdown(text, o);
           out!.value = result.length > 200_000 ? result.slice(0, 200_000) + '\n… (preview cut short; the download has everything)' : result;
           out!.hidden = false;
         } else result = 'xlsx';
         const sep = { ',': 'comma', ';': 'semicolon', '\t': 'tab', '|': 'pipe' }[p.delimiter] ?? `"${p.delimiter}"`;
-        status.textContent = `${rows.length} row${rows.length === 1 ? '' : 's'}, ${o.header ? `${head.length} columns, ` : ''}${sep}-separated${rows.length > MAX_ROWS ? `. Preview shows the first ${MAX_ROWS}.` : '.'}`;
+        status.textContent = tool === 'csv-to-sql'
+          ? `${rows.length} INSERT statement${rows.length === 1 ? '' : 's'} for table ${sqlTableName($<HTMLInputElement>('tableName')?.value ?? '')}${rows.length > MAX_ROWS ? `. Preview shows the first ${MAX_ROWS} rows.` : '.'}`
+          : `${rows.length} row${rows.length === 1 ? '' : 's'}, ${o.header ? `${head.length} columns, ` : ''}${sep}-separated${rows.length > MAX_ROWS ? `. Preview shows the first ${MAX_ROWS}.` : '.'}`;
         if (p.warnings.length) { err.textContent = `Check these rows: ${p.warnings.join(' · ')}`; err.hidden = false; }
       }
       go.disabled = false;
@@ -236,6 +246,7 @@ const outLabel = { 'yaml-to-json': 'Download .json', 'yaml-to-csv': 'Download .c
 
   let timer = 0;
   input.addEventListener('input', () => { clearTimeout(timer); timer = window.setTimeout(update, 250); });
+  $('tableName')?.addEventListener('input', () => { clearTimeout(timer); timer = window.setTimeout(update, 250); });
   root.querySelectorAll('select, input[type=checkbox]').forEach((el) => el.addEventListener('change', update));
 
   drop.addEventListener('files', async (e) => {
@@ -302,7 +313,8 @@ const outLabel = { 'yaml-to-json': 'Download .json', 'yaml-to-csv': 'Download .c
     save(blob, file);
     showDone({
       el: $('done')!, slug: root.dataset.slug!, line: savedLine(file), again: () => save(blob, file),
-      result: new File([blob], file, { type: blob.type }),
+      // For CSV to SQL the saved file is .sql, which no page here reads, so the chip carries the source CSV instead.
+      result: tool === 'csv-to-sql' ? new File([input.value], `${name}.csv`, { type: 'text/csv' }) : new File([blob], file, { type: blob.type }),
       reset: () => {
         input.value = ''; list.innerHTML = ''; name = 'data'; sheetInfo = '';
         drop.classList.remove('compact'); $('pasteWrap')!.hidden = fromXlsx; $('showText')!.hidden = true;
@@ -315,6 +327,7 @@ const outLabel = { 'yaml-to-json': 'Download .json', 'yaml-to-csv': 'Download .c
     else if (tool === 'csv-to-yaml' || tool === 'xlsx-to-yaml') done(new Blob([result], { type: 'application/yaml' }), `${name}.yaml`);
     else if (tool === 'json-to-yaml') done(new Blob([result], { type: 'application/yaml' }), `${name}.yaml`);
     else if (fromCsvTsv || tool === 'xlsx-to-tsv') done(new Blob(['﻿' + result], { type: 'text/tab-separated-values' }), `${name}.tsv`); // BOM so Excel reads UTF-8
+    else if (tool === 'csv-to-sql') done(new Blob([result], { type: 'text/plain' }), `${name}.sql`);
     else if (tool === 'csv-to-markdown' || tool === 'xlsx-to-markdown' || tool === 'json-to-markdown') done(new Blob([result], { type: 'text/markdown' }), `${name}.md`);
     else if (tool === 'json-to-tsv') done(new Blob(['﻿' + result], { type: 'text/tab-separated-values' }), `${name}.tsv`); // BOM so Excel reads UTF-8
     else if (tool === 'json-to-csv' || fromXlsx || fromTsv || tool === 'md-to-csv' || tool === 'yaml-to-csv') done(new Blob(['﻿' + result], { type: 'text/csv' }), `${name}.csv`); // BOM so Excel reads UTF-8

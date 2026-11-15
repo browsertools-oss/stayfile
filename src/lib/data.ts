@@ -221,3 +221,50 @@ export function jsonToMarkdown(text: string): string {
   return renderMarkdownTable(cols, body, numericCols(body, cols.length));
 }
 
+/** A safe SQL table name: letters, digits, underscores and $, at most 64 characters.
+ *  Anything else becomes an underscore, a leading digit gets a t_ prefix, empty input means csv_table. */
+export function sqlTableName(raw: string): string {
+  const cleaned = raw.trim().replace(/[^a-zA-Z0-9_$]+/g, '_').replace(/^_+|_+$/g, '');
+  if (!cleaned) return 'csv_table';
+  const name = /^[a-zA-Z_]/.test(cleaned) ? cleaned : `t_${cleaned}`;
+  return name.slice(0, 64);
+}
+
+const SIMPLE_ID = /^[a-zA-Z_][a-zA-Z0-9_$]*$/;
+/** Identifiers that are not simple get double quotes, with embedded quotes doubled. */
+const sqlIdent = (n: string): string => (SIMPLE_ID.test(n) ? n : `"${n.replace(/"/g, '""')}"`);
+
+/** One SQL literal. NULL for empty and missing cells, TRUE/FALSE for booleans, numbers as numbers,
+ *  everything else single-quoted with the quote doubled. Stock SQL: works in MariaDB, MySQL, Postgres and SQLite. */
+const sqlValue = (v: unknown): string => {
+  if (v == null || v === '') return 'NULL';
+  if (typeof v === 'number') return Number.isFinite(v) ? String(v) : 'NULL';
+  if (typeof v === 'boolean') return v ? 'TRUE' : 'FALSE';
+  return `'${String(v).replace(/'/g, "''")}'`;
+};
+
+/** CSV text → one INSERT statement per row, against a table you name.
+ *  The first row becomes the column list when the file has a header. Without one, columns are column_1, column_2 and so on.
+ *  Numbers stay numbers, empty cells become NULL, other values are quoted strings. */
+export function csvToSql(text: string, o: CsvOptions & { table?: string } = {}): string {
+  const header = o.header ?? true;
+  const p = parseCsv(text, { ...o, header, typed: o.typed ?? true });
+  const table = sqlTableName(o.table ?? '');
+  let cols: string[];
+  let rows: unknown[][];
+  if (header) {
+    cols = p.fields;
+    if (!cols.length) throw new Error('No rows found in the file.');
+    rows = (p.rows as Record<string, unknown>[]).map((r) => cols.map((c) => r[c]));
+    if (!rows.length) throw new Error('No rows found in the file.');
+  } else {
+    const body = p.rows as unknown[][];
+    if (!body.length) throw new Error('No rows found in the file.');
+    const width = body.reduce((m, r) => Math.max(m, r.length), 0);
+    cols = Array.from({ length: width }, (_, i) => `column_${i + 1}`);
+    rows = body.map((r) => Array.from({ length: width }, (_, i) => r[i]));
+  }
+  const colList = cols.map(sqlIdent).join(', ');
+  return rows.map((r) => `INSERT INTO ${table} (${colList}) VALUES (${r.map(sqlValue).join(', ')});`).join('\n') + '\n';
+}
+

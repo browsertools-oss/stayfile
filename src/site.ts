@@ -40,6 +40,7 @@ export type Tool =
   | 'yaml-to-csv'
   | 'yaml-to-xlsx'
   | 'csv-to-yaml'
+  | 'csv-to-sql'
   | 'json-to-yaml';
 
 export type Group = 'PDF' | 'Images' | 'Spreadsheets and data';
@@ -2350,6 +2351,41 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Can I pick the separator?',
         a: 'The separator is detected on its own, and the dropdown lists comma, semicolon, tab and pipe. Excel exports in much of Europe use semicolons, so pick that one if detection guesses wrong.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'csv-to-sql',
+    tool: 'csv-to-sql',
+    group: 'Spreadsheets and data',
+    card: 'CSV to SQL',
+    blurb: 'INSERT statements from a CSV file',
+    title: 'CSV to SQL converter online',
+    h1: 'Convert CSV to SQL',
+    lede: 'Turn a CSV file into INSERT statements you can run against your database. Numbers stay numbers, empty cells become NULL, and single quotes inside the text are doubled the way SQL wants. Everything runs in your browser.',
+    description: 'Convert CSV to SQL INSERT statements in your browser. Name the table, drop a file or paste the rows, and copy the script. Nothing is uploaded.',
+    steps: [
+      'Drop in a .csv file, or paste the rows.',
+      'Name the table, and check whether the first row holds the column names.',
+      'Copy the statements or download them as a .sql file.',
+    ],
+    faq: [
+      {
+        q: 'What does the output look like?',
+        a: 'One INSERT INTO statement per row, against the table name you typed. The columns come from the first row, or from column_1, column_2 and so on if the file has no header row.',
+      },
+      {
+        q: 'Which databases does it work with?',
+        a: 'The statements are plain SQL: strings are single-quoted with quotes doubled, booleans are TRUE and FALSE, empty cells are NULL. They run in MariaDB, MySQL, Postgres and SQLite. The script does not create the table, so make the table first.',
+      },
+      {
+        q: 'How are numbers and text kept apart?',
+        a: 'Values that look like numbers are written without quotes, everything else is quoted. A leading zero keeps a value as text, so a zip code like 02134 is inserted as text. Tick "Keep all values as text" to quote everything.',
+      },
+      {
+        q: 'What if a cell contains a single quote?',
+        a: 'It is doubled, so O\'Hara becomes \'\'O\'\'Hara\'\' inside the statement. That is the standard escape, and every database above reads it the same way.',
       },
       PRIVATE,
     ],
