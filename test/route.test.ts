@@ -82,6 +82,7 @@ describe('nextTools', () => {
     expect(slugs(nextTools('heic-to-jpg'))).toEqual(['compress-image', 'resize-image', 'jpg-to-pdf']);
     expect(slugs(nextTools('csv-to-json'))).toEqual(['json-to-excel', 'json-to-csv']);
     expect(slugs(nextTools('csv-to-markdown'))).toEqual(['text-to-pdf']);
+    expect(slugs(nextTools('tsv-to-markdown'))).toEqual(['text-to-pdf']);
     expect(slugs(nextTools('jsonl-to-csv'))).toEqual(['csv-to-excel']);
     expect(slugs(nextTools('csv-to-excel'))).toEqual(['excel-to-json']);
     expect(slugs(nextTools('excel-to-csv'))).toEqual(['csv-to-markdown']);
