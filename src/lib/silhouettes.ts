@@ -79,6 +79,7 @@ export const shapes: Record<string, Shape[]> = {
   'json-to-yaml': merge(G(14, 12, 52, 68, true), S(74, 34, 32, 46, 4)),
   'csv-to-yaml': merge(G(14, 12, 52, 68, true), S(74, 34, 32, 46, 4)),
   'csv-to-sql': merge(G(14, 14, 48, 68, true), { fill: [], cut: [], ink: ['M72 30l12 10-12 10', 'M90 54h16'] }),
+  'excel-to-sql': merge(G(14, 14, 48, 68, true), { fill: [], cut: [], ink: ['M72 30l12 10-12 10', 'M90 54h16'] }),
   'markdown-to-json': merge(G(16, 16, 54, 66, true), { fill: ['M84 32q-6 0 -6 6v7q0 4 -4 4q4 0 4 4v7q0 6 6 6', 'M100 32q6 0 6 6v7q0 4 4 4q-4 0 -4 4v7q0 6 -6 6'], cut: [] }),
   'tsv-to-json': merge(G(16, 16, 54, 66, true), { fill: [`M84 30q-6 0 -6 6v8q0 4 -4 4q4 0 4 4v8q0 6 6 6`, `M96 30q6 0 6 6v8q0 4 4 4q-4 0 -4 4v8q0 6 -6 6`], cut: [] }),
   'tsv-to-csv': merge(G(14, 12, 56, 68, true), S(78, 30, 30, 44, 3)),

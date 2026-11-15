@@ -41,6 +41,7 @@ export type Tool =
   | 'yaml-to-xlsx'
   | 'csv-to-yaml'
   | 'csv-to-sql'
+  | 'xlsx-to-sql'
   | 'json-to-yaml';
 
 export type Group = 'PDF' | 'Images' | 'Spreadsheets and data';
@@ -2351,6 +2352,41 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Can I pick the separator?',
         a: 'The separator is detected on its own, and the dropdown lists comma, semicolon, tab and pipe. Excel exports in much of Europe use semicolons, so pick that one if detection guesses wrong.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'excel-to-sql',
+    tool: 'xlsx-to-sql',
+    group: 'Spreadsheets and data',
+    card: 'Excel to SQL',
+    blurb: 'First sheet into INSERT statements',
+    title: 'Excel to SQL converter online',
+    h1: 'Convert Excel to SQL',
+    lede: 'Turn the rows of an Excel sheet into INSERT statements you can run against your database. The first sheet is read, the first row becomes the column names, numbers stay numbers and empty cells become NULL. Everything runs in your browser.',
+    description: 'Convert an Excel spreadsheet to SQL INSERT statements in your browser. The first sheet is converted, and nothing is uploaded.',
+    steps: [
+      'Drop in a .xlsx file. Only the first sheet is converted.',
+      'Name the table. The first row becomes the column names.',
+      'Copy the statements or download them as a .sql file.',
+    ],
+    faq: [
+      {
+        q: 'What about the other sheets?',
+        a: 'Only the first sheet is read, like every other Excel page here. If the sheet you want is not the first one, move it to the front in Excel and save again.',
+      },
+      {
+        q: 'What does the output look like?',
+        a: 'One INSERT INTO statement per row, against the table name you typed. The columns come from the first row of the sheet, quoted or unquoted depending on whether they are plain names.',
+      },
+      {
+        q: 'How are numbers and text kept apart?',
+        a: 'Values that look like numbers are written without quotes, everything else is quoted. A leading zero keeps a value as text, so a zip code like 02134 is inserted as text.',
+      },
+      {
+        q: 'Which databases does it work with?',
+        a: 'The statements are plain SQL: strings are single-quoted with quotes doubled, booleans are TRUE and FALSE, empty cells are NULL. They run in MariaDB, MySQL, Postgres and SQLite. The script does not create the table, so make the table first.',
       },
       PRIVATE,
     ],
