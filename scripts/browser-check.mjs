@@ -61,6 +61,7 @@ XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['note'], ['second tab
 await writeFile(join(fixtures, 'sample.xlsx'), XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' }));
 
 await writeFile(join(fixtures, 'sample.csv'), 'name,zip\nAda,02134\nBob,07030\n');
+await writeFile(join(fixtures, 'sample.tsv'), 'name\tzip\nAda\t02134\nBob\t07030\n');
 await writeFile(join(fixtures, 'sample.json'), JSON.stringify([{ name: 'Ada', zip: '02134' }, { name: 'Bob', zip: '07030' }]));
 await writeFile(join(fixtures, 'sample.yaml'), 'name: Ada\nzip: \'02134\'\n---\nname: Bob\nzip: \'07030\'\n');
 // 1x1 transparent GIF
@@ -192,6 +193,13 @@ const checks = [
   { slug: '/text-to-pdf/', fixtures: [F('sample.txt')], click: 'Make PDF', expect: 'Made' },
   { slug: '/yaml-to-json/', fixtures: [F('sample.yaml')], click: 'Download .json', expect: '' },
   { slug: '/json-to-yaml/', fixtures: [F('sample.json')], click: 'Download .yaml', expect: '' },
+  { slug: '/yaml-to-csv/', fixtures: [F('sample.yaml')], click: 'Download .csv', expect: '' },
+  { slug: '/yaml-to-excel/', fixtures: [F('sample.yaml')], click: 'Download .xlsx', expect: '' },
+  { slug: '/tsv-to-json/', fixtures: [F('sample.tsv')], click: 'Download .json', expect: '' },
+  { slug: '/tsv-to-csv/', fixtures: [F('sample.tsv')], click: 'Download .csv', expect: '' },
+  { slug: '/csv-to-tsv/', fixtures: [F('sample.csv')], click: 'Download .tsv', expect: '' },
+  { slug: '/tsv-to-markdown/', fixtures: [F('sample.tsv')], click: 'Download .md', expect: '' },
+  { slug: '/json-to-tsv/', fixtures: [F('sample.json')], click: 'Download .tsv', expect: '' },
   { slug: '/add-page-numbers-to-pdf/', fixtures: [F('sample.pdf')], click: 'Add page numbers', expect: 'Added' },
   { slug: '/heic-to-jpg/', name: 'heic-to-jpg (load only, no HEIC fixture)' },
   { slug: '/heic-to-png/', name: 'heic-to-png (load only, no HEIC fixture)' },
