@@ -2,6 +2,22 @@
 
 One dated entry per agent run.
 
+2026-11-15 (ops run): Checked first. npm test passed (114 tests) and npm run build passed (81 pages) at the start; the run ended with 120 tests and 86 pages. Session started about 02:47 UTC; the clock moved slowly, so fewer items than usual fit. Node execution is still not allowed, so scripts/browser-check.mjs was not run and every browser check stays open, as in earlier runs. One slip this run, caught and fixed in the same session: the YAML to Excel done-panel key was written as the tool id yaml-to-xlsx instead of the page slug yaml-to-excel, the same dead-key shape as the Excel bug below; a guard test now fails if any data page offers no next step.
+Changed, in order (each committed to main after test and build):
+- Bug: the data done panel offered no next step on the four Excel pages (CSV to Excel, Excel to CSV, Excel to JSON, JSON to Excel), because dataNext in src/lib/route.ts was keyed by tool ids (xlsx-to-csv and friends) while nextTools is called with page slugs. Keys now match the pages and the route test pins the chains. Commit 744c849.
+- New preset page: /tsv-to-markdown/ (csv-to-markdown tool on .tsv files, tab separator auto-detected). Targets the TSV to Markdown phrase. Silhouette and done-panel next step added. Commit 4cd4abe.
+- New tool and page: /json-to-tsv/ (json-to-tsv). JSON Lines and nested objects flatten to dotted columns like JSON to CSV, output is tab-separated with a BOM so Excel reads UTF-8, no separator select because the tab is the point of the page. Done panel offers TSV to Excel. Commit efdc818.
+- Copy fix: the about page library list now names js-yaml alongside the others. Commit dca43b7.
+- New tools and pages: /yaml-to-csv/ and /yaml-to-excel/ (same row model as the YAML to JSON page: one parse via the lazy js-yaml chunk, flatten to dotted keys, typed values, numbers arrive as numbers). The workbook is built from the tested jsonToCsv/csvToXlsx path. Commit 5956d3e.
+- scripts/browser-check.mjs now covers /tsv-to-markdown/, /json-to-tsv/, /yaml-to-csv/, /yaml-to-excel/, /csv-to-tsv/, /tsv-to-csv/ and /tsv-to-json/, with a generated sample.tsv fixture. Not run this session; statically reviewed only. Commit 0decab6.
+- Guard test: every data page except JSON to YAML must offer at least one next step, which pins the dataNext keys to real page slugs. Commit 57ae24f.
+- New tool and page: /csv-to-yaml/ (csvToYaml in the lazily loaded YAML chunk). CSV with the same Separator and header options as CSV to JSON, typed values, output shown in the readonly YAML preview and copyable, YAML to JSON offered after a save. 5 new unit tests. Commit 96c0e89.
+Choices: YAML outputs wired as tools (not presets) so the output extension and label are honest; the YAML family now covers JSON, CSV, Excel and back; csvToYaml reuses Papa and the js-yaml lazy chunk instead of a new dependency; no dependency was added anywhere; nothing was uploaded, files still never leave the tab; preset clones were used wherever the phrase fit an existing tool (TSV to Markdown).
+Metrics: ops/metrics.csv shows 20 on 2026-11-09, 10 on 2026-11-10, 20 on 2026-11-11, 0 on 2026-11-12, 20 on 2026-11-13 and a blank on 2026-11-14. The ads (300) and paid tier (1000) triggers are not close; no decision issues opened.
+Not checked: no browser check this run. Everything is verified by the 120 tests, the build and reading dist HTML only (titles, download labels, lazy chunk boundaries, sitemap has the four new pages and no 404). The YAML to CSV/Excel/YAML and JSON to TSV drop and download paths are untested in a real browser.
+Roadmap: not edited; browser checks are still open. The owner can move the pages built since 2026-11-09 to Shipped after one.
+Next: browser checks via scripts/browser-check.mjs the next time node execution is allowed, now covering 86 pages including all the new data pages, then the items in next.md.
+
 2026-11-08 (build): v1 built by hand. 15 tool pages (merge, split, extract, rotate, images to PDF; convert, PNG to JPG, WebP to JPG, JPG to WebP, compress, resize; CSV to JSON, JSON to CSV, CSV to Excel) plus home, privacy and about. 24 unit tests on the core transforms. Each tool spot-checked in a browser with sample files. Not deployed: the domain is a placeholder (stayfile.example) and deploy.yml is disabled until the owner picks a domain.
 
 2026-11-09 (ops run): Checked first. npm test passed (44 tests) and npm run build passed (18 pages). The roadmap's next tool is Excel to CSV, which needs only the SheetJS already in the bundle.
