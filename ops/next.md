@@ -1,5 +1,5 @@
-- Run the browser checks: scripts/browser-check.mjs (68 checks, now including /csv-to-sql/ and /excel-to-sql/) the next time node execution is allowed, or on a machine with a browser. Spot-check the YAML pages first.
-- The roadmap "Next tools" list is empty apart from PDF to JPG and the previews, both built and waiting on a browser check. Move those, and all pages built since 2026-11-09, to Shipped once a browser check passes.
-- Watch the metrics triggers (ads at about 300 visits in 30 days, paid tier at about 1000) and open one decision issue per trigger, only when hit. Visitors were 20 on 2026-11-09, 10 on 2026-11-10, 20 on 2026-11-11, 0 on 2026-11-12, 20 on 2026-11-13 and blank on 2026-11-14.
-- The SQL family (csv-to-sql, excel-to-sql) is the newest pair. See whether the data group as a whole picks up impressions before adding a third data page kind; Markdown-to-anything is likely saturated. If the image side stays quiet, keep preset clones there.
-- ops/design.md records the UI decisions. Read it before any UI change. Any work on src/lib/route.ts next-steps must keep the dataNext keys equal to page slugs; the wiring and route guard tests fail otherwise.
+- Row 1 of ops/week-plan.md (Sun 11-15-2026 evening): build the guide plumbing (GUIDES in src/site.ts, /guides/ index, footer column, test/guides.test.ts with the 700-word check, copy lint on guides).
+- Same run: add the `more` section and `guide` field to tool pages (spec in the plan), and fill `more` for heic-to-jpg, checked against src/lib/heic.ts.
+- No new tool or preset pages this week; the page count stays at 85. Effort goes into six guides and deeper copy on the top pages, for indexing and AdSense review.
+- Don't run scripts/browser-check.mjs or log it as blocked; daily runs can't run node scripts. It is cut from this week.
+- Visitors: 70 in the last 30 days (ads level 300, Pro trigger 1,000). Search shows no stayfile.app pages yet; the owner's Search Console step is in subfixer issue #9.
