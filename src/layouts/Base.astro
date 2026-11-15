@@ -307,6 +307,8 @@ const canonical = new URL(path, SITE.url).href;
     /* Image rows: thumb, name, Save and remove on one line; sizes on the line below, under the name. */
     .files li:has(.thumb) .name { flex: 1 1 0; min-width: 0; }
     .files li:has(.thumb) .meta { order: 9; flex-basis: 100%; padding-left: 52px; }
+    /* Done panel on a phone: the label sits on its own line, chips wrap below it. */
+    .done-next { flex-basis: 100%; margin-left: 0; }
   }
   .files { list-style: none; margin: 0 0 12px; padding: 0; background: var(--field); border-radius: var(--r); border: 1px solid var(--line); }
   .files:empty { display: none; }
@@ -380,7 +382,7 @@ const canonical = new URL(path, SITE.url).href;
   .chip:hover:not(:disabled) { border-color: var(--ink); }
   .chip:disabled { opacity: .5; cursor: progress; }
   .routes .primary { height: 40px; font-size: 14px; padding: 0 18px; }
-  .done { margin-top: 16px; padding: 14px 16px; background: var(--field); border: 1px solid var(--line); border-left-width: 1px; border-radius: var(--r); display: grid; gap: 10px; }
+  .done { margin-top: 16px; padding: 14px 16px; background: var(--field); border: 1px solid var(--line); border-radius: var(--r); display: grid; gap: 10px; }
   .done-line { margin: 0; font-weight: 700; }
   .done-line::before { content: ''; display: inline-block; width: 10px; height: 10px; margin-right: 10px; border-radius: 50%; background: var(--ok); vertical-align: 1px; }
   .done-row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
