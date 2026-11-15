@@ -83,6 +83,10 @@ describe('nextTools', () => {
     expect(slugs(nextTools('csv-to-json'))).toEqual(['json-to-excel', 'json-to-csv']);
     expect(slugs(nextTools('csv-to-markdown'))).toEqual(['text-to-pdf']);
     expect(slugs(nextTools('jsonl-to-csv'))).toEqual(['csv-to-excel']);
+    expect(slugs(nextTools('csv-to-excel'))).toEqual(['excel-to-json']);
+    expect(slugs(nextTools('excel-to-csv'))).toEqual(['csv-to-markdown']);
+    expect(slugs(nextTools('excel-to-json'))).toEqual(['json-to-csv']);
+    expect(slugs(nextTools('json-to-excel'))).toEqual(['excel-to-csv']);
     expect(slugs(nextTools('pdf-to-jpg'))).toEqual(['compress-image', 'resize-image']);
     expect(slugs(nextTools('pdf-to-png'))).toEqual(['compress-image', 'resize-image']);
     expect(slugs(nextTools('text-to-pdf'))).toEqual(['merge-pdf']);
