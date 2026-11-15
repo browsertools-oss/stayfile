@@ -102,6 +102,7 @@ export function nextTools(slug: string): Route[] {
     'csv-to-markdown': [{ slug: 'text-to-pdf', label: 'Turn it into a PDF' }],
     'tsv-to-markdown': [{ slug: 'text-to-pdf', label: 'Turn it into a PDF' }],
     'json-to-csv': [{ slug: 'csv-to-excel', label: 'Open it in Excel' }],
+    'json-to-tsv': [{ slug: 'tsv-to-excel', label: 'Open it in Excel' }],
     'jsonl-to-csv': [{ slug: 'csv-to-excel', label: 'Open it in Excel' }],
     'csv-to-excel': [{ slug: 'excel-to-json', label: 'Convert to JSON' }],
     'excel-to-markdown': [{ slug: 'text-to-pdf', label: 'Turn it into a PDF' }],

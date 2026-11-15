@@ -22,6 +22,7 @@ export type Tool =
   | 'csv-to-json'
   | 'csv-to-markdown'
   | 'json-to-csv'
+  | 'json-to-tsv'
   | 'csv-to-xlsx'
   | 'xlsx-to-csv'
   | 'xlsx-to-json'
@@ -1936,6 +1937,33 @@ export const PAGES: ToolPage[] = [
     description: 'Convert JSON to CSV in your browser. Flattens nested objects into columns and accepts JSON Lines. Nothing leaves your device.',
     steps: ['Drop in a .json file or paste the JSON.', 'Check the preview. Nested fields show up as columns like address.city.', 'Download the CSV or copy it.'],
     faq: [
+      {
+        q: 'What JSON shapes does it accept?',
+        a: 'An array of objects, a single object, an object with one array inside (such as {"data": [...]}), or JSON Lines with one object per line.',
+      },
+      {
+        q: 'What happens to lists inside a record?',
+        a: 'They are written into a single cell as JSON text, for example ["red","blue"], so nothing is lost.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'json-to-tsv',
+    tool: 'json-to-tsv',
+    group: 'Spreadsheets and data',
+    card: 'JSON to TSV',
+    blurb: 'JSON into tab-separated values',
+    title: 'JSON to TSV converter online',
+    h1: 'Convert JSON to TSV',
+    lede: 'Turn a JSON array, an API response or JSON Lines into a tab-separated file. TSV is what you get when you copy cells out of a spreadsheet, and every table import reads it. Nested fields get their own columns.',
+    description: 'Convert JSON to TSV in your browser. Flattens nested objects into columns and accepts JSON Lines. Nothing leaves your device.',
+    steps: ['Drop in a .json file or paste the JSON.', 'Check the preview. Nested fields show up as columns like address.city.', 'Download the TSV or copy it.'],
+    faq: [
+      {
+        q: 'Can I open the result in Excel?',
+        a: 'Yes. Double-click the saved .tsv file, or paste the copied table straight into a sheet. Excel, Google Sheets and LibreOffice all read tab-separated values, and numbers arrive as numbers.',
+      },
       {
         q: 'What JSON shapes does it accept?',
         a: 'An array of objects, a single object, an object with one array inside (such as {"data": [...]}), or JSON Lines with one object per line.',

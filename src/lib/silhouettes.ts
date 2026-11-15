@@ -81,6 +81,7 @@ export const shapes: Record<string, Shape[]> = {
   'csv-to-tsv': merge(S(14, 22, 40, 54, 3), G(56, 12, 50, 70, true)),
   'jsonl-to-csv': merge(S(14, 12, 48, 70, 0), { fill: [], cut: ['M28 36q-5 0 -5 5v6q0 3 -3 3q3 0 3 3v6q0 5 5 5', 'M48 36q5 0 5 5v6q0 3 3 3q-3 0 -3 3v6q0 5 -5 5'] }, G(70, 26, 36, 52)),
   'json-to-csv': merge(S(14, 12, 48, 70, 0), { fill: [], cut: ['M28 36q-5 0 -5 5v6q0 3 -3 3q3 0 3 3v6q0 5 5 5', 'M48 36q5 0 5 5v6q0 3 3 3q-3 0 -3 3v6q0 5 -5 5'] }, G(70, 26, 36, 52)),
+  'json-to-tsv': merge(S(14, 12, 48, 70, 0), { fill: [], cut: ['M28 36q-5 0 -5 5v6q0 3 -3 3q3 0 3 3v6q0 5 5 5', 'M48 36q5 0 5 5v6q0 3 3 3q-3 0 -3 3v6q0 5 -5 5'] }, G(70, 26, 36, 52)),
   'csv-to-excel': merge(G(14, 14, 60, 70, true), S(70, 34, 36, 50, 3)),
   'tsv-to-excel': merge(G(14, 14, 60, 70, true), S(70, 34, 36, 50, 3)),
   'excel-to-csv': merge(S(62, 30, 44, 56, 3), G(12, 14, 56, 68, true)),
