@@ -7,7 +7,7 @@ const fromJson = tool === 'json-to-csv' || tool === 'json-to-xlsx' || tool === '
 const fromXlsx = tool === 'xlsx-to-csv' || tool === 'xlsx-to-json' || tool === 'xlsx-to-markdown' || tool === 'xlsx-to-tsv';
 const fromTsv = tool === 'tsv-to-csv';
 const fromCsvTsv = tool === 'csv-to-tsv';
-const fromYaml = tool === 'yaml-to-json' || tool === 'json-to-yaml';
+const fromYaml = tool === 'yaml-to-json' || tool === 'json-to-yaml' || tool === 'yaml-to-csv' || tool === 'yaml-to-xlsx';
 const fromMd = tool === 'md-to-csv' || tool === 'md-to-json' || tool === 'md-to-xlsx';
 const pExts = (preset?.accept ?? '').match(/\.[a-z0-9]+/gi)?.map((e) => e.slice(1).toUpperCase()) ?? [];
 const presetLabel = pExts.join(' · ');
@@ -16,12 +16,12 @@ const isJsonl = pExts.includes('JSONL') || pExts.includes('NDJSON');
 const accept = preset?.accept ?? (fromXlsx
   ? '.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   : fromMd ? '.md,.markdown,text/markdown,text/plain'
-  : tool === 'yaml-to-json' ? '.yaml,.yml,application/yaml,application/x-yaml,text/yaml,text/plain'
+  : tool !== 'json-to-yaml' ? '.yaml,.yml,application/yaml,application/x-yaml,text/yaml,text/plain'
   : tool === 'json-to-yaml' ? '.json,application/json,text/plain'
   : fromJson ? '.json,.jsonl,.ndjson,application/json,text/plain' : fromTsv ? '.tsv,text/tab-separated-values,text/plain' : '.csv,.tsv,.txt,text/csv,text/plain');
-const what = fromYaml ? (tool === 'yaml-to-json' ? 'a YAML file' : 'a JSON file') : fromMd ? 'a Markdown file' : isTsv || fromTsv ? 'a .tsv file' : isJsonl ? 'a .jsonl file' : fromXlsx ? 'an Excel file' : fromJson ? 'a JSON file' : 'a CSV file';
+const what = fromYaml ? (tool === 'json-to-yaml' ? 'a JSON file' : 'a YAML file') : fromMd ? 'a Markdown file' : isTsv || fromTsv ? 'a .tsv file' : isJsonl ? 'a .jsonl file' : fromXlsx ? 'an Excel file' : fromJson ? 'a JSON file' : 'a CSV file';
 const placeholder = fromYaml
-  ? tool === 'yaml-to-json' ? 'name: Ada\nage: 36\ncity: London' : '{"name": "Ada", "age": 36}'
+  ? tool === 'json-to-yaml' ? '{"name": "Ada", "age": 36}' : 'name: Ada\nage: 36\ncity: London'
   : fromMd
   ? '| name | age |\n| --- | --- |\n| Ada | 36 |\n| Grace | 85 |'
   : fromTsv || isTsv
@@ -30,13 +30,13 @@ const placeholder = fromYaml
       ? '{"name": "Ada", "age": 36}\n{"name": "Grace", "age": 85}'
       : fromJson ? '[{"name": "Ada", "age": 36}, {"name": "Grace", "age": 85}]' : 'name,age\nAda,36\nGrace,85';
 const sub = presetLabel ? `${presetLabel} files, or paste below` : fromYaml ? 'or paste below' : fromXlsx ? 'Only the first sheet is converted' : fromMd ? 'A Markdown table, or paste below' : fromTsv ? 'TSV files, or paste below' : fromCsvTsv ? 'CSV files, or paste below' : 'or paste below';
-const outLabel = { 'yaml-to-json': 'Download .json', 'json-to-yaml': 'Download .yaml', 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .csv', 'json-to-tsv': 'Download .tsv', 'csv-to-xlsx': 'Download .xlsx', 'xlsx-to-csv': 'Download .csv', 'xlsx-to-json': 'Download .json', 'xlsx-to-markdown': 'Download .md', 'json-to-markdown': 'Download .md', 'json-to-xlsx': 'Download .xlsx', 'csv-to-markdown': 'Download .md', 'tsv-to-csv': 'Download .csv', 'csv-to-tsv': 'Download .tsv', 'xlsx-to-tsv': 'Download .tsv', 'md-to-csv': 'Download .csv', 'md-to-json': 'Download .json', 'md-to-xlsx': 'Download .xlsx' }[tool as string];
+const outLabel = { 'yaml-to-json': 'Download .json', 'yaml-to-csv': 'Download .csv', 'yaml-to-xlsx': 'Download .xlsx', 'json-to-yaml': 'Download .yaml', 'csv-to-json': 'Download .json', 'json-to-csv': 'Download .csv', 'json-to-tsv': 'Download .tsv', 'csv-to-xlsx': 'Download .xlsx', 'xlsx-to-csv': 'Download .csv', 'xlsx-to-json': 'Download .json', 'xlsx-to-markdown': 'Download .md', 'json-to-markdown': 'Download .md', 'json-to-xlsx': 'Download .xlsx', 'csv-to-markdown': 'Download .md', 'tsv-to-csv': 'Download .csv', 'csv-to-tsv': 'Download .tsv', 'xlsx-to-tsv': 'Download .tsv', 'md-to-csv': 'Download .csv', 'md-to-json': 'Download .json', 'md-to-xlsx': 'Download .xlsx' }[tool as string];
 ---
 <section class="tool" data-tool={tool} data-slug={slug}>
   <Drop accept={accept} main={`Drop ${what} here, or <u>choose one</u>`} sub={sub} />
   <ul class="files" id="list"></ul>
   <div id="pasteWrap" hidden={fromXlsx}>
-    <label class="hint" for="input" style="display:block;margin:12px 0 6px">Or paste {fromYaml ? (tool === 'yaml-to-json' ? 'YAML' : 'JSON') : fromJson ? 'JSON' : fromTsv ? 'TSV' : fromMd ? 'Markdown' : 'CSV'}</label>
+    <label class="hint" for="input" style="display:block;margin:12px 0 6px">Or paste {fromYaml ? (tool === 'json-to-yaml' ? 'JSON' : 'YAML') : fromJson ? 'JSON' : fromTsv ? 'TSV' : fromMd ? 'Markdown' : 'CSV'}</label>
     <textarea id="input" rows="6" spellcheck="false" placeholder={placeholder}></textarea>
   </div>
   <button type="button" class="link" id="showText" hidden>Edit the text</button>
@@ -92,7 +92,7 @@ const outLabel = { 'yaml-to-json': 'Download .json', 'json-to-yaml': 'Download .
   const fromTsv = tool === 'tsv-to-csv';
   const fromCsvTsv = tool === 'csv-to-tsv';
   const fromMd = tool === 'md-to-csv' || tool === 'md-to-json' || tool === 'md-to-xlsx';
-  const fromYaml = tool === 'yaml-to-json' || tool === 'json-to-yaml';
+  const fromYaml = tool === 'yaml-to-json' || tool === 'json-to-yaml' || tool === 'yaml-to-csv' || tool === 'yaml-to-xlsx';
   // js-yaml loads only on the two YAML pages, never on the rest of the data tools.
   let yamlMod: Promise<typeof import('../lib/yaml')> | null = null;
   const loadYaml = () => (yamlMod ??= import('../lib/yaml'));
@@ -158,14 +158,22 @@ const outLabel = { 'yaml-to-json': 'Download .json', 'json-to-yaml': 'Download .
         if (p.warnings.length) { err.textContent = `Check these rows: ${p.warnings.join(' · ')}`; err.hidden = false; }
       } else if (fromYaml) {
         const { yamlToJson, jsonToYaml } = await loadYaml();
-        const toJson = tool === 'yaml-to-json';
-        result = toJson ? yamlToJson(text) : jsonToYaml(text);
-        out!.value = result.length > 200_000 ? result.slice(0, 200_000) + '\n… (preview cut short; the download has everything)' : result;
-        out!.hidden = false;
-        const rows = jsonRows(toJson ? result : text);
-        const cols = columns(rows);
+        // YAML in, JSON in the middle, then CSV text or JSON text out. The workbook is built from the CSV here.
+        const preview = (s: string) => { out!.value = s.length > 200_000 ? s.slice(0, 200_000) + '\n… (preview cut short; the download has everything)' : s; out!.hidden = false; };
+        let rows, cols, note;
+        if (tool === 'json-to-yaml') {
+          result = jsonToYaml(text);
+          preview(result);
+          rows = jsonRows(text); cols = columns(rows);
+          note = 'dumped as YAML';
+        } else {
+          const json = yamlToJson(text);
+          rows = jsonRows(json); cols = columns(rows);
+          if (tool === 'yaml-to-json') { result = json; preview(json); note = 'typed as numbers where possible'; }
+          else { result = jsonToCsv(json); note = 'flattened with dotted keys'; }
+        }
         table(cols, rows.map((r) => cols.map((c) => r[c])));
-        status.textContent = `${rows.length} row${rows.length === 1 ? '' : 's'}, ${cols.length} column${cols.length === 1 ? '' : 's'}, ${toJson ? 'typed as numbers where possible' : 'dumped as YAML'}.${rows.length > MAX_ROWS ? ` Preview shows the first ${MAX_ROWS}.` : ''}`;
+        status.textContent = `${rows.length} row${rows.length === 1 ? '' : 's'}, ${cols.length} column${cols.length === 1 ? '' : 's'}, ${note}.${rows.length > MAX_ROWS ? ` Preview shows the first ${MAX_ROWS}.` : ''}`;
       } else if (fromMd) {
         // The first Markdown table in the text becomes rows; the first row is the header.
         const rows = markdownTableRows(text);
@@ -231,7 +239,7 @@ const outLabel = { 'yaml-to-json': 'Download .json', 'json-to-yaml': 'Download .
     const looksData = fromYaml ? looksYaml : /^text\//.test(f.type) || f.type === '' || f.type === 'application/json' || f.type === 'application/vnd.ms-excel' || /\.(csv|tsv|txt|json|jsonl|ndjson)$/i.test(f.name);
     if (!fromXlsx && !fromMd && !looksData) {
       list.innerHTML = '';
-      err.textContent = `${f.name} does not look like ${fromYaml ? (tool === 'yaml-to-json' ? 'a YAML or JSON' : 'a JSON') : fromJson ? 'a JSON' : fromTsv ? 'a TSV' : fromMd ? 'a Markdown' : 'a CSV'} file.`;
+      err.textContent = `${f.name} does not look like ${fromYaml ? (tool === 'json-to-yaml' ? 'a JSON' : 'a YAML') : fromJson ? 'a JSON' : fromTsv ? 'a TSV' : fromMd ? 'a Markdown' : 'a CSV'} file.`;
       err.hidden = false;
       return;
     }
@@ -301,14 +309,14 @@ const outLabel = { 'yaml-to-json': 'Download .json', 'json-to-yaml': 'Download .
     else if (fromCsvTsv || tool === 'xlsx-to-tsv') done(new Blob(['﻿' + result], { type: 'text/tab-separated-values' }), `${name}.tsv`); // BOM so Excel reads UTF-8
     else if (tool === 'csv-to-markdown' || tool === 'xlsx-to-markdown' || tool === 'json-to-markdown') done(new Blob([result], { type: 'text/markdown' }), `${name}.md`);
     else if (tool === 'json-to-tsv') done(new Blob(['﻿' + result], { type: 'text/tab-separated-values' }), `${name}.tsv`); // BOM so Excel reads UTF-8
-    else if (tool === 'json-to-csv' || fromXlsx || fromTsv || tool === 'md-to-csv') done(new Blob(['﻿' + result], { type: 'text/csv' }), `${name}.csv`); // BOM so Excel reads UTF-8
+    else if (tool === 'json-to-csv' || fromXlsx || fromTsv || tool === 'md-to-csv' || tool === 'yaml-to-csv') done(new Blob(['﻿' + result], { type: 'text/csv' }), `${name}.csv`); // BOM so Excel reads UTF-8
     else {
       go.disabled = true;
       status.textContent = 'Building workbook…';
       try {
         const { csvToXlsx } = await import('../lib/xlsx');
         // For JSON and Markdown the workbook is built from the CSV the preview made, not from the raw text.
-        const bytes = tool === 'json-to-xlsx' || tool === 'md-to-xlsx'
+        const bytes = tool === 'json-to-xlsx' || tool === 'md-to-xlsx' || tool === 'yaml-to-xlsx'
           ? csvToXlsx(result, { delimiter: ',', header: true, typed: true, sheetName: name })
           : csvToXlsx(input.value, { ...opts(), sheetName: name });
         status.textContent = '';

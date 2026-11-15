@@ -36,6 +36,8 @@ export type Tool =
   | 'md-to-json'
   | 'md-to-xlsx'
   | 'yaml-to-json'
+  | 'yaml-to-csv'
+  | 'yaml-to-xlsx'
   | 'json-to-yaml';
 
 export type Group = 'PDF' | 'Images' | 'Spreadsheets and data';
@@ -2222,6 +2224,68 @@ export const PAGES: ToolPage[] = [
       {
         q: 'What YAML does it write?',
         a: 'Block-style YAML 1.2 with two-space indentation. Strings that need quoting are quoted; everything else comes out plain.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'yaml-to-csv',
+    tool: 'yaml-to-csv',
+    group: 'Spreadsheets and data',
+    card: 'YAML to CSV',
+    blurb: 'YAML rows into a CSV file',
+    title: 'YAML to CSV converter online',
+    h1: 'Convert YAML to CSV',
+    lede: 'Turn a YAML list of records into a CSV you can open in any spreadsheet. Nested fields get their own columns with dotted names, and values that look like numbers arrive as numbers. Everything runs in your browser.',
+    description: 'Convert YAML to CSV in your browser. A list of maps becomes rows, nested keys flatten to dotted columns. Nothing is uploaded.',
+    steps: [
+      'Drop in a .yaml or .yml file, or paste the YAML.',
+      'Check the preview of the flattened rows.',
+      'Download the .csv file or copy it.',
+    ],
+    faq: [
+      {
+        q: 'What YAML shape works best?',
+        a: 'A list of maps, for example a list of users or line items. Each map becomes one row, and every key becomes a column, so nested keys like address.city get their own column. A single map produces one row.',
+      },
+      {
+        q: 'What happens to lists inside a record?',
+        a: 'They are written into a single cell as JSON text, for example ["red","blue"], the same as the JSON to CSV page does. So nothing is lost.',
+      },
+      {
+        q: 'Will my YAML booleans and nulls come through?',
+        a: 'Yes. true and false stay booleans and null stays empty in the CSV. Strings that look like numbers, such as zip codes with a leading zero, are kept as text.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'yaml-to-excel',
+    tool: 'yaml-to-xlsx',
+    group: 'Spreadsheets and data',
+    card: 'YAML to Excel',
+    blurb: 'YAML rows into an .xlsx workbook',
+    title: 'YAML to Excel converter online',
+    h1: 'Convert YAML to Excel',
+    lede: 'Turn a YAML list of records into a real Excel workbook. Numbers arrive as numbers and the first row holds the keys, so you can filter and sum as soon as the file opens. Everything runs in your browser.',
+    description: 'Convert YAML to an Excel .xlsx workbook in your browser. A list of maps becomes one row per record. Nothing is uploaded.',
+    steps: [
+      'Drop in a .yaml or .yml file, or paste the YAML.',
+      'Check the preview of the flattened rows.',
+      'Click Download to save the .xlsx file.',
+    ],
+    faq: [
+      {
+        q: 'What YAML shape works best?',
+        a: 'A list of maps, the same shape the CSV and JSON to Excel pages want. Each map becomes one row, every key becomes a column, and nested keys like address.city get their own column with a dotted name.',
+      },
+      {
+        q: 'Will numbers be real numbers in the sheet?',
+        a: 'Yes. Values that look like numbers are written as numbers, so Excel can sum and sort them. Anything with a leading zero stays as text.',
+      },
+      {
+        q: 'Which sheet gets the data?',
+        a: 'One sheet, named after the file when you dropped one in. The first row holds the keys.',
       },
       PRIVATE,
     ],
