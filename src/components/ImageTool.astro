@@ -18,7 +18,7 @@ const subLine = heic
   ? 'HEIC and HEIF photos from an iPhone or iPad'
   : presetLabel
     ? `${presetLabel} files`
-    : 'JPG · PNG · WebP · GIF · AVIF · SVG · ICO';
+    : 'JPG · PNG · WebP · GIF · AVIF · SVG · BMP · ICO';
 const keepable = tool !== 'img-convert';
 const out = preset.out ?? (keepable ? 'keep' : 'image/jpeg');
 const formats = [
