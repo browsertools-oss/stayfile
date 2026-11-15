@@ -45,11 +45,11 @@ describe('suggestTools', () => {
     expect(slugs(suggestTools([f('rows.json')]))).toEqual(['json-to-csv', 'json-to-excel', 'json-to-markdown']);
   });
   test('one Excel file maps to the Excel converters', () => {
-    expect(slugs(suggestTools([f('budget.xlsx')]))).toEqual(['excel-to-csv', 'excel-to-json']);
+    expect(slugs(suggestTools([f('budget.xlsx')]))).toEqual(['excel-to-csv', 'excel-to-json', 'excel-to-markdown']);
     expect(kindOf(f('budget.xlsx'))).toBe('xlsx');
   });
-  test('one YAML file suggests the YAML to JSON page', () => {
-    expect(slugs(suggestTools([f('config.yaml')]))).toEqual(['yaml-to-json']);
+  test('one YAML file suggests the YAML converters', () => {
+    expect(slugs(suggestTools([f('config.yaml')]))).toEqual(['yaml-to-json', 'yaml-to-csv', 'yaml-to-excel']);
     expect(describeDrop([f('config.yaml')])).toBe('config.yaml. What should happen to it?');
   });
   test('one text file suggests text-to-pdf', () => {
