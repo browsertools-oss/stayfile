@@ -28,6 +28,7 @@ export type Tool =
   | 'xlsx-to-json'
   | 'xlsx-to-markdown'
   | 'xlsx-to-tsv'
+  | 'xlsx-to-yaml'
   | 'json-to-xlsx'
   | 'json-to-markdown'
   | 'tsv-to-csv'
@@ -2082,6 +2083,37 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Are numbers and dates kept?',
         a: 'Cells are read the way Excel shows them. A date formatted as 2026-11-06 comes out as that text, and plain numbers come out as plain numbers.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'excel-to-yaml',
+    tool: 'xlsx-to-yaml',
+    group: 'Spreadsheets and data',
+    card: 'Excel to YAML',
+    blurb: 'A sheet as a YAML list of records',
+    title: 'Excel to YAML converter online',
+    h1: 'Convert Excel to YAML',
+    lede: 'Turn the first sheet of an .xlsx workbook into a YAML list of records, the format CI configs and Kubernetes manifests use. Numbers arrive as numbers and the first row becomes the keys.',
+    description: 'Convert Excel .xlsx to YAML in your browser. The first sheet is read, values are typed, and nothing is uploaded.',
+    steps: [
+      'Drop in an .xlsx file. Its first sheet is read.',
+      'Check the preview. The first row becomes the keys.',
+      'Download the .yaml file or copy it.',
+    ],
+    faq: [
+      {
+        q: 'Which sheet is converted?',
+        a: 'Only the first sheet. Drag the tab you want to the front in Excel, save, and drop the file here again. Other sheets are not read, and the page says when they were left out.',
+      },
+      {
+        q: 'What does the output look like?',
+        a: 'A YAML sequence with one mapping per row, keyed by the header. For example - name: Ada followed by age: 36.',
+      },
+      {
+        q: 'Are numbers and dates kept?',
+        a: 'A date formatted as 2026-11-06 comes out as that text, plain numbers stay plain numbers, and strings that start with a zero stay text.',
       },
       PRIVATE,
     ],

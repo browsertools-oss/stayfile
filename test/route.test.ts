@@ -93,6 +93,7 @@ describe('nextTools', () => {
     expect(slugs(nextTools('csv-to-yaml'))).toEqual(['yaml-to-json']);
     expect(slugs(nextTools('json-to-tsv'))).toEqual(['tsv-to-excel']);
     expect(slugs(nextTools('yaml-to-csv'))).toEqual(['csv-to-excel']);
+    expect(slugs(nextTools('excel-to-yaml'))).toEqual(['yaml-to-json']);
     expect(slugs(nextTools('yaml-to-excel'))).toEqual(['excel-to-csv']);
     expect(slugs(nextTools('tsv-to-markdown'))).toEqual(['text-to-pdf']);
     expect(slugs(nextTools('jsonl-to-csv'))).toEqual(['csv-to-excel']);

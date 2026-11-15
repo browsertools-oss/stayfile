@@ -201,6 +201,7 @@ const checks = [
   { slug: '/tsv-to-markdown/', fixtures: [F('sample.tsv')], click: 'Download .md', expect: '' },
   { slug: '/json-to-tsv/', fixtures: [F('sample.json')], click: 'Download .tsv', expect: '' },
   { slug: '/csv-to-yaml/', fixtures: [F('sample.csv')], click: 'Download .yaml', expect: '' },
+  { slug: '/excel-to-yaml/', fixtures: [F('sample.xlsx')], click: 'Download .yaml', expect: '' },
   { slug: '/add-page-numbers-to-pdf/', fixtures: [F('sample.pdf')], click: 'Add page numbers', expect: 'Added' },
   { slug: '/heic-to-jpg/', name: 'heic-to-jpg (load only, no HEIC fixture)' },
   { slug: '/heic-to-png/', name: 'heic-to-png (load only, no HEIC fixture)' },
