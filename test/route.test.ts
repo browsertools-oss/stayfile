@@ -77,6 +77,14 @@ describe('nextTools', () => {
   test('never offers the tool you are on', () => {
     for (const p of PAGES) expect(slugs(nextTools(p.slug))).not.toContain(p.slug);
   });
+  test('every data page except JSON to YAML offers a next step', () => {
+    // The keys in dataNext must be page slugs; a tool id key there is silently dead.
+    const missing = PAGES
+      .filter((p) => p.group === 'Spreadsheets and data' && p.slug !== 'json-to-yaml')
+      .filter((p) => nextTools(p.slug).length === 0)
+      .map((p) => p.slug);
+    expect(missing).toEqual([]);
+  });
   test('PDF results go to PDF tools, image results to image tools, data results to data tools', () => {
     expect(slugs(nextTools('merge-pdf'))).toEqual(['rotate-pdf', 'extract-pages-from-pdf']);
     expect(slugs(nextTools('heic-to-jpg'))).toEqual(['compress-image', 'resize-image', 'jpg-to-pdf']);
@@ -84,7 +92,7 @@ describe('nextTools', () => {
     expect(slugs(nextTools('csv-to-markdown'))).toEqual(['text-to-pdf']);
     expect(slugs(nextTools('json-to-tsv'))).toEqual(['tsv-to-excel']);
     expect(slugs(nextTools('yaml-to-csv'))).toEqual(['csv-to-excel']);
-    expect(slugs(nextTools('yaml-to-xlsx'))).toEqual(['excel-to-csv']);
+    expect(slugs(nextTools('yaml-to-excel'))).toEqual(['excel-to-csv']);
     expect(slugs(nextTools('tsv-to-markdown'))).toEqual(['text-to-pdf']);
     expect(slugs(nextTools('jsonl-to-csv'))).toEqual(['csv-to-excel']);
     expect(slugs(nextTools('csv-to-excel'))).toEqual(['excel-to-json']);

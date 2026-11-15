@@ -116,7 +116,7 @@ export function nextTools(slug: string): Route[] {
     'json-to-markdown': [{ slug: 'text-to-pdf', label: 'Turn it into a PDF' }],
     'yaml-to-json': [{ slug: 'json-to-excel', label: 'Open it in Excel' }, { slug: 'json-to-csv', label: 'Convert to CSV' }],
     'yaml-to-csv': [{ slug: 'csv-to-excel', label: 'Open it in Excel' }],
-    'yaml-to-xlsx': [{ slug: 'excel-to-csv', label: 'Convert to CSV' }],
+    'yaml-to-excel': [{ slug: 'excel-to-csv', label: 'Convert to CSV' }],
   };
   if (dataNext[slug]) return dataNext[slug];
   const imgNext: Route[] = [
