@@ -1,5 +1,7 @@
 # Roadmap (owner-approved, Nov 9th, 2026)
 
+Owner direction (11-15-2026): everything is designed and optimized for revenue first and foremost. The weekly planner may change the triggers, order and offers below when the evidence says revenue comes sooner; owner-only steps (sign-ins, spending, tax and payment details) stay with the owner.
+
 Same model as SubFixer: free tools for traffic, a paid tier later on the tools that get traffic.
 
 
