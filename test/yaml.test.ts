@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { yamlToJson, jsonToYaml } from '../src/lib/yaml';
+import { yamlToJson, jsonToYaml, csvToYaml } from '../src/lib/yaml';
 
 describe('yamlToJson', () => {
   test('types numbers, booleans and null', () => {
@@ -37,5 +37,26 @@ describe('jsonToYaml', () => {
   });
   test('invalid JSON says so', () => {
     expect(() => jsonToYaml('{oops}')).toThrow('Not valid JSON');
+  });
+});
+
+describe('csvToYaml', () => {
+  test('each record becomes a mapping keyed by the header', () => {
+    const out = csvToYaml('name,age\nAda,36\nGrace,85\n');
+    expect(out).toBe('- name: Ada\n  age: 36\n- name: Grace\n  age: 85\n');
+  });
+  test('numbers are typed and leading zeros stay text', () => {
+    const out = csvToYaml('name,zip,age\nAda,02134,36\n');
+    expect(JSON.parse(yamlToJson(out))).toEqual([{ name: 'Ada', zip: '02134', age: 36 }]);
+  });
+  test('without a header row the result is a list of lists', () => {
+    expect(csvToYaml('Ada,36\nGrace,85\n', { header: false })).toBe('- - Ada\n  - 36\n- - Grace\n  - 85\n');
+  });
+  test('the separator can be forced', () => {
+    const out = csvToYaml('name;age\nAda;36\n', { delimiter: ';' });
+    expect(JSON.parse(yamlToJson(out))).toEqual([{ name: 'Ada', age: 36 }]);
+  });
+  test('an empty file says so', () => {
+    expect(() => csvToYaml('   \n')).toThrow('empty');
   });
 });

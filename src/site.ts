@@ -38,6 +38,7 @@ export type Tool =
   | 'yaml-to-json'
   | 'yaml-to-csv'
   | 'yaml-to-xlsx'
+  | 'csv-to-yaml'
   | 'json-to-yaml';
 
 export type Group = 'PDF' | 'Images' | 'Spreadsheets and data';
@@ -2286,6 +2287,37 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Which sheet gets the data?',
         a: 'One sheet, named after the file when you dropped one in. The first row holds the keys.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'csv-to-yaml',
+    tool: 'csv-to-yaml',
+    group: 'Spreadsheets and data',
+    card: 'CSV to YAML',
+    blurb: 'CSV rows into a YAML list',
+    title: 'CSV to YAML converter online',
+    h1: 'Convert CSV to YAML',
+    lede: 'Turn a CSV file into a YAML list of records, the format CI configs and Kubernetes manifests use. The first row becomes the keys and values are typed, so numbers land as numbers. Everything runs in your browser.',
+    description: 'Convert CSV to YAML in your browser. The first row becomes the mapping keys and numbers stay numbers. Nothing is uploaded.',
+    steps: [
+      'Drop in a .csv file, or paste the rows.',
+      'Check the separator and whether the first row holds the column names.',
+      'Download the .yaml file or copy it.',
+    ],
+    faq: [
+      {
+        q: 'What does the output look like?',
+        a: 'A YAML sequence with one mapping per row, keyed by the header. For example - name: Ada followed by zip: \'02134\'. Without a header row the result is a YAML list of lists.',
+      },
+      {
+        q: 'Will zip codes keep their leading zeros?',
+        a: 'Yes. Strings that start with a zero are kept as text. Tick "Keep all values as text" if you want no numbers at all.',
+      },
+      {
+        q: 'Can I pick the separator?',
+        a: 'The separator is detected on its own, and the dropdown lists comma, semicolon, tab and pipe. Excel exports in much of Europe use semicolons, so pick that one if detection guesses wrong.',
       },
       PRIVATE,
     ],
