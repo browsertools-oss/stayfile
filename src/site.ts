@@ -204,6 +204,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Rotate PDF pages',
     lede: 'Turn every page, or only the ones that came out of the scanner sideways, and save the PDF that way for good.',
     description: 'Rotate all pages or selected pages of a PDF by 90, 180 or 270 degrees and save it. Runs in your browser, so the file is not uploaded.',
+    more: {
+      h2: 'What rotation actually changes',
+      paras: [
+        'The page content is not redrawn. Only the rotation setting stored on each page changes, added to whatever the page already had, wrapped around 360. A page stored at 90 degrees that you turn 90 again ends up at 180, the way you would expect.',
+        'Because nothing is re-rendered, text stays selectable, images keep their resolution and the file gains no new pages or layers. The PDF is simply resaved with the new flags.',
+        'The page box is not swapped either. A turned portrait page keeps its original width and height in the file, and the rotation flag tells the reader to show it sideways. Rotation is measured in right angles only, so pages can never end up at an odd angle, and pages you do not list are passed through unchanged.',
+      ],
+    },
     steps: [
       'Drop in the PDF.',
       'Choose which way to turn it, and type page numbers if only some pages need it.',
@@ -231,6 +239,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Add page numbers to a PDF',
     lede: 'Stamp a number on every page of a PDF: plain numbers, "3 of 12", or "Page 3 of 12". The number sits centred at the bottom or the top, and the file keeps everything it had.',
     description: 'Add page numbers to a PDF in your browser. Every page is numbered, the text stays selectable and the file is never uploaded.',
+    more: {
+      h2: 'How the stamp is drawn',
+      paras: [
+        'Numbers are stamped in Courier 10 point, centred on the page width, 22 points from the bottom edge or from the top edge when you pick the top option. Courier is built into every PDF viewer, so nothing is embedded and the file grows by only a few bytes per page.',
+        'Three formats are available: a plain number such as 3, that number with the total such as 3 of 12, and the word Page in front such as Page 3 of 12. The total counts from your start number, so a 30-page document stamped from 10 ends at 39 rather than 30.',
+        'The stamp is drawn over whatever is already on the page; existing page numbers printed elsewhere on the page are not found or removed. The stamp text stays selectable, and anything outside basic Latin characters is replaced with a question mark rather than failing the file.',
+      ],
+    },
     steps: [
       'Drop in the PDF.',
       'Pick where the number goes, the format, and the number to start at.',
@@ -351,6 +367,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert text to PDF',
     lede: 'Make a PDF from a plain text file, such as a .txt note, a Markdown file or a log. The text keeps its line breaks, long lines are wrapped to fit the page, and the fixed-width font keeps any columns lined up.',
     description: 'Convert a plain text or Markdown file to a PDF in your browser. The file never leaves your device.',
+    more: {
+      h2: 'How the PDF is laid out',
+      paras: [
+        'The PDF is one column of Courier 10 point on A4 with 72 point margins. Courier is built into every PDF viewer, so no font is embedded and the file stays small. Each line holds 75 characters, wrapped to fit the page, and a word longer than a line is cut in half.',
+        'A page holds about 49 lines, so a long log produces many pages with no headings or breaks inserted. The text keeps its line breaks exactly as written, and short lines are not stretched to fill the width.',
+        'Latin-1 characters pass through; anything else, such as Chinese, Cyrillic or emoji, is replaced with a question mark rather than failing the file. UTF-8 text files with either LF or CRLF line endings read the same, and empty lines are preserved.',
+      ],
+    },
     steps: [
       'Drop in the text file.',
       'Click Make PDF.',
@@ -766,6 +790,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert HEIC to PNG',
     lede: 'Turn iPhone HEIC photos into PNG files. PNG keeps every pixel, but its files are usually larger than HEIC or JPG, so use it when an app asks for PNG or when you plan to edit the photo.',
     description: 'Convert iPhone HEIC photos to PNG in your browser, one at a time or in a batch. Your photos are never uploaded.',
+    more: {
+      h2: 'What the PNG keeps',
+      paras: [
+        'Safari reads HEIC on its own. Other browsers fetch a small decoder from this site the first time you convert, only when a HEIC file is actually opened, and a batch of ten photos does not pay for it ten times.',
+        'Each photo is decoded to raw pixels, drawn to a canvas and written as a PNG. HEIC holds 10 bits of colour per channel while the canvas works in 8 bits, so very smooth gradients can band slightly. Resolution and framing carry over exactly, and because PNG is lossless, nothing further is lost after the decode.',
+        'The date, camera and location details are dropped, the same as on the JPG page, because the PNG is encoded fresh from the pixels. Sequence HEIC files such as burst shots give up only their primary image. PNG files are usually larger than the HEIC they came from, so pick JPG when size matters more than exactness.',
+      ],
+    },
     steps: ['Drop in your .heic files.', 'PNG is already selected.', 'Click Convert, then save each photo or all of them as a zip.'],
     faq: [
       {
@@ -1137,6 +1169,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert SVG to ICO',
     lede: 'Turn an SVG into a .ico file, the format browsers and desktops use for favicons and shortcuts. The file holds 16, 32 and 48 px versions of the image.',
     description: 'Convert an SVG to a .ico favicon file in your browser. The file holds 16, 32 and 48 px sizes. Your image stays on your device.',
+    more: {
+      h2: 'How the icon is built',
+      paras: [
+        'The SVG is drawn at its own size first, then scaled into 16, 32 and 48 pixel pictures at high smoothing quality, and all three are packed into one .ico file. Browsers and Windows pick the size they need.',
+        'Start from an SVG with a real width and height, or at least a viewBox. An SVG with no size at all is drawn at 1024 by 768, which squashes square artwork into a wide frame. Non-square art is scaled to fit the square canvas and padded, never stretched.',
+        'An SVG that points at outside images or fonts can fail to draw; keep everything inside the file and it converts cleanly. The three pictures are stored as PNGs inside the .ico container, which current Windows and every current browser read.',
+      ],
+    },
     steps: ['Drop in your .svg files.', 'Nothing to set. The three sizes are made from your image.', 'Click Save to download the .ico file, or all of them as a zip.'],
     faq: [
       {
@@ -1377,6 +1417,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert PNG to WebP',
     lede: 'Turn PNG images into WebP files, which are often smaller and still keep sharp edges. Transparency is kept.',
     description: 'Convert PNG to WebP online, one file or many at once. Adjustable quality and transparency kept. Your images stay on your device.',
+    more: {
+      h2: 'What happens to your pixels',
+      paras: [
+        'Each PNG is decoded, drawn and re-encoded as WebP at the quality you pick. This page writes lossy WebP, which is where the big savings on photos come from. Flat colors and sharp edges can pick up slight ringing at low quality settings, so raise the slider if edges look dirty.',
+        'Transparency is kept. WebP supports an alpha channel, so a PNG logo on a transparent background stays transparent in the output. Single-color gradients and flat artwork often compress better in a lossless format, so if the WebP looks worse than the PNG, raise the quality slider.',
+        'In browsers whose canvas cannot write WebP, this site encodes the file with its own WebP encoder instead, using the same quality value, so the output is WebP either way. Either path re-encodes from pixels, so detail already lost in a JPG source stays lost.',
+      ],
+    },
     steps: ['Drop in your PNG files.', 'WebP is already selected. Move the quality slider if you want smaller files.', 'Click Save to download the WebP files.'],
     faq: [
       {
@@ -1456,6 +1504,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Compress JPG',
     lede: 'Make JPG photos small enough for an email, an upload form or a website. You see the new size before you download, and the original is never changed.',
     description: 'Reduce JPG file size in your browser. Set quality and maximum width, compare sizes, and save. No upload, and no sign-up.',
+    more: {
+      h2: 'Where the savings come from',
+      paras: [
+        'The photo is decoded, optionally scaled down to a width limit you pick, and re-encoded as a JPG at the quality setting. The default quality here is 70, which is usually indistinguishable from the original on screen but a good deal smaller.',
+        'If the result in the same format and at the same width would be larger than the original, you get the original file back unchanged instead of a bigger "compressed" file. That happens most often with photos already saved at low quality.',
+        'JPG has no transparency, so any transparent pixels are flattened onto white, like every other JPG output on this site. Compressed files are saved with a -small suffix, and the new size is shown next to the old one before you save.',
+      ],
+    },
     steps: [
       'Drop in one or more JPG files.',
       'Pick a quality level. Setting a maximum width as well saves the most space on large phone photos.',
@@ -2053,6 +2109,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert Excel to JSON',
     lede: 'Turn the first sheet of an Excel workbook into a JSON array. The column headings become the keys, and each row after the heading becomes one object.',
     description: 'Convert Excel .xlsx files to JSON in your browser. Uses the first sheet and its header row as keys. Your workbook is never uploaded.',
+    more: {
+      h2: 'How the sheet becomes JSON',
+      paras: [
+        'The sheet is first read as CSV text in your browser, the same way the Excel to CSV page reads it. Each cell arrives as the text Excel shows, so a date formatted as 2026-11-06 in the sheet comes out as that string, not as a serial number.',
+        'Typing happens column by column. If any cell in a column has to stay text, such as a zip code like 02134 or an ID longer than 15 digits, the whole column stays text so no cell silently changes. Numbers that fit come out as JSON numbers, and true and false come out as booleans.',
+        'Headings are trimmed, and a blank heading becomes column_1, column_2 and so on, so every key in the output is present and named. The result is indented with two spaces and can be copied or saved as a .json file.',
+      ],
+    },
     steps: ['Drop in an .xlsx file.', 'Check the preview. Only the first sheet is converted.', 'Download the JSON or copy it.'],
     faq: [
       {
@@ -2173,6 +2237,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert JSON to Excel',
     lede: 'Turn a JSON array or an API response into an Excel workbook. Each key becomes a column heading, and numbers stay numbers so you can sum them in Excel.',
     description: 'Convert JSON to Excel .xlsx in your browser. Nested fields become columns and numbers stay numbers. Nothing leaves your device.',
+    more: {
+      h2: 'What the workbook looks like',
+      paras: [
+        'Columns are the union of keys across every row, in the order they first appear. A key that shows up only in the tenth row still gets its own column, and rows missing that key get an empty cell, so mixed shapes still produce a tidy sheet.',
+        'Values are retyped on the way in: numbers become real Excel numbers you can sum, and true and false become booleans. Text that only looks like a number, such as 02134, stays text. Nested objects were already flattened to dotted columns like address.city, and a list inside a record is written as JSON text in one cell.',
+        'The result is a genuine .xlsx workbook written by SheetJS, not a renamed CSV, so types open correctly in Excel, LibreOffice and Google Sheets. The sheet is named Sheet1; rename it after opening if you need something else.',
+      ],
+    },
     steps: ['Drop in a .json file or paste the JSON.', 'Check the preview. Nested fields show up as columns like address.city.', 'Click Download to save the .xlsx file.'],
     faq: [
       {
@@ -2254,6 +2326,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert JSON to YAML',
     lede: 'Turn a JSON file into YAML, the format CI systems and app manifests use. Nesting, lists and quoted strings all come out as clean block YAML. Everything runs in your browser.',
     description: 'Convert JSON to YAML in your browser. Keys keep their order from the JSON file, and nothing is uploaded.',
+    more: {
+      h2: 'What the YAML looks like',
+      paras: [
+        'The JSON is parsed, then written as block-style YAML with two-space indentation. Keys keep the order they have in your JSON file, and lists come out as plain dash sequences. Strings that need quoting are quoted, and everything else is written plain.',
+        'Types come through as YAML scalars: numbers stay numbers, true and false stay booleans, and null is written as null. Empty objects and empty lists are preserved rather than dropped, which matters for config files where the key has to exist.',
+        'js-yaml does the parsing, loaded only on this page. Invalid JSON, such as a trailing comma or a comment, is rejected with the parser\'s message instead of being silently repaired. If you need anchors for repeated blocks, write those by hand; the tool does not generate them.',
+      ],
+    },
     steps: [
       'Drop in a .json file, or paste the JSON.',
       'Check the preview of the parsed rows.',
