@@ -22,6 +22,7 @@ const jsonld = [
     <div class="wall">
       <h1>File tools that keep your files on your device</h1>
       <p class="lede">Each tool here runs inside your browser tab. The files you open are read and changed on your own computer, and none of them is uploaded.</p>
+      <p class="who">Stayfile is for the file jobs that get in the way of something else: putting a PDF back together, shrinking iPhone photos for an upload form, or making a CSV that opens cleanly in Excel. It is free, there is no account, and the work happens in your browser on your own computer, so the file never leaves your device, whether it is a bank statement or a signed contract. Not sure where to start? Drop a file in the box below and this page will point you at the right tool.</p>
       <section class="tool start" data-family="any" aria-label="Start with your files">
         <Drop accept=".pdf,image/*,.heic,.heif,.csv,.tsv,.json,.jsonl,.ndjson,.yaml,.yml,.xlsx,.txt,.md,.markdown,.log,.ico" multiple take={false} main="Drop files here, or <u>choose files</u>" sub="PDF · images · iPhone photos · CSV · JSON · YAML · Excel · text. You pick what to do next." />
         <div class="routes" id="routes" hidden>
@@ -109,6 +110,7 @@ const jsonld = [
 </script>
 <style>
   .start { margin: 0 0 12px; }
+  .who { color: var(--paint-muted); max-width: 62ch; line-height: 1.55; margin: -12px 0 28px; font-size: 16px; }
   .routes { padding-top: 16px; display: grid; gap: 12px; justify-items: start; }
   .routes-line { margin: 0; font-weight: 700; }
   .routes-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
