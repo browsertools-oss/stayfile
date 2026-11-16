@@ -12,7 +12,7 @@ Targets:
 - Six guides plus a guides index, each guide at least 700 words
 - 16 top tool pages get a section of real detail
 - No new tool pages (stays at 85)
-- At least one page in Google and 100 visitors in 30 days (needs your Search Console step)
+- 100 visitors in the last 30 days (now 70)
 
 | Run | In plain words |
 |---|---|
