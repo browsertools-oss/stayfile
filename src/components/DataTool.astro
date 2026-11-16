@@ -67,6 +67,9 @@ const outLabel = { 'yaml-to-json': 'Download .json', 'yaml-to-csv': 'Download .c
         <input type="text" id="tableName" placeholder="csv_table" autocomplete="off" spellcheck="false" style="width: 12em" />
       </label>
     )}
+    {['json-to-csv', 'xlsx-to-csv', 'yaml-to-csv', 'tsv-to-csv'].includes(tool) && (
+      <label class="check"><input type="checkbox" id="bom" /> For Excel: add a UTF-8 BOM</label>
+    )}
     {fromJson && tool !== 'json-to-markdown' && tool !== 'json-to-tsv' && (
       <label>Separator
         <select id="delim">
@@ -92,7 +95,7 @@ const outLabel = { 'yaml-to-json': 'Download .json', 'yaml-to-csv': 'Download .c
 
 <script>
   import { parseCsv, csvToJson, csvToMarkdown, tsvToCsv, csvToTsv, markdownToCsv, markdownToJson, markdownTableRows, jsonRows, columns, jsonToCsv, jsonToMarkdown, csvToSql, sqlTableName, type CsvOptions } from '../lib/data';
-  import { save, baseName } from '../lib/save';
+  import { save, baseName, withBom } from '../lib/save';
   import { savedLine } from '../lib/route';
   import { showDone, hideDone } from '../lib/done';
 
@@ -340,7 +343,12 @@ const outLabel = { 'yaml-to-json': 'Download .json', 'yaml-to-csv': 'Download .c
     else if (tool === 'csv-to-sql' || tool === 'xlsx-to-sql') done(new Blob([result], { type: 'text/plain' }), `${name}.sql`);
     else if (tool === 'csv-to-markdown' || tool === 'xlsx-to-markdown' || tool === 'json-to-markdown') done(new Blob([result], { type: 'text/markdown' }), `${name}.md`);
     else if (tool === 'json-to-tsv') done(new Blob(['﻿' + result], { type: 'text/tab-separated-values' }), `${name}.tsv`); // BOM so Excel reads UTF-8
-    else if (tool === 'json-to-csv' || fromXlsx || fromTsv || tool === 'md-to-csv' || tool === 'yaml-to-csv') done(new Blob(['﻿' + result], { type: 'text/csv' }), `${name}.csv`); // BOM so Excel reads UTF-8
+    else if (tool === 'json-to-csv' || fromXlsx || fromTsv || tool === 'md-to-csv' || tool === 'yaml-to-csv') {
+      // The four CSV pages make the BOM opt-in (off by default); other CSV outputs keep it so Excel opens UTF-8.
+      const gated = ['json-to-csv', 'xlsx-to-csv', 'yaml-to-csv', 'tsv-to-csv'].includes(tool);
+      const bom = gated ? $<HTMLInputElement>('bom')?.checked : true;
+      done(new Blob([bom ? withBom(result) : result], { type: 'text/csv' }), `${name}.csv`);
+    }
     else {
       go.disabled = true;
       status.textContent = 'Building workbook…';

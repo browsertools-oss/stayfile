@@ -26,3 +26,9 @@ export async function zip(files: { name: string; data: Blob | Uint8Array }[]): P
 }
 
 export const baseName = (n: string) => n.replace(/\.[^./\\]+$/, '') || 'file';
+
+/** Prepend a UTF-8 BOM so Excel reads the file as UTF-8. Applied at save time only, never to the preview or the copied text. Idempotent. */
+export const BOM = "﻿";
+export function withBom(text: string): string {
+  return text.startsWith(BOM) ? text : BOM + text;
+}

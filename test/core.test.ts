@@ -387,3 +387,14 @@ describe('image math', () => {
     expect(sizeChange(1000, 1000)).toBe('same size');
   });
 });
+
+describe('save helpers', () => {
+  test('withBom prepends a UTF-8 BOM and is idempotent', async () => {
+    const { withBom, BOM } = await import('../src/lib/save');
+    expect(BOM).toHaveLength(1);
+    expect(BOM.charCodeAt(0)).toBe(0xfeff);
+    expect(withBom('a,b\n1,2')).toBe(BOM + 'a,b\n1,2');
+    expect(withBom(withBom('a,b'))).toBe(BOM + 'a,b');
+    expect(withBom('a,b').charCodeAt(0)).toBe(0xfeff);
+  });
+});
