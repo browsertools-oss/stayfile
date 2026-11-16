@@ -1,5 +1,5 @@
 ---
-import { SITE, PAGES, GROUPS, GROUP_ID, GROUP_SHORT } from '../site';
+import { SITE, PAGES, GROUPS, GROUP_ID, GROUP_SHORT, GUIDES } from '../site';
 interface Props {
   title: string;
   description: string;
@@ -69,6 +69,11 @@ const canonical = new URL(path, SITE.url).href;
               {PAGES.filter((p) => p.group === g).map((p) => <a href={`/${p.slug}/`}>{p.card}</a>)}
             </nav>
           ))}
+          <nav aria-label="Guides">
+            <h3>Guides</h3>
+            <a href="/guides/">All guides</a>
+            {GUIDES.map((g) => <a href={`/guides/${g.slug}/`}>{g.title}</a>)}
+          </nav>
         </div>
         <p>
           {SITE.name} works in your browser and never uploads your files. <a href="/privacy/">Privacy</a> · <a href="/about/">About</a>

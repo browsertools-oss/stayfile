@@ -65,6 +65,8 @@ export interface ToolPage {
   preset?: Preset;
   steps: string[];
   faq: { q: string; a: string }[];
+  more?: { h2: string; paras: string[]; sample?: { before: string; after: string } };
+  guide?: string;
 }
 
 const PRIVATE = {
@@ -718,6 +720,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert HEIC to JPG',
     lede: "iPhones save photos as HEIC, which many Windows apps and upload forms won't open. Turn them into ordinary JPG files, one photo or a whole batch.",
     description: 'Convert iPhone HEIC photos to JPG in your browser, one at a time or in a batch. Your photos are never uploaded.',
+    more: {
+      h2: 'What happens to the photo',
+      paras: [
+        'Safari reads HEIC on its own. Other browsers download a small HEIC decoder the first time you convert. It is served from this site, kept in memory for the rest of the visit, and fetched only when a HEIC file is actually converted, so a batch of ten photos does not pay for it ten times.',
+        'Each photo is decoded to raw pixels, drawn onto a canvas and encoded as a new JPG. HEIC files hold 10 bits of colour per channel; the canvas path works in 8-bit channels, so very smooth gradients can band slightly that the HEIC did not. At the default quality of 85 this is hard to see in normal photos.',
+        'Only the primary image is taken from files that hold several pictures, such as burst or sequence HEIC, so live-photo motion is not carried over. And because the JPG is encoded fresh from the pixels, the date, camera and location details are dropped. If you need those, keep the originals on the phone; converting to keep a backup throws them away.',
+      ],
+    },
     steps: [
       'Drop in your .heic files.',
       'JPG is already selected. Move the quality slider if you want smaller files.',
@@ -2433,3 +2443,6 @@ export const GROUPS: Group[] = ['PDF', 'Images', 'Spreadsheets and data'];
 // Anchor ids on the home page and short labels for the header nav.
 export const GROUP_ID: Record<Group, string> = { PDF: 'pdf', Images: 'images', 'Spreadsheets and data': 'data' };
 export const GROUP_SHORT: Record<Group, string> = { PDF: 'PDF', Images: 'Images', 'Spreadsheets and data': 'Data' };
+
+// Guides under /guides/. A guide goes in only when it is finished and passes the word-count test.
+export const GUIDES: { slug: string; title: string; blurb: string }[] = [];

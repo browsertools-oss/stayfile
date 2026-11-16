@@ -4,7 +4,8 @@ import PdfTool from './PdfTool.astro';
 import ImageTool from './ImageTool.astro';
 import DataTool from './DataTool.astro';
 import Silhouette from './Silhouette.astro';
-import { SITE, PAGES, GROUP_ID, type ToolPage } from '../site';
+import { SITE, PAGES, GROUP_ID, GUIDES, type ToolPage } from '../site';
+const guide = GUIDES.find((g) => g.slug === page.guide);
 interface Props { page: ToolPage }
 const { page } = Astro.props;
 const path = `/${page.slug}/`;
@@ -64,9 +65,24 @@ const jsonld = [
     <h2>How to use it</h2>
     <ol class="steps">{page.steps.map((s) => <li>{s}</li>)}</ol>
   </section>
+  {page.more && (
+    <section class="row">
+      <h2>{page.more.h2}</h2>
+      <div>
+        {page.more.paras.map((p) => <p>{p}</p>)}
+        {page.more.sample && (
+          <div class="samples">
+            <div><span class="sample-label">Before</span><pre class="sample">{page.more.sample.before}</pre></div>
+            <div><span class="sample-label">After</span><pre class="sample">{page.more.sample.after}</pre></div>
+          </div>
+        )}
+      </div>
+    </section>
+  )}
   <section class="row">
     <h2>Questions</h2>
     <div>{page.faq.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}</div>
+    {guide && <p class="read-guide">Read the guide: <a href={`/guides/${guide.slug}/`}>{guide.title}</a></p>}
   </section>
   {related.length > 0 && (
     <section class="row">
@@ -85,6 +101,10 @@ const jsonld = [
   .head .lede { margin-bottom: 28px; }
   .head :global(.mark-big) { width: 200px; margin-bottom: 24px; color: var(--paint); }
   .first { border-top: 0; }
+  .read-guide { margin-top: 12px; font-size: 15px; }
+  .samples { display: grid; gap: 12px; margin-top: 8px; }
+  .sample-label { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 4px; }
+  .sample { font-family: var(--mono); font-size: 12px; overflow-x: auto; background: var(--field); border: 1px solid var(--line); border-radius: var(--r); padding: 10px 12px; margin: 0; }
   .related { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: 12px; }
   .related a { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 8px; border-radius: var(--r); color: var(--board); text-decoration: none; font-size: 14px; font-weight: 700; text-align: center; }
   .related a :global(.sil) { width: 100%; max-width: 104px; --cut: var(--ground); }

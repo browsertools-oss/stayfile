@@ -1,6 +1,8 @@
 import { describe, test, expect } from 'vitest';
+import { readFileSync, readdirSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
 import { kindOf, suggestTools, describeDrop, nextTools, mergedName, savedLine, splitButtons } from '../src/lib/route';
-import { PAGES } from '../src/site';
+import { PAGES, GUIDES } from '../src/site';
 
 const f = (name: string, type = '') => ({ name, type });
 const slugs = (r: { slug: string }[]) => r.map((x) => x.slug);
@@ -152,7 +154,14 @@ describe('site copy', () => {
     p.card, p.blurb, p.title, p.h1, p.lede, p.description,
     ...p.steps,
     ...p.faq.flatMap((f) => [f.q, f.a]),
+    ...(p.more ? [p.more.h2, ...p.more.paras, p.more.sample?.before ?? '', p.more.sample?.after ?? ''] : []),
   ]);
+  // Guide copy lives in the .astro files, not in PAGES; read it off disk.
+  const guideText = GUIDES.flatMap((g) => {
+    const file = join(process.cwd(), 'src/pages/guides', g.slug, 'index.astro');
+    return existsSync(file) ? [readFileSync(file, 'utf8')] : [];
+  });
+  allText.push(...guideText);
   test('no em or en dashes anywhere', () => {
     for (const t of allText) expect(t).not.toMatch(/[–—]/);
   });

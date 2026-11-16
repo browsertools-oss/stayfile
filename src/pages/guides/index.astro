@@ -1,0 +1,33 @@
+---
+import Base from '../../layouts/Base.astro';
+import { GUIDES, SITE } from '../../site';
+const title = `Guides | ${SITE.name}`;
+const description = 'Plain answers to file problems: iPhone HEIC photos, CSV files that open in one column, loading a CSV into a database, and combining PDFs.';
+---
+<Base title={title} description={description} path="/guides/">
+  <div class="board bleed band" data-family="any">
+    <div class="wall">
+      <h1>Guides</h1>
+      <p class="lede">Short guides to the problems behind the file tools: what the file is, why the usual app will not open it, and the steps that fix it.</p>
+    </div>
+  </div>
+  <section class="row first">
+    <h2>All guides</h2>
+    <div>
+      {GUIDES.length === 0 && <p>The first guides are on the way. Check back soon.</p>}
+      <ul class="guides">
+        {GUIDES.map((g) => <li><a href={`/guides/${g.slug}/`}><span class="gt">{g.title}</span><span class="gb">{g.blurb}</span></a></li>)}
+      </ul>
+    </div>
+  </section>
+</Base>
+<style>
+  .band { padding-bottom: 40px; }
+  .band h1 { color: var(--paint); }
+  .band .lede { color: var(--paint-muted); }
+  .guides { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+  .guides a { display: block; background: var(--field); border: 1px solid var(--line); border-radius: var(--r); padding: 16px 18px; text-decoration: none; }
+  .guides a:hover { border-color: var(--link); }
+  .gt { display: block; font-weight: 700; color: var(--ink); }
+  .gb { display: block; color: var(--muted); margin-top: 4px; }
+</style>
