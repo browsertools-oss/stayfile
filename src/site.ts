@@ -91,6 +91,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Merge PDF files',
     lede: 'Put several PDFs into one file in the order you choose. The merging happens in your browser, so the documents stay on your computer.',
     description: 'Combine PDF files into one document in your browser. Drag to set the order, then download. Nothing is uploaded and there is no sign-up.',
+    more: {
+      h2: 'What merging does to the file',
+      paras: [
+        'The merge copies each page into a brand new document with the pages left exactly as they are: no rasterising, no pass through the printer routine. Text stays selectable, images keep their resolution and compressed streams stay as the original encoder wrote them. Page size, page boxes and rotation carry over too, so an A4 landscape page in one source stays landscape in the result.',
+        'The output is a fresh document, so properties such as author, title and the application that made the sources are not carried in. The merged file has its own properties and no history.',
+        'Nothing is recompressed, which is the point: quality is identical to the sources, and the file you get is close to the sum of the files you gave it. If the result is too large to send, shrinking it means shrinking one of the sources first, not merging harder.',
+      ],
+    },
     steps: [
       'Drop in two or more PDF files, or click to pick them.',
       'Use the arrows to put them in the order you want.',
