@@ -1,5 +1,5 @@
-- Row 1 of ops/week-plan.md (Sun 11-15-2026 evening): build the guide plumbing (GUIDES in src/site.ts, /guides/ index, footer column, test/guides.test.ts with the 700-word check, copy lint on guides).
-- Same run: add the `more` section and `guide` field to tool pages (spec in the plan), and fill `more` for heic-to-jpg, checked against src/lib/heic.ts.
-- No new tool or preset pages this week; the page count stays at 85. Effort goes into six guides and deeper copy on the top pages, for indexing and AdSense review.
-- Don't run scripts/browser-check.mjs or log it as blocked; daily runs can't run node scripts. It is cut from this week.
-- Visitors: 70 in the last 30 days (ads level 300, Pro trigger 1,000). Search shows no stayfile.app pages yet; the owner's Search Console step is in subfixer issue #9.
+- Row 4 done early on 11-16 morning. Tue 11-17 morning run: take the oldest row not marked DONE.
+- Mon 11-16 evening run: finish row 3 (more for pdf-to-jpg, jpg-to-pdf, compress-image, after reading the code). merge-pdf is done already.
+- Tue 11-17 evening run (row 5): more with samples for csv-to-json and json-to-csv; more without samples for csv-to-excel and excel-to-csv. Samples must be pasted from real transform output, with tests proving it.
+- 92 pages, 137 tests, sitemap carries 3 guide URLs. Two guides live under /guides/; keep growing them in plan order.
+- Visitors: 70 in the last 30 days (ads level 300, Pro trigger 1,000). Search still shows no stayfile.app pages; the owner's Search Console step is in subfixer issue #9.
