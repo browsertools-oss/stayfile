@@ -2053,6 +2053,7 @@ export const PAGES: ToolPage[] = [
     slug: 'csv-to-excel',
     tool: 'csv-to-xlsx',
     group: 'Spreadsheets and data',
+    guide: 'csv-opens-in-one-column-in-excel',
     card: 'CSV to Excel',
     blurb: 'Save a CSV as a real .xlsx workbook',
     title: 'CSV to Excel converter: save CSV as XLSX online',
@@ -2532,5 +2533,10 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'iphone-heic-photos-to-jpg',
     title: 'iPhone HEIC photos: convert to JPG and stop getting them',
     blurb: 'What HEIC is, why Windows will not open it, and how to fix it on the phone and on the PC.',
+  },
+  {
+    slug: 'csv-opens-in-one-column-in-excel',
+    title: 'CSV opens in one column in Excel: why and how to fix it',
+    blurb: 'Why Excel puts a CSV in one column, and the five fixes plus the UTF-8 catch.',
   },
 ];

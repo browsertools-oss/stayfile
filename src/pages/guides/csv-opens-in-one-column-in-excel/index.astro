@@ -1,0 +1,61 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'CSV opens in one column in Excel: why and how to fix it';
+const description = 'Why Excel puts a CSV into one column, and the five fixes: import by hand, a sep= line, Text to Columns, region settings, or convert to .xlsx.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-16',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/csv-opens-in-one-column-in-excel/" jsonld={jsonld}>
+  <h1>CSV opens in one column in Excel: why and how to fix it</h1>
+  <p class="lede">You double-click a .csv file and Excel pours the whole row into column A. No error message, no prompt, just one wide column of text. This happens every day in every office, and it is a settings mismatch rather than a broken file. Here is why, and the five fixes that actually work.</p>
+
+  <h2>Why it happens</h2>
+  <p>Excel does not read a CSV by a fixed rule. It splits the file on the list separator chosen in your computer's region settings. In the United States and the United Kingdom the separator is a comma. In most of Europe and much of South America the comma is the decimal mark, so the list separator is a semicolon. A comma-separated file opened there lands in one column, and the reverse happens too: a semicolon file opened on a US machine lands in one column.</p>
+  <p>Nothing in the file is wrong, and nothing about your machine is broken either. The mismatch is between the file's separators and the region's expectation. The file below is comma-separated, which many European builds of Excel will not split on their own:</p>
+  <pre><code>name,city,age
+Ada,London,36
+Grace,Berlin,85</code></pre>
+  <p>If your region expects semicolons, those rows arrive in column A exactly as written, commas and all.</p>
+
+  <h2>Fix 1: import the file by hand</h2>
+  <p>This is the reliable fix when the file is fine and you just want it open. In current Excel, use Data, then From Text/CSV. Pick the file, and Excel shows a preview with the delimiter it detected. If it guessed wrong, choose the right delimiter from the dropdown (comma, semicolon, tab or pipe) and the preview splits into columns. Load the file, and future opens of that same file behave, because the import is what you saved.</p>
+  <p>The same dialog also fixes the encoding problem, which is why it is the first thing to try for any CSV that looks odd. More on that below.</p>
+
+  <h2>Fix 2: a sep= line at the top of the file</h2>
+  <p>Excel reads a first line of the form below and uses it as the separator for every later line:</p>
+  <pre><code>sep=,</code></pre>
+  <p>Use sep=; instead if your file uses semicolons. The catch is that other programs do not know this convention, so they read the sep= line as a row of data with one cell. Keep it for files you know will be opened in Excel, and strip it for anything going into a database, a script or a shared pipeline.</p>
+
+  <h2>Fix 3: Text to Columns</h2>
+  <p>If the file is already open and wrong, select column A, use Data, then Text to Columns, pick Delimited, and choose the separator your file actually uses. Finish the wizard and the column splits in place. The fine print is that Text to Columns turns the split values into text rather than numbers, which changes how they sort and sum. If you need the result back as real numbers, convert the file instead, as in fix 5.</p>
+
+  <h2>Fix 4: change the list separator in your region settings</h2>
+  <p>On Windows, open Control Panel, then Region, then Additional settings, and change the List separator from semicolon to comma (or the other way around). On a Mac, open System Settings, then Language &amp; Region, and adjust the separators the same way. After that, CSVs open the way the file was written. This fixes every file you will ever open on that machine, which is also its downside: it changes the behaviour for every other program that consults the same setting, and it does nothing for colleagues on computers you do not control.</p>
+
+  <h2>Fix 5: convert the CSV to .xlsx once</h2>
+  <p>A workbook has no separator at all, because the columns are structural. Convert the file once with <a href="/csv-to-excel/">CSV to Excel</a> and the problem never comes back: numbers arrive as numbers, the first row becomes the headings, and the page detects the delimiter for you (comma, semicolon, tab and pipe are all recognised), so you do not have to tell it which one your file uses.</p>
+  <p>If you would rather keep CSV but want a guaranteed separator, <a href="/tsv-to-csv/">TSV to CSV</a> and <a href="/csv-to-tsv/">CSV to TSV</a> swap a comma file for tabs or the other way round. Tabs are worth knowing about: tabs almost never appear inside spreadsheet text, so a tab-separated file survives more tools than a comma file does.</p>
+
+  <h2>Accents show up as Ã© or similar</h2>
+  <p>A related symptom: the file opens with one column <em>and</em> the accented letters are wrong, "CafÃ©" instead of "Café". That is an encoding mismatch. The file holds UTF-8 bytes, and Excel fell back to the local code page. The fix is in the same import dialog: Data, From Text/CSV, and set the File Origin to "65001: Unicode (UTF-8)" before loading. If you save from Excel, choose "CSV UTF-8 (Comma delimited)" instead of plain CSV. Converting the file to .xlsx with the converter on this site also avoids it, because the workbook carries the text as text rather than as bytes to guess at.</p>
+
+  <h2>A BOM helps Excel read UTF-8</h2>
+  <p>If you produce CSVs for other people to open in Excel, a byte order mark at the start of the file tells Excel to use UTF-8 without any import wizard. Four pages here can add one to the saved file: <a href="/json-to-csv/">JSON to CSV</a>, <a href="/excel-to-csv/">Excel to CSV</a>, <a href="/yaml-to-csv/">YAML to CSV</a> and <a href="/tsv-to-csv/">TSV to CSV</a>. Tick "For Excel: add a UTF-8 BOM" before you download. The mark goes into the file you save only; the preview, the table and the copied text stay clean. It is off by default because many tools read the mark as a stray character at the start of the first cell.</p>
+
+  <h2>The short version</h2>
+  <p>One column means the separator and the region disagree, not the file. For a one-off, fix 1 or fix 5 takes less time than arguing with the file. For files you make for others, tick the UTF-8 BOM on the CSV pages above, or hand them a workbook instead of a CSV.</p>
+  <p>See also: <a href="/guides/iphone-heic-photos-to-jpg/">iPhone HEIC photos: convert to JPG and stop getting them</a>.</p>
+</Base>
+<style>
+  pre { font-family: var(--mono, monospace); overflow-x: auto; }
+</style>
