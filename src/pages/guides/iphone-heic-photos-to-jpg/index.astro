@@ -1,0 +1,59 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'iPhone HEIC photos: convert to JPG and stop getting them';
+const description = 'Why iPhones save photos as HEIC, why Windows and upload forms refuse them, and how to turn the photos you have into JPG.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-16',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/iphone-heic-photos-to-jpg/" jsonld={jsonld}>
+  <h1>How to convert iPhone HEIC photos to JPG</h1>
+  <p class="lede">If someone sent you a photo from an iPhone and your computer refused to open it, the file was almost certainly a HEIC. This guide covers what HEIC is, why the iPhone uses it, how to convert the photos you already have, and how to choose a format the rest of the world can open.</p>
+
+  <h2>What HEIC is and why the iPhone uses it</h2>
+  <p>HEIC is the file extension for photos saved with the HEIF standard. Apple adopted it for the iPhone because a HEIC photo at a given quality is about half the size of a JPG, so the same phone holds roughly twice as many photos. Video uses a related format called HEVC.</p>
+  <p>The setting is called High Efficiency. When it is on, the Camera app saves photos as HEIF files ending in .heic and video as HEVC. The alternative, Most Compatible, saves photos as JPEG and video as H.264. Apple names the both of these in the same place so you can switch without hunting for them.</p>
+  <p>Changing the setting does not convert photos you already took. It only changes what the camera writes from then on. Photos already on the phone stay HEIC until you convert them or export them in another format.</p>
+
+  <h2>Why Windows, upload forms and older apps refuse it</h2>
+  <p>Outside Apple's own devices, HEIC support is patchy. Windows 10 and 11 can show HEIC pictures, but only after you install the free HEIF Image Extensions from the Microsoft Store. Many HEIC photos also need the HEVC Video Extensions on top, which usually costs about a dollar. Some PCs can install a free package called HEVC Video Extensions from Device Manufacturer instead. Prices vary by region, so check the Store listing before you expect to pay.</p>
+  <p>Safari on a Mac reads HEIC on its own. Chrome and Firefox on a computer will not open a HEIC file when you double-click it. Upload forms on job, government, insurance and print-shop sites often reject HEIC as well, even when the same form takes a JPG without complaint. Programs more than a few years old tend to behave the same. If a file "will not open" for no clear reason, the extension is the first thing to check.</p>
+
+  <h2>Convert the photos you already have</h2>
+  <p>The quickest fix is to convert the HEIC files to JPG with the <a href="/heic-to-jpg/">HEIC to JPG</a> page. Drop your .heic files onto it, pick a quality if you want to (the default is 85), and save each JPG or all of them as a zip. One photo or a whole batch works the same way. Safari reads HEIC by itself; other browsers fetch a small decoder from this site the first time you convert, and only when a HEIC file is actually opened. Nothing is uploaded to a server.</p>
+  <p>Two other conversions exist for the same photos:</p>
+  <ul>
+    <li><a href="/heic-to-png/">HEIC to PNG</a> makes a PNG instead. PNG keeps every pixel exactly, which suits photos headed for an editing program. PNG files are usually larger than HEIC or JPG.</li>
+    <li><a href="/heic-to-pdf/">HEIC to PDF</a> puts each photo on its own page inside a PDF. Use it for applications, records or printing, when the other end asked for a document rather than a picture. The photos are redrawn as JPG inside the PDF.</li>
+  </ul>
+  <p>There is also a <a href="/heic-to-webp/">HEIC to WebP</a> page for the web, since WebP opens in every current browser and keeps files small.</p>
+
+  <h2>Stop new photos from saving as HEIC</h2>
+  <p>If you would rather your phone stopped producing HEIC files, the fix is two taps. Go to Settings, then Camera, then Formats, and choose Most Compatible instead of High Efficiency. New photos come out as JPEG, which everything opens. The cost is storage: JPEG files are larger, so the same phone holds fewer photos.</p>
+  <p>There is a second setting that matters when you move photos to a computer. In the Photos settings (on newer iOS it sits under Settings, then Apps, then Photos), look for Transfer to Mac or PC. If it is set to Automatic, the phone converts photos to JPG as it transfers them, and the HEIC originals stay on the phone. If it is set to Keep Originals, HEIC files transfer as they are, and you will need the steps above on the computer. Automatic is the sensible default for most people, because you keep the small HEIC files on the phone and the compatible JPG files everywhere else.</p>
+
+  <h2>Open HEIC on Windows without converting</h2>
+  <p>If you would rather read HEIC files on the PC as they are, install the HEIF Image Extensions from the Microsoft Store. It is free. For most photos you will also need the HEVC Video Extensions, which usually costs about a dollar, or the free device-manufacturer version if your PC offers it. Once both are in place, File Explorer shows thumbnails and the Photos app opens the files.</p>
+  <p>That route fixes one computer. It does nothing for a HEIC photo you email to a colleague, print at a shop, or upload to a form. Converting to JPG fixes every destination at once, which is why it is the better habit when the photo has to leave your devices.</p>
+
+  <h2>What you keep and what you lose</h2>
+  <p>Converting here means decoding each photo to raw pixels and encoding a fresh file. A few things follow from that:</p>
+  <ul>
+    <li>The date, location and camera details stored in the HEIC are not carried into the JPG, PNG or WebP. The converted file is a fresh picture of the photo, not the original data with a new name.</li>
+    <li>HEIC files that hold several pictures, such as burst shots and live photo sequences, give up only their primary image. The motion and the extra frames stay in the HEIC original.</li>
+    <li>HEIC stores 10 bits of colour per channel. The canvas this site draws to works in 8-bit channels, so very smooth gradients can band slightly that the HEIC did not show. At the default quality of 85 this is hard to spot in ordinary photos.</li>
+  </ul>
+  <p>Resolution and framing carry over exactly, one pixel in and one pixel out. If you ever need the date, location or camera data from a photo, keep the HEIC original on the phone or in a backup. The converted copies will not have it.</p>
+
+  <h2>The short version</h2>
+  <p>HEIC saves space on the phone and costs you compatibility everywhere else. For photos already taken, run them through <a href="/heic-to-jpg/">HEIC to JPG</a> and keep the originals if the metadata matters. For new photos, either switch Camera to Most Compatible or set Transfer to Mac or PC to Automatic, and the problem stops at the source.</p>
+</Base>

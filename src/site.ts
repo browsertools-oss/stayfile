@@ -712,6 +712,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'heic-to-jpg',
     tool: 'img-convert',
+    guide: 'iphone-heic-photos-to-jpg',
     group: 'Images',
     card: 'HEIC to JPG',
     blurb: 'Turn iPhone photos into JPG',
@@ -756,6 +757,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'heic-to-png',
     tool: 'img-convert',
+    guide: 'iphone-heic-photos-to-jpg',
     group: 'Images',
     card: 'HEIC to PNG',
     blurb: 'Turn iPhone photos into PNG',
@@ -2445,4 +2447,10 @@ export const GROUP_ID: Record<Group, string> = { PDF: 'pdf', Images: 'images', '
 export const GROUP_SHORT: Record<Group, string> = { PDF: 'PDF', Images: 'Images', 'Spreadsheets and data': 'Data' };
 
 // Guides under /guides/. A guide goes in only when it is finished and passes the word-count test.
-export const GUIDES: { slug: string; title: string; blurb: string }[] = [];
+export const GUIDES: { slug: string; title: string; blurb: string }[] = [
+  {
+    slug: 'iphone-heic-photos-to-jpg',
+    title: 'iPhone HEIC photos: convert to JPG and stop getting them',
+    blurb: 'What HEIC is, why Windows will not open it, and how to fix it on the phone and on the PC.',
+  },
+];

@@ -5,9 +5,9 @@ import ImageTool from './ImageTool.astro';
 import DataTool from './DataTool.astro';
 import Silhouette from './Silhouette.astro';
 import { SITE, PAGES, GROUP_ID, GUIDES, type ToolPage } from '../site';
-const guide = GUIDES.find((g) => g.slug === page.guide);
 interface Props { page: ToolPage }
 const { page } = Astro.props;
+const guide = page.guide ? GUIDES.find((g) => g.slug === page.guide) : undefined;
 const path = `/${page.slug}/`;
 const family = page.tool.startsWith('pdf') || page.tool === 'img-to-pdf' || page.tool === 'text-to-pdf' ? 'pdf' : page.tool.startsWith('img') ? 'img' : 'data';
 // Show the pages that share a format with this one, then the rest, capped at eight so a
