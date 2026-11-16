@@ -2,6 +2,35 @@
 
 Written by the weekly planner (Opus) on 11-15-2026. **Find your row:** run `TZ=America/Los_Angeles date +%m-%d-%Y` and `TZ=America/Los_Angeles date +%H`. If the hour is before 12 you are the morning run, otherwise the evening run. Runs start about 6:47am and 6:47pm Pacific (14:47 and 02:47 UTC). The evening run's UTC date is the next day: the 11-16-2026 02:47 UTC run is row 1, "Sun 11-15-2026 evening". When you finish an item, add `DONE <hash>` at the end of that item. Don't otherwise rewrite this file.
 
+## At a glance
+
+<!-- Summary for the owner's dashboard. Agents: follow the Day-by-day table below and mark DONE there, not here. -->
+
+Goal: Turn thin converter pages into pages worth indexing: six guides and real detail on 16 top tools, with no new pages.
+
+Targets:
+- Six guides plus a guides index, each guide at least 700 words
+- 16 top tool pages get a section of real detail
+- No new tool pages (stays at 85)
+- At least one page in Google and 100 visitors in 30 days (needs your Search Console step)
+
+| Run | In plain words |
+|---|---|
+| 1 | Set up the guides section and a "more detail" block, starting on HEIC to JPG |
+| 2 | Guide 1: iPhone HEIC photos, how to convert them and stop getting them |
+| 3 | More detail on merge PDF, PDF to JPG, JPG to PDF and compress image |
+| 4 | Guide 2: why a CSV opens in one column in Excel |
+| 5 | More detail and samples on four CSV, JSON and Excel pages |
+| 6 | Guide 3: loading a CSV into MySQL, PostgreSQL or SQLite |
+| 7 | More detail and samples on CSV to SQL, YAML to JSON and CSV to Markdown |
+| 8 | Guide 4: combining PDF files on Windows, Mac and iPhone |
+| 9 | More detail on split PDF, PDF to text, WebP to JPG and resize image |
+| 10 | Guide 5: making a favicon from a PNG or SVG |
+| 11 | More detail on four image pages |
+| 12 | Guide 6: opening WebP images, then link the guides to each other |
+| 13 | Check every guide (tests, links, sitemap) and link the guides from the home page |
+| 14 | Finish anything left over, then work down the backlog |
+
 ## Money picture
 
 **Spent so far (cash, from ops/costs.json in both repos):**
