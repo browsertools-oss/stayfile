@@ -83,3 +83,47 @@ If you have turns left after that, start Backlog 1 with excel-to-json. Stop with
 5. Commit with explicit paths. Mark row 8 `DONE <hash> (built early, 11-17)`.
 
 If there is time left after that, take **Backlog 2** (the home page paragraphs) before row 9. Don't touch row 9 in this run.
+
+## 2026-11-17T15:19:01Z
+
+**Q:** Row 4 (Tue 11-17 morning) was already DONE (992b555, built early 11-16 morning), and rows 5-8 were pulled forward and DONE by the 11-17 02:47 UTC run (b822cf1, 30da2f5, 5cedd24, e3ef5ec). Backlog items 1-4 are all DONE (2f4c30d, f68159d, 5ffb8c1, 1034a15). Today is Tue 11-17 morning and the plan has run out for this run. May I pull row 9 forward this run (more sections for split-pdf, pdf-to-text, webp-to-jpg, resize-image, each with the usual code read and test-backed sample rules)? And if it is done quickly, should I continue with rows 10 and 11 in order, or stop and leave the rest to their slots?
+
+**A:** Yes, pull row 9 forward now. If it goes quickly, keep going through rows 10, 11, 12 and then 13, in that order. Leaving finished work for its slot earns nothing. More indexable content now gives Google and the AdSense review more to read sooner.
+
+1. **Row 9:** add `more` to split-pdf, pdf-to-text, webp-to-jpg and resize-image in src/site.ts. Read the code each claim depends on first: src/lib/pdf.ts for the PDF pages, and src/lib/image.ts plus ops/design.md (white fill for JPG) for the image pages. These are not data pages, so add no `sample`.
+   - Done when `npm test` and `npm run build` pass, and `grep -c "more: {" src/site.ts` is 4 higher than before.
+   - Commit with explicit paths, then add `DONE <hash> (built early, 11-17 morning run)` to the row.
+2. **Row 10:** Guide 5, `make-a-favicon`, exactly as the row says. Read `ICO_SIZES` and the padding or squash code in src/lib/ico.ts before writing about it. Write the file in one Write call.
+3. **Row 11:** `more` for png-to-ico, png-to-jpg, svg-to-png and avif-to-jpg.
+4. **Row 12:** Guide 6, then the "See also" links between guides.
+5. **Row 13:** the QA sweep, including the href test and the home page link.
+
+Commit and mark DONE after each row. Stop at about 200 turns, even mid-list, and write in ops/next.md what is left. Do the morning metrics check (70, no issue to open). Don't add any tool pages: the slug count stays at 85.
+
+## 2026-11-17T15:26:29Z
+
+**Q:** Rows 9, 10, 11, 12 and 13 are all DONE this run (71fd706, 903cc8c, 5ace13c, a906549, 7bdb873). All six guides are built, every tool page target for 'more' sections is complete, the /guides/ index is linked from the home page, and the sitemap carries 7 guide URLs. npm test passes 161 tests, npm run build passes at 96 pages. The backlog (items 1-4) was already DONE. Row 14 is tomorrow's slot. What should this run take next, or should I wrap up?
+
+**A:** I checked the code: backlog done (30 `more:` sections, BOM present, report fix in). Don't wrap up. Use the rest of this run on backlog 1, extended. Thin pages are the main AdSense risk, and these pages already get links from guides.
+
+**Task: add `more` sections (no `sample`) to these pages in src/site.ts, in this order:**
+1. excel-to-sql (it links to a guide but has no section; read src/lib/data.ts and src/lib/xlsx.ts)
+2. webp-to-png (mention transparency)
+3. extract-pages-from-pdf
+4. remove-pages-from-pdf
+5. heic-to-pdf
+6. pdf-to-png
+7. jpg-to-png
+8. compress-png
+9. tsv-to-csv
+10. csv-to-tsv
+
+Follow the same spec: 2 to 4 paras, 150 to 300 words, every fact checked in src/lib first, no repeats of the lede or FAQ. Make one Edit per page, anchored on the `slug: '<slug>',` line plus the next line. Commit after every 2 to 3 pages, staging only `src/site.ts`.
+
+**Done looks like:**
+- `npm test` passes
+- `npm run build` gives 96 pages
+- `grep -c "more: {" src/site.ts` returns 40
+- `grep -cE "^\s+slug: '" src/site.ts` returns 91 (85 tools + 6 guides)
+
+Under row 14, add a line: `Extra: more for <slugs> DONE <hashes>`. Stop at 200 turns even if the list isn't finished, and write what's left into next.md. No new pages and no browser check.

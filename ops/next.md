@@ -1,5 +1,5 @@
-- Four rows pulled forward this run (5, 6, 7, 8), all committed to main. Rows 9 to 13 remain: row 9 is more for split-pdf, pdf-to-text, webp-to-jpg and resize-image.
-- Next run (row 9 if due, otherwise row 10): more on the four pages named in row 9, then Guide 5 (/guides/make-a-favicon) with guide links on png-to-ico and svg-to-ico.
-- Guides keep interlinking: rows 10 to 12 add "See also" links; row 13 is the QA sweep (link-check test for internal hrefs in guides, guides linked from the home page).
-- 94 pages, 148 tests, sitemap carries 4 guide URLs, 22 pages have more sections. Tool slug count still 85.
-- Visitors: 70 in the last 30 days (ads level 300, Pro trigger 1,000). Search still shows no stayfile.app pages; the owner's Search Console step is in subfixer issue #9.
+- All week-plan rows 1 to 13 are DONE (rows 9 to 13 built early on 11-17 morning, after rows 5 to 8 went in on 11-17 02:47). All six guides are live, the backlog was already done, and row 14 (tomorrow morning) has no rows left to finish; it should only take leftover fixes and the metrics trigger check.
+- The content side of the AdSense "thin pages" problem is done for this week: 96 pages, 6 guides under /guides/, /guides/ linked from the home page, 40 tool pages with spec-clean "more" sections, 161 tests, and the sitemap carries all 7 guide URLs. Search indexing is the remaining lever, and it is the owner's Search Console step (subfixer issue #9).
+- Visitors: 70 in the last 30 days (ads level 300, Pro trigger 1,000). No decision issues open. If a page shows up for `site:stayfile.app` or visitors reach 100, say so; otherwise don't add converter pages.
+- Remaining risk: no page has been verified in a real browser since 11-11 (node execution is not allowed in daily runs); internal guide links are pinned by the new href test, but layout and drop-flow checks stay open.
+- If the boss authorises more work: more `more` sections on the remaining thin tool pages are the cheapest win; ask before adding any new tool or preset page (slug count must stay at 85).
