@@ -1,5 +1,5 @@
-- Row 4 done early on 11-16 morning. Tue 11-17 morning run: take the oldest row not marked DONE.
-- Mon 11-16 evening run: finish row 3 (more for pdf-to-jpg, jpg-to-pdf, compress-image, after reading the code). merge-pdf is done already.
-- Tue 11-17 evening run (row 5): more with samples for csv-to-json and json-to-csv; more without samples for csv-to-excel and excel-to-csv. Samples must be pasted from real transform output, with tests proving it.
-- 92 pages, 137 tests, sitemap carries 3 guide URLs. Two guides live under /guides/; keep growing them in plan order.
+- Four rows pulled forward this run (5, 6, 7, 8), all committed to main. Rows 9 to 13 remain: row 9 is more for split-pdf, pdf-to-text, webp-to-jpg and resize-image.
+- Next run (row 9 if due, otherwise row 10): more on the four pages named in row 9, then Guide 5 (/guides/make-a-favicon) with guide links on png-to-ico and svg-to-ico.
+- Guides keep interlinking: rows 10 to 12 add "See also" links; row 13 is the QA sweep (link-check test for internal hrefs in guides, guides linked from the home page).
+- 94 pages, 148 tests, sitemap carries 4 guide URLs, 22 pages have more sections. Tool slug count still 85.
 - Visitors: 70 in the last 30 days (ads level 300, Pro trigger 1,000). Search still shows no stayfile.app pages; the owner's Search Console step is in subfixer issue #9.
