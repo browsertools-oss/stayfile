@@ -286,6 +286,15 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert PDF to JPG',
     lede: 'Turn each page of a PDF into a JPG picture, for sending, pasting into a form or putting in a slide. A one-page PDF gives one JPG; a longer one comes back as a zip of numbered JPGs.',
     description: 'Convert every page of a PDF to a JPG image in your browser, at 96, 150 or 300 dpi. The PDF is not uploaded.',
+    more: {
+      h2: 'What happens to the page',
+      paras: [
+        'Each page is drawn onto a white canvas by pdf.js at the resolution you pick. The canvas scale is the dpi divided by 72, which is the unit PDF pages are measured in, so 150 dpi gives a page about twice the pixel size of 96 dpi without any extra work on your side.',
+        'JPG has no transparency, so anything transparent on the page is flattened onto white instead of black. The page is saved at quality 0.92, which keeps text edges clean while making the file much smaller than a lossless image would be.',
+        'A one-page PDF downloads as a single JPG named after the PDF. A longer PDF comes back as a zip named after the PDF with a -jpg suffix, holding one JPG per page numbered in order, padded to the width of the page count.',
+        'The text on the page becomes pixels, so it can no longer be selected, searched or copied out. Keep the original PDF if you need the words. pdf.js and its worker are downloaded only when you click Convert, not when the page opens.',
+      ],
+    },
     steps: [
       'Drop in the PDF.',
       'Pick a resolution. 150 dpi suits most screens, and 300 dpi is better for printing.',
@@ -446,6 +455,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert images to PDF',
     lede: 'Make one PDF from photos or scans, one image per page. Works with JPG, PNG, WebP and GIF, and you choose the page size.',
     description: 'Turn JPG, PNG or WebP images into a single PDF with one image per page. Pick A4, Letter or image size. Nothing is uploaded.',
+    more: {
+      h2: 'What happens to your images',
+      paras: [
+        'JPG and PNG files go into the PDF exactly as they are, with no re-encoding, so what you see is the quality you picked the file for. WebP and GIF cannot sit in a PDF directly, so each is redrawn as a JPG at quality 0.92 before it goes in, which is nearly lossless for photos and slightly soft on fine line art.',
+        '"Same as image" makes each page exactly the size of its image. A4 and Letter give standard pages, and wide images are placed on landscape pages instead of being squeezed. Images are never scaled up; they are only scaled down to fit inside the margins, and each is centred on its page.',
+        'The margin setting applies to A4 and Letter pages. "Same as image" always uses a zero margin, since the page is the picture. Each image becomes one page, so the page count equals the number of pictures you add, and a single image downloads under its own name rather than in a zip.',
+      ],
+    },
     steps: [
       'Drop in your images. Phone photos and scans both work.',
       'Put them in order and pick a page size and margin.',
@@ -1480,6 +1497,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Compress images',
     lede: 'Make photos small enough for an email, an upload form or a website. You see the new size before you download, and the original is never changed.',
     description: 'Reduce the file size of JPG, PNG and WebP images in your browser. Set quality and maximum width, compare sizes, and save. No upload.',
+    more: {
+      h2: 'How the compression works',
+      paras: [
+        'Each image is decoded, optionally scaled down to the maximum width you pick, and re-encoded in the same format by default. The default quality is 70, which usually looks the same as the original on screen but shrinks photos a good deal. Large downscales go in halving steps, which keeps edges sharper than one big jump.',
+        'PNG is lossless, so a PNG barely shrinks at any quality setting; pick WebP, or JPG for photos without transparency, for real savings. JPG has no transparency, so any transparent pixels are flattened onto white.',
+        'If the result in the same format at the same width would be larger than the original, you get the original file back unchanged instead of a bigger "compressed" file. Saved files carry a -small suffix, and the before and after size is shown next to each image so you can see the difference before you keep it.',
+      ],
+    },
     steps: [
       'Drop in one or more images.',
       'Pick a quality level. Setting a maximum width as well saves the most space on large phone photos.',
