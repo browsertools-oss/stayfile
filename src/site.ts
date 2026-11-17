@@ -166,6 +166,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Extract pages from a PDF',
     lede: 'Pick the pages you need and save them as a new, smaller PDF. You can also use this to reorder or drop pages.',
     description: 'Save selected pages of a PDF as a new file. Type pages like 1, 3, 7-9 and download. Works in your browser with no upload.',
+    more: {
+      h2: 'How the page selection works',
+      paras: [
+        'The pages you type are saved in the order you type them, so 3, 1, 2 puts page three first, and a backwards range like 10-1 reverses those pages. Commas or semicolons separate entries, "to" works as well as a dash, and 8- runs to the end of the file.',
+        'The pages are copied into a fresh document exactly as they are: text stays selectable, images keep their resolution and nothing is re-compressed. The output is about as large as the pages it holds, so trimming a long scan gives you a genuinely smaller file.',
+        'Each output is a fresh PDF rather than a slice of the original. Document properties such as title and author are not carried over, and neither is the bookmark list, so an extracted chapter from an indexed report loses its outline. The file is named after your source with a -pages suffix.',
+      ],
+    },
     steps: [
       'Drop in your PDF.',
       'Type the pages to keep, for example 2, 5-7. They are saved in the order you type them.',
@@ -194,6 +202,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Remove pages from a PDF',
     lede: 'Take out the pages you do not want and save everything else as a new PDF. Your original file is not changed.',
     description: 'Delete pages from a PDF in your browser. Type the pages to remove and download the rest. Your files are never uploaded.',
+    more: {
+      h2: 'How the new file is built',
+      paras: [
+        'The pages you list are dropped from the copy, and everything else is kept in the original order. So 2, 5-7 out of ten pages gives you pages 1, 3, 4 and 8 through 10, unchanged. The original file is never modified.',
+        'Pages are copied into a fresh document rather than re-rendered, so text stays selectable, images keep their resolution and nothing is re-compressed. The removed pages are really gone from the output, which also makes it as small as the pages it keeps.',
+        'Removing every page is refused, because a PDF needs at least one page; leave one in and save again. The output is named after your source with a -removed suffix. Document properties and the bookmark list from the original are not carried over, so check the result if the outline mattered.',
+      ],
+    },
     steps: ['Drop in your PDF.', 'Type the pages to remove, for example 2, 5-7.', 'Click Remove pages and save the new PDF.'],
     faq: [
       {
@@ -335,6 +351,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert PDF to PNG',
     lede: 'Turn each page of a PDF into a PNG picture. PNG keeps text and lines sharp, so it suits pages with small print or diagrams. A one-page PDF gives one PNG; a longer one comes back as a zip of numbered PNGs.',
     description: 'Convert every page of a PDF to a PNG image in your browser, at 96, 150 or 300 dpi. The PDF is not uploaded.',
+    more: {
+      h2: 'What the PNG keeps',
+      paras: [
+        'Each page is drawn onto a white canvas by pdf.js at the dpi you pick and saved as a lossless PNG. Unlike the JPG pages, the quality slider is not involved, and nothing is thrown away after the draw, so small text, hairline rules and flat colour in diagrams stay crisp.',
+        'Because PNG stores every pixel exactly, these files come out larger than JPGs of the same page, sometimes much larger for busy scans. Pick 96 dpi for on-screen use and 150 dpi as the default; reach for 300 dpi only when the pages will be printed.',
+        'A one-page PDF saves as a single PNG named after the PDF. A longer one comes back as a zip named with a -png suffix, holding one PNG per page numbered in order. The words become pixels, so they can no longer be selected or searched, and pdf.js is downloaded only when you click Convert, not when the page opens.',
+      ],
+    },
     steps: [
       'Drop in the PDF.',
       'Pick a resolution. 150 dpi suits most screens, and 300 dpi is better for printing.',
@@ -561,6 +585,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert HEIC to PDF',
     lede: 'Turn iPhone HEIC photos into one PDF, one photo per page. Useful for applications, records and printing.',
     description: 'Convert HEIC photos from an iPhone to a PDF in your browser, one per page, in the order you choose. Your photos are never uploaded.',
+    more: {
+      h2: 'What happens to each photo',
+      paras: [
+        'A HEIC is neither a JPG nor a PNG, so it is decoded first. Safari reads HEIC itself; other browsers download a small decoder the first time, which is the wait on the first photo. The photo is drawn onto a canvas at its own size on a white background and encoded as a JPG at quality 0.92, and that JPG is what goes into the PDF.',
+        'Because the PDF is built from the redrawn pixels, the date, camera and location details in the HEIC do not survive, and burst or live-photo files give up only their primary image. Pages are the photo size by default, or A4 or Letter with the image fitted inside and never upscaled; wide photos turn the page landscape.',
+        'Each photo becomes one page, in the order shown in the list, and you can mix in other image formats in the same drop. If an exact copy of the pixels matters more than convenience, convert the photos to PNG first and use the PNG to PDF page, which embeds them as they are.',
+      ],
+    },
     steps: ['Drop in your .heic files.', 'Put them in order and pick a page size and margin.', 'Click Make PDF and save it.'],
     faq: [
       {
@@ -750,6 +782,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert JPG to PNG',
     lede: 'Turn JPG photos into PNG files. PNG stores every pixel exactly as it is, which some apps and websites ask for. It cannot bring back detail that JPG has already thrown away.',
     description: 'Convert JPG to PNG online, one file or many at once. Saves lossless PNG files. Your photos stay on your device.',
+    more: {
+      h2: 'What the conversion can and cannot fix',
+      paras: [
+        'The JPG is decoded to raw pixels, drawn onto a canvas at the same dimensions and saved as a lossless PNG. Every pixel in the output is the pixel the JPG showed, byte for byte, which is why apps and websites that ask for PNG get exactly what they asked for.',
+        'Nothing is repaired. The detail JPG discarded when the photo was saved is gone for good, and turning it into a PNG only stores the lossy version without further change. Edges that looked fuzzy stay fuzzy; the PNG just stops the damage from getting worse.',
+        'Expect the PNG to be much larger than the JPG it came from, often several times larger for photos, because PNG stores every pixel exactly. The quality slider does nothing here. Reach for this page when a destination specifically wants PNG, not as a way to make a JPG better.',
+      ],
+    },
     steps: ['Drop in your JPG files.', 'PNG is already selected. Change it only if you need another format.', 'Click Save to download the PNG files.'],
     faq: [
       {
@@ -1479,6 +1519,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert WebP to PNG',
     lede: 'Turn WebP images into PNG files that open in almost any program, including older ones that cannot read WebP. Transparent areas stay transparent.',
     description: 'Convert WebP to PNG online, one file or many at once. Transparency is kept. Your images stay on your device.',
+    more: {
+      h2: 'How the pixels move across',
+      paras: [
+        'The WebP is decoded in your browser, drawn onto a canvas at the same dimensions and encoded as a PNG, so the picture keeps exactly the pixels the WebP held. PNG is lossless, and that path changes nothing after the draw. Detail a lossy WebP already dropped does not come back.',
+        'Transparency is the main reason to pick this page. WebP can carry an alpha channel, and PNG keeps it, so a WebP logo or icon with transparent background stays transparent. The quality slider has no effect on PNG because PNG is lossless; moving it changes nothing.',
+        'PNG is the format the most programs can open, which is why this page exists even though WebP is smaller. The trade is size: expect the PNG to be larger than the WebP you started with, worth it when the file has to open somewhere specific.',
+      ],
+    },
     steps: ['Drop in your WebP files.', 'PNG is already selected. Change it only if you need another format.', 'Click Save to download the PNG files.'],
     faq: [
       {
@@ -1638,6 +1686,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Compress PNG',
     lede: 'Make a PNG small enough for a website, a README or an upload form. Set a maximum width and quality, and see the new size before you download. For a much smaller file, save as WebP instead; the page tells you when the PNG will barely shrink.',
     description: 'Reduce PNG file size in your browser. Cap the width, compare sizes, and save. Optionally save as WebP for a much smaller file. Nothing leaves your device.',
+    more: {
+      h2: 'Why a PNG barely shrinks',
+      paras: [
+        'PNG is lossless, so re-saving a PNG removes almost nothing. The real savings here come from the maximum width, 1920 pixels by default, which scales the image down proportionally using halving steps that keep edges sharp. A 4000 pixel screenshot re-saved at 1920 comes out far smaller.',
+        'The quality slider only matters if you switch Save as to WebP or JPG. Left on PNG it does nothing, because PNG has no quality to trade. The page shows the size change next to each file before you save, so you can see when a re-save bought nothing.',
+        'If the output would be bigger than the original while staying the same format and width, the original file is handed back unchanged instead. For genuinely big reductions, save as WebP, which keeps transparency; pick JPG only for photos with no transparency.',
+      ],
+    },
     steps: [
       'Drop in one or more PNG files.',
       'Set a maximum width. Re-saving at 1920 pixels or less is where most of the savings come from.',
@@ -1852,6 +1908,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert TSV to CSV',
     lede: 'Turn a tab-separated file into a CSV that opens cleanly in Excel and every data tool. Cells with commas or quotes are quoted for you, and line endings are set for Windows.',
     description: 'Convert TSV to CSV in your browser. Quoting is handled for you, and the file never leaves your device.',
+    more: {
+      h2: 'What passes through, and what changes',
+      paras: [
+        'The file is parsed as tab-separated, with no guessing about the source: a tab is a tab. Rows and columns pass through exactly as they are, and nothing is retyped, so a leading zero like 00123 stays text, and numbers are not reformatted.',
+        'On the way out, cells are quoted only when they need it. A cell holding a comma is wrapped in quotes; a cell holding a quote gets its quotes doubled, the standard CSV escape. The output uses Windows line endings, which older Excel expects.',
+        'If a dropped file is comma-separated rather than tab-separated, the page says so instead of producing one-column output you would have to redo. For the reverse direction, use the CSV to TSV page, which quotes cells that hold a tab or a quote.',
+      ],
+    },
     steps: [
       'Drop in a .tsv file, or paste the rows.',
       'Check the preview.',
@@ -1883,6 +1947,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert CSV to TSV',
     lede: 'Turn a CSV file into a tab-separated file for tools that paste better with tabs. The separator is detected on its own, and cells are quoted when they hold a tab or a quote.',
     description: 'Convert CSV to TSV in your browser. Quoting is handled for you, and the file never leaves your device.',
+    more: {
+      h2: 'What changes on the way to TSV',
+      paras: [
+        'The source separator is detected automatically, so comma, semicolon or tab files all read the same way, and the output is written strictly tab-separated. Rows and columns pass through untouched apart from the delimiter change, and nothing is retyped: a value like 00123 stays text, and numbers keep their written form.',
+        'Cells are quoted only when they hold a tab or a quote, mirroring the CSV rule with the characters swapped. A cell with a tab is wrapped in quotes, a cell with a quote gets its quotes doubled. A cell with just a comma needs no quoting in TSV at all, which is the usual reason to switch.',
+        'The output uses Windows line endings. Some strict TSV readers are unhappy with quoted fields, but nothing is lost from the file itself, and spreadsheets pasting tab-separated text land one value per cell every time. If the dropped file is already tab-separated, the page says so instead of converting twice.',
+      ],
+    },
     steps: [
       'Drop in a .csv file, or paste the rows.',
       'Check the preview.',
@@ -2626,6 +2698,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert Excel to SQL',
     lede: 'Turn the rows of an Excel sheet into INSERT statements you can run against your database. The first sheet is read, the first row becomes the column names, numbers stay numbers and empty cells become NULL. Everything runs in your browser.',
     description: 'Convert an Excel spreadsheet to SQL INSERT statements in your browser. The first sheet is converted, and nothing is uploaded.',
+    more: {
+      h2: 'How the sheet becomes statements',
+      paras: [
+        'The first sheet is read with SheetJS and taken as the text you see in the cells, then the same code path the CSV to SQL page uses turns each row into one INSERT INTO statement. The first row becomes the column list, numbers stay unquoted, empty cells become NULL, and quotes inside text are doubled.',
+        'Only the first sheet is read. If your workbook has several, the page lists their names so you know what was left out, and the order of sheets decides which one counts. A value that looks like a number, like 02134 with a leading zero, stays quoted as text.',
+        'The table name you type is cleaned to letters, digits, underscores and dollar signs, capped at 64 characters, with a t_ prefix when it starts with a digit. The script does not create the table: build it first with the types you want, then run the statements. Long output is cut short in the preview at 200,000 characters; the download still holds everything.',
+      ],
+    },
     steps: [
       'Drop in a .xlsx file. Only the first sheet is converted.',
       'Name the table. The first row becomes the column names.',
