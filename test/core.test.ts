@@ -7,6 +7,7 @@ import * as XLSX from 'xlsx';
 import { csvToXlsx, xlsxToRows, xlsxToCsv } from '../src/lib/xlsx';
 import { targetSize, renameTo, formatBytes, sizeChange, avifQuality } from '../src/lib/image';
 import { PAGES } from '../src/site';
+import { yamlToJson } from '../src/lib/yaml';
 
 // A PDF whose pages are 100, 200, 300... points wide, so we can tell pages apart after a transform.
 async function makePdf(n: number, rotation = 0) {
@@ -415,5 +416,23 @@ describe('more-section samples', () => {
   test('json-to-csv sample is the real output of jsonToCsv', () => {
     const s = sample('json-to-csv');
     expect(jsonToCsv(s.before, { delimiter: ',' }).trim()).toBe(s.after.trim());
+  });
+
+  test('csv-to-sql sample is the real output of csvToSql', () => {
+    const s = sample('csv-to-sql');
+    const out = csvToSql(s.before, { delimiter: '', header: true, typed: true, table: 'csv_table' });
+    expect(out).toContain("'O''Brien'");
+    expect(out).toContain('NULL');
+    expect(out.trim()).toBe(s.after.trim());
+  });
+
+  test('yaml-to-json sample is the real output of yamlToJson', () => {
+    const s = sample('yaml-to-json');
+    expect(yamlToJson(s.before, { indent: 2 }).trim()).toBe(s.after.trim());
+  });
+
+  test('csv-to-markdown sample is the real output of csvToMarkdown', () => {
+    const s = sample('csv-to-markdown');
+    expect(csvToMarkdown(s.before, { delimiter: '', header: true }).trim()).toBe(s.after.trim());
   });
 });

@@ -1740,6 +1740,18 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert CSV to Markdown',
     lede: 'Turn a CSV file or pasted rows into a Markdown table you can paste into a README, an issue or a pull request. Numbers come out right-aligned, and pipes inside cells are escaped so the table keeps its shape.',
     description: 'Convert CSV to a Markdown table in your browser. Paste rows or drop a file, set the separator, and copy the table for GitHub or any Markdown editor. Nothing is uploaded.',
+    more: {
+      h2: 'How the table is written',
+      paras: [
+        'The output is a GitHub-flavored Markdown table: a header line, an alignment row, then one line per row of the file. Columns that hold only numbers get right-aligned with ---: in the alignment row, and everything else stays left-aligned.',
+        'A pipe inside a cell is written as \\| so it does not split the cell, and a line break inside a cell becomes <br>. Other characters pass through unchanged, which is why a table pasted from Excel keeps its shape.',
+        'With the header option off, the table gets generated Column 1, Column 2 cells, because Markdown tables need a header row to render. The separator is detected automatically or picked by hand, and values are not typed, so 00789 keeps its leading zeros.',
+      ],
+      sample: {
+        before: 'tool,uses,score\npdf-merge,12,9\ncsv-to-json,8,7\nmerge-pdf,3,10',
+        after: '| tool | uses | score |\n| --- | ---: | ---: |\n| pdf-merge | 12 | 9 |\n| csv-to-json | 8 | 7 |\n| merge-pdf | 3 | 10 |\n',
+      },
+    },
     steps: [
       'Drop in a .csv file or paste the rows.',
       'Check the separator and whether the first row holds the column names.',
@@ -2369,6 +2381,18 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert YAML to JSON',
     lede: 'Turn a YAML file into JSON. Handy for CI configs, Kubernetes manifests and app settings you need as JSON for a script or an API. Everything runs in your browser.',
     description: 'Convert YAML to JSON in your browser, including multi-document files. Your file is never uploaded.',
+    more: {
+      h2: 'What the JSON looks like',
+      paras: [
+        'The YAML is parsed with js-yaml and written as JSON indented with two spaces. Keys keep the order they have in the file, nested maps become nested objects, and lists become JSON arrays. Anchors and aliases are resolved by the parser before the JSON is written, so you never see an &ref in the output.',
+        'A file with several documents separated by --- becomes a JSON array with one entry per document; a single-document file gives you the document itself, not a one-element array. Custom tags are not supported, so export those by hand.',
+        'Types carry over as JSON scalars: YAML numbers become JSON numbers, true and false become booleans, and null becomes null. Plain JSON parses as YAML, so a .json file converts fine here too. js-yaml loads only when the page runs, in its own chunk.',
+      ],
+      sample: {
+        before: 'name: stayfile\nplugins:\n  - pdf\n  - csv\nlimits:\n  pages: 50\n  pro: false',
+        after: '{\n  "name": "stayfile",\n  "plugins": [\n    "pdf",\n    "csv"\n  ],\n  "limits": {\n    "pages": 50,\n    "pro": false\n  }\n}',
+      },
+    },
     steps: [
       'Drop in a .yaml or .yml file, or paste the YAML.',
       'Check the preview of the parsed rows.',
@@ -2569,6 +2593,18 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert CSV to SQL',
     lede: 'Turn a CSV file into INSERT statements you can run against your database. Numbers stay numbers, empty cells become NULL, and single quotes inside the text are doubled the way SQL wants. Everything runs in your browser.',
     description: 'Convert CSV to SQL INSERT statements in your browser. Name the table, drop a file or paste the rows, and copy the script. Nothing is uploaded.',
+    more: {
+      h2: 'Exactly what comes out',
+      paras: [
+        'One INSERT INTO statement per row, against the table name you typed. The first row of the file becomes the column list; turn the header option off and the columns are named column_1, column_2 and so on. The table name is cleaned to letters, digits, underscores and dollar signs, capped at 64 characters, and a name starting with a digit gets a t_ prefix. Column names that are not simple identifiers get double quotes.',
+        'Numbers are written unquoted, TRUE and FALSE come out as bare booleans, and an empty cell becomes NULL. Everything else is single-quoted with any quote inside doubled, which is the escape MariaDB, MySQL, Postgres and SQLite all read the same way.',
+        'The script does not create the table. You create it first with the types you want, then run the statements. Typing is per column like the CSV to JSON page, so if any value in a column must stay text, the whole column is quoted as text.',
+      ],
+      sample: {
+        before: "name,city,age\nAda,London,36\nO'Brien,Dublin,34\nGrace,,85\nSam,Berlin,41",
+        after: "INSERT INTO csv_table (name, city, age) VALUES ('Ada', 'London', 36);\nINSERT INTO csv_table (name, city, age) VALUES ('O''Brien', 'Dublin', 34);\nINSERT INTO csv_table (name, city, age) VALUES ('Grace', NULL, 85);\nINSERT INTO csv_table (name, city, age) VALUES ('Sam', 'Berlin', 41);",
+      },
+    },
     steps: [
       'Drop in a .csv file, or paste the rows.',
       'Name the table, and check whether the first row holds the column names.',
