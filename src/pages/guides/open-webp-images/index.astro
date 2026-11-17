@@ -1,0 +1,56 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = "Saved a WebP image you can't open? Convert it";
+const description = 'Why websites save images as WebP, why older apps refuse them, and how to get a JPG or PNG that opens anywhere, in your browser.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-17',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/open-webp-images/" jsonld={jsonld}>
+  <h1>Saved a WebP image you can't open? Convert it</h1>
+  <p class="lede">You right-clicked an image on a website, chose Save As, and the file you got ends in .webp. Your photo app will not open it, the print shop will not take it, and the form you need it for wants a JPG. This happens because websites serve WebP on purpose. Here is why, and how to turn the file into something that opens anywhere, without installing anything.</p>
+
+  <h2>Why websites save images as WebP</h2>
+  <p>WebP is a format Google made for the web. At the same visual quality it makes smaller files than JPG or PNG, so pages load faster and use less data. Websites convert their images to WebP on their servers and serve them to browsers, which have supported WebP for years. Nobody tells you this, and saving the image keeps the format it was served in.</p>
+  <p>That is the whole reason the file on your disk is WebP: it was made small for a screen, not saved for you to edit or print.</p>
+
+  <h2>Why older apps refuse it</h2>
+  <p>Support for WebP arrived later in desktop programs than in browsers. Older photo viewers, editors, print software and upload forms were built around JPG, PNG, TIFF or PDF, and many were never updated. Some refuse the file by extension, others by actual decode support. A print shop that asks for "JPG or PDF" means it, and upload forms on government and medical sites are notoriously conservative about formats.</p>
+  <p>Before converting, check what the destination actually wants. Most of the time a JPG is the safest answer, a PNG is the safe answer when transparency matters, and a PDF is the right container for a document.</p>
+
+  <h2>Convert it to JPG and open it anywhere</h2>
+  <p>Use <a href="/webp-to-jpg/">WebP to JPG</a>. Drop in the .webp files, and the page decodes them with your browser, draws them onto a canvas and encodes fresh JPGs. One image converts to one JPG; several come back as a zip. JPG has no transparency, so any transparent areas are painted white before the JPG is written. The quality slider defaults to 85, which is hard to tell from the original in normal photos.</p>
+  <p>JPG is the format older programs, upload forms and print shops accept almost without exception. If the destination is a website form, an email attachment or a print counter, convert to JPG and move on.</p>
+
+  <h2>Keep the transparency with PNG</h2>
+  <p>When the WebP has a transparent background, such as a logo or an icon, converting to JPG paints it white. To keep the transparency, use <a href="/webp-to-png/">WebP to PNG</a> instead. PNG is lossless, so the pixels come through unchanged, and it opens in nearly every program that struggles with WebP. PNG files are usually larger than WebP, but that is the price of keeping the alpha channel.</p>
+  <p>One honest limit: detail that a lossy WebP already discarded does not come back in the PNG. The conversion copies the pixels it is given. A lossless WebP round-trips exactly; a lossy one round-trips as the quality it has.</p>
+
+  <h2>Need a document instead? Go to PDF</h2>
+  <p>If the image has to arrive as a document, for a print shop, a client or an archive, <a href="/webp-to-pdf/">WebP to PDF</a> places each image on its own page of a PDF. PDF cannot hold WebP, so each image is redrawn as a high-quality JPG inside the PDF, and the FAQ on the page says so. If the redraw worries you, convert to PNG first and use the PNG to PDF page, which embeds the pixels exactly.</p>
+
+  <h2>A quick decision guide</h2>
+  <ul>
+    <li>Upload form, email, print shop, older app: convert to JPG.</li>
+    <li>Image has a transparent background you need to keep: convert to PNG.</li>
+    <li>The image is really a document page: convert to PDF.</li>
+    <li>You will re-edit the image first: convert to PNG, edit, and let the editor save whatever format it wants.</li>
+    <li>You want the exact original file untouched: use the image as saved from the site, and convert a copy only for the destination that refuses it.</li>
+  </ul>
+
+  <h2>The short version</h2>
+  <p>WebP is the web's format, not a general-purpose one your desktop apps have to read. Converting takes seconds: <a href="/webp-to-jpg/">WebP to JPG</a> for widest compatibility, <a href="/webp-to-png/">WebP to PNG</a> to keep transparency, <a href="/webp-to-pdf/">WebP to PDF</a> for a document. Your files are read and converted inside the tab, and nothing is uploaded.</p>
+  <p>See also: <a href="/guides/make-a-favicon/">How to make a favicon.ico from a PNG or SVG</a>.</p>
+</Base>
+<style>
+  pre { font-family: var(--mono, monospace); overflow-x: auto; }
+</style>

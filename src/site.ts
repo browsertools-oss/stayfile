@@ -766,6 +766,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'webp-to-jpg',
     tool: 'img-convert',
+    guide: 'open-webp-images',
     group: 'Images',
     card: 'WebP to JPG',
     blurb: 'Open WebP images anywhere',
@@ -1469,6 +1470,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'webp-to-png',
     tool: 'img-convert',
+    guide: 'open-webp-images',
     group: 'Images',
     card: 'WebP to PNG',
     blurb: 'Turn WebP images into PNG files',
@@ -2731,5 +2733,10 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'make-a-favicon',
     title: 'How to make a favicon.ico from a PNG or SVG',
     blurb: 'The sizes browsers use, the file location, and the link tags to paste.',
+  },
+  {
+    slug: 'open-webp-images',
+    title: "Saved a WebP image you can't open? Convert it",
+    blurb: 'Why websites save WebP, and how to get a JPG or PNG out of it.',
   },
 ];
