@@ -718,6 +718,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert PNG to JPG',
     lede: 'Turn PNG images into JPG files, which are usually far smaller for photos. Transparent areas are filled with white.',
     description: 'Convert PNG to JPG online, one file or many at once. Adjustable quality, white background for transparent areas. Files stay on your device.',
+    more: {
+      h2: 'What the JPG conversion does',
+      paras: [
+        'The PNG is decoded to raw pixels, drawn onto a canvas at the same dimensions and encoded as a fresh JPG. No part of the original PNG is reused, and no metadata travels: date, camera and location details are dropped, and the pixel size stays exactly what it was.',
+        'JPG cannot hold transparency, so pixels that were transparent in the PNG are painted white before the JPG is written. If the transparent areas are the point of the image, convert to WebP or keep the PNG instead.',
+        'PNG files storing photos are usually far larger than the JPG made from them, often by 70 percent or more, because PNG keeps every pixel exactly. For screenshots, flat graphics and text, JPG trades crisp edges for artifacts, so WebP or PNG stay the better home for those.',
+      ],
+    },
     steps: ['Drop in your PNG files.', 'JPG is already selected. Move the quality slider if you want smaller files.', 'Click Convert and save.'],
     faq: [
       {
@@ -904,6 +912,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert AVIF to JPG',
     lede: 'Save AVIF images as JPG files, which almost every app and upload form accepts. AVIF is a newer format, and many older programs still cannot open it.',
     description: 'Convert AVIF images to JPG in your browser, one at a time or in a batch. Your images are never uploaded.',
+    more: {
+      h2: 'What happens to the pixels',
+      paras: [
+        'Your browser decodes the AVIF itself and the page draws it onto a canvas at the same dimensions, then encodes a new JPG from the pixels. The default quality is 85. No part of the AVIF file is reused, and no metadata, such as date or camera details, comes along.',
+        'AVIF can hold 10 bits per colour channel; the canvas path works in 8-bit, so very smooth gradients can band slightly that the AVIF did not. This is hard to see in normal photos at quality 85.',
+        'AVIF can also carry transparency, and JPG cannot, so transparent pixels are painted white before the JPG is written. If the background matters, use AVIF to PNG instead. The JPG you get is an ordinary one that older apps, editors and upload forms accept.',
+      ],
+    },
     steps: ['Drop in your .avif files.', 'JPG is already selected. Move the quality slider if you want smaller files.', 'Click Convert, then save each image or all of them as a zip.'],
     faq: [
       {
@@ -1052,6 +1068,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert SVG to PNG',
     lede: 'Turn SVG files into plain PNG images. Handy when an app or form refuses the SVG itself.',
     description: 'Convert SVG vector files to PNG in your browser. The PNG is made at the SVG\'s own size, transparency is kept. Your file is never uploaded.',
+    more: {
+      h2: 'How the PNG is drawn',
+      paras: [
+        'The SVG is drawn through a canvas at its own size, which comes from its width and height attributes, or from its viewBox when it has none. An SVG with no size information at all is drawn at 1024 by 768. The long side is capped at 8192 pixels, so a huge poster SVG does not produce a gigantic PNG.',
+        'Drawing through a canvas rather than relying on createImageBitmap avoids the disagreements browsers have about SVG sizes, and keeps the result identical across browsers. Transparency in the SVG is kept as transparency in the PNG.',
+        'The quality slider has no effect here, because PNG is lossless. If the SVG relies on fonts installed on your computer or on images hosted elsewhere, the PNG can show fallback text or miss those pieces, since the SVG is loaded as a standalone document. To get a different size, convert first, then use the Resize page on the PNG.',
+      ],
+    },
     steps: ['Drop in your .svg files.', 'PNG is already selected. Change it only if you need another format.', 'Click Convert and save.'],
     faq: [
       {
@@ -1124,6 +1148,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert PNG to ICO',
     lede: 'Turn a PNG into a .ico file, the format browsers and desktops use for favicons and shortcuts. The file holds 16, 32 and 48 px versions of the image, and transparency is kept.',
     description: 'Convert a PNG to a .ico favicon file in your browser. The file holds 16, 32 and 48 px sizes. Your image stays on your device.',
+    more: {
+      h2: 'How the icon file is built',
+      paras: [
+        'The PNG is decoded to a bitmap, and three square frames are drawn from it: 16, 32 and 48 pixels, each with high-quality smoothing. Each frame is stored inside the .ico as a 32-bit PNG with an alpha channel, so the frames look clean on light and dark tab bars. Nothing of the original PNG container is reused; only the pixels are.',
+        'If the PNG is not square, the image is scaled to fit inside each square and centred on a transparent background rather than stretched. Start from a square image of at least 48 pixels so the 16 pixel frame still has something to work with. A source much larger than 48 pixels is fine, since the smaller frames are made by scaling down.',
+        'Several files dropped together are converted one by one and saved as a single images.zip. Each .ico inside keeps the name of its source file, so icon.png becomes icon.ico. No metadata is written into the .ico beyond the images themselves.',
+      ],
+    },
     steps: ['Drop in your PNG files.', 'Nothing to set. The three sizes are made from your image.', 'Click Save to download the .ico file, or all of them as a zip.'],
     faq: [
       {
