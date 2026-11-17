@@ -129,6 +129,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Split a PDF',
     lede: 'Cut one PDF into several smaller ones, either by page ranges you type or one file per page. You get a zip when there is more than one file.',
     description: 'Split a PDF by page ranges or into single pages, right in your browser. Your file is not uploaded. Download the parts as a zip.',
+    more: {
+      h2: 'What splitting does and does not change',
+      paras: [
+        'Every range you type becomes its own PDF. Pages are copied into a new document exactly as they are, so text stays selectable, images keep their resolution and nothing is re-compressed. The output files are about as large as the pages they hold, no smaller.',
+        'The range syntax is flexible. Parts are separated by commas or semicolons, and a dash with no end, like 8-, runs to the last page. A range written backwards, like 10-1, walks backwards and reverses those pages. A single part is saved as a plain PDF; several parts come back as a zip named after your file, with each part labelled by its page numbers.',
+        'Each output is a fresh file rather than a chapter of the original. The original document properties, such as title and author, are not carried over, and the bookmark list is not carried over either. A password-protected PDF is refused until you remove the password in your PDF reader first.',
+      ],
+    },
     steps: [
       'Drop in the PDF you want to split.',
       'Type the ranges you want as separate files, such as 1-3, 4-10, 11-, or choose one file per page.',
@@ -358,6 +366,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert PDF to text',
     lede: 'Pull the text out of a PDF and save it as a plain .txt file you can paste into anything. It works on PDFs with real text in them, and it cannot read scanned pages.',
     description: 'Extract the text from a PDF in your browser and download it as a .txt file. Your PDF never leaves your device.',
+    more: {
+      h2: 'How the text comes out',
+      paras: [
+        'The text is pulled out with pdf.js, the same engine browsers use to show PDFs, and it follows the reading order of the file. Pages are separated by a blank line in the output, and the .txt download holds every page. The preview box stops at 200,000 characters when the text is longer than that; the download still has everything.',
+        'A scan has no text in this sense. If the pages are pictures, there are no words for the page to find, and the page tells you so instead of handing you an empty file. Tables and multi-column layouts lose their structure: you get lines of words in reading order, not cells.',
+        'pdf.js loads only when you click Extract, and only on this page. The file is read inside the tab, and nothing is uploaded. Because the words are copied out rather than redrawn, the output is plain text with no fonts, no styles and no images, ready to paste into any editor.',
+      ],
+    },
     steps: [
       'Drop in the PDF.',
       'Click Extract text and read the result in the box.',
@@ -750,6 +766,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert WebP to JPG',
     lede: 'Images saved from websites often come down as WebP, which some apps still refuse to open. Turn them into ordinary JPG files.',
     description: 'Convert WebP images to JPG so they open in any app. Batch convert in your browser with no upload and no sign-up.',
+    more: {
+      h2: 'What the JPG keeps and drops',
+      paras: [
+        'The WebP is decoded to raw pixels, drawn onto a canvas and encoded as a fresh JPG. Because the conversion starts from pixels, no date, camera or location metadata comes along, and none of the original file bytes are reused. The default quality is 85, which you can move with the slider.',
+        'JPG has no transparency, so transparent areas in the WebP fill with white. If the image relies on a transparent background, saving as PNG keeps it instead. Animated WebP files come out as a still image, so motion is not kept.',
+        'WebP decodes through the browser itself, so no extra library is downloaded for the conversion. The work happens in the tab, in batches, and the files never leave your device. The JPG you get is an ordinary one that older apps and upload forms accept.',
+      ],
+    },
     steps: ['Drop in your .webp files.', 'JPG is already selected. Pick PNG instead if the image has a transparent background.', 'Click Convert and save.'],
     faq: [
       {
@@ -1609,6 +1633,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Resize images',
     lede: 'Change the width and height of one image or many. Type exact pixels or a percentage, and the proportions stay locked unless you unlock them.',
     description: 'Resize JPG, PNG and WebP images to exact pixel dimensions or a percentage, in batches, right in your browser. Files are not uploaded.',
+    more: {
+      h2: 'How the new size is worked out',
+      paras: [
+        'Type a percentage and both sides scale together. Type a width or a height, and with proportions locked the other side is computed to match; the image is scaled to fit inside your box, so nothing is stretched. Unlock the proportions to force the exact width and height you typed.',
+        'Large downscales go in halving steps rather than one jump, with high-quality smoothing at each step. That keeps edges noticeably sharper than a single big reduction. Dimensions round to whole pixels, and never below one pixel on a side.',
+        'Making an image bigger is off unless you tick "Allow enlarging" or type a percentage above 100. Enlarging cannot add detail the file does not have, so expect softness. Leaving both boxes empty keeps the dimensions as they are, which is rarely what you want, so one side is always required for a real change.',
+      ],
+    },
     steps: [
       'Drop in your images.',
       'Type a width, a height or a percentage. Leave one side empty to keep the proportions.',
