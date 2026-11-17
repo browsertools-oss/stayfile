@@ -1,0 +1,59 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to combine PDF files on Windows, Mac and iPhone';
+const description = 'Join PDFs without extra software: Preview on a Mac, the Files app on iPhone, and what Windows can and cannot do on its own.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-17',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/combine-pdf-files/" jsonld={jsonld}>
+  <h1>How to combine PDF files on Windows, Mac and iPhone</h1>
+  <p class="lede">You have two or three PDFs and one place they need to end up: a single file. The way to get there depends on what you have in front of you. A Mac has Preview, an iPhone has the Files app, and Windows has nothing built in. Here is each route, and what to watch for in the result.</p>
+
+  <h2>On a Mac: Preview does it</h2>
+  <ol>
+    <li>Open the first PDF in Preview.</li>
+    <li>Open the sidebar with View, then Thumbnails, so every page shows as a thumbnail on the side.</li>
+    <li>Drag the other PDFs from the Finder into the sidebar, dropping them where their pages should go.</li>
+    <li>Use File, then Export as PDF to save the combined file under a new name.</li>
+  </ol>
+  <p>Dragging PDFs into the thumbnail sidebar merges them in place. If you want only some pages from a source file, open it in Preview first, select the thumbnails you want, and drag just those. Preview is free and already on every Mac, so this is the route to try before anything else on Apple hardware.</p>
+
+  <h2>On an iPhone or iPad: the Files app</h2>
+  <ol>
+    <li>Open the Files app and browse to the folder holding the PDFs.</li>
+    <li>Tap Select in the top corner.</li>
+    <li>Tap each PDF you want to combine.</li>
+    <li>Tap the More button, the three dots, then Create PDF.</li>
+  </ol>
+  <p>The order iOS uses is the order the files were selected, so tap them in the order you want them to appear. The menu wording moves around between iOS versions, but Select, the three dots and Create PDF have been stable for a while. The new PDF is saved next to the sources in the same folder.</p>
+
+  <h2>On Windows: there is no built-in way</h2>
+  <p>Windows 10 and 11 cannot join PDFs without extra software. "Microsoft Print to PDF" prints one document at a time and cannot append files. The free desktop routes involve installing a PDF program, which is more than most people want for a two-minute job.</p>
+  <p>The browser route is <a href="/merge-pdf/">Merge PDF</a>. Drop in the files, set the order with the arrows, and save. It runs entirely in your browser: the files are read on your machine, the combined PDF is made there, and nothing is uploaded. That matters when the PDFs are contracts, statements or anything you would not email to a stranger. The page works the same on a Mac or a phone, so it is the one method that covers every device you own.</p>
+
+  <h2>Reordering and trimming before or after</h2>
+  <p>Merging appends whole files in the order you set. If one of the sources needs pages removed first, do that step before merging with <a href="/remove-pages-from-pdf/">Remove pages from PDF</a>, or pull just the pages you need with <a href="/extract-pages-from-pdf/">Extract pages from PDF</a>. Both make a new PDF and leave the original untouched.</p>
+  <p>If the combined file is too large to send, shrink one of the sources before merging rather than after. For a first step with a long document, <a href="/split-pdf/">Split PDF</a> breaks it into the ranges you choose or one file per page, which also works when only a few pages of a big scan need to go into the combined file.</p>
+
+  <h2>What is kept and what is not</h2>
+  <p>The merge copies each page into a brand new document with the pages left as they are. No re-render, no pass through a printer routine. Text stays selectable, images keep their resolution, and the page size and rotation of each source page carry over, so a landscape page in one file stays landscape in the result.</p>
+  <p>Some things do not survive, and it is better to know before you rely on them. The bookmark list from the source files is not carried over, so a merged copy of an indexed report loses its sidebar outline. Fillable form fields may lose their interactivity, so fill forms in before merging. The output is a fresh document, so document properties such as author and title are not carried over either. Nothing is recompressed, which is why the combined file is close to the sum of its sources.</p>
+  <p>If you need the outline, one workaround is to keep the merged pages and rebuild the bookmarks in a desktop PDF reader afterwards. If the forms matter more than the merge, print them to PDF first, which flattens the fields into the page, and merge those.</p>
+
+  <h2>The short version</h2>
+  <p>Mac: Preview, thumbnails sidebar, Export as PDF. iPhone: Files app, Select, three dots, Create PDF. Windows: nothing built in, so use the browser merge page. Trim or split sources first if they need it, and expect to lose bookmarks and live form fields whichever route you take.</p>
+  <p>See also: <a href="/guides/csv-opens-in-one-column-in-excel/">CSV opens in one column in Excel: why and how to fix it</a>.</p>
+</Base>
+<style>
+  pre { font-family: var(--mono, monospace); overflow-x: auto; }
+</style>

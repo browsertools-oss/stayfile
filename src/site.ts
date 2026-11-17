@@ -85,6 +85,7 @@ export const PAGES: ToolPage[] = [
     slug: 'merge-pdf',
     tool: 'pdf-merge',
     group: 'PDF',
+    guide: 'combine-pdf-files',
     card: 'Merge PDF',
     blurb: 'Combine several PDFs into one file',
     title: 'Merge PDF files online without uploading them',
@@ -2654,5 +2655,10 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'import-csv-into-mysql-postgresql-sqlite',
     title: 'Load a CSV into MySQL, PostgreSQL or SQLite',
     blurb: 'The exact import commands for the three databases, and the INSERT fallback.',
+  },
+  {
+    slug: 'combine-pdf-files',
+    title: 'How to combine PDF files on Windows, Mac and iPhone',
+    blurb: 'Preview on a Mac, Files on iPhone, and the browser route for Windows.',
   },
 ];
