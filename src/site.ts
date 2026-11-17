@@ -1116,6 +1116,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'png-to-ico',
     tool: 'img-ico',
+    guide: 'make-a-favicon',
     group: 'Images',
     card: 'PNG to ICO',
     blurb: 'Make a .ico favicon file from a PNG',
@@ -1211,6 +1212,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'svg-to-ico',
     tool: 'img-ico',
+    guide: 'make-a-favicon',
     group: 'Images',
     card: 'SVG to ICO',
     blurb: 'Make a .ico favicon file from an SVG',
@@ -2692,5 +2694,10 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'combine-pdf-files',
     title: 'How to combine PDF files on Windows, Mac and iPhone',
     blurb: 'Preview on a Mac, Files on iPhone, and the browser route for Windows.',
+  },
+  {
+    slug: 'make-a-favicon',
+    title: 'How to make a favicon.ico from a PNG or SVG',
+    blurb: 'The sizes browsers use, the file location, and the link tags to paste.',
   },
 ];

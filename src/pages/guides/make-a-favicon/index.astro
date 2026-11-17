@@ -1,0 +1,58 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to make a favicon.ico from a PNG or SVG';
+const description = 'Make a favicon.ico from a PNG or SVG: the sizes browsers use, where the file goes, and the link tags to paste into your site.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-17',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/make-a-favicon/" jsonld={jsonld}>
+  <h1>How to make a favicon.ico from a PNG or SVG</h1>
+  <p class="lede">The small icon in a browser tab is a favicon, and getting one takes one image and five minutes. The job has three parts: making an .ico file, putting it at the root of your site, and adding a line or two of markup for the browsers that want more. Here is the whole thing, from a PNG or from an SVG.</p>
+
+  <h2>Where the file goes</h2>
+  <p>Browsers ask for <code>/favicon.ico</code> at the root of your site on their own. No tag is needed for that one URL. Put <code>favicon.ico</code> next to your home page, so <code>https://yoursite.com/favicon.ico</code> resolves, and every visitor's browser will find it without any markup at all.</p>
+  <p>Everything beyond the root .ico is an improvement, not a requirement. The extra markup below covers modern browsers and iPhones, and costs two more files.</p>
+
+  <h2>What a good .ico holds</h2>
+  <p>An .ico file is a container. It can hold several sizes of the same icon in one file, and the browser picks the size it needs. Stayfile's <a href="/png-to-ico/">PNG to ICO</a> page writes three sizes into one file: 16, 32 and 48 pixels. The 16 pixel frame covers browser tabs, 32 covers taskbars and shortcuts, and 48 covers desktop shortcuts and larger icon slots.</p>
+  <p>Each frame is a full square PNG stored inside the .ico container. Browsers accept PNG payloads in .ico files, and these frames keep 32 bits of colour, so transparency in your source survives. Start from a square image. A non-square image is scaled to fit inside the square and centred with padding around it; it is never stretched or squashed, but it will not fill the frame, so a wide logo comes out small with empty space above and below. If your source is not square, crop or pad it to a square first, or it will not read well at 16 pixels.</p>
+
+  <h2>Make it from a PNG</h2>
+  <ol>
+    <li>Export or find a PNG of your icon. A square image of at least 48 pixels works; bigger is better, because the 16 and 32 pixel frames are made by scaling your source down.</li>
+    <li>Open <a href="/png-to-ico/">PNG to ICO</a>, drop the file in, and click Convert.</li>
+    <li>Save the file as <code>favicon.ico</code> and put it at the root of your site.</li>
+  </ol>
+  <p>If your PNG is not square, or you want a clean square crop, use <a href="/resize-image/">Resize image</a> first: type the same number for width and height and keep proportions locked, or unlock them only if you accept a stretch. Sizing a small image up to force a bigger frame does not add detail, so prefer a source that is already at least 48 pixels square.</p>
+
+  <h2>Make it from an SVG</h2>
+  <p>An SVG is often the best source for an icon because it is a drawing, not a grid of pixels. Open <a href="/svg-to-ico/">SVG to ICO</a>, drop the file in, and save the result as <code>favicon.ico</code>. The page draws the SVG at its own size, scales it to 16, 32 and 48 pixels, and stores each frame as a PNG inside the .ico.</p>
+  <p>Two things to watch. Keep the SVG's own dimensions square (a square <code>viewBox</code> is the reliable way), because a wide SVG is fitted inside the square frames and padded rather than stretched. And keep the artwork simple: fine detail that reads at full size disappears at 16 pixels, so test the tab at actual size before you ship it.</p>
+
+  <h2>The tags to add</h2>
+  <p>The root .ico needs no markup. These three lines cover modern browsers, iPhones and high-DPI screens. Paste them inside <code>&lt;head&gt;</code>:</p>
+  <pre><code>&lt;link rel="icon" href="/favicon.ico" sizes="any"&gt;
+&lt;link rel="icon" href="/icon.svg" type="image/svg+xml"&gt;
+&lt;link rel="apple-touch-icon" href="/apple-touch-icon.png"&gt;</code></pre>
+  <p>The first line points browsers at your .ico, and <code>sizes="any"</code> tells them it is a multi-size container. The second line offers the SVG directly to browsers that take it, which is sharper at any size; serve the SVG at <code>/icon.svg</code> alongside the .ico and the browser picks whichever it prefers. The third line is for iPhones and iPads: when someone adds your site to their home screen, iOS uses <code>apple-touch-icon.png</code> instead of the .ico. That file is a PNG of 180 by 180 pixels. Make it from your square source with <a href="/resize-image/">Resize image</a>, setting both sides to 180.</p>
+
+  <h2>Checking it worked</h2>
+  <p>Open <code>https://yoursite.com/favicon.ico</code> directly in a tab. If the icon downloads or displays, the file is in place. Then load your home page and look at the tab. Browsers cache favicons aggressively, so if the old icon sticks around, add a throwaway query such as <code>/favicon.ico?v=2</code> in a link tag while you test, or clear the site's cache entry in your browser. A favicon that looks wrong at small size is nearly always a source problem: not square, too much detail, or a transparent background that reads as black on a dark tab bar.</p>
+
+  <h2>The short version</h2>
+  <p>Square source in, <code>favicon.ico</code> at the root out. The .ico from Stayfile holds 16, 32 and 48 pixel frames with transparency intact, built from your PNG or from an SVG you already have. Add the three link tags for iPhones and SVG-capable browsers, and remember that the root .ico alone is enough for most of the web.</p>
+  <p>See also: <a href="/guides/combine-pdf-files/">How to combine PDF files on Windows, Mac and iPhone</a>.</p>
+</Base>
+<style>
+  pre { font-family: var(--mono, monospace); overflow-x: auto; }
+</style>
