@@ -1,0 +1,57 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'Load a CSV into MySQL, PostgreSQL or SQLite';
+const description = 'The exact commands to import a CSV into MySQL, PostgreSQL and SQLite, plus the portable INSERT route for consoles and hosts without file access.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-17',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/import-csv-into-mysql-postgresql-sqlite/" jsonld={jsonld}>
+  <h1>Load a CSV into MySQL, PostgreSQL or SQLite</h1>
+  <p class="lede">You have a CSV and a database, and you want the rows in a table. The built-in import commands are fast and worth trying first. When they are not available, such as on a web SQL console or a host without file access, plain INSERT statements are the portable route, and <a href="/csv-to-sql/">CSV to SQL</a> can write them for you.</p>
+
+  <h2>Before you import anything</h2>
+  <p>Every route below expects the table to exist already, with columns that match the file. Check the column types first. A CSV has no types, so a column that holds numbers should be a numeric type, and a column that holds values like 00123 should be text, or the leading zeros are lost the moment the database casts them.</p>
+  <p>Look at the file for the usual traps: a header row that is not data, quotes inside quoted cells, and line endings from Windows. All three commands handle quoted cells, and all three can skip a header line, but none of them will invent a missing table for you in MySQL or PostgreSQL.</p>
+
+  <h2>MySQL: LOAD DATA LOCAL INFILE</h2>
+  <p>From the mysql client, the fastest route is LOAD DATA:</p>
+  <pre><code>LOAD DATA LOCAL INFILE 'people.csv' INTO TABLE people
+FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n'
+IGNORE 1 LINES;</code></pre>
+  <p>IGNORE 1 LINES skips the header row. Change \n to \r\n if the file came from Windows and the import looks off by one row. The LOCAL keyword is the weak point: it needs local_infile enabled on both the client and the server, and many shared hosts turn it off. If you get an error about the file not being found or LOCAL being disabled, that is why. Enabling it is a server setting, not something you can force from the client side.</p>
+
+  <h2>PostgreSQL: \copy from psql</h2>
+  <p>From psql, use \copy, which reads the file from your own machine rather than the server:</p>
+  <pre><code>\copy people FROM 'people.csv' WITH (FORMAT csv, HEADER true)</code></pre>
+  <p>The table must exist first. HEADER true tells PostgreSQL to treat the first line as column names, so the columns in the file should match the table's column names. If the file uses a different separator, add DELIMITER ';' inside the parentheses. Note that \copy is a psql command, not SQL, so it does not work in pgAdmin's query tool or in a web console; use the import pages there or generate INSERT statements instead.</p>
+
+  <h2>SQLite: .import in the sqlite3 shell</h2>
+  <p>From the sqlite3 command line:</p>
+  <pre><code>.import --csv people.csv people</code></pre>
+  <p>If the table does not exist, SQLite creates it and uses the first row of the file as the column names. If the table already exists, .import reads every line as data, so include or strip the header yourself. The --csv flag handles quoted cells. For anything fancier, such as skipping a header on an existing table, create the table without the header line in the file or use the INSERT route below.</p>
+
+  <h2>When the direct routes are not available</h2>
+  <p>Sometimes none of the commands fit: a web SQL console with no file access, a managed host with local_infile off, or a migration file that belongs in git. INSERT statements work everywhere, because they are plain SQL. Writing a few hundred by hand is nobody's idea of a good afternoon, so that is what <a href="/csv-to-sql/">CSV to SQL</a> is for. Drop in the file and you get one INSERT INTO statement per row, ready to paste into any console that accepts SQL.</p>
+  <p>The details matter, and they are all handled by the converter. Numbers are written unquoted, TRUE and FALSE come out as booleans, empty cells become NULL, and strings are single-quoted with any quote inside doubled, which is the standard escaping all three databases accept. The table name you type is cleaned to letters, digits, underscores and dollar signs, capped at 64 characters, and a name that starts with a digit gets a t_ prefix. Column names that are not simple identifiers get double quotes.</p>
+  <p>By default the first row of the file becomes the column list. Turn the header option off and the columns are named column_1, column_2 and so on. What the tool does not do is write a CREATE TABLE statement: you create the table first, with the types you want, then run the INSERTs it gives you. If your data starts life in a spreadsheet rather than a CSV, <a href="/excel-to-sql/">Excel to SQL</a> does the same thing from the first sheet of a workbook.</p>
+
+  <h2>If the CSV came from Excel</h2>
+  <p>Two Excel habits cause most import failures. The first is the separator: a comma file opened in a region that expects semicolons lands in one column, and it imports as one column too. The fixes are in <a href="/guides/csv-opens-in-one-column-in-excel/">the guide on CSVs opening in one column</a>, and the short version is to pick the separator explicitly in the import command or convert to .xlsx first with <a href="/csv-to-excel/">CSV to Excel</a>. The second is encoding: if accented names turn into mojibake, the file is UTF-8 and the tool is reading it as the local code page, so set the encoding to UTF-8 in the import or use psql's \copy, which reads bytes as they are.</p>
+
+  <h2>The short version</h2>
+  <p>Create the table, then pick the command that matches where you are: LOAD DATA for MySQL, \copy for PostgreSQL, .import for SQLite. When you are stuck behind a web console or a locked-down host, generate INSERTs with the CSV to SQL page and paste them. Either way, check the types of the target columns before you load, because the database will happily store "00123" as 123 if you let it.</p>
+  <p>See also: <a href="/guides/csv-opens-in-one-column-in-excel/">CSV opens in one column in Excel: why and how to fix it</a>.</p>
+</Base>
+<style>
+  pre { font-family: var(--mono, monospace); overflow-x: auto; }
+</style>

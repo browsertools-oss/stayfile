@@ -2526,6 +2526,7 @@ export const PAGES: ToolPage[] = [
     slug: 'excel-to-sql',
     tool: 'xlsx-to-sql',
     group: 'Spreadsheets and data',
+    guide: 'import-csv-into-mysql-postgresql-sqlite',
     card: 'Excel to SQL',
     blurb: 'First sheet into INSERT statements',
     title: 'Excel to SQL converter online',
@@ -2561,6 +2562,7 @@ export const PAGES: ToolPage[] = [
     slug: 'csv-to-sql',
     tool: 'csv-to-sql',
     group: 'Spreadsheets and data',
+    guide: 'import-csv-into-mysql-postgresql-sqlite',
     card: 'CSV to SQL',
     blurb: 'INSERT statements from a CSV file',
     title: 'CSV to SQL converter online',
@@ -2611,5 +2613,10 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'csv-opens-in-one-column-in-excel',
     title: 'CSV opens in one column in Excel: why and how to fix it',
     blurb: 'Why Excel puts a CSV in one column, and the five fixes plus the UTF-8 catch.',
+  },
+  {
+    slug: 'import-csv-into-mysql-postgresql-sqlite',
+    title: 'Load a CSV into MySQL, PostgreSQL or SQLite',
+    blurb: 'The exact import commands for the three databases, and the INSERT fallback.',
   },
 ];
