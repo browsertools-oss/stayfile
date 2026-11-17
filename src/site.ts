@@ -1701,6 +1701,18 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert CSV to JSON',
     lede: 'Turn a CSV file or pasted rows into JSON. The header row becomes the keys, and numbers come out as numbers unless you ask for text.',
     description: 'Convert CSV to JSON in your browser. Detects commas, semicolons and tabs, handles quoted fields, and keeps your data on your device.',
+    more: {
+      h2: 'What the typing does to your data',
+      paras: [
+        'Numbers come out as JSON numbers, and true and false come out as booleans. Values that would change if they were turned into numbers are kept as text: anything with a leading zero like 02134, and integers longer than 15 digits. Typing is applied per column, so if any value in a column must stay text, the whole column stays text and no cell silently changes.',
+        'Empty cells come out as empty strings, and the separator is detected automatically unless you pick one by hand. If the first row holds column names, they become the keys, with blank headings renamed column_1, column_2 and so on. Turn on "Keep all values as text" if you want no typing at all.',
+        'The output is indented with two spaces. A UTF-8 BOM at the start of the file is stripped before parsing, so files saved by Excel read cleanly.',
+      ],
+      sample: {
+        before: 'code,qty,note\n00123,4,in stock\n00456,,out of stock\n00789,12,in stock',
+        after: '[\n  {\n    "code": "00123",\n    "qty": 4,\n    "note": "in stock"\n  },\n  {\n    "code": "00456",\n    "qty": "",\n    "note": "out of stock"\n  },\n  {\n    "code": "00789",\n    "qty": 12,\n    "note": "in stock"\n  }\n]',
+      },
+    },
     steps: [
       'Drop in a .csv file or paste the rows.',
       'Check the options: whether the first row is a header, and whether numbers should stay as text.',
@@ -2042,6 +2054,18 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert JSON to CSV',
     lede: 'Turn a JSON array, an API response or JSON Lines into a CSV file that opens in Excel, Numbers or Google Sheets. Nested fields get their own columns.',
     description: 'Convert JSON to CSV in your browser. Flattens nested objects into columns and accepts JSON Lines. Nothing leaves your device.',
+    more: {
+      h2: 'How nested data is flattened',
+      paras: [
+        'Nested objects are flattened into dotted keys, so {"address":{"city":"London"}} becomes a column called address.city. Lists are written into a single cell as JSON text, for example ["red","blue"], so nothing in the record is lost.',
+        'The tool accepts a JSON array, a single object, an object with exactly one array inside it such as {"data": [...]}, or JSON Lines with one object per line. Anything else gives a clear error instead of a half-converted file.',
+        'Columns are the union of every key in the rows, in the order the keys first appear. A row that is missing a key gets an empty cell, so a ragged export still produces a rectangular CSV. Line endings are CRLF, the same as a file saved by Excel.',
+      ],
+      sample: {
+        before: '[\n  { "name": "Ada", "address": { "city": "London", "zip": "E1 6AN" } },\n  { "name": "Grace", "role": "admin" }\n]',
+        after: 'name,address.city,address.zip,role\r\nAda,London,E1 6AN,\r\nGrace,,,admin',
+      },
+    },
     steps: ['Drop in a .json file or paste the JSON.', 'Check the preview. Nested fields show up as columns like address.city.', 'Download the CSV or copy it.'],
     faq: [
       {
@@ -2093,6 +2117,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert CSV to Excel',
     lede: 'Save a CSV as a proper .xlsx workbook. Numbers are stored as numbers, so you can sum and sort them as soon as the file opens in Excel.',
     description: 'Convert CSV files to Excel .xlsx in your browser. Handles commas, semicolons and tabs and keeps numbers as numbers. No upload.',
+    more: {
+      h2: 'What the workbook keeps',
+      paras: [
+        'The CSV is parsed first, with the separator detected or picked by you, and the numbers are stored as real numbers so you can sum and average them as soon as the file opens. Values with leading zeros and integers longer than 15 digits are stored as text, so Excel will not round them or drop the zeros.',
+        'Every row goes in as it is, including the first row: nothing restyles or freezes the header, and empty cells stay empty. The sheet is named after the file you dropped in, with the characters Excel forbids in a sheet name replaced by spaces and the name capped at 31 characters.',
+        'The workbook is written with compression, so the .xlsx is usually smaller than the equivalent CSV would suggest, and it opens in Excel, Numbers and Google Sheets without any import step or separator guessing.',
+      ],
+    },
     steps: ['Drop in a .csv file or paste the rows.', 'Check the preview and the options.', 'Click Download to save the .xlsx file.'],
     faq: [
       {
@@ -2116,6 +2148,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert Excel to CSV',
     lede: 'Save the first sheet of an Excel workbook as a CSV file. Each cell is written the way it is shown in the sheet, so a formatted date or number comes out as you see it.',
     description: 'Convert Excel .xlsx files to CSV in your browser. Saves the first sheet as comma-separated text. Your workbook is never uploaded.',
+    more: {
+      h2: 'What the conversion keeps',
+      paras: [
+        'Only the first sheet is converted. The page reports how many other sheets the workbook has, and to convert one of those you drag its tab to the front in Excel and drop the file here again. Each cell is written the way Excel shows it, so a date formatted as 2026-11-06 comes out as that text, not as a serial number.',
+        'Cells that contain commas, quotes or line breaks are wrapped in quotes, which is how CSV holds those characters inside one value. Numbers come out as plain digits, and an empty cell comes out as nothing between the separators.',
+        'Formulas are not carried over; the CSV holds the value each cell displayed when the workbook was last saved. If you need the calculation itself, keep the .xlsx. The saved file can carry a UTF-8 BOM if you tick the Excel option, so accented characters open correctly in Excel.',
+      ],
+    },
     steps: ['Drop in an .xlsx file.', 'Check the preview. Only the first sheet is converted.', 'Download the CSV or copy it.'],
     faq: [
       {

@@ -6,6 +6,7 @@ import { typeValue, parseCsv, csvToJson, csvToMarkdown, tsvToCsv, csvToTsv, mark
 import * as XLSX from 'xlsx';
 import { csvToXlsx, xlsxToRows, xlsxToCsv } from '../src/lib/xlsx';
 import { targetSize, renameTo, formatBytes, sizeChange, avifQuality } from '../src/lib/image';
+import { PAGES } from '../src/site';
 
 // A PDF whose pages are 100, 200, 300... points wide, so we can tell pages apart after a transform.
 async function makePdf(n: number, rotation = 0) {
@@ -396,5 +397,23 @@ describe('save helpers', () => {
     expect(withBom('a,b\n1,2')).toBe(BOM + 'a,b\n1,2');
     expect(withBom(withBom('a,b'))).toBe(BOM + 'a,b');
     expect(withBom('a,b').charCodeAt(0)).toBe(0xfeff);
+  });
+});
+
+describe('more-section samples', () => {
+  const sample = (slug: string) => {
+    const p = PAGES.find((p) => p.slug === slug);
+    if (!p || !p.more || !p.more.sample) throw new Error(`page ${slug} has no sample`);
+    return p.more.sample;
+  };
+
+  test('csv-to-json sample is the real output of csvToJson', () => {
+    const s = sample('csv-to-json');
+    expect(csvToJson(s.before, { delimiter: '', header: true, typed: true, indent: 2 }).trim()).toBe(s.after.trim());
+  });
+
+  test('json-to-csv sample is the real output of jsonToCsv', () => {
+    const s = sample('json-to-csv');
+    expect(jsonToCsv(s.before, { delimiter: ',' }).trim()).toBe(s.after.trim());
   });
 });
