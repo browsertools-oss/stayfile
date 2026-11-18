@@ -465,6 +465,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert Markdown to PDF',
     lede: 'Make a PDF from a Markdown file. The text keeps its line breaks, long lines are wrapped to fit the page and the fixed-width font keeps any columns lined up. The PDF holds the Markdown as plain text, not restyled formatting.',
     description: 'Convert Markdown (.md) to PDF in your browser. Fixed-width layout, line wrapping, and no upload. Good for archiving and sharing .md files.',
+    more: {
+      h2: 'What the PDF keeps from your Markdown',
+      paras: [
+        'The PDF holds the Markdown source as written, with the heading markers and asterisks visible. Headings are not restyled, links are not clickable and tables stay as pipes and dashes lined up in the fixed-width font. The text is selectable and searchable in any PDF viewer, so the file doubles as a plain record of exactly what the source contained.',
+        'Because the font is Courier at 10 points, fenced code blocks and ASCII tables keep their alignment. Long prose lines are hard-wrapped at 75 characters rather than reflowed, so comparing the PDF text with the .md file reads almost line for line, which helps when you are archiving a spec, a changelog or a README as it was.',
+        'This is not a typesetter. If you want headings rendered large with real styling, paste the Markdown into an editor that exports to PDF. It is the right tool for filing a document exactly as it was written, with nothing silently restyled, and because no font is embedded the file stays small.',
+      ],
+    },
     steps: [
       'Drop in your .md or .markdown file.',
       'Click Make PDF.',
@@ -536,6 +544,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert PNG to PDF',
     lede: 'Make one PDF from PNG images, one image per page. PNG files go into the PDF as they are, so screenshots and scanned text keep their sharp edges.',
     description: 'Convert PNG images to a PDF in your browser, one image per page. Pick A4, Letter or the image size. Your files are never uploaded.',
+    more: {
+      h2: 'How the PNGs go into the PDF',
+      paras: [
+        'PNG files are embedded in the PDF byte for byte, with no re-encoding, so a screenshot keeps every pixel and the text on it stays sharp at any zoom. Nothing is resaved as JPG, which is the usual cause of fuzzy screenshots from other converters.',
+        'PNG transparency is kept, so a logo or a screenshot with a transparent background stays transparent instead of gaining a white or black box. If you need a solid white page behind the picture, flatten the PNG on white first.',
+        'The trade-off is size. A PNG is not compressed again inside the PDF, so the PDF is about as large as the PNGs you drop in, and photographic PNGs make heavy files. When the PDF size matters, save photos as JPG and use the JPG to PDF page; text-heavy screenshots are better left as PNG.',
+      ],
+    },
     steps: ['Drop in your PNG files.', 'Put them in order and pick a page size and margin.', 'Click Make PDF and save it.'],
     faq: [
       {
@@ -560,6 +576,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert WebP to PDF',
     lede: 'Make one PDF from WebP images, one image per page. PDF cannot hold WebP directly, so each file is redrawn as a high-quality JPG before it goes in.',
     description: 'Convert WebP images to a PDF in your browser, one image per page. Pick A4, Letter or the image size. Your files are never uploaded.',
+    more: {
+      h2: 'What happens to each WebP',
+      paras: [
+        'A PDF cannot hold a WebP, so each file is decoded and drawn onto a white page, then re-encoded as a JPG at quality 0.92 and embedded as a picture. Photos come through nearly unchanged; fine line art and small text can soften slightly.',
+        'WebP transparency is painted white before the JPG is written, since JPG has no alpha channel. If the background matters, convert the WebP to PNG first and use the PNG to PDF page, which embeds the file as it is.',
+        'No WebP metadata travels into the PDF, and an animated WebP gives up only the frame the decoder draws. Pages default to the image\'s own dimensions, or A4 or Letter with wide images turned landscape, and each picture becomes one page, in the order shown.',
+      ],
+    },
     steps: ['Drop in your WebP files.', 'Put them in order and pick a page size and margin.', 'Click Make PDF and save it.'],
     faq: [
       {
@@ -641,6 +665,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert SVG to PDF',
     lede: 'Make one PDF from SVG drawings, one drawing per page. Each SVG is drawn and saved inside the PDF as a picture.',
     description: 'Convert SVG vector drawings to a PDF in your browser, one per page. Pick image size, A4 or Letter. Your file is never uploaded.',
+    more: {
+      h2: 'What to expect from an SVG here',
+      paras: [
+        'The SVG is drawn onto a canvas at its intrinsic size, taken from the width and height attributes or the viewBox when those are missing, and saved inside the PDF as a JPG picture. It is not embedded as vector art, so the PDF is not infinitely zoomable: enlarge the page and the edges soften like a photo.',
+        'An SVG with no size information at all is drawn at 1024 by 768, and a drawing whose long side exceeds 8192 pixels is scaled down to that cap. If you need a bigger picture in the PDF, give the SVG explicit width and height attributes before converting.',
+        'Transparent areas come out white, because the picture inside the PDF is a JPG. Flat colour shapes and line art survive the trip well; gradients and fine type can band slightly at the edges, which is the re-encode rather than the drawing.',
+      ],
+    },
     steps: ['Drop in your .svg files.', "Pick a page size and margin, or keep the SVG's own size.", 'Click Make PDF and save it.'],
     faq: [
       {
@@ -714,6 +746,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert images',
     lede: 'Change images between JPG, PNG, WebP and AVIF. You can drop in JPG, PNG, WebP, GIF, AVIF, SVG, BMP or ICO files. Convert one file or a whole batch, with a quality setting for the formats that use one.',
     description: 'Convert images between JPG, PNG, WebP and AVIF in your browser. GIFs, SVGs, BMPs and ICO files can be read too. Batch conversion, adjustable quality, and no uploads.',
+    more: {
+      h2: 'What changes between formats',
+      paras: [
+        'Converting redraws your image through a canvas, so the result is built from the pixels rather than patched from the original file. JPG and WebP come out at the quality you set, 85 by default; PNG is lossless and ignores the quality slider. WebP keeps transparency, and JPG fills it with white.',
+        'AVIF is encoded by a bundled codec instead of the browser, with the slider mapped to AVIF\'s own scale, so a middle setting still gives a good photo. Encoding takes longer than the other formats, a few seconds for a large photo.',
+        'Animated GIFs keep only their first frame, SVGs are drawn at the size their markup requests, and ICOs decode the way your browser reads them, usually the largest size stored. Drop in several files at once and they all convert; the Save button downloads one images.zip when more than one file is ready.',
+      ],
+    },
     steps: [
       'Drop in one or more images.',
       'Pick the format you want and, for JPG, WebP or AVIF, a quality level.',
@@ -925,6 +965,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert HEIC to WebP',
     lede: 'Turn iPhone HEIC photos into WebP, which keeps files small and opens in every current browser.',
     description: 'Convert iPhone HEIC photos to WebP in your browser, one at a time or in a batch. Your photos are never uploaded.',
+    more: {
+      h2: 'What you get from the WebP',
+      paras: [
+        'The HEIC is decoded first: Safari reads it directly, and other browsers fetch a small decoder on first use. The photo is drawn onto a canvas at its own size and re-encoded as a WebP, so the file you get is built from the pixels rather than converted in place.',
+        'Date, location and camera details do not carry over, and burst or live-photo files give up only their primary frame. Ten-bit HEIC colour is flattened to 8-bit, which is invisible in normal photos.',
+        'Every current browser displays WebP, which makes it the natural target for a website. If you need maximum compatibility with older apps and upload forms instead, HEIC to JPG is the safer choice; WebP wins on size at the same visible quality.',
+      ],
+    },
     steps: ['Drop in your .heic files.', 'WebP is already selected. Move the quality slider if you want smaller files.', 'Click Convert, then save each photo or all of them as a zip.'],
     faq: [
       {
@@ -1141,6 +1189,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert SVG to JPG',
     lede: 'Turn SVG files into JPG images. Transparent areas come out white, since JPG has no transparency.',
     description: 'Convert SVG vector files to JPG in your browser. Transparent areas are filled with white. Your file is never uploaded.',
+    more: {
+      h2: 'Sizing and quality',
+      paras: [
+        'The SVG is drawn onto a canvas at the size in its markup: the width and height attributes, or the viewBox when those are missing. If neither is present it is drawn at 1024 by 768, and anything whose long side exceeds 8192 pixels is scaled down to that cap.',
+        'Units are converted to CSS pixels, so an SVG sized in centimetres or inches comes out at the same physical size on screen. To get a larger JPG than the SVG specifies, enlarge the width and height attributes in the SVG before converting.',
+        'Transparent areas are painted white and the JPG is encoded at the quality you set, 85 by default. Text renders with whatever fonts the browser has, so a typeface the machine lacks is substituted before the picture is taken.',
+      ],
+    },
     steps: ['Drop in your .svg files.', 'JPG is already selected. Move the quality slider if you want smaller files.', 'Click Convert and save.'],
     faq: [
       {
@@ -1221,6 +1277,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert ICO to PNG',
     lede: 'Open a .ico favicon file and save it as a PNG. An ICO can hold several sizes of the same picture; the page uses the image your browser decodes, which is usually the largest size in the file.',
     description: 'Convert a .ico favicon to a PNG image in your browser. Transparency is kept. The file never leaves your device.',
+    more: {
+      h2: 'What happens to the sizes inside the .ico',
+      paras: [
+        'An .ico file is a container. It can hold one picture or several, commonly 16, 32 and 48 pixels, stored either as BMP data or as PNG payloads, usually 32 bit with transparency. Your browser decodes the container when the page reads the file, normally giving you the largest image stored.',
+        'Only that one decoded image survives. The container header, the smaller entries and any cursor hotspot data are dropped, so the PNG is a single picture at the decoded size, not a set of files.',
+        'Transparency carries over, because the frames in the container hold a real alpha channel and PNG keeps it. That is usually the point of pulling a favicon out of a site or a desktop shortcut, where you want the artwork without the wrapper.',
+      ],
+    },
     steps: ['Drop in your .ico files.', 'PNG is already selected.', 'Click Convert, then save each image or all of them as a zip.'],
     faq: [
       {
@@ -1422,6 +1486,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert GIF to PNG',
     lede: 'Save a GIF as a PNG image. Only the first frame of an animated GIF is kept, because PNG holds a single picture.',
     description: 'Convert GIF images to PNG in your browser. Only the first frame of an animated GIF is kept. Your files are never uploaded.',
+    more: {
+      h2: 'What the PNG keeps and what it drops',
+      paras: [
+        'A GIF stores at most 256 colors chosen from a palette, and those pixels pass into the PNG unchanged, so the picture does not shift. PNG compresses losslessly, so nothing is softened in the transfer the way a JPG would soften it.',
+        'Only the first frame is kept. PNG has no idea of frames, so an animated GIF becomes a still of wherever the loop started. To keep the motion, the file has to stay a GIF or become a video.',
+        'GIF transparency is one palette entry flagged as transparent; the PNG keeps it as a true alpha channel, so the edges of the picture stay smooth instead of being cut against a single background color. File size can go either way depending on how noisy the frame is.',
+      ],
+    },
     steps: ['Drop in your .gif files.', 'PNG is already selected.', 'Click Convert, then save each image or all of them as a zip.'],
     faq: [
       {
@@ -1583,6 +1655,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert images to WebP',
     lede: 'WebP files are often a quarter to a third smaller than JPG at about the same quality, which makes web pages load faster.',
     description: 'Convert JPG and PNG images to WebP in your browser. Batch convert, set the quality, and download a zip. Nothing is uploaded.',
+    more: {
+      h2: 'Why and how much smaller',
+      paras: [
+        'WebP typically makes files a quarter to a third smaller than JPG at the same visible quality, which is why websites serve it. A quality setting of 75 to 80 is a reasonable default for photos; go lower only when the page weight matters more than the pixels.',
+        'Converting a JPG to WebP is a lossy step on top of a lossy file, since the pixels are decoded and encoded again, so some detail is lost twice over. At 85 this is rarely visible; at 60 and below it becomes easier to spot on smooth gradients.',
+        'Every current browser displays WebP, and transparent PNGs keep their transparency through the conversion. On browsers whose canvas cannot write WebP, a bundled encoder is used instead, so the output is always WebP rather than a PNG with a different name.',
+      ],
+    },
     steps: ['Drop in JPG or PNG images.', 'WebP is already selected. A quality of 75 to 80 looks good for most photos.', 'Click Convert and save the files.'],
     faq: [
       {
