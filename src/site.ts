@@ -1053,6 +1053,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert AVIF to PNG',
     lede: 'Turn AVIF images into PNG files that open anywhere. Transparency is kept.',
     description: 'Convert AVIF images to PNG in your browser so they open in any app. Transparency is kept. Your file is never uploaded.',
+    more: {
+      h2: 'What the PNG ends up holding',
+      paras: [
+        'The AVIF is decoded by the browser, drawn through a canvas and saved as a PNG. PNG is lossless, so the conversion itself adds no damage, and the alpha channel AVIF stores is kept. The quality slider has no effect on a PNG, because there is no lossy step for it to tune.',
+        'AVIF compresses hard, so expect the PNG to be much larger than the AVIF you started with. That size jump is normal. PNG is the right target when the image has to open in apps that cannot read AVIF yet, or to go through an editor that does not understand the format.',
+        'Date, camera and location metadata recorded inside the AVIF do not survive, because the image passes through a canvas redraw and only the pixels are carried into the PNG. If the original came off a phone and the metadata matters, keep the AVIF and work on a copy.',
+      ],
+    },
     steps: ['Drop in your .avif files.', 'PNG is already selected.', 'Click Convert, then save each image or all of them as a zip.'],
     faq: [
       {
@@ -1237,6 +1245,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert SVG to WebP',
     lede: 'Turn SVG files into WebP images, with transparency kept. The WebP is made at the SVG\'s own size and is usually smaller than a PNG of the same picture.',
     description: 'Convert SVG vector files to WebP in your browser. Transparency is kept and the WebP is made at the SVG\'s own size. Your file is never uploaded.',
+    more: {
+      h2: 'What the WebP is made from',
+      paras: [
+        'The SVG is drawn at its own size, taken from the width and height attributes, or the viewBox when those are missing. An SVG with no size information at all is drawn at 1024 by 768, and anything whose long side passes 8192 pixels is scaled down to that cap. The result is pixels, not vector art.',
+        'The page draws the SVG the way the browser draws it. Fonts your computer has but the page cannot load fall back to defaults, and outside images or stylesheets the SVG references may be missing or blocked, which is why a drawing can look different here than it did in the editor.',
+        'Transparency is kept, and the quality slider sets the WebP compression, 85 by default; a WebP at 85 is usually far smaller than a PNG of the same drawing. Browsers whose canvas cannot write WebP get the bundled encoder instead, so the output is always WebP. Metadata from the SVG is not carried into the image.',
+      ],
+    },
     steps: ['Drop in your .svg files.', 'WebP is already selected. Move the quality slider if you want smaller files.', 'Click Convert and save.'],
     faq: [
       {
