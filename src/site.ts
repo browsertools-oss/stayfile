@@ -641,6 +641,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert GIF to PDF',
     lede: 'Make one PDF from GIF images, one per page. Only the first frame of an animated GIF is kept, since PDF can hold a picture but not the animation.',
     description: 'Convert GIF images to a PDF in your browser, one per page. Animated GIFs keep their first frame. Your files are never uploaded.',
+    more: {
+      h2: 'What ends up in the PDF',
+      paras: [
+        'A GIF is neither a JPG nor a PNG, so each one is decoded first, the first frame is drawn on a white background and re-encoded as a JPG at quality 0.92. That JPG is what is placed in the PDF. Only files that are already real JPG or PNG bytes get embedded as they are; everything else goes through the redraw.',
+        'The default page matches the picture\'s own size. Pick A4 or Letter and wide pictures turn the page landscape, with the image fitted inside the margins and never enlarged. Margins default to medium and can be set to none, small or large. Pages come one to an image, in the order shown in the list.',
+        'The animation is dropped with everything except the first frame, and transparency comes out white, so a GIF cut out on transparency gets a solid page background. If the picture is a logo that has to stay exact, convert it to PNG first and use the PNG to PDF page, which embeds the pixels unchanged.',
+      ],
+    },
     steps: ['Drop in your .gif files.', 'Put them in order and pick a page size and margin.', 'Click Make PDF and save it.'],
     faq: [
       {
@@ -697,6 +705,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert BMP to PDF',
     lede: 'Make one PDF from BMP pictures, one picture per page, in the order you choose. The converting happens in your browser, so the files stay on your own device.',
     description: 'Convert BMP files to a PDF in your browser, one per page, in the order you choose. Pick a page size and margin. Your files are never uploaded.',
+    more: {
+      h2: 'What ends up in the PDF',
+      paras: [
+        'BMP bytes cannot go into a PDF directly, so each picture is decoded, drawn on a white background and re-encoded as a JPG at quality 0.92. A BMP that starts out huge will still produce a much leaner PDF, because the JPG step drops the uncompressed bulk before anything is embedded.',
+        'The default page is the picture\'s own size. A4 or Letter turns the page landscape for wide pictures, and the image is fitted inside the margins, centred, and never upscaled past its own pixel size. Margins default to medium and can be set to none, small or large.',
+        'One picture makes one page, in the order listed, and JPGs and PNGs can be mixed into the same drop; those are embedded byte for byte instead of redrawn. If the picture has to stay exact, save it as a PNG first and use the PNG to PDF page.',
+      ],
+    },
     steps: ['Drop in your .bmp files.', 'Put them in order and pick a page size and margin.', 'Click Make PDF and save it.'],
     faq: [
       {
@@ -1309,6 +1325,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert JPG to ICO',
     lede: 'Turn a JPG into a .ico file, the format browsers and desktops use for favicons and shortcuts. The file holds 16, 32 and 48 px versions of the image.',
     description: 'Convert a JPG to a .ico favicon file in your browser. The file holds 16, 32 and 48 px sizes. Your image stays on your device.',
+    more: {
+      h2: 'How the icon file is built',
+      paras: [
+        'The JPG is decoded to a bitmap, and three square frames are drawn from it: 16, 32 and 48 pixels. Each frame is scaled with high-quality smoothing and centred on the square. The frames are stored inside the .ico as 32-bit PNGs with an alpha channel, so the file stays small and looks clean on light and dark tab bars.',
+        'A JPG has no transparency of its own, so the pixels it covers are opaque. A non-square JPG is letterboxed inside the square frames, and that bare canvas area stays transparent because the canvas starts clear. The corners of a non-square icon come out see-through, not white.',
+        'The 16 pixel frame is where a detailed picture falls apart; thin strokes vanish at that size. Start from a bold, simple source at least 48 pixels across. Several JPGs dropped together are converted one by one and saved as a zip, each .ico named after its source file.',
+      ],
+    },
     steps: ['Drop in your JPG files.', 'Nothing to set. The three sizes are made from your image.', 'Click Save to download the .ico file, or all of them as a zip.'],
     faq: [
       {
@@ -1470,6 +1494,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert BMP to PNG',
     lede: 'Save a BMP image as a PNG. PNG keeps every pixel and compresses without losing anything, so the picture stays exact and the file usually shrinks.',
     description: 'Convert BMP images to PNG in your browser. The picture stays pixel for pixel and transparency is kept. Your files are never uploaded.',
+    more: {
+      h2: 'What stays exact',
+      paras: [
+        'PNG compression is lossless, so the picture you get is pixel for pixel the BMP. Line art, logos and scans with dithering come out with every pixel intact, and the file is still smaller than the BMP, because PNG squeezes the runs of repeated pixels that BMP writes out in full.',
+        'If the BMP carries an alpha channel, it is kept. PNG stores transparency as a true alpha channel, so cutouts stay smooth instead of being clipped against one background color. The quality slider has no effect here; PNG has no lossy step for it to tune.',
+        'Photos save less dramatically from this page than from the JPG one, because PNG refuses to throw pixels away. For a photo that will only be viewed on screen, the JPG page usually produces a much smaller file. For anything that needs to stay exact, PNG is the right stop.',
+      ],
+    },
     steps: ['Drop in your .bmp files.', 'PNG is already selected.', 'Click Convert, then save each image or all of them as a zip.'],
     faq: [
       {
