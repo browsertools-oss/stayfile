@@ -1438,6 +1438,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert BMP to JPG',
     lede: 'Save a BMP image as a JPG. BMP stores every pixel uncompressed, so the file is usually very large. JPG shrinks it a lot, at the cost of some fine detail.',
     description: 'Convert BMP images to JPG in your browser. JPG has no transparency, so transparent areas are filled with white. Your files are never uploaded.',
+    more: {
+      h2: 'Why the file gets so much smaller',
+      paras: [
+        'A BMP stores every pixel in full, row by row, with no compression at all, so even modest pictures start large. The browser decodes it directly and the pixels are re-encoded as a JPG at the quality on the slider, 85 by default. That re-encode is where the size drop comes from.',
+        'Some 32-bit BMP files carry an alpha channel. JPG has no way to hold it, so those pixels are painted white underneath before saving. If the picture needs a transparent background kept, the BMP to PNG page writes a lossless file instead.',
+        'Flat-color artwork is a poor fit for JPG, because sharp transitions pick up a faint halo. Photos shrink the most and stay clean. For large flat fields of one color, the PNG page keeps the edges crisp and is usually small enough on its own.',
+      ],
+    },
     steps: ['Drop in your .bmp files.', 'JPG is already selected.', 'Click Convert, then save each image or all of them as a zip.'],
     faq: [
       {
@@ -1518,6 +1526,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert GIF to JPG',
     lede: 'Save a GIF as a JPG image. Only the first frame of an animated GIF is kept, and transparent areas are filled with white, since JPG holds a single opaque picture.',
     description: 'Convert GIF images to JPG in your browser. The first frame is kept and transparency is filled with white. Your files are never uploaded.',
+    more: {
+      h2: 'What the JPG keeps and what it drops',
+      paras: [
+        'The browser decodes the GIF and hands over a single picture, the first frame. JPG holds no animation and no palette, so the frame is re-rendered as a JPG at the quality on the slider, 85 by default. Flat areas with hard edges can pick up ringing, the faint halo JPG puts around sharp transitions.',
+        'Transparent pixels are painted white before saving, because JPG has no transparent color. A GIF cut out on transparency comes out with a solid white background instead. If the picture has to sit on another color, use the GIF to PNG page, which keeps the transparency and the exact source pixels.',
+        'GIF pixels were already held to 256 colors, so gradients arrived as stepped bands. The JPG re-encode smooths some of that stepping and adds its own softness in exchange. Saved files keep the original name with a .jpg extension, and several at once are saved one by one or bundled into a zip.',
+      ],
+    },
     steps: ['Drop in your .gif files.', 'JPG is already selected. Move the quality slider if you want smaller files.', 'Click Convert, then save each image or all of them as a zip.'],
     faq: [
       {
@@ -1841,6 +1857,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Resize JPG',
     lede: 'Change the width and height of one JPG or many. Type exact pixels or a percentage, and the proportions stay locked unless you unlock them.',
     description: 'Resize JPG images to exact pixel dimensions or a percentage, in batches, right in your browser. Files are not uploaded.',
+    more: {
+      h2: 'How the resize is done',
+      paras: [
+        'The size is worked out before any pixels are drawn. Whole pixels are kept and no side ends up smaller than one pixel. When both width and height are typed with proportions locked, the picture is scaled to fit inside that box without stretching, so one side can land smaller than you typed.',
+        'Reducing a picture is done in halving steps instead of one jump, which keeps edges and fine text much cleaner on big shrinks. The last pass uses high-quality smoothing, and the file is saved as a JPG at the quality shown on the slider, 85 by default. Saving as JPG is lossy even when the size barely moves, so a round trip through this page is not free.',
+        'Enlarging happens only through a percentage above 100 or the "Allow enlarging" option. A larger width or height typed on its own is clamped back down to the picture\'s own size. Enlarging invents no detail, it re-renders softly. The saved file keeps the original name with the new dimensions added, like photo-1600x1200.jpg, so nothing is overwritten by accident.',
+      ],
+    },
     steps: [
       'Drop in your JPG files.',
       'Type a width, a height or a percentage. Leave one side empty to keep the proportions.',
@@ -1873,6 +1897,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Resize PNG',
     lede: 'Change the width and height of one PNG or many. Type exact pixels or a percentage, and the proportions stay locked unless you unlock them.',
     description: 'Resize PNG images to exact pixel dimensions or a percentage, in batches, right in your browser. Files are not uploaded.',
+    more: {
+      h2: 'How the resize is done',
+      paras: [
+        'The size is worked out before any pixels are drawn. Whole pixels are kept and no side ends up smaller than one pixel. With proportions locked and both sides typed, the picture is fitted inside that box without stretching, so one side can land smaller than you typed.',
+        'Large shrinks are drawn in halving steps with high-quality smoothing, which keeps line art and text readable. PNG is lossless and keeps the alpha channel, so a transparent background stays transparent and no color shifts appear anywhere, including flat one-color areas where JPG would ring.',
+        'The quality slider has no effect on a PNG, because PNG has no lossy step for it to tune. Enlarging needs a percentage above 100 or the "Allow enlarging" option; a bigger width or height typed on its own is clamped to the picture\'s own size, and none of it adds detail. The saved file keeps the original name with the new dimensions added at the end.',
+      ],
+    },
     steps: [
       'Drop in your PNG files.',
       'Type a width, a height or a percentage. Leave one side empty to keep the proportions.',
