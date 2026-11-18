@@ -133,6 +133,7 @@ Competition: every converter phrase ("heic to jpg", "csv to sql", "merge pdf") a
 | 13 | Sat 11-21-2026 evening | 11-22 02:47 | QA sweep: `npm test` (word counts, copy lint), one h1 per guide, every internal href in the guides points at an existing slug (add a test in test/guides.test.ts that collects `href="/..."` from each guide file and checks it against `PAGES` slugs plus `/guides/...` and `/`), `grep -c "/guides/" dist/sitemap-0.xml`. Fix what fails. Link the /guides/ index from the home page (one line or small section under the tool groups in src/pages/index.astro). DONE 7bdb873 (built early, 11-17 morning run; sitemap holds 7 guide URLs, one per line-agnostic count) |
 | 14 | Sun 11-22-2026 morning | 11-22 14:47 | Finish anything not marked DONE above, oldest first. If all done, take the backlog in order. Do the usual morning metrics trigger check. |
 Extra: more for excel-to-sql, webp-to-png, extract-pages-from-pdf, remove-pages-from-pdf, heic-to-pdf, pdf-to-png, jpg-to-png, compress-png, tsv-to-csv, csv-to-tsv DONE e6e0680 |
+Extra 2: more for markdown-to-pdf, png-to-pdf, webp-to-pdf, svg-to-pdf, convert-image, heic-to-webp, svg-to-jpg, jpg-to-webp, ico-to-png, gif-to-png DONE 0512294 |
 
 ## Backlog (in order, for runs that finish early)
 
