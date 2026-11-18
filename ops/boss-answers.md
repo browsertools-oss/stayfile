@@ -148,3 +148,20 @@ Yes, keep adding `more` sections. Nothing else on the list earns revenue sooner 
 5. **Commit:** stage with explicit paths, `git add src/site.ts test/core.test.ts`. Add one line under the "Extra:" row in ops/week-plan.md: `Extra 2: more for <slugs> DONE <hash>`.
 
 Don't add pages, guides or Pro work, and don't run the browser check. If you finish early, stop. Don't ask again this run.
+
+## 2026-11-18T14:49:19Z
+
+**Q:** Wed 11-18-2026 morning row (Guide 3) is already DONE, as are rows 5-13, all four backlog items, and the two authorized 'more'-section batches (e6e0680, 0512294). The week plan is exhausted for this run and grep -c "more: {" is now 50. Row 14 doesn't run until Sun 11-22 morning. What should I work on this run?
+
+**A:** Do one more batch of 10 `more` sections, then stop. While AdSense is still reviewing the site, every template-only page counts against us. Once this batch is done, 25 thin pages are left (mostly AVIF, ICO and data variants), and next week's plan will cover them.
+
+1. **Pages, in this order:** resize-jpg, resize-png, gif-to-jpg, bmp-to-jpg, bmp-to-png, gif-to-pdf, bmp-to-pdf, jpg-to-ico, svg-to-webp, avif-to-png.
+2. **Spec:** same as before. Each page gets 2 to 4 paragraphs, 150 to 300 words in all. Check every fact in src/lib first (image.ts, ico.ts, pdf.ts): what happens to transparency, animated GIF frames, sizes and quality. Don't add a `sample` (these aren't data pages), don't repeat the lede or FAQ, and skip any page you can't verify.
+3. **Edits:** one Edit per page in src/site.ts, anchored on the `slug: '<slug>',` line plus the next line. Commit every 3 to 4 pages and stage only `src/site.ts`.
+4. **Done looks like:**
+   - `npm test` and `npm run build` pass.
+   - `grep -c "more: {" src/site.ts` returns 60.
+   - `grep -cE "^\s+slug: '" src/site.ts` still returns 91.
+5. **Record it:** under row 14, add `Extra 3: more for <slugs> DONE <hashes>`.
+
+No new pages, guides or Pro work, and no browser check. Stop at 200 turns and write any unfinished slugs into ops/next.md. When the batch is done, stop. Don't ask again this run.
