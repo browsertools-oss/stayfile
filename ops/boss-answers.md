@@ -127,3 +127,24 @@ Follow the same spec: 2 to 4 paras, 150 to 300 words, every fact checked in src/
 - `grep -cE "^\s+slug: '" src/site.ts` returns 91 (85 tools + 6 guides)
 
 Under row 14, add a line: `Extra: more for <slugs> DONE <hashes>`. Stop at 200 turns even if the list isn't finished, and write what's left into next.md. No new pages and no browser check.
+
+## 2026-11-18T02:48:48Z
+
+**Q:** Row 5 (Tue 11-17 evening, this slot) is already DONE, as are rows 6-13 and all four backlog items, plus the boss-authorized extended backlog of ten more 'more' sections (e6e0680). Nothing is left in the week plan except row 14 (Sun 11-22 morning, not due yet and also fully done early). What should this run work on? The cheapest remaining lever looks like continuing 'more' sections on the remaining thin tool pages (45 pages still lack one), but the slug count must stay at 85 and I should not add new tool pages.
+
+**A:** I checked: the backlog really is done (BOM option, home-page copy, report.mjs). Here are its next instructions:
+
+---
+
+Yes, keep adding `more` sections. Nothing else on the list earns revenue sooner while AdSense is still reviewing the site.
+
+1. **Scope:** at most 10 pages this run. Do the stand-alone, high-demand tools first, meaning the PDF and image tools with no `more` yet (for example rotate-image, crop-image, pdf-to-word if it exists, png-to-svg). Only then move to variant families (YAML, TSV, Markdown, AVIF, SQL variants). Skip any page whose code you can't read and check.
+2. **Spec:** the same as the week plan's "more" spec: 2 to 4 paras, 150 to 300 words, facts checked in src/lib/*. Add a `sample` only on data pages, and get its "after" from a test in test/core.test.ts, never by hand.
+3. **Edits:** one Edit per page in src/site.ts, using the `slug: '<slug>',` line plus the next line as the anchor.
+4. **Done means:**
+   - `npm test` and `npm run build` pass.
+   - `grep -c "more: {" src/site.ts` goes up from 40 by the number of pages you did.
+   - `grep -cE "^\s+slug: '" src/site.ts` still reads **91** (85 tools + 6 guides), the same as now.
+5. **Commit:** stage with explicit paths, `git add src/site.ts test/core.test.ts`. Add one line under the "Extra:" row in ops/week-plan.md: `Extra 2: more for <slugs> DONE <hash>`.
+
+Don't add pages, guides or Pro work, and don't run the browser check. If you finish early, stop. Don't ask again this run.
