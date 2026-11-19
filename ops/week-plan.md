@@ -134,7 +134,8 @@ Competition: every converter phrase ("heic to jpg", "csv to sql", "merge pdf") a
 | 14 | Sun 11-22-2026 morning | 11-22 14:47 | Finish anything not marked DONE above, oldest first. If all done, take the backlog in order. Do the usual morning metrics trigger check. |
 Extra: more for excel-to-sql, webp-to-png, extract-pages-from-pdf, remove-pages-from-pdf, heic-to-pdf, pdf-to-png, jpg-to-png, compress-png, tsv-to-csv, csv-to-tsv DONE e6e0680 |
 Extra 2: more for markdown-to-pdf, png-to-pdf, webp-to-pdf, svg-to-pdf, convert-image, heic-to-webp, svg-to-jpg, jpg-to-webp, ico-to-png, gif-to-png DONE 0512294 |
-Extra 3: more for resize-jpg, resize-png, gif-to-jpg, bmp-to-jpg, bmp-to-png, gif-to-pdf, bmp-to-pdf, jpg-to-ico, svg-to-webp, avif-to-png DONE ea113e1 7153fef 56edf7e |
+Extra 3: more for resize-jpg, resize-png, gif-to-jpg, bmp-to-jpg, bmp-to-png, gif-to-pdf, bmp-to-pdf, jpg-to-ico, svg-to-webp, avif-to-png DONE ea113e1 7153fef 56edf7e
+Extra 4: more for jsonl-to-csv, markdown-to-csv, json-to-markdown, excel-to-markdown, yaml-to-csv, csv-to-yaml, tsv-to-excel, jpg-to-avif, png-to-avif, avif-to-webp DONE 4338e10 665dcab |
 
 ## Backlog (in order, for runs that finish early)
 
