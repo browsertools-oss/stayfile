@@ -5,10 +5,20 @@ import ImageTool from './ImageTool.astro';
 import DataTool from './DataTool.astro';
 import Silhouette from './Silhouette.astro';
 import { SITE, PAGES, GROUP_ID, GUIDES, type ToolPage } from '../site';
+import { formatsFor } from '../formats';
 interface Props { page: ToolPage }
 const { page } = Astro.props;
 const guide = page.guide ? GUIDES.find((g) => g.slug === page.guide) : undefined;
 const path = `/${page.slug}/`;
+const formats = formatsFor(page.slug);
+const FACT_ROWS: [keyof (typeof formats)[number]['facts'], string][] = [
+  ['kind', 'What it is'],
+  ['since', 'Dates from'],
+  ['by', 'Made by'],
+  ['goodFor', 'Good for'],
+  ['watch', 'Watch out for'],
+  ['opens', 'Opens in'],
+];
 const family = page.tool.startsWith('pdf') || page.tool === 'img-to-pdf' || page.tool === 'text-to-pdf' ? 'pdf' : page.tool.startsWith('img') ? 'img' : 'data';
 // Show the pages that share a format with this one, then the rest, capped at eight so a
 // twenty-card group does not bury the page under its own related list.
@@ -79,6 +89,27 @@ const jsonld = [
       </div>
     </section>
   )}
+  {formats.length > 0 && (
+    <section class="row">
+      <h2>{formats.length === 1 ? `About ${formats[0].name} files` : `${formats.map((f) => f.name).join(' and ')} compared`}</h2>
+      <div>
+        <div class="fmt-wrap">
+          <table class="fmt">
+            {formats.length > 1 && <thead><tr><th scope="col"><span class="vh">Fact</span></th>{formats.map((f) => <th scope="col">{f.name}</th>)}</tr></thead>}
+            <tbody>
+              {FACT_ROWS.map(([k, label]) => <tr><th scope="row">{label}</th>{formats.map((f) => <td>{f.facts[k]}</td>)}</tr>)}
+            </tbody>
+          </table>
+        </div>
+        {formats.map((f) => (
+          <>
+            <h3 class="fmt-h">{f.name}: {f.full}</h3>
+            {f.paras.map((p) => <p>{p}</p>)}
+          </>
+        ))}
+      </div>
+    </section>
+  )}
   <section class="row">
     <h2>Questions</h2>
     <div>{page.faq.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}</div>
@@ -101,6 +132,13 @@ const jsonld = [
   .head .lede { margin-bottom: 28px; }
   .head :global(.mark-big) { width: 200px; margin-bottom: 24px; color: var(--paint); }
   .first { border-top: 0; }
+  .fmt-wrap { overflow-x: auto; margin-bottom: 8px; }
+  .fmt { border-collapse: collapse; width: 100%; font-size: 15px; }
+  .fmt th, .fmt td { text-align: left; vertical-align: top; padding: 8px 12px 8px 0; border-bottom: 1px solid var(--line); }
+  .fmt tbody th { font-weight: 700; color: var(--muted); white-space: nowrap; width: 1%; }
+  .fmt thead th { font-weight: 800; }
+  .fmt-h { margin-top: 24px; font-size: 18px; }
+  .vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .read-guide { margin-top: 12px; font-size: 15px; }
   .samples { display: grid; gap: 12px; margin-top: 8px; }
   .sample-label { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 4px; }

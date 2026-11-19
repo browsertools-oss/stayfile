@@ -1,0 +1,61 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to make a photo smaller to email or upload';
+const description = 'Why phone photos are so large, the two settings that shrink them (pixel size and quality), the numbers that work for email, forms and websites, and what to avoid.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-18',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/make-a-photo-smaller-to-email/" jsonld={jsonld}>
+  <h1>How to make a photo smaller to email or upload</h1>
+  <p class="lede">An upload form says "maximum 2 MB" and the photo from your phone is 6 MB. An email bounces because four pictures add up to more than the attachment limit. Shrinking a photo is easy once you know there are only two settings that matter, and which one to change first.</p>
+
+  <h2>Why phone photos are so big</h2>
+  <p>A current phone camera takes photos of 12 megapixels or more, about 4000 by 3000 pixels. Some take 48 megapixel photos and combine them down; some keep them at full size. Saved as JPG or HEIC, a 12 megapixel photo usually lands somewhere between 2 and 6 MB, depending on how much detail is in the scene. Grass, gravel and crowds make larger files than a clear sky, because detail is what the compression has to keep.</p>
+  <p>Most of those pixels are wasted when the photo is looked at on a screen. A laptop screen is around 1500 to 2500 pixels wide, a phone held upright fewer still. A photo shown in an email or on a web page is scaled down on the fly anyway, so you are sending pixels nobody will see.</p>
+
+  <h2>The two settings that shrink a photo</h2>
+  <p><strong>Pixel size</strong> is the width and height of the image. Halving both the width and the height leaves a quarter of the pixels, and the file shrinks roughly in proportion. Going from 4000 pixels wide to 2000 pixels wide usually takes a 4 MB photo to about 1 MB before you touch anything else.</p>
+  <p><strong>Quality</strong> is the JPG (or WebP, or AVIF) compression level, usually a number from 0 to 100. Lower numbers throw away more fine detail. The scale is not linear: dropping from 95 to 80 saves a lot and is hard to see, while dropping from 60 to 40 saves less and starts to show blocky patches and halos around edges.</p>
+  <p>Changing the pixel size first and the quality second gets the smallest file for the least visible change. A photo resized to 1920 pixels wide at quality 75 to 80 is typically 300 to 600 KB and looks the same as the original on any screen.</p>
+
+  <h2>Numbers that work</h2>
+  <p>These are starting points rather than rules. Check the result and adjust.</p>
+  <ul>
+    <li><strong>Email:</strong> 1600 to 2000 pixels on the long side, quality 75 to 80. Gmail caps attachments at 25 MB per message, and attachments grow by about a third when an email is encoded for sending, so ten full size phone photos will not fit, while ten resized ones will with room to spare.</li>
+    <li><strong>Upload forms with a 1 or 2 MB limit:</strong> 1600 pixels on the long side at quality 80 lands well under 1 MB for almost any photo. If the form asks for a passport or ID style photo, check whether it also asks for exact pixel dimensions, and use those.</li>
+    <li><strong>Your own website:</strong> about 1600 to 2400 pixels wide for a full width picture, and consider WebP or AVIF instead of JPG. Both make noticeably smaller files at the same visual quality, and all current browsers show them.</li>
+    <li><strong>Printing:</strong> do not shrink. Print shops want the original pixels. A 6 by 4 inch print at 300 dots per inch needs 1800 by 1200 pixels, and larger prints need more.</li>
+  </ul>
+
+  <h2>Doing it on this site</h2>
+  <p>The <a href="/compress-image/">Compress image</a> page does both steps at once: pick a quality, optionally set a maximum width, and it shows the new size of every file before you save. It handles a batch, so a whole set of holiday photos goes through together. If you need exact dimensions instead, <a href="/resize-image/">Resize image</a> takes a width, a height or a percentage and keeps the proportions locked unless you unlock them.</p>
+  <p>If the photos are iPhone HEIC files and the form will not take them at all, convert them first with <a href="/heic-to-jpg/">HEIC to JPG</a>, which has its own quality slider. Moving it down to about 75 usually gets a photo under 1 MB without any visible change.</p>
+  <p>Both pages work inside your browser, so the photos are never uploaded anywhere, which is worth something when the picture is of a passport, a medical document or your children.</p>
+
+  <h2>Doing it without any website</h2>
+  <p><strong>iPhone:</strong> the Mail app offers to reduce attached photos to Small, Medium or Large when you send. In the Photos app, sharing to Mail gives the same choice.</p>
+  <p><strong>Mac:</strong> open the photo in Preview, choose Tools, then Adjust Size, and type a smaller width. Then use File, then Export, pick JPEG, and move the Quality slider. Preview shows the resulting file size as you drag it.</p>
+  <p><strong>Windows:</strong> the Photos app has a Resize option in its menu with preset sizes. Paint can also resize by percentage or pixels and then save as JPG.</p>
+
+  <h2>Mistakes to avoid</h2>
+  <ul>
+    <li><strong>Compressing the same JPG again and again.</strong> Every save at a lossy quality throws away a little more. Always start from the original, not from the last smaller copy.</li>
+    <li><strong>Saving a photo as PNG to make it "better".</strong> PNG is lossless, which for a photo means several times larger. It cannot bring back detail the JPG already lost.</li>
+    <li><strong>Making it bigger.</strong> Enlarging a small picture does not add detail. It only makes a larger, softer file.</li>
+    <li><strong>Losing the originals.</strong> Resizing and recompressing make a new file. Keep the original on the phone or in your photo library for printing and editing later.</li>
+  </ul>
+
+  <h2>The short version</h2>
+  <p>Shrink the pixel size first, to about 1600 to 2000 pixels on the long side, then set quality around 75 to 80. That turns a 4 MB phone photo into a few hundred kilobytes that look the same on screen. Keep the original for printing.</p>
+  <p>See also: <a href="/guides/jpg-png-webp-or-avif/">JPG, PNG, WebP or AVIF: which image format to use</a> and <a href="/guides/iphone-heic-photos-to-jpg/">iPhone HEIC photos: convert to JPG and stop getting them</a>.</p>
+</Base>

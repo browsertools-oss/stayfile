@@ -1,0 +1,69 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'Are online file converters safe for private files?';
+const description = 'What happens to a file you upload to a converter site, the real risks for contracts, IDs and bank statements, and how to check whether a tool uploads your file at all.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-18',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/are-online-file-converters-safe/" jsonld={jsonld}>
+  <h1>Are online file converters safe for private files?</h1>
+  <p class="lede">Search for "merge PDF" or "HEIC to JPG" and you get a page of free converter sites. Most of them work the same way: you upload the file, their server converts it, and you download the result. For a meme that is fine. For a passport scan, a tax return or a signed contract, it is worth knowing what you are agreeing to, and that there is another way.</p>
+
+  <h2>What happens when you upload a file</h2>
+  <p>On a typical converter site, your file travels over an encrypted connection to a server owned or rented by the company. It is written to disk there, processed, and the result is stored until you download it. Most reputable sites say in their privacy policy that files are deleted after a set time, often one to twenty four hours.</p>
+  <p>That promise may well be kept. The issue is that you cannot check it, and the file exists, for a while, on a machine you do not control, run by a company you probably know nothing about, quite possibly in another country. Several things can go wrong in that window:</p>
+  <ul>
+    <li><strong>Breaches.</strong> Servers that hold many strangers' documents are attractive targets. Misconfigured cloud storage buckets full of uploaded files are found and reported every year.</li>
+    <li><strong>Retention that is longer than stated.</strong> Backups, logs and caches can keep copies after the main file is deleted.</li>
+    <li><strong>Terms you did not read.</strong> Some free services reserve broad rights over uploaded content, or are run mainly to show ads and collect data.</li>
+    <li><strong>Lookalike sites.</strong> Copies of well known converters exist to collect files or push unwanted downloads. They look almost identical and often appear in ads above the real result.</li>
+  </ul>
+
+  <h2>Which files deserve care</h2>
+  <p>A reasonable rule: if you would not email the file to a stranger, do not upload it to a stranger's server. That covers:</p>
+  <ul>
+    <li>Identity documents: passports, driving licences, ID cards, visas.</li>
+    <li>Financial documents: bank statements, pay stubs, tax returns, invoices with account numbers.</li>
+    <li>Contracts, leases, offer letters and anything signed.</li>
+    <li>Medical records and insurance paperwork.</li>
+    <li>Data exports with other people's details in them: customer lists, member spreadsheets, CRM exports.</li>
+    <li>Photos of children, and photos with location data in them.</li>
+  </ul>
+  <p>For work files there may also be a rule against it. Many employers forbid putting company or client data into unapproved online services, and for personal data about customers, data protection law can apply.</p>
+
+  <h2>The alternative: tools that run in your browser</h2>
+  <p>A modern browser can do most file conversions itself. A site can send the program to your browser, and the browser runs it on your file locally. The file is read from your disk into the page, changed in memory, and saved back to your disk. It never travels anywhere.</p>
+  <p>That is how every tool on this site works. When you <a href="/merge-pdf/">merge PDFs</a>, <a href="/heic-to-jpg/">convert HEIC photos</a> or <a href="/excel-to-csv/">turn a workbook into a CSV</a> here, the code that does the work is downloaded to your browser and runs there. There is no server step to upload to.</p>
+  <p>The built-in tools on your computer and phone are also local: Preview and Finder on a Mac, the Files app on an iPhone, the Photos app and Paint on Windows. They are often the right answer for simple jobs.</p>
+
+  <h2>How to check whether a site uploads your file</h2>
+  <p>You do not have to take any site's word for it, including this one. Two checks work in any desktop browser:</p>
+  <ol>
+    <li><strong>Watch the network.</strong> Open the browser's developer tools (F12 on Windows, Option Command I on a Mac), go to the Network tab, and then convert a file. An uploading site shows a request carrying roughly the size of your file. A local tool shows no such request.</li>
+    <li><strong>Pull the plug.</strong> Load the page, then turn off Wi-Fi or unplug the network, and try a conversion. A server based converter fails. A local tool keeps working. One caveat: some local tools download a helper the first time a particular format is used (the HEIC decoder on this site is one), so try one file while online first, then go offline and try again.</li>
+  </ol>
+  <p>Also look for a privacy page that says plainly whether files are uploaded, rather than only how long they are kept. A site that keeps files for one hour is still a site that receives them. Read <a href="/privacy/">this site's privacy page</a> for exactly what it does and does not collect.</p>
+
+  <h2>If you have to use an upload site</h2>
+  <ul>
+    <li>Type the address yourself rather than clicking an ad, and check the domain.</li>
+    <li>Prefer services from established companies with a clear privacy policy and a named owner.</li>
+    <li>Remove what you can before uploading: crop out an ID number, delete pages that are not needed, or redact with a black box and flatten.</li>
+    <li>Use the delete button if the site offers one once you have your file.</li>
+    <li>Never upload files that contain other people's personal data without permission.</li>
+  </ul>
+
+  <h2>The short version</h2>
+  <p>Upload converters are usually fine for harmless files and a real risk for documents that identify you or other people. Tools that run in the browser do the same work without the file leaving your device, and you can verify that yourself in under a minute.</p>
+  <p>See also: <a href="/guides/combine-pdf-files/">How to combine PDF files on Windows, Mac and iPhone</a>.</p>
+</Base>

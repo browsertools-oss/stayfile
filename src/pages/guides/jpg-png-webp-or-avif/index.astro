@@ -1,0 +1,63 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'JPG, PNG, WebP or AVIF: which image format to use';
+const description = 'What each image format is good at, where each one breaks, and a simple way to choose between JPG, PNG, WebP, AVIF, GIF and SVG for photos, screenshots, logos and websites.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-18',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/jpg-png-webp-or-avif/" jsonld={jsonld}>
+  <h1>JPG, PNG, WebP or AVIF: which image format to use</h1>
+  <p class="lede">Picking the wrong image format costs you in one of two ways: a file far bigger than it needs to be, or a picture that looks smudged. The choice comes down to what is in the picture and where it is going. Here is what each format actually does, and a short way to decide.</p>
+
+  <h2>Lossy and lossless, in one paragraph</h2>
+  <p>A lossless format such as PNG stores every pixel exactly, so the picture can be saved any number of times with no change. A lossy format such as JPG keeps a close approximation and throws away detail the eye is bad at noticing, which makes files much smaller. Lossy is the right choice for photos, where there is so much fine variation that nobody can tell. Lossless is the right choice for anything with sharp edges and flat colour, such as text, interface screenshots and logos, where lossy compression leaves visible smears and halos.</p>
+
+  <h2>JPG: photos that have to go anywhere</h2>
+  <p>JPG has been the standard photo format since the early 1990s, and every device, program and upload form on earth accepts it. At a quality of around 80 it makes a photo several times smaller than PNG with no visible difference. It has two real weaknesses. It has no transparency, so a cut-out logo gets a solid background. And it is poor at text and sharp lines: a screenshot saved as JPG gets a faint grey fuzz around every letter.</p>
+  <p>Use it for: photos you are emailing, printing, or uploading to a form, job site or government portal.</p>
+
+  <h2>PNG: screenshots, logos and transparency</h2>
+  <p>PNG is lossless and supports full transparency, so edges stay crisp and cut-out shapes keep their see-through background. Screenshots, diagrams, charts, logos and anything with text belong in PNG. A screenshot of a document is often smaller as PNG than as JPG, because large areas of flat colour compress extremely well.</p>
+  <p>The weakness is photos. A phone photo saved as PNG can easily be 15 to 20 MB, several times the JPG, with no visible benefit.</p>
+  <p>Use it for: screenshots, logos, icons, diagrams, anything with transparency, and any image you will edit again.</p>
+
+  <h2>WebP: the smaller default for websites</h2>
+  <p>Google released WebP in 2010 to replace JPG, PNG and GIF on the web. It can be lossy or lossless, keeps transparency, and can animate. Lossy WebP is typically a quarter to a third smaller than a JPG that looks the same, and lossless WebP is usually smaller than PNG. Every current browser shows it, Safari included since 2020.</p>
+  <p>Outside the browser, support is patchier. Plenty of desktop programs, upload forms and print services still reject .webp files, which is why people end up with a downloaded WebP they cannot open and need to <a href="/webp-to-jpg/">convert WebP to JPG</a> or <a href="/webp-to-png/">WebP to PNG</a>.</p>
+  <p>Use it for: images on your own website or app.</p>
+
+  <h2>AVIF: the smallest, at a price</h2>
+  <p>AVIF borrows the compression from the AV1 video codec. It usually makes smaller files than WebP at the same quality, especially for photos with smooth areas such as skies and skin, and it supports transparency, animation and high dynamic range colour. Chrome, Firefox and Safari all display it, Safari since 2022.</p>
+  <p>Two costs come with it. Encoding is slow: a large photo can take several seconds where JPG takes a fraction of one. And support outside browsers is the thinnest of the four. Treat AVIF as a website format and keep a JPG or PNG for everything else.</p>
+  <p>Use it for: large photos on websites where every kilobyte counts, served next to a JPG or WebP fallback if you need to support older software.</p>
+
+  <h2>The others you will meet</h2>
+  <p><strong>HEIC</strong> is the format iPhones save photos in. It is excellent at saving storage on the phone but poorly supported elsewhere, so it is mostly a format you convert away from, with <a href="/heic-to-jpg/">HEIC to JPG</a> being the usual route.</p>
+  <p><strong>GIF</strong> is limited to 256 colours and is only worth using for short, simple animations, and even then WebP or a short video is usually smaller.</p>
+  <p><strong>SVG</strong> is not made of pixels at all. It describes shapes, so it stays perfectly sharp at any size and is ideal for logos and icons on websites. When something needs a fixed bitmap instead, convert it with <a href="/svg-to-png/">SVG to PNG</a> at the largest size you will need.</p>
+  <p><strong>BMP</strong> is an old Windows format with almost no compression. There is no reason to keep using it; PNG holds the same pixels at a fraction of the size.</p>
+
+  <h2>A quick way to decide</h2>
+  <ul>
+    <li>Is it a photo going to a person, a printer or a form? <strong>JPG.</strong></li>
+    <li>Does it have text, sharp lines, or transparency? <strong>PNG.</strong></li>
+    <li>Is it going on your own website? <strong>WebP</strong>, or <strong>AVIF</strong> for large photos.</li>
+    <li>Is it a logo or icon for a website? <strong>SVG</strong> if you have it, otherwise PNG.</li>
+    <li>Is it a favicon? <strong>ICO</strong>, made from a square PNG.</li>
+  </ul>
+
+  <h2>Converting between them</h2>
+  <p>Converting from a lossy format to a lossless one does not restore anything. A JPG turned into a PNG keeps every JPG artefact and just gets bigger. Converting from lossless to lossy always loses a little, so keep the original. And converting a picture with transparency into JPG fills the transparent areas with a solid colour.</p>
+  <p>The <a href="/convert-image/">Convert image</a> page on this site takes JPG, PNG, WebP, AVIF, GIF, SVG, BMP and ICO files and saves them as JPG, PNG, WebP or AVIF, with a quality setting for the lossy ones. It runs in your browser, so nothing is uploaded.</p>
+  <p>See also: <a href="/guides/make-a-photo-smaller-to-email/">How to make a photo smaller to email or upload</a>.</p>
+</Base>

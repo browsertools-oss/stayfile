@@ -1,0 +1,71 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to open a JSON file in Excel or Google Sheets';
+const description = 'Why a JSON export does not open as a table, how nested fields and lists get flattened into columns, and three ways to get JSON into Excel or Google Sheets.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-18',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/open-json-in-excel-or-sheets/" jsonld={jsonld}>
+  <h1>How to open a JSON file in Excel or Google Sheets</h1>
+  <p class="lede">You asked an app for your data and it handed you a .json file. Double-click it and you get a wall of brackets in a text editor, not a spreadsheet. JSON and spreadsheets hold data in different shapes, and getting from one to the other means deciding how to flatten it. Here is what that involves and the simplest ways to do it.</p>
+
+  <h2>Why JSON is not a table</h2>
+  <p>A spreadsheet is a grid: every row has the same columns, and every cell holds one value. JSON is a tree. A record can hold another record, which can hold a list, which can hold more records. A typical export looks like this:</p>
+  <pre><code>{`[
+  {"id": 1, "name": "Ada", "address": {"city": "London", "zip": "N1"}, "tags": ["admin", "beta"]},
+  {"id": 2, "name": "Grace", "address": {"city": "New York", "zip": "10001"}, "tags": []}
+]`}</code></pre>
+  <p>The outer square brackets are a list of records, which maps nicely onto rows. But address is a record inside a record, and tags is a list inside a record. Neither fits in one cell as it stands.</p>
+
+  <h2>How flattening works</h2>
+  <p>The common convention, used by most converters, is:</p>
+  <ul>
+    <li><strong>Nested records become extra columns</strong> with dotted names. address.city and address.zip each get a column.</li>
+    <li><strong>Lists of simple values</strong> are written into one cell, either as JSON text such as ["admin","beta"] or joined with a separator.</li>
+    <li><strong>Missing fields</strong> become empty cells. If only some records have a phone field, the column exists and is blank for the rest.</li>
+  </ul>
+  <p>So the example above becomes a table with the columns id, name, address.city, address.zip and tags. Each record is one row and nothing is lost.</p>
+  <p>The hard case is a list of records inside a record, such as an order with several line items. There is no single right answer: you can keep the items as JSON text in one cell, or produce one row per item and repeat the order details on each. If you need the second, it is usually a job for Power Query or a short script, covered below.</p>
+
+  <h2>Method 1: convert it in the browser</h2>
+  <p>The <a href="/json-to-csv/">JSON to CSV</a> page flattens nested fields into dotted columns, writes lists into one cell as JSON text, and shows a preview before you save. It accepts an array of records, a single record, an object wrapping an array (such as an API response with a data field) and JSON Lines with one record per line. If you want a workbook rather than a CSV, <a href="/json-to-excel/">JSON to Excel</a> saves an .xlsx directly, which avoids the separator and encoding problems CSV can have.</p>
+  <p>Nothing is uploaded. That matters more than usual here, because JSON exports tend to be exactly the data people are careful with: customer lists, order histories, personal data downloads from social networks.</p>
+
+  <h2>Method 2: Power Query in Excel for Windows</h2>
+  <p>Excel for Microsoft 365 and Excel 2016 or later on Windows can read JSON directly:</p>
+  <ol>
+    <li>Choose Data, then Get Data, then From File, then From JSON.</li>
+    <li>Pick the file. The Power Query editor opens and shows the top level as a list.</li>
+    <li>Click To Table, then use the expand button in a column header (two arrows) to unfold nested records into columns. Repeat for each nested level.</li>
+    <li>Click Close and Load.</li>
+  </ol>
+  <p>Power Query is the best choice when the same export arrives every week, because the steps are saved and Refresh repeats them on the new file. It also handles the list of records case by expanding a list column to new rows. The cost is a learning curve, and Excel for the web cannot import JSON this way.</p>
+
+  <h2>Method 3: Google Sheets</h2>
+  <p>Google Sheets has no built-in JSON import. The practical route is to convert to CSV or .xlsx first (method 1) and then use File, then Import, then Upload. Sheets detects the columns from the CSV. For data that is fetched from an API on a schedule, people write a short Apps Script function, but for a one-off file that is far more work than converting it.</p>
+
+  <h2>Going the other way</h2>
+  <p>To turn a spreadsheet back into JSON, for an API, a test fixture or a configuration file, <a href="/csv-to-json/">CSV to JSON</a> and <a href="/excel-to-json/">Excel to JSON</a> make an array with one record per row, using the first row as the field names. Numbers come out as numbers rather than text, which is what most programs expect.</p>
+
+  <h2>Common problems</h2>
+  <ul>
+    <li><strong>"Unexpected token" or "invalid JSON" errors.</strong> The file is not valid JSON. Common causes are a trailing comma after the last item, single quotes instead of double quotes, or comments. JSON allows none of these. If the file has one record per line and no surrounding brackets, it is JSON Lines, which <a href="/jsonl-to-csv/">JSONL to CSV</a> reads.</li>
+    <li><strong>Long numbers changing.</strong> Excel keeps only 15 significant digits, so an 18 digit ID turns into something ending in zeros. Import such columns as text.</li>
+    <li><strong>Dates appearing as long text.</strong> JSON has no date type, so dates arrive as text such as 2026-11-18T09:30:00Z. Excel may or may not recognise them; a Text to Columns pass or a DATEVALUE formula fixes it.</li>
+    <li><strong>Hundreds of columns.</strong> Deeply nested data flattens into very wide tables. If you only need a few fields, delete the rest after converting, or convert a smaller part of the file.</li>
+  </ul>
+  <p>See also: <a href="/guides/csv-opens-in-one-column-in-excel/">CSV opens in one column in Excel: why and how to fix it</a>.</p>
+</Base>
+<style>
+  pre { font-family: var(--mono, monospace); overflow-x: auto; }
+</style>

@@ -2979,4 +2979,24 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     title: "Saved a WebP image you can't open? Convert it",
     blurb: 'Why websites save WebP, and how to get a JPG or PNG out of it.',
   },
+  {
+    slug: 'make-a-photo-smaller-to-email',
+    title: 'How to make a photo smaller to email or upload',
+    blurb: 'Pixel size first, quality second: the numbers that work for email, forms and websites.',
+  },
+  {
+    slug: 'jpg-png-webp-or-avif',
+    title: 'JPG, PNG, WebP or AVIF: which image format to use',
+    blurb: 'What each format is good at, where it breaks, and a quick way to choose.',
+  },
+  {
+    slug: 'open-json-in-excel-or-sheets',
+    title: 'How to open a JSON file in Excel or Google Sheets',
+    blurb: 'Why JSON is not a table, how flattening works, and three ways to get it into a sheet.',
+  },
+  {
+    slug: 'are-online-file-converters-safe',
+    title: 'Are online file converters safe for private files?',
+    blurb: 'What happens to an uploaded file, which files deserve care, and how to check a site.',
+  },
 ];

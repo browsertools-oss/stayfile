@@ -1,0 +1,17 @@
+---
+import Base from '../../layouts/Base.astro';
+import { SITE } from '../../site';
+---
+<Base title={`Contact | ${SITE.name}`} description="How to reach the people behind Stayfile: report a bug, ask for a tool, or ask about privacy." path="/contact/">
+  <h1>Contact</h1>
+  <p class="lede">{SITE.name} is a small independent site. Email is the way to reach it, and every message is read.</p>
+  <h2>Email</h2>
+  <p><a href="mailto:hello@stayfile.app">hello@stayfile.app</a></p>
+  <h2>Reporting a problem</h2>
+  <p>If a tool fails on a file, say which page you were on, which browser and device you used, and what you expected to happen. Please do not attach the file itself if it is private. A description of it (for example "a 40 page scanned PDF" or "an iPhone 15 HEIC photo") is usually enough to reproduce the problem.</p>
+  <h2>Asking for a tool</h2>
+  <p>Requests for new conversions are welcome. A tool can be added if it can run entirely in the browser, because the rule on this site is that files are never uploaded.</p>
+  <h2>Source code</h2>
+  <p>The site is open source. You can read the code, check that nothing is uploaded, and report issues on <a href="https://github.com/browsertools-oss/stayfile">GitHub</a>.</p>
+  <p>For how the site handles data, see the <a href="/privacy/">privacy page</a>.</p>
+</Base>

@@ -49,7 +49,7 @@ describe('guides', () => {
         const markup = src.replace(/<pre[\s\S]*?<\/pre>/g, ' ');
         const hrefs = [...markup.matchAll(/href="(\/[^"#?]*)[^"]*"/g)].map((m) => m[1]);
         for (const href of hrefs) {
-          if (href === '/' || href === '/guides/') continue; // home and guides index
+          if (['/', '/guides/', '/privacy/', '/about/', '/contact/'].includes(href)) continue; // home, guides index and the site pages
           if (href.startsWith('/guides/')) {
             const g = href.replace(/^\/guides\//, '').replace(/\/$/, '');
             expect(guideSlugs.has(g), `${g.slug}: href "${href}" is not a guide`).toBe(true);
