@@ -1076,6 +1076,14 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'jpg-to-avif',
+    more: {
+      h2: 'What the conversion keeps',
+      paras: [
+        'AVIF encoding is done by jSquash, the Squoosh codecs, fetched only when you convert. The quality slider maps to AVIF\'s 0 to 100 scale shifted down by 25, because AVIF reaches the same visual quality at a lower number than JPG or WebP. The default of 85 becomes 60 inside the encoder, at speed 8, which trades a little size for much faster encodes.',
+        'The JPG is decoded by the browser and drawn onto a canvas before encoding, so EXIF data such as the date, the location and the camera model is dropped, along with any comment metadata the JPG carries. A burst or Live Photo pair is treated as a single still frame.',
+        'JPG has no alpha channel, so there is no transparency to carry over, and the canvas works in 8-bit channels, matching the source. The result is a real AVIF file, not a renamed JPG, so any tool with an AVIF decoder reads it. Colour data is kept at the canvas\'s precision rather than upscaled to 10-bit.',
+      ],
+    },
     tool: 'img-convert',
     group: 'Images',
     card: 'JPG to AVIF',
@@ -1100,6 +1108,14 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'png-to-avif',
+    more: {
+      h2: 'What the conversion keeps',
+      paras: [
+        'The PNG is decoded by the browser and the pixels are re-encoded as AVIF with jSquash, fetched only when you convert. Transparency is kept: the canvas holds the PNG\'s alpha channel and AVIF stores one, so transparent areas stay transparent without a white fill behind them.',
+        'The quality slider maps to AVIF\'s 0 to 100 scale shifted down by 25, and the default of 85 becomes 60 in the encoder at speed 8. AVIF is lossy at every setting, so this is the one step where detail is actually discarded. Keep the PNG original if you may need it later.',
+        'The canvas works in 8-bit channels, so a 16-bit PNG is rounded to 8 bits. Text chunks and other metadata inside the PNG are dropped by the re-encode. If the PNG is a screenshot with flat colour and sharp text, compare the saved size against the original before replacing it.',
+      ],
+    },
     tool: 'img-convert',
     group: 'Images',
     card: 'PNG to AVIF',
@@ -1148,6 +1164,14 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'avif-to-webp',
+    more: {
+      h2: 'What the conversion keeps',
+      paras: [
+        'AVIF is decoded by the browser itself. If the browser cannot decode AVIF, the page shows an error instead of a file. Ten-bit AVIF is flattened to the canvas\'s 8-bit channels, EXIF metadata is not kept, and animation is not kept either; the still frame is converted.',
+        'WebP is written by the browser\'s canvas when it can. Safari\'s canvas silently returns a PNG instead, so the page detects the wrong output type and switches to jSquash\'s WebP encoder, fetched only when it is needed. Transparency is kept either way, with no white fill behind transparent areas.',
+        'The quality slider is passed to the encoder as 0 to 100, and the default of 85 becomes 85. This is a lossy-to-lossy conversion, so fine detail softens a little at each hop. Starting from the original AVIF is better than re-saving an already converted copy.',
+      ],
+    },
     tool: 'img-convert',
     group: 'Images',
     card: 'AVIF to WebP',
@@ -2170,6 +2194,14 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'tsv-to-excel',
+    more: {
+      h2: 'How the workbook is built',
+      paras: [
+        'The tab-separated grid is written straight into a sheet, first row included, as plain cells with no styling. SheetJS builds a real .xlsx with compression, so the file opens in Excel, LibreOffice and Google Sheets with no delimiter to fight with. The sheet is named after the file you dropped in, cleaned of characters Excel forbids and capped at 31 characters.',
+        'Values are typed on the way in: plain numbers become real numbers Excel can sum, true and false become booleans, and a value with a leading zero stays text under the same column-wide rule the CSV pages use. Untick "First row is column names" if your data has no header row.',
+        'Long numbers that would lose precision keep their text instead of rounding, and date-like values such as 2026-11-06 stay as text, because only plain numbers become numbers. Cells that are empty in the file stay empty in the sheet. Everything, numbers included, can be forced to text with the "Keep all values as text" option.',
+      ],
+    },
     tool: 'csv-to-xlsx',
     group: 'Spreadsheets and data',
     card: 'TSV to Excel',
@@ -2788,6 +2820,14 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'yaml-to-csv',
+    more: {
+      h2: 'How the rows are made',
+      paras: [
+        'js-yaml parses the file, the result is flattened to dotted columns and written as CSV, the same path the YAML to JSON page uses. A list of maps gives one row per record; nested maps give dotted columns like address.city, and a list inside a record is written as JSON text in one cell.',
+        'Columns are the union of keys across all rows in first-appearance order, and a record missing a key gets an empty cell, so a YAML list whose records have different keys still comes out as a tidy sheet. A YAML file with several documents separated by --- becomes one set of rows in the same table.',
+        'Numbers arrive as numbers and true and false arrive as booleans. A value with a leading zero stays text under the same column-wide rule the CSV to JSON page uses, and strings are quoted when they hold commas or quotes. Line endings are CRLF, js-yaml loads only on the YAML pages, and the "For Excel: add a UTF-8 BOM" checkbox here is off by default.',
+      ],
+    },
     tool: 'yaml-to-csv',
     group: 'Spreadsheets and data',
     card: 'YAML to CSV',
@@ -2850,6 +2890,14 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'csv-to-yaml',
+    more: {
+      h2: 'How the records are written',
+      paras: [
+        'With the first row as column names, each record becomes a YAML mapping keyed by those names, so the output reads like hand-written config. The result is a list of mappings, which is the shape tools expect when they load records into a pipeline or a manifest.',
+        'Values are typed the same way as the CSV to JSON page: plain numbers become numbers, true and false become booleans, and values with leading zeros stay text. If any value in a column must stay text, the whole column stays text, so a zip code like 02134 is never quietly turned into 2134.',
+        'Untick "First row is column names" and the output becomes a list of lists instead, one list per row, with no keys at all, which suits data that has no header. js-yaml writes block-style YAML with two-space indentation, and js-yaml itself loads only on the YAML pages, not on the rest of the data tools.',
+      ],
+    },
     tool: 'csv-to-yaml',
     group: 'Spreadsheets and data',
     card: 'CSV to YAML',
