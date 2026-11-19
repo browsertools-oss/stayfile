@@ -2234,6 +2234,14 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'jsonl-to-csv',
+    more: {
+      h2: 'How the lines are read',
+      paras: [
+        'The whole file is parsed as JSON first. When that fails, each line is parsed as its own JSON object, which is what a JSON Lines file is. A line that is not valid JSON fails the conversion with an error instead of being skipped, so a truncated export errors out loudly rather than quietly dropping rows.',
+        'Nested objects flatten into dotted columns, so an object like address with a city inside becomes a column called address.city. A list inside a record is written into one cell as JSON text. Columns are the union of keys across every row, in the order the keys first appear, and a record missing a key gets an empty cell.',
+        'JSON numbers are written as numbers and JSON strings stay strings, so a zip code stored as "02134" keeps its zeros. The output uses CRLF line endings and quotes cells that hold commas or quotes, the same rules Excel and Google Sheets read. This page shares the JSON to CSV tool, so the "For Excel: add a UTF-8 BOM" checkbox is available here too, off by default.',
+      ],
+    },
     tool: 'json-to-csv',
     group: 'Spreadsheets and data',
     card: 'JSONL to CSV',
@@ -2266,6 +2274,14 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'markdown-to-csv',
+    more: {
+      h2: 'How the table is found and unwound',
+      paras: [
+        'When the file has an alignment row such as | --- | --- |, the table is read as the header line directly above it plus the pipe lines below it, and the rest of the file, prose, headings and other tables, is ignored. Without an alignment row, every line containing a pipe is read as a row, which suits loose tables pasted from anywhere.',
+        'The header row survives as the first line of the CSV and the alignment row is dropped. Cells are trimmed, \\| becomes | again, and <br> becomes a real line break inside the cell. A line break inside a quoted CSV cell is legal, so cell text with breaks round-trips back to the Markdown page unchanged.',
+        'Cells containing commas, quotes or line breaks are quoted when the CSV is written, and line endings are CRLF. The download carries a UTF-8 BOM, so Excel shows accented characters correctly instead of showing mojibake. If the file holds no table, you get an error saying so rather than an empty download.',
+      ],
+    },
     tool: 'md-to-csv',
     group: 'Spreadsheets and data',
     card: 'Markdown to CSV',
@@ -2585,6 +2601,14 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'excel-to-markdown',
+    more: {
+      h2: 'How the sheet becomes a table',
+      paras: [
+        'Only the first sheet is read. The sheet is converted to rows and then to the same GitHub-flavored table the CSV to Markdown page writes. When a workbook has several sheets, the page says so, naming the first sheet and how many were left out, so nothing is silently missed.',
+        'Cells are read as they are shown in Excel, so a date formatted as 2026-11-06 comes out as that text. A column whose cells are all numbers is right-aligned and gets a numeric marker in the separator row. Pipes inside cells are written as \\| and line breaks become <br>, so pasted tables hold together on GitHub.',
+        'Formatting does not carry over: the table holds values, not fonts, colours or column widths. Merged cells are read as stored, so the top-left cell has the value and the rest come out empty. The download is a plain UTF-8 .md file, and the preview can be cut short at 200,000 characters on very large sheets.',
+      ],
+    },
     tool: 'xlsx-to-markdown',
     group: 'Spreadsheets and data',
     card: 'Excel to Markdown',
@@ -2647,6 +2671,14 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'json-to-markdown',
+    more: {
+      h2: 'How the table is built',
+      paras: [
+        'An array of objects, a single object, an object wrapping one array such as {"data": [...]}, or JSON Lines all work here. Everything nests down to dotted columns, so {"a": {"b": 1}} becomes a column called a.b. A list inside a record stays as JSON text in one cell rather than being split across columns.',
+        'Columns are the union of keys across every row in first-appearance order, and a record missing a key gets an empty cell. Pipes inside a value are written as \\| so the table keeps its shape, and line breaks inside a value become <br>, so one record renders as one row on GitHub.',
+        'A column whose non-empty cells are all numbers gets a numeric marker in the separator row, so GitHub right-aligns it. Empty JSON throws an error instead of producing a bare header. The preview can be cut short at 200,000 characters on very large files; the download always holds the full table.',
+      ],
+    },
     tool: 'json-to-markdown',
     group: 'Spreadsheets and data',
     card: 'JSON to Markdown',
