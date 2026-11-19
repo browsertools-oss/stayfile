@@ -1,5 +1,5 @@
-- The week plan is fully DONE, including the boss-authorized Extra 4 batch: ten more 'more' sections (jsonl-to-csv, markdown-to-csv, json-to-markdown, excel-to-markdown, yaml-to-csv, csv-to-yaml, tsv-to-excel, jpg-to-avif, png-to-avif, avif-to-webp; commits 4338e10, 665dcab). "more" sections now on 70 pages; slug count unchanged at 95; 177 tests and the build pass; all ten sections verified in dist HTML.
-- About 15 thin tool pages remain without a 'more' section, mostly AVIF, ICO and data variant families; the boss said the next planner owns them. No new tool or preset pages until Search Console shows indexing.
-- Visitors: 70 in the last 30 days at the last morning check (ads level 300, Pro trigger 1,000; metrics.csv shows a blank for 2026-11-17, counted as 0). No decision issues open. Indexing is the owner's Search Console step (subfixer issue #9).
-- No page has been verified in a real browser since 11-11; browser checks are not an allowed command in daily runs. Internal guide links are pinned by the href test, but layout and drop-flow checks stay open.
-- Next run: this plan is exhausted; any further work (the 15 remaining thin pages) needs the next week's plan or a boss answer. Do not add pages, guides or Pro work without one.
+- The week plan is fully DONE (all 14 rows, all backlog items, all four boss-authorized Extra batches). Targets met: 6 guides at 700+ words each, 70 "more" sections (target 16), 85 tool pages unchanged, 7 guide URLs in sitemap.
+- Morning metrics: 70 visitors in last 30 days (ops/metrics.csv). Ads trigger (300) and Pro trigger (1,000) not close; no decision issues.
+- No work assigned for this run; rows 8 and 9 were built early on 11-17. The plan is exhausted until next week's planner.
+- Remaining levers outside run control: AdSense review (re-requested 11-18 after low-value-content fix) and owner Search Console indexing (subfixer issue #9).
+- Next run: wait for next week's plan. Do not add pages, guides, or Pro work without a boss answer.
