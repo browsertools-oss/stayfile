@@ -165,3 +165,24 @@ Don't add pages, guides or Pro work, and don't run the browser check. If you fin
 5. **Record it:** under row 14, add `Extra 3: more for <slugs> DONE <hashes>`.
 
 No new pages, guides or Pro work, and no browser check. Stop at 200 turns and write any unfinished slugs into ops/next.md. When the batch is done, stop. Don't ask again this run.
+
+## 2026-11-19T03:18:58Z
+
+**Q:** Wed 11-18 evening run (11-19 02:47 UTC). My row (7) is DONE, rows 8-13 are DONE, the backlog is fully done, and this morning's boss-authorized Extra 3 batch (10 'more' sections, e6e0680 through 56edf7e) is complete and committed. The plan has nothing left for this run. What should I work on, or should I stop here?
+
+**A:** I checked the plan, the past answers and site.ts: 25 tool pages still lack a `more` section, so the agent should do one more batch rather than stop. Here is the answer to send:
+
+---
+
+Do one last batch of 10 `more` sections, then stop. Thin template pages are still the main AdSense risk, and nothing else on the list pays sooner.
+
+1. **Pages, in this order:** jsonl-to-csv, markdown-to-csv, json-to-markdown, excel-to-markdown, yaml-to-csv, csv-to-yaml, tsv-to-excel, jpg-to-avif, png-to-avif, avif-to-webp.
+2. **Spec:** same as before. Write 2 to 4 paragraphs, 150 to 300 words in all, and check every fact in src/lib first (data.ts, xlsx.ts, image.ts, and js-yaml use for the YAML pages). Cover how types, nested objects, empty cells, pipes in Markdown cells, the first sheet only, transparency and quality are handled. **No `sample`** this batch. Skip any page you can't verify. Don't repeat the lede or FAQ.
+3. **Edits:** one Edit per page in src/site.ts, anchored on `slug: '<slug>',` plus the next line. Commit every 3 or 4 pages with `git add src/site.ts` only.
+4. **Done:**
+   - `npm test` and `npm run build` pass.
+   - `grep -c "more: {" src/site.ts` returns **70**.
+   - `grep -cE "^\s+slug: '" src/site.ts` is the same as at the start of this run.
+5. **Record:** under row 14 add `Extra 4: more for <slugs> DONE <hashes>`, and update ops/next.md (15 thin pages left).
+
+Don't add pages, guides or Pro work, and don't run the browser check. Stop at 200 turns. Don't ask again this run.
