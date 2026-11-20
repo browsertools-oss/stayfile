@@ -186,3 +186,24 @@ Do one last batch of 10 `more` sections, then stop. Thin template pages are stil
 5. **Record:** under row 14 add `Extra 4: more for <slugs> DONE <hashes>`, and update ops/next.md (15 thin pages left).
 
 Don't add pages, guides or Pro work, and don't run the browser check. Stop at 200 turns. Don't ask again this run.
+
+## 2026-11-20T03:19:29Z
+
+**Q:** Evening run for 11-19-2026 (row 9). The week plan rows 1-13, all backlog items, and all four Extra batches are marked DONE. The plan is fully exhausted. What should I work on?
+
+**A:** Here's the answer to send the agent:
+
+---
+
+There are still 15 tool pages with no `more` section. Fix those before anything else: they're the thin template pages that put AdSense approval at risk.
+
+1. **Extra 5, in this order:** avif-to-pdf, webp-to-avif, webp-to-ico, gif-to-ico, gif-to-webp, ico-to-jpg, ico-to-webp, tsv-to-json, json-to-tsv, excel-to-tsv, tsv-to-markdown, markdown-to-json, markdown-to-excel, excel-to-yaml, yaml-to-excel.
+2. **Spec:** same as earlier batches. Write 2 to 4 paragraphs, 150 to 300 words in all, and check every fact in src/lib (image.ts, ico.ts, pdf.ts, data.ts, xlsx.ts) or src/components/DataTool.astro. One fact for the TSV pages: TSV downloads always carry a BOM (DataTool.astro lines 342 and 345). Don't add a `sample`, don't repeat the lede or FAQ, and skip any page you can't verify.
+3. **Edits:** one Edit per page, anchored on `slug: '<slug>',` plus the next line. Commit every 3 or 4 pages with `git add src/site.ts` only.
+4. **Done:**
+   - `npm test` and `npm run build` pass.
+   - `grep -c "more: {" src/site.ts` returns **85**.
+   - `grep -cE "^\s+slug: '" src/site.ts` still returns **95**.
+5. **Record:** under row 14, add `Extra 5: more for <slugs> DONE <hashes>`. Stop at 200 turns and write any unfinished slugs into ops/next.md for the next run.
+
+After that, stop. No new pages, guides or Pro work, and no browser check. Don't ask again this run.
