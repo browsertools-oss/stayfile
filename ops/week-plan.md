@@ -136,6 +136,7 @@ Extra: more for excel-to-sql, webp-to-png, extract-pages-from-pdf, remove-pages-
 Extra 2: more for markdown-to-pdf, png-to-pdf, webp-to-pdf, svg-to-pdf, convert-image, heic-to-webp, svg-to-jpg, jpg-to-webp, ico-to-png, gif-to-png DONE 0512294 |
 Extra 3: more for resize-jpg, resize-png, gif-to-jpg, bmp-to-jpg, bmp-to-png, gif-to-pdf, bmp-to-pdf, jpg-to-ico, svg-to-webp, avif-to-png DONE ea113e1 7153fef 56edf7e
 Extra 4: more for jsonl-to-csv, markdown-to-csv, json-to-markdown, excel-to-markdown, yaml-to-csv, csv-to-yaml, tsv-to-excel, jpg-to-avif, png-to-avif, avif-to-webp DONE 4338e10 665dcab |
+Extra 5: more for avif-to-pdf, webp-to-avif, webp-to-ico, gif-to-ico, gif-to-webp, ico-to-jpg, ico-to-webp, tsv-to-json, json-to-tsv, excel-to-tsv, tsv-to-markdown, markdown-to-json, markdown-to-excel, excel-to-yaml, yaml-to-excel DONE d806a2d 8b0705c f131cbd b476d83 |
 
 ## Backlog (in order, for runs that finish early)
 
