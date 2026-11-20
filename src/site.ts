@@ -737,6 +737,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert AVIF to PDF',
     lede: 'Make one PDF from AVIF pictures, one picture per page, in the order you choose. The converting happens in your browser, so the files stay on your own device.',
     description: 'Convert AVIF files to a PDF in your browser, one per page, in the order you choose. Pick a page size and margin. Your files are never uploaded.',
+    more: {
+      h2: 'How the pictures go into the PDF',
+      paras: [
+        'Each AVIF is decoded by the browser, drawn onto a canvas and re-encoded as a JPG at quality 0.92, because PDF cannot embed AVIF bytes directly. The JPG is then placed on its own page. Transparency is lost in the JPG step, so transparent areas become white.',
+        'Choose "Fit" for the page size and the page matches the image dimensions exactly, with the margin you set. Choose A4 or Letter and the page is that size; wide images are rotated to landscape automatically, and the image is scaled down to fit inside the margins without ever being upscaled.',
+        'Only the first frame of an animated AVIF is used. Metadata such as EXIF is not kept. The output is a raster PDF, so text in the picture is not selectable and the file size is roughly the sum of the JPG sizes plus a small PDF overhead.',
+      ],
+    },
     steps: ['Drop in your .avif files.', 'Put them in order and pick a page size and margin.', 'Click Make PDF and save it.'],
     faq: [
       {
@@ -1149,6 +1157,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert WebP to AVIF',
     lede: 'Turn WebP images into AVIF, which often compresses photos further. Transparency is kept. Check that the place you will use the file opens AVIF first.',
     description: 'Convert WebP to AVIF online, one file or many at once. Transparency is kept. Your images stay on your device.',
+    more: {
+      h2: 'What the conversion does to the file',
+      paras: [
+        'The WebP is decoded in your browser, drawn onto a canvas at the same dimensions and encoded as AVIF by a bundled codec (jSquash), not by the browser. The quality slider is mapped to AVIF\'s own scale: the slider value times 100, minus 25, so the default 85 becomes 60. This keeps files small while AVIF still looks as good as WebP at a higher number.',
+        'Transparency is kept. AVIF supports an alpha channel, so a WebP with a transparent background stays transparent. The encoder runs at speed 8, which trades a little size for much faster encodes; large photos still take a few seconds. Animated WebP files keep only their first frame.',
+        'This is a lossy-to-lossy conversion. Both WebP and AVIF throw away detail the eye is less likely to notice, so each hop softens fine detail a little. If you have the original photo, convert that instead of a WebP you already saved.',
+      ],
+    },
     steps: ['Drop in your WebP files.', 'AVIF is already selected. Move the quality slider to change the file size.', 'Click Convert, then save each image or all of them as a zip.'],
     faq: [
       {
@@ -1397,6 +1413,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert WebP to ICO',
     lede: 'Turn a WebP into a .ico file, the format browsers and desktops use for favicons and shortcuts. The file holds 16, 32 and 48 px versions of the image.',
     description: 'Convert a WebP to a .ico favicon file in your browser. The file holds 16, 32 and 48 px sizes. Your image stays on your device.',
+    more: {
+      h2: 'How the icon is built',
+      paras: [
+        'The WebP is decoded by the browser, drawn at its intrinsic size and then scaled into 16, 32 and 48 pixel pictures at high smoothing quality. All three are packed into one .ico file as 32-bit PNG frames, which current Windows and every current browser read.',
+        'If the WebP is not square, the image is centered on a square canvas and padded with transparency instead of being stretched. The alpha channel is kept, so a transparent background stays transparent in the .ico file.',
+        'Drop in several WebP files and each becomes its own .ico file; the Save button downloads an images.zip when more than one file is ready.',
+      ],
+    },
     steps: ['Drop in your WebP files.', 'Nothing to set. The three sizes are made from your image.', 'Click Save to download the .ico file, or all of them as a zip.'],
     faq: [
       {
@@ -1630,6 +1654,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert GIF to ICO',
     lede: 'Turn a GIF into a .ico file, the format browsers use for favicons. The first frame of an animated GIF is kept, and the file holds 16, 32 and 48 px versions of the image.',
     description: 'Convert a GIF to a .ico favicon file in your browser. Only the first frame of an animated GIF is used. Transparency is kept. Your file is never uploaded.',
+    more: {
+      h2: 'How the icon is built',
+      paras: [
+        'The GIF is decoded by the browser and only its first frame is used. That frame is drawn at its intrinsic size, then scaled into 16, 32 and 48 pixel pictures at high smoothing quality. All three are packed into one .ico file as 32-bit PNG frames, which current Windows and every current browser read.',
+        'A GIF uses a 256-color palette, so the decoded frame has at most 256 distinct colors. The ICO stores each size as a full 32-bit PNG, so the palette limit does not expand but the file can hold transparency cleanly. If the GIF is not square, the image is centered on a square canvas and padded with transparency instead of being stretched.',
+        'Drop in several GIF files and each becomes its own .ico file; the Save button downloads an images.zip when more than one file is ready.',
+      ],
+    },
     steps: ['Drop in your GIF files.', 'Nothing to set. The three sizes are made from your image.', 'Click Save to download the .ico file, or all of them as a zip.'],
     faq: [
       {
