@@ -2464,6 +2464,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert Markdown to Excel',
     lede: 'Turn a Markdown table into an .xlsx workbook. The first table in the file is read, prose around it is ignored, and numbers come out as numbers so you can sum them in Excel.',
     description: 'Convert Markdown tables to Excel .xlsx in your browser. The first table is used, prose is skipped, and nothing is uploaded.',
+    more: {
+      h2: 'How the table becomes an Excel workbook',
+      paras: [
+        'The first GitHub-flavored Markdown table in the file is found: the header line above the first alignment row (| --- | --- |) plus the pipe lines below it. Prose, headings, code blocks and other tables are ignored. Escaped pipes (\\|) become | again, and <br> becomes a line break inside the cell, reversing what the CSV to Markdown page does.',
+        'The parsed table is converted to CSV text and then SheetJS builds a real .xlsx workbook with compression. Plain numbers are written as numbers so you can sum and sort them; values with leading zeros stay text. The sheet is named after the file name, with characters Excel forbids replaced by spaces and the name capped at 31 characters.',
+        'Merged cells in the Markdown are not represented (Markdown tables do not support them). The Markdown to CSV and Markdown to JSON pages use the same table parser, so the row and column count match across the three pages. The preview shows the first 50 rows; the downloaded workbook has everything.',
+      ],
+    },
     steps: [
       'Drop in a .md file, or paste the Markdown.',
       'Check the preview of the table.',
@@ -2706,6 +2714,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert Excel to YAML',
     lede: 'Turn the first sheet of an .xlsx workbook into a YAML list of records, the format CI configs and Kubernetes manifests use. Numbers arrive as numbers and the first row becomes the keys.',
     description: 'Convert Excel .xlsx to YAML in your browser. The first sheet is read, values are typed, and nothing is uploaded.',
+    more: {
+      h2: 'How the sheet becomes YAML',
+      paras: [
+        'The first sheet of the workbook is read through SheetJS and converted to CSV text, then that CSV is parsed into typed rows (numbers as numbers, leading zeros as text, true/false as booleans) and written as YAML by js-yaml. The output is a block-style YAML sequence with one mapping per row, keyed by the header row, with two-space indentation. js-yaml resolves any anchors or aliases before writing, so the output is plain YAML.',
+        'Values are typed column by column: if any value in a column must stay text (a zip code like 02134), the whole column stays text, so one column never mixes "02134" and 10001. A date formatted as 2026-11-06 comes out as that text. The page says how many sheets were left out when the workbook has more than one.',
+        'The preview is capped at 200,000 characters; the downloaded .yaml file has everything. Only the first sheet is converted. If you need a different sheet, drag its tab to the front in Excel, save the workbook, and drop it here again. The CSV to YAML page does the same conversion starting from a CSV file.',
+      ],
+    },
     steps: [
       'Drop in an .xlsx file. Its first sheet is read.',
       'Check the preview. The first row becomes the keys.',
@@ -2963,6 +2979,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert YAML to Excel',
     lede: 'Turn a YAML list of records into a real Excel workbook. Numbers arrive as numbers and the first row holds the keys, so you can filter and sum as soon as the file opens. Everything runs in your browser.',
     description: 'Convert YAML to an Excel .xlsx workbook in your browser. A list of maps becomes one row per record. Nothing is uploaded.',
+    more: {
+      h2: 'How the YAML becomes an Excel workbook',
+      paras: [
+        'The YAML is parsed by js-yaml (loaded only on the YAML pages). Several YAML documents (separated by ---) become a JSON array, then each mapping in the list becomes one row. Nested keys like address.city are flattened into dotted columns, the same as the JSON to Excel page. Values are typed on the way in: plain numbers become real Excel numbers you can sum and sort, and anything with a leading zero stays text.',
+        'SheetJS builds a genuine .xlsx workbook with compression, so the file opens in Excel, LibreOffice and Google Sheets with types intact. The sheet is named after the file you dropped in, with characters Excel forbids replaced by spaces and the name capped at 31 characters. The first row holds the keys.',
+        'The page also accepts a YAML file pasted into the box. The preview shows the first 50 rows; the downloaded workbook has everything. The YAML to CSV and YAML to JSON pages use the same parsing logic, so the row and column count match across the three pages.',
+      ],
+    },
     steps: [
       'Drop in a .yaml or .yml file, or paste the YAML.',
       'Check the preview of the flattened rows.',
