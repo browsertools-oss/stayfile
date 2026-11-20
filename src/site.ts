@@ -1478,6 +1478,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert ICO to JPG',
     lede: 'Save an ICO icon as a JPG image. The largest size stored in the icon is used, and transparent areas are filled with white.',
     description: 'Convert ICO icons to JPG in your browser. The largest size in the file is kept. Transparent areas turn white. Your files are never uploaded.',
+    more: {
+      h2: 'How the conversion works',
+      paras: [
+        'The browser decodes the .ico container and picks the largest size stored in it (usually 16 to 256 pixels on a side). That image is drawn onto a canvas and re-encoded as a JPG at the quality on the slider, 85 by default. Because the source is small, the output JPG is small too.',
+        'JPG has no transparency, so any transparent pixels in the icon are painted white before saving. If you need the transparent background kept, the ICO to PNG and ICO to WebP pages write lossless and lossy files with alpha instead.',
+        'The browser reads the .ico container natively. If it cannot decode a particular icon, the page shows an error. Drop in several .ico files and each becomes its own JPG; the Save button downloads one images.zip when more than one file is ready.',
+      ],
+    },
     steps: ['Drop in your .ico files.', 'JPG is already selected. Move the quality slider if you want a smaller file.', 'Click Convert, then save each image or all of them as a zip.'],
     faq: [
       {
@@ -1502,6 +1510,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert ICO to WebP',
     lede: 'Save an ICO icon as a WebP image. The largest size stored in the icon is used, and transparency is kept. WebP files open in every current browser.',
     description: 'Convert ICO icons to WebP in your browser. The largest size in the file is kept, transparency is kept, and nothing leaves your device.',
+    more: {
+      h2: 'How the conversion works',
+      paras: [
+        'The browser decodes the .ico container and picks the largest size stored in it (usually 16 to 256 pixels on a side). That image is drawn onto a canvas and re-encoded as WebP at the quality on the slider, 85 by default. Because the source is small, the output WebP is small too.',
+        'WebP supports transparency, so the alpha channel from the icon is kept. In browsers whose canvas cannot write WebP (Safari), the page uses its own WebP encoder (jSquash) with the same quality value, so the output is WebP either way. If you need a lossless file with transparency, the ICO to PNG page writes a PNG instead.',
+        'The browser reads the .ico container natively. If it cannot decode a particular icon, the page shows an error. Drop in several .ico files and each becomes its own WebP; the Save button downloads one images.zip when more than one file is ready.',
+      ],
+    },
     steps: ['Drop in your .ico files.', 'WebP is already selected. Move the quality slider if you want a smaller file.', 'Click Convert, then save each image or all of them as a zip.'],
     faq: [
       {
@@ -1686,6 +1702,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert GIF to WebP',
     lede: 'Save a GIF as a WebP image. Only the first frame of an animated GIF is kept, because WebP on this page holds a single picture. Transparency is kept.',
     description: 'Convert GIF images to WebP in your browser. The first frame is kept and transparency is kept. Your files are never uploaded.',
+    more: {
+      h2: 'What the conversion does to the file',
+      paras: [
+        'The GIF is decoded by the browser and only its first frame is used. That frame is drawn onto a canvas and encoded as WebP at the quality you set, 85 by default. A GIF uses a 256-color palette, so the decoded frame has at most 256 distinct colors; the WebP can look softer on photos but is usually smaller.',
+        'Transparency is kept. WebP supports an alpha channel, so a GIF with a transparent background stays transparent. In browsers whose canvas cannot write WebP (Safari), the page uses its own WebP encoder (jSquash) with the same quality value, so the output is WebP either way.',
+        'Animated GIFs keep only their first frame. Drop in several GIF files and each becomes its own WebP file; the Save button downloads one images.zip when more than one file is ready.',
+      ],
+    },
     steps: ['Drop in your .gif files.', 'WebP is already selected. Move the quality slider if you want smaller files.', 'Click Convert, then save each image or all of them as a zip.'],
     faq: [
       {
@@ -2203,6 +2227,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert TSV to JSON',
     lede: 'Turn a tab-separated file into JSON. This is the format you get from pasting cells out of a spreadsheet, and from many database exports. The tab separator is detected on its own.',
     description: 'Convert TSV to JSON in your browser. Paste rows or drop a .tsv file, keep leading zeros as text, and download the result. Nothing is uploaded.',
+    more: {
+      h2: 'How the TSV becomes JSON',
+      paras: [
+        'The tab-separated text is parsed with a fixed tab delimiter. The first row is treated as column names unless you untick "First row is column names", in which case keys become column_1, column_2 and so on. Values are typed column by column: if any value in a column must stay text (a zip code like 02134), the whole column stays text, so one column never mixes "02134" and 10001. Plain numbers become JSON numbers, true and false become booleans.',
+        'The JSON is written with two-space indentation. Keys appear in the order they first occur across all rows, matching the column order of the TSV. Empty cells become null in the output. The preview shows the first 50 rows; the downloaded file has everything.',
+        'Pasting cells straight from Excel or Google Sheets works because the copied text uses tabs between columns. The page shares the CSV to JSON tool, so the same typing rules and "Keep all values as text" option apply. TSV downloads on other pages always carry a UTF-8 BOM so Excel opens them as UTF-8, but JSON output does not use a BOM.',
+      ],
+    },
     steps: [
       'Drop in a .tsv file, or copy cells from a spreadsheet and paste them into the box.',
       'Check the options: header row, and whether numbers should stay as text.',
