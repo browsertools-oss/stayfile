@@ -2307,6 +2307,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert TSV to Markdown',
     lede: 'Turn a tab-separated file or pasted spreadsheet cells into a Markdown table you can paste into a README, an issue or a pull request. Numbers come out right-aligned, and pipes inside cells are escaped so the table keeps its shape.',
     description: 'Convert TSV to a Markdown table in your browser. Drop a .tsv file or paste rows, and copy the table for GitHub or any Markdown editor. Nothing is uploaded.',
+    more: {
+      h2: 'How the TSV becomes a Markdown table',
+      paras: [
+        'The tab-separated text is parsed with a fixed tab delimiter. The first row is treated as column names unless you untick "First row is column names", in which case headers become Column 1, Column 2 and so on, because Markdown tables require a header row. Each cell is escaped: pipes become \\| and line breaks become <br>, so the table keeps its shape when pasted into GitHub or any Markdown editor.',
+        'Columns whose values are all numbers get a right-aligned marker (---:) in the separator row, so columns of figures line up. The output uses CRLF line endings. The preview shows the first 50 rows; the downloaded .md file has everything.',
+        'Pasting cells straight from Excel or Google Sheets works because the copied text uses tabs between columns. The page shares the CSV to Markdown tool, so the same escaping and alignment logic applies. TSV downloads on other pages always carry a UTF-8 BOM so Excel opens them as UTF-8, but Markdown output does not use a BOM.',
+      ],
+    },
     steps: [
       'Drop in a .tsv file, or copy cells from a spreadsheet and paste them into the box.',
       'Check whether the first row holds the column names.',
@@ -2417,6 +2425,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert Markdown to JSON',
     lede: 'Turn a Markdown table into JSON rows you can feed to a script or an API call. The first table in the file is read, prose around it is ignored, and the header row becomes the keys.',
     description: 'Convert a Markdown table to JSON in your browser. The first GitHub-flavored table is used, the header row becomes the keys, and nothing is uploaded.',
+    more: {
+      h2: 'How the table becomes JSON',
+      paras: [
+        'The first GitHub-flavored Markdown table in the file is found: the header line above the first alignment row (| --- | --- |) plus the pipe lines below it. Prose, headings, code blocks and other tables are ignored. Escaped pipes (\\|) become | again, and <br> becomes a line break inside the string, reversing what the CSV to Markdown page does.',
+        'The header row becomes the JSON keys. Cells are typed like CSV cells: plain numbers become JSON numbers, true and false become booleans, and values with leading zeros (zip codes) stay text. The output is a JSON array of objects, written with two-space indentation. The preview is capped at 200,000 characters; the downloaded .json file has everything.',
+        'If the file holds no table, you get an error that says so. The Markdown to CSV and Markdown to Excel pages use the same table parser, so the row and column count match across the three pages.',
+      ],
+    },
     steps: [
       'Drop in a .md file, or paste the Markdown.',
       'Check the preview of the table.',
@@ -2514,6 +2530,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert JSON to TSV',
     lede: 'Turn a JSON array, an API response or JSON Lines into a tab-separated file. TSV is what you get when you copy cells out of a spreadsheet, and every table import reads it. Nested fields get their own columns.',
     description: 'Convert JSON to TSV in your browser. Flattens nested objects into columns and accepts JSON Lines. Nothing leaves your device.',
+    more: {
+      h2: 'How the JSON becomes TSV',
+      paras: [
+        'The JSON is parsed into rows: an array of objects, a single object, an object wrapping one array, or JSON Lines (one object per line). Nested objects are flattened into dotted keys, so address.city becomes a column. Lists inside a record are written into one cell as JSON text, for example ["red","blue"].',
+        'Columns are the union of keys across all rows, in the order the keys first appear. Plain numbers are written as numbers, true and false as TRUE and FALSE, and empty cells are empty. The TSV always uses CRLF line endings and carries a UTF-8 BOM so Excel opens it as UTF-8 without a separate import step.',
+        'The preview shows the first 50 rows; the downloaded file has everything. If you need comma-separated output instead, the JSON to CSV page uses the same flattening logic with commas.',
+      ],
+    },
     steps: ['Drop in a .json file or paste the JSON.', 'Check the preview. Nested fields show up as columns like address.city.', 'Download the TSV or copy it.'],
     faq: [
       {
@@ -2643,6 +2667,14 @@ export const PAGES: ToolPage[] = [
     h1: 'Convert Excel to TSV',
     lede: 'Turn the first sheet of an .xlsx workbook into a tab-separated file that pastes or pipes into other tools. Rows and columns pass through untouched apart from the delimiter change.',
     description: 'Convert Excel .xlsx to TSV in your browser. The first sheet is read, quoting is handled for you, and nothing is uploaded.',
+    more: {
+      h2: 'How the sheet becomes TSV',
+      paras: [
+        'The first sheet of the workbook is read through SheetJS and converted to CSV text, then that CSV is re-parsed and written out as tab-separated values. Cells are read the way Excel shows them: a date formatted as 2026-11-06 comes out as that text, plain numbers come out as plain numbers, and text stays text. The page says how many sheets were left out when the workbook has more than one.',
+        'Cells containing tabs or quotes are quoted in the output. The TSV uses CRLF line endings and always carries a UTF-8 BOM so Excel and other tools read it as UTF-8 without an import step. There are no delimiter options on this page because the tab is the point of the format.',
+        'Only the first sheet is converted. If you need a different sheet, drag its tab to the front in Excel, save the workbook, and drop it here again. The CSV to TSV page does the same conversion starting from a CSV file.',
+      ],
+    },
     steps: [
       'Drop in an .xlsx file. Its first sheet is read.',
       'Check the preview.',
