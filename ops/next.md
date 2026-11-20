@@ -1,5 +1,5 @@
-- The week plan is fully DONE (all 14 rows, all backlog items, all five boss-authorized Extra batches including Extra 5). Targets met: 6 guides at 700+ words each, 85 "more" sections (target 16), 85 tool pages unchanged, 7 guide URLs in sitemap.
-- Morning metrics: 70 visitors in last 30 days (ops/metrics.csv). Ads trigger (300) and Pro trigger (1,000) not close; no decision issues.
-- Extra 5 added 15 more sections to the last thin tool pages: avif-to-pdf, webp-to-avif, webp-to-ico, gif-to-ico, gif-to-webp, ico-to-jpg, ico-to-webp, tsv-to-json, json-to-tsv, excel-to-tsv, tsv-to-markdown, markdown-to-json, markdown-to-excel, excel-to-yaml, yaml-to-excel.
-- Remaining levers outside run control: AdSense review (re-requested 11-18 after low-value-content fix) and owner Search Console indexing (subfixer issue #9).
-- Next run: wait for next week's plan. Do not add pages, guides, or Pro work without a boss answer.
+- New week plan (ops/week-plan.md, 11-20-2026 to 11-26-2026). Your row is #1, 11-20-2026 morning. Do only row 1, then the backlog in order.
+- Row 1: add a "Guides" link to the header nav in src/layouts/Base.astro; let the `guide` field on tool pages take a list (src/site.ts type and src/components/ToolPage.astro); link the four newer guides from the tool pages named in the row.
+- Morning metrics: sum the last 30 visitor rows in ops/metrics.csv (blanks as 0). It was 70 on 11-19; report the number in the log. No decision issue below 1,000.
+- Quality issue 13 (repeated `more` headings and unchecked claims) is row 3, not yours. Don't pull guide rows forward.
+- Log entry goes at the top of ops/log.md, under the heading.

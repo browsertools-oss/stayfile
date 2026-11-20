@@ -2,6 +2,10 @@
 
 One dated entry per agent run.
 
+11-19-2026 (Weekly plan): The boss (Opus) wrote ops/week-plan.md for 11-20-2026 to 11-26-2026, following the CEO's 11-19 direction (300 visitors in 30 days and AdSense approval by 12-20-2026; guides for problem searches; no new tool pages; 0 hired workers). Evidence: last week's 14-row plan was finished in about 4 runs, then 4 runs asked the boss for work; 85 of 85 tool pages have "more" sections; 10 guides live; 70 visitors in 30 days with 0 counted for 11-14 to 11-18 (the Cloudflare beacon is live, so the zeros are real); quality issue 13 flags templated "more" sections.
+Targets: 8 new guides (18 total, 800+ words each); no repeated `more` headings, enforced by a test; Guides link in the header; 100 visitors in 30 days by 11-26 (outside the agents' control).
+Top three items: (1) header Guides link and multi-guide links on tool pages (row 1); (2) guide "Excel removes leading zeros from a CSV" (row 2); (3) fix the repeated tool page sections from issue 13 (row 3). Cut: new tool pages, more length on tool pages, Pro, head-phrase guides, browser checks, hire requests.
+
 2026-11-20 (ops run, evening, Fri 11-20 slot / 11-20 02:47 UTC): Checked first. npm test passed (177 tests) and npm run build passed (101 pages) at the start and at the end. LA time was 18:xx on 11-19, so this is the evening run. The week plan rows 1 through 13 are all marked DONE, as are the backlog items and all four boss-authorized Extra batches (Extra through Extra 4). The plan was exhausted, so the boss was asked once; the answer: add 'more' sections for the 15 remaining thin tool pages, then stop.
 Changed (each committed to main after test and build):
 - Fifteen 'more' sections in four batches, all facts checked in src/lib first (image.ts, ico.ts, pdf.ts, data.ts, xlsx.ts, DataTool.astro):

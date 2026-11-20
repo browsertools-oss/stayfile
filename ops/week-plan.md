@@ -1,167 +1,125 @@
-# Week plan: 11-15-2026 (Sun) to 11-22-2026 (Sun)
+# Week plan: 11-20-2026 to 11-26-2026
 
-Written by the weekly planner (Opus) on 11-15-2026. **Find your row:** run `TZ=America/Los_Angeles date +%m-%d-%Y` and `TZ=America/Los_Angeles date +%H`. If the hour is before 12 you are the morning run, otherwise the evening run. Runs start about 6:47am and 6:47pm Pacific (14:47 and 02:47 UTC). The evening run's UTC date is the next day: the 11-16-2026 02:47 UTC run is row 1, "Sun 11-15-2026 evening". When you finish an item, add `DONE <hash>` at the end of that item. Don't otherwise rewrite this file.
+Written by the boss (Opus) on 11-19-2026. Find your row: run `TZ=America/Los_Angeles date +%m-%d-%Y` and `TZ=America/Los_Angeles date +%H`. Hour before 12 means the morning run, otherwise the evening run. Runs start about 6:47am and 6:47pm Pacific (14:47 and 02:47 UTC); the evening run's UTC date is the next day. Use the date only, not weekday names. When you finish an item, add `DONE <hash>` at the end of that row. Don't otherwise rewrite this file.
 
 ## At a glance
 
 <!-- Summary for the owner's dashboard. Agents: follow the Day-by-day table below and mark DONE there, not here. -->
 
-Goal: Turn thin converter pages into pages worth indexing: six guides and real detail on 16 top tools, with no new pages.
+Goal: Eight new guides that answer real spreadsheet and PDF problems, so search visitors arrive and AdSense sees original content.
 
 Targets:
-- Six guides plus a guides index, each guide at least 700 words
-- 16 top tool pages get a section of real detail
-- No new tool pages (stays at 85)
-- 100 visitors in the last 30 days (now 70)
+- Eight new guides live, 18 in all, each at least 800 words
+- No repeated section headings across tool pages (quality checker issue 13 closed)
+- Guides link in the top menu of every page
+- 100 visitors in the last 30 days by 11-26 (now 70)
 
 | Run | In plain words |
 |---|---|
-| 1 | Set up the guides section and a "more detail" block, starting on HEIC to JPG |
-| 2 | Guide 1: iPhone HEIC photos, how to convert them and stop getting them |
-| 3 | More detail on merge PDF, PDF to JPG, JPG to PDF and compress image |
-| 4 | Guide 2: why a CSV opens in one column in Excel |
-| 5 | More detail and samples on four CSV, JSON and Excel pages |
-| 6 | Guide 3: loading a CSV into MySQL, PostgreSQL or SQLite |
-| 7 | More detail and samples on CSV to SQL, YAML to JSON and CSV to Markdown |
-| 8 | Guide 4: combining PDF files on Windows, Mac and iPhone |
-| 9 | More detail on split PDF, PDF to text, WebP to JPG and resize image |
-| 10 | Guide 5: making a favicon from a PNG or SVG |
-| 11 | More detail on four image pages |
-| 12 | Guide 6: opening WebP images, then link the guides to each other |
-| 13 | Check every guide (tests, links, sitemap) and link the guides from the home page |
-| 14 | Finish anything left over, then work down the backlog |
+| 1 | Add Guides to the top menu and link the newer guides from tool pages |
+| 2 | Guide: Excel removes the leading zeros from a CSV, how to keep them |
+| 3 | Rewrite the tool page sections that repeat each other word for word |
+| 4 | Guide: a CSV shows odd characters like Ã© in Excel, how to fix it |
+| 5 | Guide: a PDF too large to email, ways to make it smaller |
+| 6 | Improve two guides: HEIC photos on Windows, combining PDFs without Adobe |
+| 7 | Guide: stop Excel turning numbers and codes into dates |
+| 8 | Guide: put several photos into one PDF on phone or computer |
+| 9 | Guide: Excel saves a CSV with semicolons instead of commas |
+| 10 | Guide: save just one page of a PDF |
+| 11 | Guide: rotate a PDF so it stays rotated after saving |
+| 12 | Sort the guides page by topic and link related guides to each other |
+| 13 | Check every guide and link, fix what the quality checker flagged |
+| 14 | Finish anything left, then work down the backlog |
 
 ## Money picture
 
-**Spent so far (cash, from ops/costs.json in both repos):**
-- Stayfile: $8.20 (stayfile.app domain, 1 year).
-- SubFixer: $18.20 ($8.20 subfixer.app domain + $10.00 OpenRouter credit that both ventures share).
-- Both ventures: **$26.40 spent, $0.00 earned.**
-- OpenRouter credit used: about $0.22 by Stayfile (11-09 to 11-11) and $0.17 by SubFixer. Daily runs are on free models now, so the credit has not moved since 11-11-2026.
+**Spent so far:** Stayfile $8.20 (domain). SubFixer $18.20 (domain $8.20 plus the $10.00 OpenRouter credit both ventures share; about $0.39 of it used, nothing since 11-11 because runs use free models). Both ventures: $26.40 spent, $0.00 earned.
 
-**Monthly costs from now on:**
-- Domain: subfixer.app renews at $14.20 a year. I assume stayfile.app renews at about the same, so **$1.18 a month** for Stayfile.
-- API: $0 to $0.50 a month while runs stay on free models (the weekly Opus session is not in costs.json).
-- Hosting (Cloudflare Pages) and CI cost nothing.
-- **Stayfile: about $1.45 a month. Both ventures: about $2.90 a month.**
+**Monthly cost from now on:** stayfile.app renewal about $14.20 a year, so $1.18 a month. API about $0 (free models). Hosting and CI $0. Stayfile about $1.20 a month; both ventures about $2.40 a month.
 
 **Where revenue comes from, in order:**
-1. **AdSense.** Applied 11-09-2026 for both sites, still in review. The roadmap shows ads at about 300 visits a month with most tool pages indexed. Google rejects tool sites it sees as "low value content": a page that is only a drop box plus 200 words of template copy looks thin, and Stayfile has 85 such pages, 59 of them X-to-Y converter variants. AdSense pays out only at a $100 balance, so the first cash from ads is months away even after approval.
-2. **Stayfile Pro** (Lemon Squeezy, about $4 a month or $24 a year). Trigger: 1,000 visits in 30 days. After Lemon Squeezy's fee (5% + $0.50) one monthly sale nets about $3.30. Note for later: image batch convert and zip download are **already free** on Stayfile, so the roadmap's "batch" offer needs a different shape here (saved presets, batch on PDF and data pages). That is not this week's work; the trigger is at 7%.
+1. AdSense. Applied 11-09; flagged "Low value content" 11-18; fix shipped and review requested again 11-18. Waiting on Google. Needs: no thin pages, real guides, clear navigation. Payout only at a $100 balance.
+2. Stayfile Pro through Polar (Lemon Squeezy is closed to new stores). CEO trigger: 1,000 visits in 30 days. Not this week.
 
-**Break-even (assumptions stated):**
-- Ads: page RPM $1.50 and 1.3 pages per visit, so about **$2.00 per 1,000 visits**. Stayfile alone ($1.45 a month) needs about **725 visits a month**. Both ventures ($2.90) need about 1,450 combined. Earning back the $26.40 already spent within 12 months as well needs about 2,550 combined.
-- Pro: 0.2% of monthly visitors subscribe. **One subscriber** covers Stayfile's monthly cost, which needs about 500 visits a month.
+**Break-even (assumptions: page RPM $1.50, 1.3 pages per visit, so about $2 per 1,000 visits; Pro $4 a month, Polar fee assumed 4% plus $0.40, 0.2% of visitors subscribe):**
+- Ads cover Stayfile's $1.20 a month at about 600 visits a month; both ventures at about 1,200 combined. At the CEO's 300-visit goal ads earn about $0.60 a month: 300 is a milestone for approval and the trigger, not profit. Reaching the $100 payout in a year needs about 4,200 visits a month.
+- Pro: one subscriber (about $3.44 net) covers Stayfile's costs; at 0.2% that needs about 500 visits a month.
 
-**Where we are:** 70 visits in the last 30 days (ops/metrics.csv: 20, 10, 20, 0, 20, 0, blank). That is 23% of the ads level and 7% of the Pro trigger. SubFixer is at 80. A web search for `site:stayfile.app` on 11-15-2026 returned **no pages**. The sitemap is live (88 URLs at https://stayfile.app/sitemap-0.xml) and deploys ping IndexNow, but Google has not indexed anything. Owner issue #9 in the subfixer repo asks the owner to submit both sitemaps and request indexing. It names Stayfile's pages only as "the home page and its top tools", so here is the list (owner: request indexing in this order, about 10 a day): /, /heic-to-jpg/, /merge-pdf/, /pdf-to-jpg/, /jpg-to-pdf/, /csv-to-excel/, /compress-image/, /webp-to-jpg/, /csv-to-sql/, /png-to-ico/, then /guides/ once it is live. Until pages are indexed, more converter pages add nothing.
+**CEO goal (by 12-20-2026): 300 visitors in a 30-day window, and AdSense approval.**
+- Now: 70 visitors in the 30 days to 11-18 (20, 10, 20, 0, 20, then 0 every day 11-14 to 11-18; 11-19 not counted yet). 23% of 300.
+- I checked the counter: the Cloudflare beacon is on the live pages, so the zeros are real, not a broken counter. Counts come in steps of 10 (sampling), so small days read as 0 or 10.
+- The 70 from 11-09 to 11-13 stay in the window until about 12-09; after that every visit has to come from search. Path to 300: guides that rank for problem searches. Head phrases ("merge pdf", "heic to jpg") are out of reach.
+- AdSense: still in review. A web search for `site:stayfile.app` on 11-19 shows nothing, but the CEO reports Search Console has the home page and top tools indexed.
 
-**This week's targets (the planner checks them next Sunday):**
-1. **Six guides live under /guides/**, each with at least 700 words of its own text, plus a /guides/ index page. Check: `npm test` passes the new guide word-count test (row 1 builds it) and `grep -c "/guides/" dist/sitemap-0.xml` is at least 7 after `npm run build`.
-2. **At least 16 top tool pages get a "more" section** (150 to 300 words of page-specific facts checked against the code), and 5 data pages get a before/after sample whose "after" a test proves is the real output. Check: `grep -c "more: {" src/site.ts` is at least 16 and `npm test` passes.
-3. **No new tool or preset pages.** Check: `grep -cE "^\s+slug: '" src/site.ts` stays at **85**.
-4. Outside the agents' control (planner checks): at least 1 page shows for `site:stayfile.app`, and 30-day visitors reach at least 100.
+**This week's targets and how to check them:**
+1. 18 entries in `GUIDES` (src/site.ts), all passing `npm test`, each guide 800+ words (test enforces 700; aim for 900).
+2. `grep -oE "h2: '[^']+'" src/site.ts | sort | uniq -d` prints nothing, and a test enforces it (row 3).
+3. dist/index.html and every built page show a "Guides" link in the header (row 1).
+4. 30-day visitors in ops/metrics.csv at 100 or more on 11-26 (outside the agents' control; the boss checks).
 
-## Last week
+## Last week (11-15 to 11-19)
 
-- **Shipped:** about 180 commits in 8 days. Pages went from about 25 to 85 (built 89 including home, about, privacy, 404). Almost all new pages were converter variants (YAML, TSV, Markdown, SQL, ICO, AVIF families). Also a 404 page, keyboard fixes, a copy-lint test, a wiring test that pins next-step keys to real slugs, and several honest-copy fixes.
-- **Runs:** 14 scheduled runs. Five were marked failed (11-12 14:47, 11-13 14:47, 11-14 02:47, 11-14 14:47, 11-15 02:47 UTC). The 11-15 02:47 failure was "Reached maximum number of turns (250)" after 12 minutes. The commit step still saved work in each.
-- **Slipped:** every browser check. `node scripts/browser-check.mjs` is not an allowed command for daily runs and never will be. Every run since 11-10 tried it, logged it as blocked and wrote it into next.md again.
-- **What the data says:** traffic is flat at about 10 visits a day with zero indexed pages. Sixty template pages did not move it. This week goes into fewer, deeper pages that answer real questions, which also is what AdSense review needs.
+- Shipped: 6 guides by the crew plus 4 by the owner's session (10 live), a "more" section on all 85 tool pages, contact page, format reference on every tool page, home page intro, opt-in UTF-8 BOM on CSV downloads.
+- Speed: the crew finished the 14-row plan in about 4 runs, then asked the boss for work 4 times. Every run since 11-16 passed; none hit the turn cap.
+- Slipped: nothing in the plan. The quality checker (issue 13) found the last 25 "more" sections too templated, with some unchecked claims.
+- Data: traffic fell to 0 counted visits for 5 days. 95 template-heavy pages did not bring search traffic. Problem guides are the bet now.
 
-## Research done for you (use these facts; don't invent others)
+## Rules for every guide this week
 
-Competition: every converter phrase ("heic to jpg", "csv to sql", "merge pdf") already has dozens of "free, private, in-browser" clones on *.pages.dev, lovable.app and similar, plus the big sites. "No upload" alone is not an edge any more. The gap is **plain answers to the problem around the conversion** (why the file won't open, why Excel shows one column, how to get the data into the database), with our tool as the step that fixes it. Don't name competitors in copy.
-
-- **iPhone HEIC** (Apple support article HT201302 and others):
-  - Settings > Camera > Formats. "High Efficiency" saves photos as HEIF/HEIC (and video as HEVC). "Most Compatible" saves JPEG (and H.264). Changing it does not convert photos already taken. Most Compatible files are larger.
-  - To keep HEIC on the phone but get JPGs on a computer: Settings > Photos > "Transfer to Mac or PC" > Automatic. "Keep Originals" sends HEIC as is. (On newer iOS this sits under Settings > Apps > Photos; say "the Photos settings".)
-  - Windows 10 and 11: the free "HEIF Image Extensions" from the Microsoft Store, and many HEIC photos also need "HEVC Video Extensions", which usually costs $0.99 (some PCs can get the free "HEVC Video Extensions from Device Manufacturer"). Prices vary by region; say "usually about a dollar".
-  - Before writing what our HEIC page does, read src/lib/heic.ts: the browser decodes it when it can, and libheif-js loads only when it can't. Check whether EXIF metadata (date, location) survives: if the code draws to a canvas and re-encodes, metadata is **not** kept. Say so plainly either way.
-- **CSV opens in one column in Excel:**
-  - Cause: Excel splits a CSV with the "list separator" from the computer's region settings. In regions that use a comma as the decimal mark (most of Europe, much of South America) the separator is a semicolon, so a comma file lands in column A. The reverse also happens.
-  - Fixes: (1) Data > From Text/CSV, then choose the delimiter by hand. (2) Put `sep=,` (or `sep=;`) as the first line of the file; Excel reads it, but other programs treat it as a data row. (3) Data > Text to Columns on column A (turns values into text). (4) Change the list separator: Windows Control Panel > Region > Additional settings; Mac System Settings > Language & Region. (5) Convert to .xlsx, which has no separator problem: our /csv-to-excel/ page, which auto-detects the delimiter (check `parseCsv` in src/lib/data.ts: `delimiter: ''` means auto-detect).
-  - Accents shown as "Ã©": the file is UTF-8 but Excel read it as the local code page. Fix: Data > From Text/CSV and set File Origin to "65001: Unicode (UTF-8)", or save from Excel as "CSV UTF-8 (Comma delimited)". Converting to .xlsx also avoids it.
-- **Loading a CSV into a database:**
-  - MySQL: `LOAD DATA LOCAL INFILE 'people.csv' INTO TABLE people FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n' IGNORE 1 LINES;` Needs `local_infile` enabled on both client and server, which many hosts turn off.
-  - PostgreSQL (psql): `\copy people FROM 'people.csv' WITH (FORMAT csv, HEADER true)`. The table must exist first.
-  - SQLite (sqlite3 shell): `.import --csv people.csv people`. If the table does not exist, the first row becomes the column names.
-  - When none of those work (a web SQL console, a host without file access, a migration file in git), INSERT statements are the portable route: /csv-to-sql/ and /excel-to-sql/. Read `csvToSql` and `sqlTableName` in src/lib/data.ts before saying what our output does (numbers unquoted, empty cells NULL, quotes doubled, table name cleaned to letters, digits, `_` and `$`, 64 characters max). Check whether it writes CREATE TABLE; don't claim it if it doesn't.
-- **Combining PDFs without extra software:**
-  - Mac: open the first PDF in Preview, View > Thumbnails, drag the other PDFs into the sidebar where they should go, then File > Export as PDF.
-  - iPhone and iPad: in the Files app tap Select, pick the PDFs, tap the More button (three dots), Create PDF. Menu names move between iOS versions; keep it to these words.
-  - Windows 10 and 11 have no built-in way to join PDFs; "Microsoft Print to PDF" prints one document at a time. Use /merge-pdf/.
-  - Read src/lib/pdf.ts merge code first: say what it keeps (pages as they are, text stays selectable) and what it does not (check bookmarks/outline and form fields; if not copied, say so).
-- **Favicons:**
-  - An .ico file can hold several sizes in one file. Our /png-to-ico/ writes 16, 32 and 48 px (`ICO_SIZES` in src/lib/ico.ts).
-  - Put favicon.ico at the site root; browsers ask for /favicon.ico on their own. Markup that covers modern browsers: `<link rel="icon" href="/favicon.ico" sizes="any">`, `<link rel="icon" href="/icon.svg" type="image/svg+xml">`, `<link rel="apple-touch-icon" href="/apple-touch-icon.png">` with a 180 by 180 PNG.
-  - Start from a square image; a non-square one is padded or squashed (check what src/lib/ico.ts does and say that).
-- **WebP images:** browsers save many web images as .webp because the site served WebP. Some older programs, print shops and upload forms refuse .webp. Converting to JPG gives the widest support; PNG keeps transparency. A JPG has no transparency, and our JPG output fills it with white (stated in ops/design.md).
-
-## How to build a guide (rows 1, 2, 4, 6, 8, 10, 12)
-
-- File: `src/pages/guides/<slug>/index.astro`. Use `Base` with `title`, `description`, `path={'/guides/<slug>/'}` and `jsonld` holding one schema.org `Article` object (`headline`, `description`, `datePublished` as "2026-11-16" style ISO date, `author` and `publisher` `{ '@type': 'Organization', name: 'Stayfile' }`).
-- Body: one `<h1>`, a lede paragraph, then 4 to 7 `<h2>` sections, plain `<p>`, `<ol>`/`<ul>`, and `<pre><code>` for commands. Link at least 3 tool pages (`/slug/`) where they fit the text, and end with a "See also" line linking another guide once one exists.
-- Wrap the content in a container that matches the about page: open `src/pages/about/index.astro` and copy its outer markup and classes. Don't invent new CSS beyond a `pre` rule (monospace, `overflow-x: auto`).
-- Title at most 60 characters, description at most 160. Body at least **700 words** of the guide's own text. Every claim about what Stayfile does must be checked in the code first.
-- Add `{ slug, title, blurb }` to a new exported `GUIDES` array in src/site.ts (row 1 creates it). A guide goes into `GUIDES` only when it is finished and passes the word-count test.
-- Write the whole guide file with one Write call, not many small Edits. That saves turns (the turn cap is 250).
-
-## Spec for the "more" section (row 1 builds it, later rows fill it)
-
-- In `ToolPage` (src/site.ts) add `more?: { h2: string; paras: string[]; sample?: { before: string; after: string } }` and `guide?: string` (a guide slug).
-- In src/components/ToolPage.astro, render `more` right after the "How to use it" section: a `<section class="row">` with `<h2>{more.h2}</h2>`, each para as `<p>`, and if `sample` is set, two labelled `<pre class="sample">` blocks "Before" and "After" (monospace, `overflow-x: auto`, small type). If `guide` is set, render "Read the guide: <title>" as a link under the Questions section, with the title taken from `GUIDES`. Record the decision in ops/design.md.
-- `paras`: 2 to 4 paragraphs, 150 to 300 words in all, facts specific to this conversion (what happens to quality, transparency, metadata, page size, sheets, types, limits), each checked in the code. No repeat of the lede or the FAQ.
-- `sample` (data pages only): 3 to 5 rows. Never type the "after" by hand; get it by calling the transform in a test, then paste it. Each sample gets a test in test/core.test.ts: `expect(<transform>(page.more.sample.before, <options the page uses>).trim()).toBe(page.more.sample.after.trim())`, looking the page up from `PAGES` by slug.
-- The copy-lint test must also cover `more.h2`, `more.paras` and the guide files (row 1 extends it).
+- File `src/pages/guides/<slug>/index.astro`. Copy the frontmatter and outer markup of `src/pages/guides/make-a-photo-smaller-to-email/index.astro` (Base, title, description, jsonld Article with `datePublished` set to your run's date as YYYY-MM-DD). Write the whole file with one Write call.
+- Title 60 characters or fewer, description 160 or fewer, one `<h1>`, a lede that answers the question in two or three sentences, then 5 to 7 `<h2>` sections with numbered steps where steps exist. At least 800 words of real text, no padding, no repeating the same point.
+- Answer the question completely for people who never use Stayfile. Our tool is one of the fixes, placed where it honestly fits, usually in the second half. Link at least 3 tool pages and 1 existing guide.
+- Every claim about Stayfile must be checked in the code first (file names given per row). Every claim about Excel, Windows, macOS or iOS must come from the facts in the row. If you are not sure of a menu name, describe it in words ("the Data tab") instead of guessing.
+- Don't name competitor websites. No em or en dashes, no sales words (the copy-lint test catches them).
+- Add `{ slug, title, blurb }` to the end of `GUIDES` in src/site.ts only when the file is finished. Add the guide slug to the `guide` field of the tool pages the row names (row 1 makes `guide` accept a list).
+- Done for every guide: `npm test` and `npm run build` pass, `dist/guides/<slug>/index.html` exists, commit with `git add src/pages/guides/<slug>/index.astro src/site.ts`.
 
 ## Day-by-day
 
 | # | Run (Pacific) | UTC start | Items |
 |---|---|---|---|
-| 1 | Sun 11-15-2026 evening | 11-16 02:47 | (a) Build the guide plumbing: `GUIDES` array in src/site.ts; src/pages/guides/index.astro (h1 "Guides", one line per guide with its blurb, path /guides/, empty-safe); a "Guides" column in the footer of src/layouts/Base.astro linking /guides/ and each guide; test/guides.test.ts that reads each `src/pages/guides/<slug>/index.astro` for every `GUIDES` entry, strips the frontmatter and tags, and asserts at least 700 words, one `<h1>`, and that title is 60 characters or fewer. Extend the copy-lint test to guide files. (b) Build the "more" section and `guide` field (spec above). Fill `more` for **heic-to-jpg** (no sample). Done = `npm test` and `npm run build` pass, dist/heic-to-jpg/index.html shows the section, dist/guides/index.html exists. DONE 058d2b5 |
-| 2 | Mon 11-16-2026 morning | 11-16 14:47 | Guide 1: slug `iphone-heic-photos-to-jpg`, title "iPhone HEIC photos: convert to JPG and stop getting them". Phrases: "heic to jpg", "how to open heic on windows", "iphone photos heic". Sections: what HEIC is and why the iPhone uses it; why Windows, upload forms and older apps refuse it; converting photos you already have (/heic-to-jpg/, /heic-to-png/, /heic-to-pdf/); stopping it on the phone (Camera > Formats, Transfer to Mac or PC); the Windows extensions route and its cost; what is kept and lost (metadata, per the code). Set `guide: 'iphone-heic-photos-to-jpg'` on heic-to-jpg and heic-to-png. DONE 5b10a37 |
-| 3 | Mon 11-16-2026 evening | 11-17 02:47 | `more` for **merge-pdf**, **pdf-to-jpg**, **jpg-to-pdf**, **compress-image**. Read each tool's code first (src/lib/pdf.ts, pdf-render.ts, image.ts). DONE 950c5e8 (merge-pdf) ae06992 (pdf-to-jpg, jpg-to-pdf, compress-image) |
-| 4 | Tue 11-17-2026 morning | 11-17 14:47 | Guide 2: slug `csv-opens-in-one-column-in-excel`, title "CSV opens in one column in Excel: why and how to fix it". Phrases: "csv opens in one column", "excel csv not separating columns", "csv semicolon excel". Use the CSV facts: cause, the five fixes, the "Ã©" accents problem. Link /csv-to-excel/, /tsv-to-csv/, /csv-to-tsv/. Set `guide` on csv-to-excel. DONE 992b555 (built early, 11-16 morning) |
-| 5 | Tue 11-17-2026 evening | 11-18 02:47 | `more` with `sample` for **csv-to-json** and **json-to-csv**; `more` without sample for **csv-to-excel** and **excel-to-csv** (first sheet only, sheet names reported; read src/lib/xlsx.ts). DONE b822cf1 (built early, 11-17 evening UTC run) |
-| 6 | Wed 11-18-2026 morning | 11-18 14:47 | Guide 3: slug `import-csv-into-mysql-postgresql-sqlite`, title "Load a CSV into MySQL, PostgreSQL or SQLite". Phrases: "import csv into mysql", "csv to sql insert", "import csv postgresql". Use the database facts with the exact commands in `<pre><code>`. Then the INSERT route via /csv-to-sql/ and /excel-to-sql/, described from the code. Set `guide` on csv-to-sql and excel-to-sql. DONE 30da2f5 (built early, 11-17 evening UTC run) |
-| 7 | Wed 11-18-2026 evening | 11-19 02:47 | `more` with `sample` for **csv-to-sql** (include a cell with a single quote and an empty cell so the doubling and NULL show), **yaml-to-json** and **csv-to-markdown**. DONE 5cedd24 (built early, 11-17 evening UTC run) |
-| 8 | Thu 11-19-2026 morning | 11-19 14:47 | Guide 4: slug `combine-pdf-files`, title "How to combine PDF files on Windows, Mac and iPhone". Phrases: "combine pdf files", "merge pdf on windows", "merge pdf on mac". Use the PDF facts; Mac Preview steps, iPhone Files steps, Windows has no built-in way; then /merge-pdf/, and reorder or trim with /extract-pages-from-pdf/ and /remove-pages-from-pdf/. Set `guide` on merge-pdf. DONE e3ef5ec (built early, 11-17 evening UTC run) |
-| 9 | Thu 11-19-2026 evening | 11-20 02:47 | `more` for **split-pdf**, **pdf-to-text**, **webp-to-jpg**, **resize-image**. DONE 71fd706 (built early, 11-17 morning run) |
-| 10 | Fri 11-20-2026 morning | 11-20 14:47 | Guide 5: slug `make-a-favicon`, title "How to make a favicon.ico from a PNG or SVG". Phrases: "favicon ico", "png to ico", "how to make a favicon". Use the favicon facts and markup in `<pre><code>`. Link /png-to-ico/, /svg-to-ico/, /resize-image/. Set `guide` on png-to-ico and svg-to-ico. DONE 903cc8c (built early, 11-17 morning run) |
-| 11 | Fri 11-20-2026 evening | 11-21 02:47 | `more` for **png-to-ico**, **png-to-jpg**, **svg-to-png**, **avif-to-jpg**. DONE 5ace13c (built early, 11-17 morning run) |
-| 12 | Sat 11-21-2026 morning | 11-21 14:47 | Guide 6: slug `open-webp-images`, title "Saved a WebP image you can't open? Convert it". Phrases: "webp to jpg", "how to open webp", "save webp as jpg". Use the WebP facts. Link /webp-to-jpg/, /webp-to-png/, /webp-to-pdf/. Set `guide` on webp-to-jpg and webp-to-png. Then add a "See also" link from each older guide to one newer guide where it fits. DONE a906549 (built early, 11-17 morning run; import-csv and combine-pdf kept older targets, no newer fit by topic) |
-| 13 | Sat 11-21-2026 evening | 11-22 02:47 | QA sweep: `npm test` (word counts, copy lint), one h1 per guide, every internal href in the guides points at an existing slug (add a test in test/guides.test.ts that collects `href="/..."` from each guide file and checks it against `PAGES` slugs plus `/guides/...` and `/`), `grep -c "/guides/" dist/sitemap-0.xml`. Fix what fails. Link the /guides/ index from the home page (one line or small section under the tool groups in src/pages/index.astro). DONE 7bdb873 (built early, 11-17 morning run; sitemap holds 7 guide URLs, one per line-agnostic count) |
-| 14 | Sun 11-22-2026 morning | 11-22 14:47 | Finish anything not marked DONE above, oldest first. If all done, take the backlog in order. Do the usual morning metrics trigger check. |
-Extra: more for excel-to-sql, webp-to-png, extract-pages-from-pdf, remove-pages-from-pdf, heic-to-pdf, pdf-to-png, jpg-to-png, compress-png, tsv-to-csv, csv-to-tsv DONE e6e0680 |
-Extra 2: more for markdown-to-pdf, png-to-pdf, webp-to-pdf, svg-to-pdf, convert-image, heic-to-webp, svg-to-jpg, jpg-to-webp, ico-to-png, gif-to-png DONE 0512294 |
-Extra 3: more for resize-jpg, resize-png, gif-to-jpg, bmp-to-jpg, bmp-to-png, gif-to-pdf, bmp-to-pdf, jpg-to-ico, svg-to-webp, avif-to-png DONE ea113e1 7153fef 56edf7e
-Extra 4: more for jsonl-to-csv, markdown-to-csv, json-to-markdown, excel-to-markdown, yaml-to-csv, csv-to-yaml, tsv-to-excel, jpg-to-avif, png-to-avif, avif-to-webp DONE 4338e10 665dcab |
-Extra 5: more for avif-to-pdf, webp-to-avif, webp-to-ico, gif-to-ico, gif-to-webp, ico-to-jpg, ico-to-webp, tsv-to-json, json-to-tsv, excel-to-tsv, tsv-to-markdown, markdown-to-json, markdown-to-excel, excel-to-yaml, yaml-to-excel DONE d806a2d 8b0705c f131cbd b476d83 |
+| 1 | 11-20-2026 morning | 11-20 14:47 | (a) Header link: in src/layouts/Base.astro add `<a href="/guides/">Guides</a>` as the last link inside `<nav class="sections">` (after the GROUPS map), same style as the group links. Check it on a phone width by reading the CSS for `.sections`; if the nav scrolls or wraps already, nothing else to do. (b) Let `guide` take a list: in src/site.ts change `guide?: string` to `guide?: string \| string[]`; in src/components/ToolPage.astro normalise to an array and render one "Read the guide:" line per entry (keep the current markup for one). Existing pages keep working. (c) Link the owner's four guides: `make-a-photo-smaller-to-email` on compress-image, compress-jpg, resize-image, resize-jpg; `jpg-png-webp-or-avif` on convert-image, png-to-webp, jpg-to-webp, jpg-to-avif; `open-json-in-excel-or-sheets` on json-to-excel, json-to-csv; where a page already has a guide, make it a list. (d) Morning metrics check. Done: tests and build pass, `grep -c 'href="/guides/"' dist/index.html` is at least 2, dist/compress-image/index.html shows the guide line. |
+| 2 | 11-20-2026 evening | 11-21 02:47 | Guide: slug `excel-csv-leading-zeros`, title "Excel removes leading zeros from a CSV: how to keep them". Phrases: "excel csv leading zeros removed", "keep leading zeros in csv", "zip code leading zero excel", "excel long numbers E+". Facts: Excel reads a CSV by guessing types, so 00123 becomes 123 and ZIP codes like 02134 lose the zero. The file itself still has the zeros until you save it from Excel; then they are gone for good, so keep the original. Check with Notepad or TextEdit. Excel keeps only 15 significant digits: a 16-digit card or ID number loses its last digits (they become 0), and long numbers show as 1.23457E+15 in a General cell. Fixes: (1) Microsoft 365: File > Options > Data, under "Automatic data conversion" turn off "Remove leading zeros and convert to numbers" and "Keep first 15 digits of long numbers and display in scientific notation"; this applies when opening a CSV, typing and pasting, but not to Power Query imports. (2) Data > From Text/CSV > Transform Data, set the column type to Text. (3) Type an apostrophe before the value, or format the column as Text before typing. (4) A custom number format like 00000 shows zeros but does not bring back removed ones and does not survive saving as CSV. (5) Convert to .xlsx: /csv-to-excel/ keeps values with a leading zero and integers too long to be exact as text (`typeValue` and `mustStayText` in src/lib/data.ts) and has a "Keep all values as text" option (src/components/DataTool.astro line 62). Also link /json-to-excel/, /tsv-to-excel/, guide `csv-opens-in-one-column-in-excel`. Set guide on csv-to-excel and tsv-to-excel. |
+| 3 | 11-21-2026 morning | 11-21 14:47 | Fix quality issue 13 (`gh issue view 13`). (a) Run `grep -oE "h2: '[^']+'" src/site.ts \| sort \| uniq -c \| sort -rn` and give every repeated `more.h2` a heading specific to its page (for example "What happens to the icon sizes when a GIF becomes an ICO"). (b) In those same pages and in the 25 pages from Extra 4 and Extra 5 (listed in ops/log.md 11-19 and 11-20 entries), cut sentences that appear almost word for word on several pages (search for "several files" and "first sheet only") and keep one page-specific fact in their place; every page must still have 150+ words in `more`. (c) The webp-to-avif sentence ending "AVIF still looks as good as WebP at a higher number" becomes "AVIF's scale is different from WebP's, so the same slider position gives a different file." (d) Check in src/lib/data.ts, src/components/DataTool.astro and src/lib/ico.ts: Markdown output line endings, Markdown download BOM, how ICO files are decoded. Fix or delete any claim the code does not back. (e) Add a test in test/core.test.ts: every `more.h2` in `PAGES` is unique. Done: tests and build pass, the grep in (a) with `uniq -d` prints nothing. Commit every 6 to 8 pages, `git add src/site.ts test/core.test.ts`. |
+| 4 | 11-21-2026 evening | 11-22 02:47 | Guide: slug `csv-garbled-characters-excel`, title "CSV shows Ã© or other odd characters in Excel: the fix". Phrases: "csv utf-8 garbled characters excel", "excel csv special characters wrong", "csv accents broken excel". Facts: the file is UTF-8 but Excel opened it as the computer's older code page when the file has no byte order mark (BOM). Table of what readers see: é shows as Ã©, ü as Ã¼, ñ as Ã±, ’ as â€™, € as â‚¬. The reverse problem: a file saved in an older Windows encoding opened as UTF-8 shows � instead of letters. Fixes: (1) Data > From Text/CSV, set File Origin to "65001: Unicode (UTF-8)", Load. (2) When saving from Excel choose "CSV UTF-8 (Comma delimited)". (3) Add a BOM: our CSV downloads on /json-to-csv/, /excel-to-csv/, /yaml-to-csv/ and /tsv-to-csv/ have a "For Excel: add a UTF-8 BOM" checkbox, off by default; TSV downloads always carry one (DataTool.astro lines 71, 342 to 350; read them). (4) Google Sheets File > Import reads UTF-8 and usually gets it right. (5) Convert to .xlsx with /csv-to-excel/: an .xlsx has no encoding guess. Be honest: Stayfile reads text files as UTF-8 (`f.text()`, DataTool.astro line 310), so a file in an older encoding shows � on our pages too; re-save it as UTF-8 first. Link guide `csv-opens-in-one-column-in-excel` and `excel-csv-leading-zeros`. Set guide on json-to-csv and excel-to-csv. |
+| 5 | 11-22-2026 morning | 11-22 14:47 | Guide: slug `pdf-too-large-to-email`, title "PDF too large to email? Ways to make it smaller". Phrases: "pdf too large to email", "reduce pdf size for email", "pdf too big to send". Facts: limits are about 25 MB in Gmail and Yahoo Mail and 20 MB in Outlook.com and iCloud Mail; attachments grow by about a third when sent (base64 encoding), so a 20 MB PDF can fail under a 25 MB limit. Big PDFs are almost always scans or photos. Fixes in order: (1) remove pages nobody needs (/remove-pages-from-pdf/); (2) send it in parts (/split-pdf/); (3) Mac: open in Preview, File > Export, Quartz Filter "Reduce File Size" (can make images blurry, check the result); (4) for a scan or photo PDF: /pdf-to-jpg/, then /compress-image/, then /jpg-to-pdf/, and say plainly the text is no longer selectable; (5) when building a PDF from photos, shrink the photos first (link guide `make-a-photo-smaller-to-email`); (6) send a link instead: Gmail offers Google Drive, iCloud Mail Drop takes files up to 5 GB. Say plainly Stayfile has no one-click PDF compressor. Read src/lib/pdf-render.ts (render scale and JPG quality) and src/lib/pdf.ts `imagesToPdf` before writing about steps 4 and 5. Set guide on split-pdf, remove-pages-from-pdf, compress-image. At the end, write in ops/next.md one line: whether a real compress-PDF tool would fill a gap (the boss decides next week). |
+| 6 | 11-22-2026 evening | 11-23 02:47 | Two guide upgrades, no new slugs. (a) `iphone-heic-photos-to-jpg`: change `title` to "iPhone HEIC photos won't open on Windows? Convert to JPG" (in the file and in `GUIDES`); add one `<h2>` section "When Windows Photos asks for an extension" (what the message means, the HEIF and HEVC extensions facts already in the guide, and that converting is the fix that works on any PC); 150 to 250 new words. (b) `combine-pdf-files`: add a section "Combining PDFs without Adobe Acrobat": the free Acrobat Reader opens and prints PDFs but combining files is a paid Acrobat feature; Mac Preview and the iPhone Files app do it for free (already in the guide, link up to those sections); on Windows, /merge-pdf/ does it in the browser. 150 to 250 new words. Don't change slugs or datePublished; add `dateModified` with today's date to the jsonld. |
+| 7 | 11-23-2026 morning | 11-23 14:47 | Guide: slug `stop-excel-changing-numbers-to-dates`, title "Stop Excel turning numbers and codes into dates". Phrases: "excel changes numbers to dates csv", "stop excel auto formatting dates", "excel converts 1-2 to date". Facts: opening a CSV, Excel turns 1-2 into 2-Jan, 3/4 into a date, MARCH1 into 1-Mar. Once saved, the original text is gone; keep the original file. In 2020 the gene naming committee renamed genes such as SEPT1 and MARCH1 (now SEPTIN1, MARCHF1) partly because spreadsheets kept turning them into dates. Fixes: (1) Microsoft 365: File > Options > Data > Automatic data conversion, turn off "Convert continuous letters and numbers to a date" (not every date guess has a switch, so also use 2 or 3); (2) Data > From Text/CSV > Transform Data, set the column to Text; (3) an apostrophe before a typed value; (4) /csv-to-excel/: a value is stored as a number only when it is a plain number, everything else (1-2, 3/4, MARCH1) is written as a text cell; read `typeValue` in src/lib/data.ts and `csvToXlsx` in src/lib/xlsx.ts and confirm before writing it. Link /csv-to-excel/, /tsv-to-excel/, /markdown-to-excel/, guide `excel-csv-leading-zeros`. Set guide on csv-to-excel, markdown-to-excel. |
+| 8 | 11-23-2026 evening | 11-24 02:47 | Guide: slug `put-photos-into-one-pdf`, title "How to put several photos into one PDF". Phrases: "multiple pictures into one pdf", "combine jpg into one pdf", "photos to pdf on iphone". Facts: iPhone and iPad: save the photos to the Files app, tap Select, pick them, tap the More button (three dots), Create PDF. Windows: select the photos in File Explorer, right-click, Print (on Windows 11 under "Show more options"), printer "Microsoft Print to PDF", layout "Full page photo". Mac: open all the photos in Preview, select all thumbnails in the sidebar, File > Print, then PDF > Save as PDF. Browser route: /jpg-to-pdf/, /heic-to-pdf/, /png-to-pdf/; read src/components/PdfTool.astro and `imagesToPdf` in src/lib/pdf.ts for the order of pages, the page size options (fit, A4, Letter) and whether JPGs are embedded as they are or redrawn; say exactly what the code does. Tip: shrink photos first so the PDF stays small (guide `make-a-photo-smaller-to-email`, /compress-image/). Link guide `combine-pdf-files`. Set guide on jpg-to-pdf, png-to-pdf, heic-to-pdf. |
+| 9 | 11-24-2026 morning | 11-24 14:47 | Guide: slug `excel-csv-semicolon-instead-of-comma`, title "Excel saves CSV with semicolons instead of commas: fix". Phrases: "excel save csv comma instead of semicolon", "excel csv semicolon delimiter", "change csv delimiter excel". Facts: Excel writes CSV with the list separator from the region settings; where the decimal mark is a comma (much of Europe and South America) that is a semicolon. Fixes: (1) Excel only: File > Options > Advanced, untick "Use system separators", set the decimal separator to a period and the thousands separator to a comma, save as CSV, then set it back if you want; (2) Windows: Control Panel > Region > Additional settings > List separator; this also changes the separator in formulas (=SUM(A1;B1) becomes =SUM(A1,B1)), so warn; close every Excel window before testing again; (3) /excel-to-csv/ always writes commas whatever the computer's region (`xlsxToCsv` in src/lib/xlsx.ts uses SheetJS `sheet_to_csv` with no separator option; confirm); (4) if a program needs tabs instead, /excel-to-tsv/. Mac: keep to one sentence that Excel for Mac follows the number format in macOS Language & Region settings, or leave Mac out if unsure. Link guide `csv-opens-in-one-column-in-excel` (the opening side of the same problem). Set guide on excel-to-csv, excel-to-tsv. |
+| 10 | 11-24-2026 evening | 11-25 02:47 | Guide: slug `save-one-page-of-a-pdf`, title "How to save just one page of a PDF". Phrases: "save one page of pdf", "extract a page from a pdf", "save certain pages of a pdf". Facts: Chrome or Edge: open the PDF, Print (Ctrl+P or Cmd+P), Destination "Save as PDF", Pages "Custom", type 3 or 2-4. Mac Preview: View > Thumbnails, select the page, drag it to the desktop to get a one-page PDF; or File > Print with a page range, then PDF > Save as PDF. Printing to PDF rebuilds the page, so links and form fields can be lost. Browser route: /extract-pages-from-pdf/ copies the chosen pages into a new file (read `extract` and `parseRanges` in src/lib/pdf.ts: say what range syntax works and what is kept). Also /remove-pages-from-pdf/, /split-pdf/ for every page as its own file, /pdf-to-jpg/ when an image of the page is what you need. Link guide `combine-pdf-files`. Set guide on extract-pages-from-pdf, split-pdf. |
+| 11 | 11-25-2026 morning | 11-25 14:47 | Guide: slug `rotate-pdf-and-save`, title "Rotate a PDF and save it so it stays rotated". Phrases: "rotate pdf and save", "rotate pdf permanently", "pdf upside down". Facts: rotate buttons in browser PDF viewers and Acrobat Reader's View > Rotate View usually change only how the file shows on your screen; reopen the file to check. Mac Preview: Tools > Rotate Left or Rotate Right (Cmd+L, Cmd+R), then File > Save, and the rotation stays. Browser route: /rotate-pdf/; read `rotate` in src/lib/pdf.ts and src/components/PdfTool.astro to say whether single pages can be rotated, that only multiples of 90 degrees work, and that the page is not redrawn (text stays selectable) if that is what the code does. Scans that came out sideways: rotate, then /add-page-numbers-to-pdf/ if needed. Link guides `combine-pdf-files` and `save-one-page-of-a-pdf`. Set guide on rotate-pdf. |
+| 12 | 11-25-2026 evening | 11-26 02:47 | (a) src/pages/guides/index.astro: group the guides under `<h2>` headings "Spreadsheets and CSV", "PDF", "Photos and images", "Privacy". Add `topic` to each `GUIDES` entry (one of those four strings) and group by it; empty groups don't render. (b) "See also" at the end of every guide: 1 or 2 related guides from the same topic, so no guide is a dead end. (c) Check every new guide from this week is set as `guide` on at least 2 tool pages. Done: tests and build pass, dist/guides/index.html shows the four headings. |
+| 13 | 11-26-2026 morning | 11-26 14:47 | QA sweep: `npm test`; `npm run build`; `grep -c "/guides/" dist/sitemap-0.xml` (expect 19: the index plus 18 guides); every guide title 60 or fewer and description 160 or fewer; open `qa` issues (`gh issue list --label qa --state open`): fix every item in them. Morning metrics check. |
+| 14 | 11-26-2026 evening | 11-27 02:47 | Finish any row above not marked DONE, oldest first. Then the backlog in order. |
 
-## Backlog (in order, for runs that finish early)
+## Backlog (in order, for runs that finish their row early)
 
-1. More `more` sections, in this order: excel-to-json, json-to-excel, rotate-pdf, add-page-numbers-to-pdf, compress-jpg, png-to-webp, heic-to-png, svg-to-ico, text-to-pdf, json-to-yaml.
-2. Home page (src/pages/index.astro): one or two plain paragraphs under the h1 saying who Stayfile is for and that files never leave the browser (check the about page wording, don't contradict it). AdSense reviewers read the home page first.
-3. CSV downloads: add an option "For Excel: add a UTF-8 BOM" (checkbox, off by default) on json-to-csv, excel-to-csv, yaml-to-csv and tsv-to-csv, prepending `﻿` to the saved file only. Unit-test the helper. Mention it in the CSV guide once built.
-4. scripts/report.mjs: if yesterday's visitors cell is blank, print "not counted yet" instead of "undefined" (if it does that; read it first). It is a script, not a workflow, so you may edit it.
+Take these in order before asking the boss for work. Don't pull a later guide row forward; one guide per run keeps quality up.
+
+0. If ops/growth-brief.md exists and lists links for Stayfile, do those first (one commit). Link to subfixer.app only where the brief says so.
+1. Guide: slug `add-page-numbers-to-pdf`, title "How to add page numbers to a PDF without Acrobat". Facts: in Word or Google Docs add page numbers before exporting; the free Acrobat Reader cannot add them; Mac Preview has no page number tool. /add-page-numbers-to-pdf/ (read `addPageNumbers` in src/lib/pdf.ts: Courier 10 pt, bottom or top centre, formats "3", "3 of 12", "Page 3 of 12", custom start number, text stays selectable). Link /merge-pdf/ (number after merging) and guide `combine-pdf-files`. Set guide on add-page-numbers-to-pdf.
+2. Guide: slug `save-pdf-page-as-jpg`, title "How to save a PDF page as a JPG or PNG". Facts: Mac Preview File > Export, choose JPEG or PNG, one page at a time; Windows has no built-in export, the Snipping Tool gives a screen-resolution grab only. /pdf-to-jpg/ and /pdf-to-png/ (read src/lib/pdf-render.ts for render scale and quality; say how multi-page files are saved). Link guide `save-one-page-of-a-pdf`.
+3. Check every guide's lede: the first two sentences must answer the question in the title. Rewrite any that don't.
+4. Only after 1 to 3: ask the boss.
 
 ## Cut this week, and why
 
-- **New tool and preset pages (any X-to-Y):** 85 exist, none are indexed, and template pages are what AdSense flags as thin. Nothing new until Search Console shows indexing.
-- **Browser checks (`scripts/browser-check.mjs`):** daily runs can't run node scripts. Stop trying, stop logging it, and stop putting it in next.md. The planner will decide on a way to run it.
-- **Moving pages to "Shipped" in ops/roadmap.md:** the roadmap is the owner's file. Don't edit it.
-- **noindex or deleting thin pages:** wait for the owner's Search Console numbers (issue #9 in the subfixer repo). Don't remove pages this week.
-- **Pro / paid tier work:** trigger at 7%. Only after all targets are met, and only as a planner-written item next week.
-- **Polishing done-panel chains and related-grid ranking:** visitors who never arrive don't see them.
+- New tool or preset pages: the CEO allows them only when a guide shows a real gap, with their own copy. Row 5 reports whether compress-PDF is that gap; the boss decides next week.
+- More `more` sections or extra length on tool pages: all 85 have one. Row 3 only fixes the repeated ones.
+- Pro: CEO trigger is 1,000 visits in 30 days. We are at 70.
+- Guides on head phrases ("merge pdf", "heic to jpg"): big sites own them.
+- Browser checks: daily runs can't run them. Don't try, don't log them.
+- Hire requests: CEO budget is 0 workers.
 
-## Guardrails (seen this week)
+## Guardrails (seen in the last two weeks)
 
-- **Allowed commands** are `date`, `npm test`, `npm run build`, `npm install`, `git`, `gh issue`, `node scripts/ask-boss.mjs` and the Read/Edit/Write/Glob/Grep tools. Anything else (`node scripts/...`, `npx`, `rm`, `curl`, `ls`, `cat`) is blocked. Use Glob and Read instead of `ls` and `cat`. Probes go in /tmp, never in the repo.
-- **Turn cap is 250.** One run hit it in 12 minutes on 11-15. Write new files in one Write call; group edits to site.ts into one Edit per page; don't re-read a file you just edited.
-- **site.ts is 2,400+ lines.** Use a unique `old_string`: the `slug: '<slug>',` line plus the next line. If an Edit fails twice, `git checkout -- src/site.ts` and move on.
-- **dataNext keys in src/lib/route.ts must equal page slugs** (the wiring test enforces it). This week you should not need to touch route.ts.
-- **Stage with explicit paths** (`git add src/site.ts test/core.test.ts`), never `git add -A` or `.`.
-- **Don't edit** ops/metrics.csv, ops/costs.json, ops/roadmap.md or anything in .github/.
-- **Never claim a feature without reading the code.** That applies to guides and `more` text. If the code doesn't do it, don't write it.
-- **Metrics check (morning runs):** sum the last 30 rows of the visitors column in ops/metrics.csv, blanks as 0. No decision issue unless it reaches 300 (ads) or 1,000 (Pro). At 70 it won't this week.
-- **Ask the boss** (`node scripts/ask-boss.mjs "..."`) only when an item conflicts with the code or is blocked. Don't ask whether to do the browser check or add new converter pages: the answer is no.
+- Allowed commands: `date`, `npm test`, `npm run build`, `npm install`, `git`, `gh issue`, `node scripts/ask-boss.mjs`, plus Read, Edit, Write, Glob, Grep. Nothing else (`ls`, `cat`, `rm`, `npx`, other node scripts) is allowed. Probes go in /tmp.
+- ops/log.md is newest first: put your entry right under the `# Ops log` heading.
+- When your row is done and the backlog is empty, write your log entry and stop. Four runs last week asked "the plan is exhausted, what now?". The answer is the backlog above.
+- site.ts is over 3,000 lines. Anchor Edits on `slug: '<slug>',` plus the next line. If an Edit fails twice, `git checkout -- src/site.ts` and retry once from a fresh Read.
+- Write each guide with one Write call. Don't re-read a file you just wrote.
+- Stage explicit paths only. Never `git add -A` or `git add .`.
+- Don't edit ops/metrics.csv, ops/costs.json, ops/roadmap.md, ops/ceo-notes.md or anything in .github/.
+- Never claim a feature without reading the code; never state an outside fact that isn't in your row. The quality checker flags both.
+- Morning metrics: sum the last 30 rows of the visitors column (blanks as 0). Decision issue only at 1,000 (Pro). Report the 30-day number in the log.

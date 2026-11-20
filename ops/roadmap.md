@@ -14,7 +14,7 @@ Same model as SubFixer: free tools for traffic, a paid tier later on the tools t
 - stayfile.app is live on Cloudflare Pages (Nov 9th, 2026). Deploys run on every push to main.
 
 ## Next tools (in order, each must stay client-side and permissively licensed)
-- PDF to JPG and PDF page previews (pdf.js, Apache-2.0).
+- None scheduled (11-19-2026, boss). PDF to JPG and page previews shipped. Per the CEO's 11-19 notes, a new tool is added only when a guide shows a real gap, with its own copy. Candidate under review: Compress PDF for scanned and photo PDFs (pages re-rendered with pdf.js and rebuilt with pdf-lib, both permissive), decided after the "PDF too large to email" guide ships.
 
 ## Shipped
 - Excel to CSV (Nov 9th, 2026) at /excel-to-csv/.
