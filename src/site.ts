@@ -2729,7 +2729,7 @@ export const PAGES: ToolPage[] = [
       paras: [
         'The first sheet of the workbook is read through SheetJS and converted to CSV text, then that CSV is parsed into typed rows (numbers as numbers, leading zeros as text, true/false as booleans) and written as YAML by js-yaml. The output is a block-style YAML sequence with one mapping per row, keyed by the header row, with two-space indentation. js-yaml resolves any anchors or aliases before writing, so the output is plain YAML.',
         'Values are typed column by column: if any value in a column must stay text (a zip code like 02134), the whole column stays text, so one column never mixes "02134" and 10001. A date formatted as 2026-11-06 comes out as that text. The page says how many sheets were left out when the workbook has more than one.',
-        'The preview is capped at 200,000 characters; the downloaded .yaml file has everything. Only the first sheet is converted. If you need a different sheet, drag its tab to the front in Excel, save the workbook, and drop it here again. The CSV to YAML page does the same conversion starting from a CSV file.',
+        'The preview is capped at 200,000 characters; the downloaded .yaml file has everything. Keys are written in the order they appear in the sheet\'s first row, so the YAML follows the column order of the workbook. The CSV to YAML page does the same conversion starting from a CSV file.',
       ],
     },
     steps: [
@@ -2759,7 +2759,7 @@ export const PAGES: ToolPage[] = [
       h2: 'How the sheet becomes a table',
       paras: [
         'Only the first sheet is read. The sheet is converted to rows and then to the same GitHub-flavored table the CSV to Markdown page writes. When a workbook has several sheets, the page says so, naming the first sheet and how many were left out, so nothing is silently missed.',
-        'Cells are read as they are shown in Excel, so a date formatted as 2026-11-06 comes out as that text. A column whose cells are all numbers is right-aligned and gets a numeric marker in the separator row. Pipes inside cells are written as \\| and line breaks become <br>, so pasted tables hold together on GitHub.',
+        'A cell that is empty produces nothing between the pipes, so the table keeps its column count even when a row is sparse. A column whose cells are all numbers is right-aligned and gets a numeric marker in the separator row. Pipes inside cells are written as \\| and line breaks become <br>, so pasted tables hold together on GitHub.',
         'Formatting does not carry over: the table holds values, not fonts, colours or column widths. Merged cells are read as stored, so the top-left cell has the value and the rest come out empty. The download is a plain UTF-8 .md file, and the preview can be cut short at 200,000 characters on very large sheets.',
       ],
     },
