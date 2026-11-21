@@ -1420,7 +1420,7 @@ export const PAGES: ToolPage[] = [
       paras: [
         'The WebP is decoded by the browser, drawn at its intrinsic size and then scaled into 16, 32 and 48 pixel pictures at high smoothing quality. All three are packed into one .ico file as 32-bit PNG frames, which current Windows and every current browser read.',
         'If the WebP is not square, the image is centered on a square canvas and padded with transparency instead of being stretched. The alpha channel is kept, so a transparent background stays transparent in the .ico file.',
-        'Drop in several WebP files and each becomes its own .ico file; the Save button downloads an images.zip when more than one file is ready.',
+        'Each of the three sizes is drawn from the decoded WebP at high smoothing rather than scaled from one of the others, so the 16 pixel icon keeps its own edge detail.',
       ],
     },
     steps: ['Drop in your WebP files.', 'Nothing to set. The three sizes are made from your image.', 'Click Save to download the .ico file, or all of them as a zip.'],
@@ -1485,7 +1485,7 @@ export const PAGES: ToolPage[] = [
       paras: [
         'The browser decodes the .ico container and picks the largest size stored in it (usually 16 to 256 pixels on a side). That image is drawn onto a canvas and re-encoded as a JPG at the quality on the slider, 85 by default. Because the source is small, the output JPG is small too.',
         'JPG has no transparency, so any transparent pixels in the icon are painted white before saving. If you need the transparent background kept, the ICO to PNG and ICO to WebP pages write lossless and lossy files with alpha instead.',
-        'The browser reads the .ico container natively. If it cannot decode a particular icon, the page shows an error. Drop in several .ico files and each becomes its own JPG; the Save button downloads one images.zip when more than one file is ready.',
+        'The browser reads the .ico container natively. If it cannot decode a particular icon, the page shows an error. The quality slider sets the JPG re-encode and starts at 85; lowering it makes the file smaller and softer.',
       ],
     },
     steps: ['Drop in your .ico files.', 'JPG is already selected. Move the quality slider if you want a smaller file.', 'Click Convert, then save each image or all of them as a zip.'],
@@ -1517,7 +1517,7 @@ export const PAGES: ToolPage[] = [
       paras: [
         'The browser decodes the .ico container and picks the largest size stored in it (usually 16 to 256 pixels on a side). That image is drawn onto a canvas and re-encoded as WebP at the quality on the slider, 85 by default. Because the source is small, the output WebP is small too.',
         'WebP supports transparency, so the alpha channel from the icon is kept. In browsers whose canvas cannot write WebP (Safari), the page uses its own WebP encoder (jSquash) with the same quality value, so the output is WebP either way. If you need a lossless file with transparency, the ICO to PNG page writes a PNG instead.',
-        'The browser reads the .ico container natively. If it cannot decode a particular icon, the page shows an error. Drop in several .ico files and each becomes its own WebP; the Save button downloads one images.zip when more than one file is ready.',
+        'The browser reads the .ico container natively. If it cannot decode a particular icon, the page shows an error. The quality slider applies to the new WebP and starts at 85, and the icon\'s other size entries are not carried over.',
       ],
     },
     steps: ['Drop in your .ico files.', 'WebP is already selected. Move the quality slider if you want a smaller file.', 'Click Convert, then save each image or all of them as a zip.'],
@@ -1677,7 +1677,7 @@ export const PAGES: ToolPage[] = [
       paras: [
         'The GIF is decoded by the browser and only its first frame is used. That frame is drawn at its intrinsic size, then scaled into 16, 32 and 48 pixel pictures at high smoothing quality. All three are packed into one .ico file as 32-bit PNG frames, which current Windows and every current browser read.',
         'A GIF uses a 256-color palette, so the decoded frame has at most 256 distinct colors. The ICO stores each size as a full 32-bit PNG, so the palette limit does not expand but the file can hold transparency cleanly. If the GIF is not square, the image is centered on a square canvas and padded with transparency instead of being stretched.',
-        'Drop in several GIF files and each becomes its own .ico file; the Save button downloads an images.zip when more than one file is ready.',
+        'The GIF\'s palette is not carried into the icon: each PNG frame is written at 32 bits, so the icon can hold more colours than the GIF source did.',
       ],
     },
     steps: ['Drop in your GIF files.', 'Nothing to set. The three sizes are made from your image.', 'Click Save to download the .ico file, or all of them as a zip.'],
@@ -1709,7 +1709,7 @@ export const PAGES: ToolPage[] = [
       paras: [
         'The GIF is decoded by the browser and only its first frame is used. That frame is drawn onto a canvas and encoded as WebP at the quality you set, 85 by default. A GIF uses a 256-color palette, so the decoded frame has at most 256 distinct colors; the WebP can look softer on photos but is usually smaller.',
         'Transparency is kept. WebP supports an alpha channel, so a GIF with a transparent background stays transparent. In browsers whose canvas cannot write WebP (Safari), the page uses its own WebP encoder (jSquash) with the same quality value, so the output is WebP either way.',
-        'Animated GIFs keep only their first frame. Drop in several GIF files and each becomes its own WebP file; the Save button downloads one images.zip when more than one file is ready.',
+        'Animated GIFs keep only their first frame. The quality slider starts at 85 and applies to the WebP encode, so a GIF that begins with a blank frame gives a blank WebP.',
       ],
     },
     steps: ['Drop in your .gif files.', 'WebP is already selected. Move the quality slider if you want smaller files.', 'Click Convert, then save each image or all of them as a zip.'],
@@ -2690,7 +2690,7 @@ export const PAGES: ToolPage[] = [
       paras: [
         'The first sheet of the workbook is read through SheetJS and converted to CSV text, then that CSV is re-parsed and written out as tab-separated values. Cells are read the way Excel shows them: a date formatted as 2026-11-06 comes out as that text, plain numbers come out as plain numbers, and text stays text. The page says how many sheets were left out when the workbook has more than one.',
         'Cells containing tabs or quotes are quoted in the output. The TSV uses CRLF line endings and always carries a UTF-8 BOM so Excel and other tools read it as UTF-8 without an import step. There are no delimiter options on this page because the tab is the point of the format.',
-        'Only the first sheet is converted. If you need a different sheet, drag its tab to the front in Excel, save the workbook, and drop it here again. The CSV to TSV page does the same conversion starting from a CSV file.',
+        'Hidden rows and hidden columns are still written, because the converter reads the stored cell values rather than what is on screen. The CSV to TSV page does the same conversion starting from a CSV file.',
       ],
     },
     steps: [
