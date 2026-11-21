@@ -763,6 +763,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'convert-image',
     tool: 'img-convert',
+    guide: 'jpg-png-webp-or-avif',
     group: 'Images',
     card: 'Convert image',
     blurb: 'Switch between image formats',
@@ -1084,6 +1085,7 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'jpg-to-avif',
+    guide: 'jpg-png-webp-or-avif',
     more: {
       h2: 'What the conversion keeps',
       paras: [
@@ -1759,6 +1761,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'png-to-webp',
     tool: 'img-convert',
+    guide: 'jpg-png-webp-or-avif',
     group: 'Images',
     card: 'PNG to WebP',
     blurb: 'Smaller WebP files from PNG images',
@@ -1791,6 +1794,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'jpg-to-webp',
     tool: 'img-convert',
+    guide: 'jpg-png-webp-or-avif',
     group: 'Images',
     card: 'JPG to WebP',
     blurb: 'Lighter images for your website',
@@ -1823,6 +1827,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'compress-image',
     tool: 'img-compress',
+    guide: 'make-a-photo-smaller-to-email',
     group: 'Images',
     card: 'Compress image',
     blurb: 'Shrink photos for email and upload forms',
@@ -1862,6 +1867,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'compress-jpg',
     tool: 'img-compress',
+    guide: 'make-a-photo-smaller-to-email',
     group: 'Images',
     card: 'Compress JPG',
     blurb: 'Shrink JPG photos for email and upload forms',
@@ -1942,6 +1948,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'resize-image',
     tool: 'img-resize',
+    guide: 'make-a-photo-smaller-to-email',
     group: 'Images',
     card: 'Resize image',
     blurb: 'Set exact pixel sizes or a percentage',
@@ -1977,6 +1984,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'resize-jpg',
     tool: 'img-resize',
+    guide: 'make-a-photo-smaller-to-email',
     group: 'Images',
     card: 'Resize JPG',
     blurb: 'Set exact pixel sizes on JPGs',
@@ -2497,6 +2505,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'json-to-csv',
     tool: 'json-to-csv',
+    guide: 'open-json-in-excel-or-sheets',
     group: 'Spreadsheets and data',
     card: 'JSON to CSV',
     blurb: 'Open JSON data in a spreadsheet',
@@ -2786,6 +2795,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'json-to-excel',
     tool: 'json-to-xlsx',
+    guide: 'open-json-in-excel-or-sheets',
     group: 'Spreadsheets and data',
     card: 'JSON to Excel',
     blurb: 'Save JSON rows as an .xlsx workbook',
