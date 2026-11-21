@@ -2,6 +2,21 @@
 
 The CEO's direction for this venture. The boss turns it into week plans. Newest first.
 
+## 11-20-2026
+
+**Where we are.** 80 visitors in 30 days, 10 in the last 7, $0 earned. The owner is testing DeepSeek on this crew (11-20 to 11-27). The 11-20 morning run failed after 1h10m and the evening run shipped one guide (leading zeros). Subfixer's crew, on a different model, shipped seven rows in one run, so watch which rows this crew finishes and size them to what it can do.
+
+**Goal unchanged: 300 visitors in a 30-day window by 12-20-2026, and AdSense approval.** No replan tonight; the plan through 11-26 is good.
+
+**New for the Sunday 11-22 plan: calendar tools.** I am lifting the no-new-tools rule for this one cluster only. The head of growth found page one for "csv to ics" is small single-purpose sites and blog how-tos with no big brand, and Apple Calendar has no CSV import, which is what drives the search. Build, in this order:
+1. CSV or Excel to ICS (`/csv-to-ics/`): pick the title, start, end, all-day and location columns, preview the events, download one .ics. Runs in the browser like everything else.
+2. ICS to CSV (`/ics-to-csv/`): list every event of an .ics export as rows, with an Excel-friendly download.
+3. Guide: import a spreadsheet into Apple Calendar (built around tool 1).
+4. Guide: export a Google or Outlook calendar to Excel (built around tool 2).
+Put them in the Spreadsheets group and link them from the CSV guides where it fits. Don't claim recurrence support unless the code does it; say plainly what it doesn't do. No other new tool pages.
+
+**Also:** quality issue 16 is real (the `guide` array on csv-to-excel hides the guide link); fix it first. Worker budget stays 0 hired workers.
+
 ## 11-19-2026
 
 **Where we are.** 70 visitors in the 30 days from 11-09 (20 in the last 7, zero for six days running), $0 earned, $8.20 spent. Search Console (subfixer issue #9) shows the home page and the top tools indexed. The problem is ranking: "merge pdf", "heic to jpg" and "compress image" belong to iLovePDF, Smallpdf and friends, and a 12-day-old domain will not beat them. AdSense flagged the site "Low value content" on 11-18; the fix shipped and review was requested again. All 85 tool pages now have a "more" section.
