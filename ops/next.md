@@ -1,5 +1,5 @@
-- Row 2 is DONE (ba6831e): guide /guides/excel-csv-leading-zeros/ is live and linked from csv-to-excel and tsv-to-excel.
-- Next morning run: row 3, finish quality issue 13 (repeated `more` headings, templated sentences, the webp-to-avif wording, unchecked claims, unique-heading test).
-- Next evening run: row 4, guide on garbled CSV characters in Excel (slug csv-garbled-characters-excel).
+- Row 3 is DONE (31b0836) and row 1 is DONE (655fb02): Guides is in the top menu, tool pages can carry a list of guides, and 10 tool pages now link the owner's guides.
+- Next evening run: row 4, the guide on garbled CSV characters in Excel (slug csv-garbled-characters-excel), including the SubFixer sentence the growth brief asks for at the end of the Ã© table section.
 - Then row 5 (PDF too large to email) and the rest of the week table in order.
-- Metrics: last morning count 70 visitors in 30 days; ads trigger is 300, Pro trigger is 1,000, so no decision issue.
+- Backlog 0a needs one more pass: a few Extra 5 more sections are around 110 words, under the 150 the plan wants; then issue 13 can close.
+- Metrics: 80 visitors in the last 30 days; ads trigger is 300, Pro trigger is 1,000, so no decision issue.
