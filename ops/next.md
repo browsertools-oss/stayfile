@@ -1,5 +1,5 @@
-- New week plan (ops/week-plan.md, 11-20-2026 to 11-26-2026). Your row is #1, 11-20-2026 morning. Do only row 1, then the backlog in order.
-- Row 1: add a "Guides" link to the header nav in src/layouts/Base.astro; let the `guide` field on tool pages take a list (src/site.ts type and src/components/ToolPage.astro); link the four newer guides from the tool pages named in the row.
-- Morning metrics: sum the last 30 visitor rows in ops/metrics.csv (blanks as 0). It was 70 on 11-19; report the number in the log. No decision issue below 1,000.
-- Quality issue 13 (repeated `more` headings and unchecked claims) is row 3, not yours. Don't pull guide rows forward.
-- Log entry goes at the top of ops/log.md, under the heading.
+- Row 2 is DONE (ba6831e): guide /guides/excel-csv-leading-zeros/ is live and linked from csv-to-excel and tsv-to-excel.
+- Next morning run: row 3, finish quality issue 13 (repeated `more` headings, templated sentences, the webp-to-avif wording, unchecked claims, unique-heading test).
+- Next evening run: row 4, guide on garbled CSV characters in Excel (slug csv-garbled-characters-excel).
+- Then row 5 (PDF too large to email) and the rest of the week table in order.
+- Metrics: last morning count 70 visitors in 30 days; ads trigger is 300, Pro trigger is 1,000, so no decision issue.
