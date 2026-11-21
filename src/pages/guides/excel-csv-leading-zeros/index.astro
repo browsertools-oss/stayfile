@@ -1,0 +1,55 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'Excel removes leading zeros from a CSV: how to keep them';
+const description = 'Excel turns 00123 into 123 and drops the zero from a ZIP code when it opens a CSV. Here is how to keep leading zeros, and why long numbers lose digits.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-20',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/excel-csv-leading-zeros/" jsonld={jsonld}>
+  <h1>Excel removes leading zeros from a CSV: how to keep them</h1>
+  <p class="lede">You open a CSV in Excel and the ZIP code 02134 shows as 2134, or the product code 00123 becomes 123. Excel guesses that a column of digits is a number, and numbers do not keep leading zeros. The fix depends on whether you are opening a file, typing values or saving one, and it is worth doing before you save anything from Excel.</p>
+
+  <h2>Why the zeros disappear</h2>
+  <p>A CSV file is plain text. It has no columns, no data types and no formatting, only rows of characters separated by commas. When Excel opens one, it reads each value and guesses what it is. A value made only of digits looks like a number, so Excel stores it as a number. The number 02134 and the number 2134 are the same value, and Excel shows the shorter form.</p>
+  <p>The same guess affects long numbers. Excel keeps only 15 significant digits in a number cell. A 16-digit card number or account number loses its last digits, which turn into zeros, and a long number in a General cell can show as something like 1.23457E+15. That display is not just cosmetic: the digits after the fifteenth are already gone from the cell.</p>
+  <p>This happens while Excel reads the file, not when it saves it. The CSV on disk still has the zeros and the full digits until you save over it or export a new file from Excel. Once you do that, the shortened values are written back and the original text is lost. Keep a copy of the CSV you downloaded or received before you open it in Excel.</p>
+
+  <h2>Check what the file really contains</h2>
+  <p>Before changing anything, open the CSV in a plain text editor. On Windows, Notepad is enough. On a Mac, use TextEdit, and choose Format, then Make Plain Text if the file opens in rich text mode. Look at the first few rows and note which values have a leading zero and which numbers are longer than 15 digits.</p>
+  <p>If the text editor shows 02134, the file is fine and Excel is the only problem. If the editor already shows 2134, the file was saved from Excel or another program that removed the zero, and no setting in Excel will bring it back. In that case you need the original source file, or you need to type the zeros again.</p>
+
+  <h2>Turn off the conversion in Microsoft 365</h2>
+  <p>Microsoft 365 Excel has a setting that controls this behaviour. Open File, then Options, then the Data tab. Under "Automatic data conversion" there are two checkboxes to turn off:</p>
+  <ul>
+    <li>Remove leading zeros and convert to numbers</li>
+    <li>Keep first 15 digits of long numbers and display in scientific notation</li>
+  </ul>
+  <p>With both off, Excel stops turning digit-only text into numbers when it opens a CSV, when you type a value and when you paste one. The setting applies to those actions but not to Power Query imports, which have their own type settings. The option is not in older Excel versions, so use one of the other fixes there.</p>
+
+  <h2>Import the file and set the column to Text</h2>
+  <p>This works in every modern Excel version and gives you control before the data lands in the sheet. Go to the Data tab, choose From Text/CSV, and pick your file. In the preview window, click Transform Data to open the Power Query editor. Select the column with the ZIP codes or ID numbers, then use the data type menu at the top of that column and choose Text. Repeat for any other column that must keep its exact characters.</p>
+  <p>Then choose Close and Load. The values arrive as text, zeros and all. The import also lets you set the file origin and the delimiter, which helps when Excel would otherwise split the file wrongly. The one cost is that text cells are not numbers, so you cannot sum or average them without converting the column back.</p>
+
+  <h2>Type values so Excel leaves them alone</h2>
+  <p>If you are entering a few values by hand, type an apostrophe before the value: <code>'02134</code>. Excel treats everything after the apostrophe as text and does not show the apostrophe in the cell. It works for ZIP codes, phone numbers and codes that start with zero.</p>
+  <p>For a whole column, select it, open Format Cells, choose Text, and then type the values. This only affects cells you enter after the format is set. Changing an existing number cell to Text does not restore zeros that Excel already removed, because the underlying value is already 2134.</p>
+  <p>A custom number format such as 00000 makes a number display with leading zeros, but it is a display trick. The cell still holds 2134, formulas use 2134, and the zeros do not survive saving the sheet as CSV. Use it for a printed list, not for data you need to keep.</p>
+
+  <h2>Convert the CSV to an Excel file first</h2>
+  <p>If you want the zeros kept and the file to open cleanly in Excel, convert the CSV to a real .xlsx workbook before Excel touches it. The <a href="/csv-to-excel/">CSV to Excel</a> page reads the file and writes each value into the sheet. A value is stored as a number only when it is a plain number. A value with a leading zero, and an integer too long to store exactly, stays as text, so 02134 and a 16-digit account number keep every character. There is also a "Keep all values as text" option when you want no type guessing at all.</p>
+  <p>The same rule applies on the <a href="/tsv-to-excel/">TSV to Excel</a> page for tab-separated files and on <a href="/json-to-excel/">JSON to Excel</a> for JSON data. The work happens in your browser, so the file is not uploaded to a server. After the conversion, the .xlsx opens with the values already stored the way you want them, and saving it again does not shorten them.</p>
+  <p>If the file also opens as a single column, that is a separate problem with the separator, covered in <a href="/guides/csv-opens-in-one-column-in-excel/">CSV opens in one column in Excel</a>.</p>
+
+  <h2>The short version</h2>
+  <p>Keep the original CSV and check it in a text editor first. In Microsoft 365, turn off the two automatic data conversion options under File, Options, Data. For a one-off file, import it through Data, From Text/CSV, Transform Data and set the column type to Text. For values you type, put an apostrophe in front or format the column as Text first. When you need the file to open correctly every time, convert it to .xlsx with <a href="/csv-to-excel/">CSV to Excel</a>, which keeps leading zeros and long numbers as text.</p>
+</Base>

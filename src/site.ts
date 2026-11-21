@@ -2258,6 +2258,7 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'tsv-to-excel',
+    guide: 'excel-csv-leading-zeros',
     more: {
       h2: 'How the workbook is built',
       paras: [
@@ -2567,7 +2568,7 @@ export const PAGES: ToolPage[] = [
     slug: 'csv-to-excel',
     tool: 'csv-to-xlsx',
     group: 'Spreadsheets and data',
-    guide: 'csv-opens-in-one-column-in-excel',
+    guide: ['csv-opens-in-one-column-in-excel', 'excel-csv-leading-zeros'],
     card: 'CSV to Excel',
     blurb: 'Save a CSV as a real .xlsx workbook',
     title: 'CSV to Excel converter: save CSV as XLSX online',
@@ -3198,5 +3199,10 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'are-online-file-converters-safe',
     title: 'Are online file converters safe for private files?',
     blurb: 'What happens to an uploaded file, which files deserve care, and how to check a site.',
+  },
+  {
+    slug: 'excel-csv-leading-zeros',
+    title: 'Excel removes leading zeros from a CSV: how to keep them',
+    blurb: 'Why 02134 becomes 2134, how to stop it, and how to keep long ID numbers exact.',
   },
 ];
