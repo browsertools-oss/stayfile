@@ -352,7 +352,7 @@ export const PAGES: ToolPage[] = [
     lede: 'Turn each page of a PDF into a PNG picture. PNG keeps text and lines sharp, so it suits pages with small print or diagrams. A one-page PDF gives one PNG; a longer one comes back as a zip of numbered PNGs.',
     description: 'Convert every page of a PDF to a PNG image in your browser, at 96, 150 or 300 dpi. The PDF is not uploaded.',
     more: {
-      h2: 'What the PNG keeps',
+      h2: 'What the PNG copy of a PDF page keeps',
       paras: [
         'Each page is drawn onto a white canvas by pdf.js at the dpi you pick and saved as a lossless PNG. Unlike the JPG pages, the quality slider is not involved, and nothing is thrown away after the draw, so small text, hairline rules and flat colour in diagrams stay crisp.',
         'Because PNG stores every pixel exactly, these files come out larger than JPGs of the same page, sometimes much larger for busy scans. Pick 96 dpi for on-screen use and 150 dpi as the default; reach for 300 dpi only when the pages will be printed.',
@@ -642,7 +642,7 @@ export const PAGES: ToolPage[] = [
     lede: 'Make one PDF from GIF images, one per page. Only the first frame of an animated GIF is kept, since PDF can hold a picture but not the animation.',
     description: 'Convert GIF images to a PDF in your browser, one per page. Animated GIFs keep their first frame. Your files are never uploaded.',
     more: {
-      h2: 'What ends up in the PDF',
+      h2: 'What ends up in the PDF from a GIF',
       paras: [
         'A GIF is neither a JPG nor a PNG, so each one is decoded first, the first frame is drawn on a white background and re-encoded as a JPG at quality 0.92. That JPG is what is placed in the PDF. Only files that are already real JPG or PNG bytes get embedded as they are; everything else goes through the redraw.',
         'The default page matches the picture\'s own size. Pick A4 or Letter and wide pictures turn the page landscape, with the image fitted inside the margins and never enlarged. Margins default to medium and can be set to none, small or large. Pages come one to an image, in the order shown in the list.',
@@ -706,7 +706,7 @@ export const PAGES: ToolPage[] = [
     lede: 'Make one PDF from BMP pictures, one picture per page, in the order you choose. The converting happens in your browser, so the files stay on your own device.',
     description: 'Convert BMP files to a PDF in your browser, one per page, in the order you choose. Pick a page size and margin. Your files are never uploaded.',
     more: {
-      h2: 'What ends up in the PDF',
+      h2: 'What ends up in the PDF from a BMP',
       paras: [
         'BMP bytes cannot go into a PDF directly, so each picture is decoded, drawn on a white background and re-encoded as a JPG at quality 0.92. A BMP that starts out huge will still produce a much leaner PDF, because the JPG step drops the uncompressed bulk before anything is embedded.',
         'The default page is the picture\'s own size. A4 or Letter turns the page landscape for wide pictures, and the image is fitted inside the margins, centred, and never upscaled past its own pixel size. Margins default to medium and can be set to none, small or large.',
@@ -955,7 +955,7 @@ export const PAGES: ToolPage[] = [
     lede: 'Turn iPhone HEIC photos into PNG files. PNG keeps every pixel, but its files are usually larger than HEIC or JPG, so use it when an app asks for PNG or when you plan to edit the photo.',
     description: 'Convert iPhone HEIC photos to PNG in your browser, one at a time or in a batch. Your photos are never uploaded.',
     more: {
-      h2: 'What the PNG keeps',
+      h2: 'What the PNG keeps from the HEIC',
       paras: [
         'Safari reads HEIC on its own. Other browsers fetch a small decoder from this site the first time you convert, only when a HEIC file is actually opened, and a batch of ten photos does not pay for it ten times.',
         'Each photo is decoded to raw pixels, drawn to a canvas and written as a PNG. HEIC holds 10 bits of colour per channel while the canvas works in 8 bits, so very smooth gradients can band slightly. Resolution and framing carry over exactly, and because PNG is lossless, nothing further is lost after the decode.',
@@ -1087,7 +1087,7 @@ export const PAGES: ToolPage[] = [
     slug: 'jpg-to-avif',
     guide: 'jpg-png-webp-or-avif',
     more: {
-      h2: 'What the conversion keeps',
+      h2: 'What the AVIF keeps from the JPG',
       paras: [
         'AVIF encoding is done by jSquash, the Squoosh codecs, fetched only when you convert. The quality slider maps to AVIF\'s 0 to 100 scale shifted down by 25, because AVIF reaches the same visual quality at a lower number than JPG or WebP. The default of 85 becomes 60 inside the encoder, at speed 8, which trades a little size for much faster encodes.',
         'The JPG is decoded by the browser and drawn onto a canvas before encoding, so EXIF data such as the date, the location and the camera model is dropped, along with any comment metadata the JPG carries. A burst or Live Photo pair is treated as a single still frame.',
@@ -1119,7 +1119,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'png-to-avif',
     more: {
-      h2: 'What the conversion keeps',
+      h2: 'What survives the move to AVIF',
       paras: [
         'The PNG is decoded by the browser and the pixels are re-encoded as AVIF with jSquash, fetched only when you convert. Transparency is kept: the canvas holds the PNG\'s alpha channel and AVIF stores one, so transparent areas stay transparent without a white fill behind them.',
         'The quality slider maps to AVIF\'s 0 to 100 scale shifted down by 25, and the default of 85 becomes 60 in the encoder at speed 8. AVIF is lossy at every setting, so this is the one step where detail is actually discarded. Keep the PNG original if you may need it later.',
@@ -1160,9 +1160,9 @@ export const PAGES: ToolPage[] = [
     lede: 'Turn WebP images into AVIF, which often compresses photos further. Transparency is kept. Check that the place you will use the file opens AVIF first.',
     description: 'Convert WebP to AVIF online, one file or many at once. Transparency is kept. Your images stay on your device.',
     more: {
-      h2: 'What the conversion does to the file',
+      h2: 'What the AVIF conversion does to the file',
       paras: [
-        'The WebP is decoded in your browser, drawn onto a canvas at the same dimensions and encoded as AVIF by a bundled codec (jSquash), not by the browser. The quality slider is mapped to AVIF\'s own scale: the slider value times 100, minus 25, so the default 85 becomes 60. This keeps files small while AVIF still looks as good as WebP at a higher number.',
+        'The WebP is decoded in your browser, drawn onto a canvas at the same dimensions and encoded as AVIF by a bundled codec (jSquash), not by the browser. The quality slider is mapped to AVIF\'s own scale: the slider value times 100, minus 25, so the default 85 becomes 60. That keeps files small. AVIF\'s scale is different from WebP\'s, so the same slider position gives a different file.',
         'Transparency is kept. AVIF supports an alpha channel, so a WebP with a transparent background stays transparent. The encoder runs at speed 8, which trades a little size for much faster encodes; large photos still take a few seconds. Animated WebP files keep only their first frame.',
         'This is a lossy-to-lossy conversion. Both WebP and AVIF throw away detail the eye is less likely to notice, so each hop softens fine detail a little. If you have the original photo, convert that instead of a WebP you already saved.',
       ],
@@ -1183,7 +1183,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'avif-to-webp',
     more: {
-      h2: 'What the conversion keeps',
+      h2: 'What the WebP keeps from the AVIF',
       paras: [
         'AVIF is decoded by the browser itself. If the browser cannot decode AVIF, the page shows an error instead of a file. Ten-bit AVIF is flattened to the canvas\'s 8-bit channels, EXIF metadata is not kept, and animation is not kept either; the still frame is converted.',
         'WebP is written by the browser\'s canvas when it can. Safari\'s canvas silently returns a PNG instead, so the page detects the wrong output type and switches to jSquash\'s WebP encoder, fetched only when it is needed. Transparency is kept either way, with no white fill behind transparent areas.',
@@ -1320,7 +1320,7 @@ export const PAGES: ToolPage[] = [
     lede: 'Turn a PNG into a .ico file, the format browsers and desktops use for favicons and shortcuts. The file holds 16, 32 and 48 px versions of the image, and transparency is kept.',
     description: 'Convert a PNG to a .ico favicon file in your browser. The file holds 16, 32 and 48 px sizes. Your image stays on your device.',
     more: {
-      h2: 'How the icon file is built',
+      h2: 'How the ICO is built from a PNG',
       paras: [
         'The PNG is decoded to a bitmap, and three square frames are drawn from it: 16, 32 and 48 pixels, each with high-quality smoothing. Each frame is stored inside the .ico as a 32-bit PNG with an alpha channel, so the frames look clean on light and dark tab bars. Nothing of the original PNG container is reused; only the pixels are.',
         'If the PNG is not square, the image is scaled to fit inside each square and centred on a transparent background rather than stretched. Start from a square image of at least 48 pixels so the 16 pixel frame still has something to work with. A source much larger than 48 pixels is fine, since the smaller frames are made by scaling down.',
@@ -1384,7 +1384,7 @@ export const PAGES: ToolPage[] = [
     lede: 'Turn a JPG into a .ico file, the format browsers and desktops use for favicons and shortcuts. The file holds 16, 32 and 48 px versions of the image.',
     description: 'Convert a JPG to a .ico favicon file in your browser. The file holds 16, 32 and 48 px sizes. Your image stays on your device.',
     more: {
-      h2: 'How the icon file is built',
+      h2: 'How the ICO is built from a JPG',
       paras: [
         'The JPG is decoded to a bitmap, and three square frames are drawn from it: 16, 32 and 48 pixels. Each frame is scaled with high-quality smoothing and centred on the square. The frames are stored inside the .ico as 32-bit PNGs with an alpha channel, so the file stays small and looks clean on light and dark tab bars.',
         'A JPG has no transparency of its own, so the pixels it covers are opaque. A non-square JPG is letterboxed inside the square frames, and that bare canvas area stays transparent because the canvas starts clear. The corners of a non-square icon come out see-through, not white.',
@@ -1416,7 +1416,7 @@ export const PAGES: ToolPage[] = [
     lede: 'Turn a WebP into a .ico file, the format browsers and desktops use for favicons and shortcuts. The file holds 16, 32 and 48 px versions of the image.',
     description: 'Convert a WebP to a .ico favicon file in your browser. The file holds 16, 32 and 48 px sizes. Your image stays on your device.',
     more: {
-      h2: 'How the icon is built',
+      h2: 'How the ICO is built from a WebP',
       paras: [
         'The WebP is decoded by the browser, drawn at its intrinsic size and then scaled into 16, 32 and 48 pixel pictures at high smoothing quality. All three are packed into one .ico file as 32-bit PNG frames, which current Windows and every current browser read.',
         'If the WebP is not square, the image is centered on a square canvas and padded with transparency instead of being stretched. The alpha channel is kept, so a transparent background stays transparent in the .ico file.',
@@ -1449,7 +1449,7 @@ export const PAGES: ToolPage[] = [
     lede: 'Turn an SVG into a .ico file, the format browsers and desktops use for favicons and shortcuts. The file holds 16, 32 and 48 px versions of the image.',
     description: 'Convert an SVG to a .ico favicon file in your browser. The file holds 16, 32 and 48 px sizes. Your image stays on your device.',
     more: {
-      h2: 'How the icon is built',
+      h2: 'How the ICO is drawn from the SVG',
       paras: [
         'The SVG is drawn at its own size first, then scaled into 16, 32 and 48 pixel pictures at high smoothing quality, and all three are packed into one .ico file. Browsers and Windows pick the size they need.',
         'Start from an SVG with a real width and height, or at least a viewBox. An SVG with no size at all is drawn at 1024 by 768, which squashes square artwork into a wide frame. Non-square art is scaled to fit the square canvas and padded, never stretched.',
@@ -1481,7 +1481,7 @@ export const PAGES: ToolPage[] = [
     lede: 'Save an ICO icon as a JPG image. The largest size stored in the icon is used, and transparent areas are filled with white.',
     description: 'Convert ICO icons to JPG in your browser. The largest size in the file is kept. Transparent areas turn white. Your files are never uploaded.',
     more: {
-      h2: 'How the conversion works',
+      h2: 'How the ICO becomes a JPG',
       paras: [
         'The browser decodes the .ico container and picks the largest size stored in it (usually 16 to 256 pixels on a side). That image is drawn onto a canvas and re-encoded as a JPG at the quality on the slider, 85 by default. Because the source is small, the output JPG is small too.',
         'JPG has no transparency, so any transparent pixels in the icon are painted white before saving. If you need the transparent background kept, the ICO to PNG and ICO to WebP pages write lossless and lossy files with alpha instead.',
@@ -1513,7 +1513,7 @@ export const PAGES: ToolPage[] = [
     lede: 'Save an ICO icon as a WebP image. The largest size stored in the icon is used, and transparency is kept. WebP files open in every current browser.',
     description: 'Convert ICO icons to WebP in your browser. The largest size in the file is kept, transparency is kept, and nothing leaves your device.',
     more: {
-      h2: 'How the conversion works',
+      h2: 'How the ICO becomes a WebP',
       paras: [
         'The browser decodes the .ico container and picks the largest size stored in it (usually 16 to 256 pixels on a side). That image is drawn onto a canvas and re-encoded as WebP at the quality on the slider, 85 by default. Because the source is small, the output WebP is small too.',
         'WebP supports transparency, so the alpha channel from the icon is kept. In browsers whose canvas cannot write WebP (Safari), the page uses its own WebP encoder (jSquash) with the same quality value, so the output is WebP either way. If you need a lossless file with transparency, the ICO to PNG page writes a PNG instead.',
@@ -1673,7 +1673,7 @@ export const PAGES: ToolPage[] = [
     lede: 'Turn a GIF into a .ico file, the format browsers use for favicons. The first frame of an animated GIF is kept, and the file holds 16, 32 and 48 px versions of the image.',
     description: 'Convert a GIF to a .ico favicon file in your browser. Only the first frame of an animated GIF is used. Transparency is kept. Your file is never uploaded.',
     more: {
-      h2: 'How the icon is built',
+      h2: 'How the ICO takes the first frame',
       paras: [
         'The GIF is decoded by the browser and only its first frame is used. That frame is drawn at its intrinsic size, then scaled into 16, 32 and 48 pixel pictures at high smoothing quality. All three are packed into one .ico file as 32-bit PNG frames, which current Windows and every current browser read.',
         'A GIF uses a 256-color palette, so the decoded frame has at most 256 distinct colors. The ICO stores each size as a full 32-bit PNG, so the palette limit does not expand but the file can hold transparency cleanly. If the GIF is not square, the image is centered on a square canvas and padded with transparency instead of being stretched.',
@@ -1705,7 +1705,7 @@ export const PAGES: ToolPage[] = [
     lede: 'Save a GIF as a WebP image. Only the first frame of an animated GIF is kept, because WebP on this page holds a single picture. Transparency is kept.',
     description: 'Convert GIF images to WebP in your browser. The first frame is kept and transparency is kept. Your files are never uploaded.',
     more: {
-      h2: 'What the conversion does to the file',
+      h2: 'What the WebP conversion does to the file',
       paras: [
         'The GIF is decoded by the browser and only its first frame is used. That frame is drawn onto a canvas and encoded as WebP at the quality you set, 85 by default. A GIF uses a 256-color palette, so the decoded frame has at most 256 distinct colors; the WebP can look softer on photos but is usually smaller.',
         'Transparency is kept. WebP supports an alpha channel, so a GIF with a transparent background stays transparent. In browsers whose canvas cannot write WebP (Safari), the page uses its own WebP encoder (jSquash) with the same quality value, so the output is WebP either way.',
@@ -1994,7 +1994,7 @@ export const PAGES: ToolPage[] = [
     lede: 'Change the width and height of one JPG or many. Type exact pixels or a percentage, and the proportions stay locked unless you unlock them.',
     description: 'Resize JPG images to exact pixel dimensions or a percentage, in batches, right in your browser. Files are not uploaded.',
     more: {
-      h2: 'How the resize is done',
+      h2: 'How the JPG is resized',
       paras: [
         'The size is worked out before any pixels are drawn. Whole pixels are kept and no side ends up smaller than one pixel. When both width and height are typed with proportions locked, the picture is scaled to fit inside that box without stretching, so one side can land smaller than you typed.',
         'Reducing a picture is done in halving steps instead of one jump, which keeps edges and fine text much cleaner on big shrinks. The last pass uses high-quality smoothing, and the file is saved as a JPG at the quality shown on the slider, 85 by default. Saving as JPG is lossy even when the size barely moves, so a round trip through this page is not free.',
@@ -2034,7 +2034,7 @@ export const PAGES: ToolPage[] = [
     lede: 'Change the width and height of one PNG or many. Type exact pixels or a percentage, and the proportions stay locked unless you unlock them.',
     description: 'Resize PNG images to exact pixel dimensions or a percentage, in batches, right in your browser. Files are not uploaded.',
     more: {
-      h2: 'How the resize is done',
+      h2: 'How the PNG is resized',
       paras: [
         'The size is worked out before any pixels are drawn. Whole pixels are kept and no side ends up smaller than one pixel. With proportions locked and both sides typed, the picture is fitted inside that box without stretching, so one side can land smaller than you typed.',
         'Large shrinks are drawn in halving steps with high-quality smoothing, which keeps line art and text readable. PNG is lossless and keeps the alpha channel, so a transparent background stays transparent and no color shifts appear anywhere, including flat one-color areas where JPG would ring.',
@@ -2320,7 +2320,7 @@ export const PAGES: ToolPage[] = [
       h2: 'How the TSV becomes a Markdown table',
       paras: [
         'The tab-separated text is parsed with a fixed tab delimiter. The first row is treated as column names unless you untick "First row is column names", in which case headers become Column 1, Column 2 and so on, because Markdown tables require a header row. Each cell is escaped: pipes become \\| and line breaks become <br>, so the table keeps its shape when pasted into GitHub or any Markdown editor.',
-        'Columns whose values are all numbers get a right-aligned marker (---:) in the separator row, so columns of figures line up. The output uses CRLF line endings. The preview shows the first 50 rows; the downloaded .md file has everything.',
+        'Columns whose values are all numbers get a right-aligned marker (---:) in the separator row, so columns of figures line up. The output uses LF line endings, one line per row. The preview shows the first 50 rows; the downloaded .md file has everything.',
         'Pasting cells straight from Excel or Google Sheets works because the copied text uses tabs between columns. The page shares the CSV to Markdown tool, so the same escaping and alignment logic applies. TSV downloads on other pages always carry a UTF-8 BOM so Excel opens them as UTF-8, but Markdown output does not use a BOM.',
       ],
     },
@@ -2616,7 +2616,7 @@ export const PAGES: ToolPage[] = [
     lede: 'Save the first sheet of an Excel workbook as a CSV file. Each cell is written the way it is shown in the sheet, so a formatted date or number comes out as you see it.',
     description: 'Convert Excel .xlsx files to CSV in your browser. Saves the first sheet as comma-separated text. Your workbook is never uploaded.',
     more: {
-      h2: 'What the conversion keeps',
+      h2: 'What the CSV keeps from the workbook',
       paras: [
         'Only the first sheet is converted. The page reports how many other sheets the workbook has, and to convert one of those you drag its tab to the front in Excel and drop the file here again. Each cell is written the way Excel shows it, so a date formatted as 2026-11-06 comes out as that text, not as a serial number.',
         'Cells that contain commas, quotes or line breaks are wrapped in quotes, which is how CSV holds those characters inside one value. Numbers come out as plain digits, and an empty cell comes out as nothing between the separators.',

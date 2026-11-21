@@ -436,3 +436,18 @@ describe('more-section samples', () => {
     expect(csvToMarkdown(s.before, { delimiter: '', header: true }).trim()).toBe(s.after.trim());
   });
 });
+
+describe('more-section headings', () => {
+  test('every more.h2 is unique across tool pages', () => {
+    const seen = new Map<string, string>();
+    const dupes: string[] = [];
+    for (const p of PAGES) {
+      const h2 = p.more?.h2;
+      if (!h2) continue;
+      const first = seen.get(h2);
+      if (first) dupes.push(`"${h2}" on ${first} and ${p.slug}`);
+      else seen.set(h2, p.slug);
+    }
+    expect(dupes).toEqual([]);
+  });
+});
