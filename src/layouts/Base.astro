@@ -53,6 +53,7 @@ const canonical = new URL(path, SITE.url).href;
         </a>
         <nav class="sections" aria-label="Tool groups">
           {GROUPS.map((g) => <a href={`/#${GROUP_ID[g]}`}>{GROUP_SHORT[g]}</a>)}
+          <a href="/guides/">Guides</a>
         </nav>
         <span class="local"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 7h10v7H3zM5 7V5a3 3 0 0 1 6 0v2" /></svg>Files stay on this device</span>
       </div>
@@ -212,7 +213,8 @@ const canonical = new URL(path, SITE.url).href;
   .local svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; }
   @media (max-width: 640px) {
     .bar { gap: 6px; }
-    .sections a { padding: 0 8px; font-size: 14px; }
+    .sections { min-width: 0; overflow-x: auto; }
+    .sections a { padding: 0 8px; font-size: 14px; white-space: nowrap; }
     .local { display: none; }
     /* The tool index is long; two narrow columns scroll less on a phone. */
     footer .cols { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px 12px; }
