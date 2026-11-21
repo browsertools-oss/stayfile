@@ -8,7 +8,7 @@ import { SITE, PAGES, GROUP_ID, GUIDES, type ToolPage } from '../site';
 import { formatsFor } from '../formats';
 interface Props { page: ToolPage }
 const { page } = Astro.props;
-const guide = page.guide ? GUIDES.find((g) => g.slug === page.guide) : undefined;
+const guides = [page.guide].flat().filter(Boolean).map((slug) => GUIDES.find((g) => g.slug === slug)).filter((g): g is NonNullable<typeof g> => Boolean(g));
 const path = `/${page.slug}/`;
 const formats = formatsFor(page.slug);
 const FACT_ROWS: [keyof (typeof formats)[number]['facts'], string][] = [
@@ -113,7 +113,7 @@ const jsonld = [
   <section class="row">
     <h2>Questions</h2>
     <div>{page.faq.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}</div>
-    {guide && <p class="read-guide">Read the guide: <a href={`/guides/${guide.slug}/`}>{guide.title}</a></p>}
+    {guides.map((g) => <p class="read-guide">Read the guide: <a href={`/guides/${g.slug}/`}>{g.title}</a></p>)}
   </section>
   {related.length > 0 && (
     <section class="row">

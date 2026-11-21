@@ -66,7 +66,7 @@ export interface ToolPage {
   steps: string[];
   faq: { q: string; a: string }[];
   more?: { h2: string; paras: string[]; sample?: { before: string; after: string } };
-  guide?: string;
+  guide?: string | string[];
 }
 
 const PRIVATE = {
