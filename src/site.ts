@@ -742,7 +742,7 @@ export const PAGES: ToolPage[] = [
       paras: [
         'Each AVIF is decoded by the browser, drawn onto a canvas and re-encoded as a JPG at quality 0.92, because PDF cannot embed AVIF bytes directly. The JPG is then placed on its own page. Transparency is lost in the JPG step, so transparent areas become white.',
         'Choose "Fit" for the page size and the page matches the image dimensions exactly, with the margin you set. Choose A4 or Letter and the page is that size; wide images are rotated to landscape automatically, and the image is scaled down to fit inside the margins without ever being upscaled.',
-        'Only the first frame of an animated AVIF is used. Metadata such as EXIF is not kept. The output is a raster PDF, so text in the picture is not selectable and the file size is roughly the sum of the JPG sizes plus a small PDF overhead.',
+        'Only the first frame of an animated AVIF is used. Metadata such as EXIF is not kept. The output is a raster PDF, so text in the picture is not selectable and the file size is roughly the sum of the JPG sizes plus a small PDF overhead. If the pictures are screenshots or diagrams, convert them to PNG first and use the PNG to PDF page, which keeps the edges exact instead of running them through the JPG step.',
       ],
     },
     steps: ['Drop in your .avif files.', 'Put them in order and pick a page size and margin.', 'Click Make PDF and save it.'],
@@ -2689,9 +2689,9 @@ export const PAGES: ToolPage[] = [
     more: {
       h2: 'How the sheet becomes TSV',
       paras: [
-        'The first sheet of the workbook is read through SheetJS and converted to CSV text, then that CSV is re-parsed and written out as tab-separated values. Cells are read the way Excel shows them: a date formatted as 2026-11-06 comes out as that text, plain numbers come out as plain numbers, and text stays text. The page says how many sheets were left out when the workbook has more than one.',
+        'SheetJS reads the first sheet of the workbook, and the tab-separated output is built from those cell values. Cells come out the way Excel shows them: a date formatted as 2026-11-06 stays that text, plain numbers stay plain numbers, and text stays text. The page says how many sheets were left out when the workbook has more than one.',
         'Cells containing tabs or quotes are quoted in the output. The TSV uses CRLF line endings and always carries a UTF-8 BOM so Excel and other tools read it as UTF-8 without an import step. There are no delimiter options on this page because the tab is the point of the format.',
-        'Hidden rows and hidden columns are still written, because the converter reads the stored cell values rather than what is on screen. The CSV to TSV page does the same conversion starting from a CSV file.',
+        'Hidden rows and hidden columns are still written, because the converter reads the stored cell values rather than what is on screen. Tabs also survive commas inside a cell without the quoting CSV needs, which makes this the format to use when the next tool expects pasted spreadsheet cells. The CSV to TSV page does the same conversion starting from a CSV file.',
       ],
     },
     steps: [
@@ -2728,9 +2728,9 @@ export const PAGES: ToolPage[] = [
     more: {
       h2: 'How the sheet becomes YAML',
       paras: [
-        'The first sheet of the workbook is read through SheetJS and converted to CSV text, then that CSV is parsed into typed rows (numbers as numbers, leading zeros as text, true/false as booleans) and written as YAML by js-yaml. The output is a block-style YAML sequence with one mapping per row, keyed by the header row, with two-space indentation. js-yaml resolves any anchors or aliases before writing, so the output is plain YAML.',
+        'SheetJS reads the first sheet, and the cell values go through the same typed CSV parser the other sheet pages use: numbers as numbers, leading zeros as text, true/false as booleans. js-yaml then writes a block-style YAML sequence with one mapping per row, keyed by the header row and indented by two spaces. Anchors and aliases are resolved before writing, so the output is plain YAML.',
         'Values are typed column by column: if any value in a column must stay text (a zip code like 02134), the whole column stays text, so one column never mixes "02134" and 10001. A date formatted as 2026-11-06 comes out as that text. The page says how many sheets were left out when the workbook has more than one.',
-        'The preview is capped at 200,000 characters; the downloaded .yaml file has everything. Keys are written in the order they appear in the sheet\'s first row, so the YAML follows the column order of the workbook. The CSV to YAML page does the same conversion starting from a CSV file.',
+        'The preview is capped at 200,000 characters; the downloaded .yaml file has everything. Keys are written in the order they appear in the sheet\'s first row, so the YAML follows the column order of the workbook. The saved file takes the name of the workbook you dropped in, with .yaml at the end. The CSV to YAML page does the same conversion starting from a CSV file.',
       ],
     },
     steps: [
@@ -2759,7 +2759,7 @@ export const PAGES: ToolPage[] = [
     more: {
       h2: 'How the sheet becomes a table',
       paras: [
-        'Only the first sheet is read. The sheet is converted to rows and then to the same GitHub-flavored table the CSV to Markdown page writes. When a workbook has several sheets, the page says so, naming the first sheet and how many were left out, so nothing is silently missed.',
+        'The workbook\'s first sheet is read cell by cell and turned into rows, then those rows are written as the same GitHub-flavored table the CSV to Markdown page makes. A date formatted as 2026-11-06 arrives as that text, and a column of numbers is right-aligned. When a workbook has several sheets, the page says so, naming the first sheet and how many were left out, so nothing is silently missed.',
         'A cell that is empty produces nothing between the pipes, so the table keeps its column count even when a row is sparse. A column whose cells are all numbers is right-aligned and gets a numeric marker in the separator row. Pipes inside cells are written as \\| and line breaks become <br>, so pasted tables hold together on GitHub.',
         'Formatting does not carry over: the table holds values, not fonts, colours or column widths. Merged cells are read as stored, so the top-left cell has the value and the rest come out empty. The download is a plain UTF-8 .md file, and the preview can be cut short at 200,000 characters on very large sheets.',
       ],
@@ -2995,7 +2995,7 @@ export const PAGES: ToolPage[] = [
       h2: 'How the YAML becomes an Excel workbook',
       paras: [
         'The YAML is parsed by js-yaml (loaded only on the YAML pages). Several YAML documents (separated by ---) become a JSON array, then each mapping in the list becomes one row. Nested keys like address.city are flattened into dotted columns, the same as the JSON to Excel page. Values are typed on the way in: plain numbers become real Excel numbers you can sum and sort, and anything with a leading zero stays text.',
-        'SheetJS builds a genuine .xlsx workbook with compression, so the file opens in Excel, LibreOffice and Google Sheets with types intact. The sheet is named after the file you dropped in, with characters Excel forbids replaced by spaces and the name capped at 31 characters. The first row holds the keys.',
+        'SheetJS builds a genuine .xlsx workbook with compression, so the file opens in Excel, LibreOffice and Google Sheets with types intact. The workbook holds one sheet, named after the file you dropped in, or data when you pasted the YAML instead. The first row holds the keys.',
         'The page also accepts a YAML file pasted into the box. The preview shows the first 50 rows; the downloaded workbook has everything. The YAML to CSV and YAML to JSON pages use the same parsing logic, so the row and column count match across the three pages.',
       ],
     },
