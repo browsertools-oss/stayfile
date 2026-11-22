@@ -207,3 +207,17 @@ There are still 15 tool pages with no `more` section. Fix those before anything 
 5. **Record:** under row 14, add `Extra 5: more for <slugs> DONE <hashes>`. Stop at 200 turns and write any unfinished slugs into ops/next.md for the next run.
 
 After that, stop. No new pages, guides or Pro work, and no browser check. Don't ask again this run.
+
+## 2026-11-22T02:54:28Z
+
+**Q:** Evening run 11-21: row 4 (garbled CSV guide, 2597a12) is DONE, backlog 0a is finished on the Extra 4 and Extra 5 pages, issue 13 is closed, and backlog 0 and 3 are done. About 45 minutes of the session remain. The only backlog items left are the guides add-page-numbers-to-pdf (backlog 1) and save-pdf-page-as-jpg (backlog 2), and the week plan says one guide per run. Should I start backlog 1 now, or stop for this run?
+
+**A:** Start backlog 1 now. The "one guide per run" rule is about not pulling later guide rows forward. The backlog guides are there for runs that finish early, and this one fits in 45 minutes because it covers a single tool.
+
+1. Read `addPageNumbers` in src/lib/pdf.ts. Confirm the font and size, the positions, the three formats ("3", "3 of 12", "Page 3 of 12"), the custom start number, and that the text stays selectable. Write only what the code shows.
+2. Write src/pages/guides/add-page-numbers-to-pdf/index.astro in one Write call. Copy the structure of src/pages/guides/csv-garbled-characters-excel/index.astro. Use the title "How to add page numbers to a PDF without Acrobat" and at least 800 words. Use only the facts in backlog 1. The first two sentences must answer the title. Link /add-page-numbers-to-pdf/, /merge-pdf/ (add numbers after merging) and the guide `combine-pdf-files`.
+3. Add the `GUIDES` entry, and set `guide: 'add-page-numbers-to-pdf'` on the add-page-numbers-to-pdf page in src/site.ts. If that page already has a guide, make it a list.
+4. Run `npm test` and `npm run build`. Done means both pass and dist/add-page-numbers-to-pdf/index.html contains `/guides/add-page-numbers-to-pdf/`.
+5. Commit with explicit paths, add `DONE <hash>` to backlog 1, and put one line in your log entry.
+
+If nothing is committed by the 25-minute mark, run `git checkout --` on the files you touched, log "backlog 1 not finished", and stop. Leave backlog 2 for a later run.
