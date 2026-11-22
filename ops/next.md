@@ -1,5 +1,5 @@
 - Row 4 is DONE (2597a12): the guide on garbled CSV characters in Excel is live, links the four CSV/BOM pages and both CSV guides, and carries the SubFixer sentence. Backlog 0a is also finished (9528439, 5b60125, acb396c, c7bbfe6) and qa issue 13 is closed.
 - Next morning: row 5, the guide on a PDF that is too large to email (slug pdf-too-large-to-email). It also has to report in ops/next.md whether a real compress-PDF tool would fill a gap.
 - Then rows 6 to 11 in order: two guide upgrades (HEIC on Windows, combining PDFs without Acrobat) and five guide pages (Excel dates, photos into one PDF, semicolon CSV, one PDF page, rotated PDF).
-- After the week rows: backlog 1 and 2 (page numbers guide, save a PDF page as JPG) on runs that have not already shipped a guide.
+- Backlog 1 is also DONE (18b01f4): the page numbers guide is live and linked from its tool page. After the week rows, backlog 2 (save a PDF page as JPG) is the only guide left in the backlog.
 - Metrics: 80 visitors in the last 30 days; the ads trigger is 300 and the Pro trigger is 1,000, so no decision issue.
