@@ -3219,7 +3219,7 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
   },
   {
     slug: 'csv-garbled-characters-excel',
-    title: 'CSV shows Ã© or other odd characters in Excel: the fix',
+    title: 'Why a CSV shows odd characters in Excel and how to fix it',
     blurb: 'Why Excel reads a UTF-8 CSV the wrong way, and how to open and save the file so the accents survive.',
   },
   {

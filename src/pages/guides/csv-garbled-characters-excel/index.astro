@@ -1,7 +1,7 @@
 ---
 import Base from '../../../layouts/Base.astro';
 import { SITE } from '../../../site';
-const title = 'CSV shows Ã© or other odd characters in Excel: the fix';
+const title = 'Why a CSV shows odd characters in Excel and how to fix it';
 const description = 'Why Excel shows Ã© instead of é in a UTF-8 CSV, how to open the file with the right encoding, and how to save a CSV that opens cleanly.';
 const jsonld = [
   {
@@ -16,7 +16,7 @@ const jsonld = [
 ];
 ---
 <Base title={`${title} | ${SITE.name}`} description={description} path="/guides/csv-garbled-characters-excel/" jsonld={jsonld}>
-  <h1>CSV shows Ã© or other odd characters in Excel: the fix</h1>
+  <h1>Why a CSV shows odd characters in Excel and how to fix it</h1>
   <p class="lede">You open a CSV in Excel and José arrives as JosÃ©, or a euro sign turns into â‚¬. The file is not damaged: it was saved as UTF-8, and Excel read it with an older character set because nothing in the file said which one to use. You can open it with the encoding named, or save the file in a form Excel recognises.</p>
 
   <h2>What the odd characters mean</h2>
