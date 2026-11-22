@@ -1483,9 +1483,9 @@ export const PAGES: ToolPage[] = [
     more: {
       h2: 'How the ICO becomes a JPG',
       paras: [
-        'The browser decodes the .ico container and picks the largest size stored in it (usually 16 to 256 pixels on a side). That image is drawn onto a canvas and re-encoded as a JPG at the quality on the slider, 85 by default. Because the source is small, the output JPG is small too.',
-        'JPG has no transparency, so any transparent pixels in the icon are painted white before saving. If you need the transparent background kept, the ICO to PNG and ICO to WebP pages write lossless and lossy files with alpha instead.',
-        'The browser reads the .ico container natively. If it cannot decode a particular icon, the page shows an error. The quality slider sets the JPG re-encode and starts at 85; lowering it makes the file smaller and softer.',
+        'The browser decodes the .ico file and uses the largest picture stored in it, usually 16 to 256 pixels on a side. The smaller entries are dropped. That picture is drawn onto a canvas at the size it already has, never enlarged, and saved as a JPG at the quality on the slider. A 32 pixel icon gives a 32 pixel JPG, so the output stays small.',
+        'JPG has no transparency, so every transparent pixel is painted white before the save. A white mark on a transparent background disappears, and an icon cut out for a dark panel gets a plain white surround. If the see-through part matters, the ICO to PNG and ICO to WebP pages keep the alpha channel.',
+        'This is the page for places that take a picture but refuse an .ico file, such as a profile photo field or a document. The browser reads the .ico container itself, and if it cannot decode a particular icon the page shows an error instead of saving a broken file. The quality slider starts at 85; lowering it makes the JPG smaller and softer.',
       ],
     },
     steps: ['Drop in your .ico files.', 'JPG is already selected. Move the quality slider if you want a smaller file.', 'Click Convert, then save each image or all of them as a zip.'],
@@ -1515,9 +1515,9 @@ export const PAGES: ToolPage[] = [
     more: {
       h2: 'How the ICO becomes a WebP',
       paras: [
-        'The browser decodes the .ico container and picks the largest size stored in it (usually 16 to 256 pixels on a side). That image is drawn onto a canvas and re-encoded as WebP at the quality on the slider, 85 by default. Because the source is small, the output WebP is small too.',
-        'WebP supports transparency, so the alpha channel from the icon is kept. In browsers whose canvas cannot write WebP (Safari), the page uses its own WebP encoder (jSquash) with the same quality value, so the output is WebP either way. If you need a lossless file with transparency, the ICO to PNG page writes a PNG instead.',
-        'The browser reads the .ico container natively. If it cannot decode a particular icon, the page shows an error. The quality slider applies to the new WebP and starts at 85, and the icon\'s other size entries are not carried over.',
+        'The browser decodes the .ico file and uses the largest picture stored in it, usually 16 to 256 pixels on a side. The other size entries are dropped, and the picture is drawn at the size it already has without enlargement.',
+        'WebP supports an alpha channel, so a transparent icon stays transparent, which is the reason to pick this page over ICO to JPG. The canvas writes the WebP at the quality on the slider. In Safari, whose canvas cannot write WebP, the page switches to its own WebP encoder with the same quality value, so the saved file is a real WebP either way.',
+        'Every current browser opens WebP, so the result can go straight into a web page, a chat or a document. If you need a lossless copy with transparency, ICO to PNG writes a PNG instead. The quality slider starts at 85, and the page reports an error rather than saving anything when the icon cannot be decoded.',
       ],
     },
     steps: ['Drop in your .ico files.', 'WebP is already selected. Move the quality slider if you want a smaller file.', 'Click Convert, then save each image or all of them as a zip.'],
@@ -2238,9 +2238,9 @@ export const PAGES: ToolPage[] = [
     more: {
       h2: 'How the TSV becomes JSON',
       paras: [
-        'The tab-separated text is parsed with a fixed tab delimiter. The first row is treated as column names unless you untick "First row is column names", in which case keys become column_1, column_2 and so on. Values are typed column by column: if any value in a column must stay text (a zip code like 02134), the whole column stays text, so one column never mixes "02134" and 10001. Plain numbers become JSON numbers, true and false become booleans.',
+        'Each line of the file becomes one row, and the tab between cells is the only separator, so a comma inside a cell is just part of its text. The first row is treated as column names unless you untick "First row is column names", in which case keys become column_1, column_2 and so on. Values are typed column by column: if any value in a column must stay text (a zip code like 02134), the whole column stays text, so one column never mixes "02134" and 10001. Plain numbers become JSON numbers, true and false become booleans.',
         'The JSON is written with two-space indentation. Keys appear in the order they first occur across all rows, matching the column order of the TSV. Empty cells become null in the output. The preview shows the first 50 rows; the downloaded file has everything.',
-        'Pasting cells straight from Excel or Google Sheets works because the copied text uses tabs between columns. The page shares the CSV to JSON tool, so the same typing rules and "Keep all values as text" option apply. TSV downloads on other pages always carry a UTF-8 BOM so Excel opens them as UTF-8, but JSON output does not use a BOM.',
+        'Copying cells out of Excel or Google Sheets and pasting them here works, because the clipboard puts tabs between columns. The page shares the CSV to JSON tool, so the same typing rules and the "Keep all values as text" option apply. The saved file is JSON, so no byte order mark is added; a BOM matters for CSV and TSV that go into a spreadsheet, not for JSON.',
       ],
     },
     steps: [
@@ -2319,9 +2319,9 @@ export const PAGES: ToolPage[] = [
     more: {
       h2: 'How the TSV becomes a Markdown table',
       paras: [
-        'The tab-separated text is parsed with a fixed tab delimiter. The first row is treated as column names unless you untick "First row is column names", in which case headers become Column 1, Column 2 and so on, because Markdown tables require a header row. Each cell is escaped: pipes become \\| and line breaks become <br>, so the table keeps its shape when pasted into GitHub or any Markdown editor.',
+        'Each tab marks a new cell, and the first row becomes the table header. If you untick "First row is column names", headers become Column 1, Column 2 and so on, because Markdown tables require a header row. Pipes inside a cell become \\| and line breaks become <br>, so the table keeps its shape when pasted into GitHub or any Markdown editor.',
         'Columns whose values are all numbers get a right-aligned marker (---:) in the separator row, so columns of figures line up. The output uses LF line endings, one line per row. The preview shows the first 50 rows; the downloaded .md file has everything.',
-        'Pasting cells straight from Excel or Google Sheets works because the copied text uses tabs between columns. The page shares the CSV to Markdown tool, so the same escaping and alignment logic applies. TSV downloads on other pages always carry a UTF-8 BOM so Excel opens them as UTF-8, but Markdown output does not use a BOM.',
+        'Copying cells out of a spreadsheet and pasting them here works, because the clipboard puts tabs between columns. The table follows the same escaping and alignment rules as the CSV to Markdown page. The saved .md file is UTF-8 with no byte order mark and LF line endings.',
       ],
     },
     steps: [
@@ -2437,9 +2437,9 @@ export const PAGES: ToolPage[] = [
     more: {
       h2: 'How the table becomes JSON',
       paras: [
-        'The first GitHub-flavored Markdown table in the file is found: the header line above the first alignment row (| --- | --- |) plus the pipe lines below it. Prose, headings, code blocks and other tables are ignored. Escaped pipes (\\|) become | again, and <br> becomes a line break inside the string, reversing what the CSV to Markdown page does.',
+        'A Markdown table is read line by line: the header line, the | --- | --- | alignment row under it, and the pipe rows below. Only the first table in the file is used. Prose, headings, code blocks and later tables are skipped, so a README with one table and a lot of writing converts cleanly. Escaped pipes (\\|) return to plain | and <br> turns back into a line break inside the string.',
         'The header row becomes the JSON keys. Cells are typed like CSV cells: plain numbers become JSON numbers, true and false become booleans, and values with leading zeros (zip codes) stay text. The output is a JSON array of objects, written with two-space indentation. The preview is capped at 200,000 characters; the downloaded .json file has everything.',
-        'If the file holds no table, you get an error that says so. The Markdown to CSV and Markdown to Excel pages use the same table parser, so the row and column count match across the three pages.',
+        'A file with no table gives an error that says so rather than an empty result. The Markdown to CSV and Markdown to Excel pages share this parser, so all three read the same rows and columns.',
       ],
     },
     steps: [
@@ -2476,9 +2476,9 @@ export const PAGES: ToolPage[] = [
     more: {
       h2: 'How the table becomes an Excel workbook',
       paras: [
-        'The first GitHub-flavored Markdown table in the file is found: the header line above the first alignment row (| --- | --- |) plus the pipe lines below it. Prose, headings, code blocks and other tables are ignored. Escaped pipes (\\|) become | again, and <br> becomes a line break inside the cell, reversing what the CSV to Markdown page does.',
+        'The first table in the Markdown file supplies the rows and columns, and everything around it is skipped. Escaped pipes and <br> line breaks are turned back into | and real line breaks before the cells are written, so what renders on GitHub is what lands in the sheet, including a line break inside a cell.',
         'The parsed table is converted to CSV text and then SheetJS builds a real .xlsx workbook with compression. Plain numbers are written as numbers so you can sum and sort them; values with leading zeros stay text. The sheet is named after the file name, with characters Excel forbids replaced by spaces and the name capped at 31 characters.',
-        'Merged cells in the Markdown are not represented (Markdown tables do not support them). The Markdown to CSV and Markdown to JSON pages use the same table parser, so the row and column count match across the three pages. The preview shows the first 50 rows; the downloaded workbook has everything.',
+        'Merged cells in the Markdown are not represented, because Markdown tables do not support them. The Markdown to CSV and Markdown to JSON pages share this parser, so the row and column count match across the three pages. The preview shows the first 50 rows, the downloaded workbook has everything, and the .xlsx opens in Excel, Google Sheets and LibreOffice.',
       ],
     },
     steps: [
