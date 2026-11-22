@@ -1,0 +1,58 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to get a photo under 100 KB for an online form';
+const description = 'Form limits are about bytes, not pixels. Check the rules, resize the photo, then lower the JPG quality while watching the size shown.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-22',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/photo-under-100kb-for-a-form/" jsonld={jsonld}>
+  <h1>How to get a photo under 100 KB for an online form</h1>
+  <p class="lede">Getting a photo under 100 KB means shrinking it in two ways: fewer pixels, then less data for each pixel. A photo straight from a phone is often about 4000 pixels wide and several megabytes, while a form usually needs no more than about 1200 pixels for a picture people will look at on a screen.</p>
+
+  <h2>Read the form's rules first</h2>
+  <p>Before you change the photo, read the limits on the upload form. Most forms state a maximum file size in KB or MB, the formats they accept, and sometimes a minimum width and height in pixels. That last number matters as much as the size limit: a 100 KB photo that is 200 pixels wide can pass the byte check and still be rejected for being too small.</p>
+  <p>Write down the three numbers: the maximum size, the accepted format, and any minimum or recommended pixel size. If the form asks for a JPG, convert anything else to JPG first. If it asks for PNG, expect a larger file for the same picture, because PNG is lossless and keeps every pixel exactly.</p>
+  <p>Also check what the photo is for. A passport or visa form usually sets a precise head size and asks for a plain background, and those rules matter more than the byte limit. A profile photo for a club, a course or a job application usually has looser rules.</p>
+
+  <h2>Resize first, because pixel count sets the floor</h2>
+  <p>File size follows pixel count more than anything else. A phone photo that is 4000 pixels wide holds about 16 million pixels. The same picture at 1200 pixels wide holds about 1.4 million. On a form that shows the photo a few centimetres wide, most of those extra pixels do nothing useful, and they are most of the reason the file is over the limit.</p>
+  <p>Use <a href="/resize-jpg/">Resize JPG</a> and type a width such as 1200 pixels. Leave the height empty and the proportions stay locked, so the height follows on its own. For a headshot that only needs to be clear on screen, 600 to 800 pixels wide is often enough. Do not go below the minimum size the form states.</p>
+  <p>If the photo has to keep its full width, skip this step and go to the quality setting below. For a 100 KB limit, resizing is usually the larger saving of the two, so try it first.</p>
+
+  <h2>Then lower the JPG quality and watch the number</h2>
+  <p>Use <a href="/compress-jpg/">Compress JPG</a> after the resize. It has a quality slider and a maximum width box, and it shows the old size and the new size next to each file before you download. The default quality is 70, which usually looks the same as the original on a screen. For a strict form limit, try 60 or 50. Fine detail such as text, hair and fabric is the first thing to soften.</p>
+  <p>Watch the new size after each attempt. There is no box where you type 100 KB and get exactly that, here or in most other tools, because the size depends on the picture. Lower the quality, or go back and cut the width, until the number passes the limit. If a file was already well compressed, the tool hands back the original rather than a larger result, so a barely changed size is a sign to resize instead.</p>
+  <p>Keep the original file. Each save is a new copy, and a photo compressed twice loses more detail than one compressed once. Start again from the original if you need to try a different setting.</p>
+
+  <h2>Choose a simpler picture if you can</h2>
+  <p>At the same quality, a photo with a plain background comes out smaller than one with leaves, brick, fabric or fine texture behind the subject. The encoder spends data on all that detail. A wall, a sheet or a clear sky gives it much less to store.</p>
+  <p>If you can retake the photo, stand closer to the subject and fill more of the frame with them. Cropping afterwards helps too, because the background you remove was also costing bytes. This is the cheapest way under a tight limit without making the face soft.</p>
+
+  <h2>If the photo is HEIC</h2>
+  <p>Some phones, iPhones in particular, save photos in HEIC, and many upload forms reject that format even when the size is fine. Convert the file to JPG first with <a href="/heic-to-jpg/">HEIC to JPG</a>, then resize and compress the JPG. The conversion runs in your browser, and the photo is not uploaded anywhere.</p>
+
+  <h2>When the limit is very small</h2>
+  <p>The resize to about 1200 pixels does most of the work. If the file is still over, lower the quality further and check the size again. For a much tighter limit, such as 20 KB, go back to the resize step and cut the width as well, because the byte count cannot fall far without removing pixels or detail.</p>
+  <p>If the form also sets a minimum pixel size, the two rules can pull against each other. Keep the minimum pixels, lower the quality, and accept that the photo will look softer. A photo that meets both numbers is better than one that is sharp and rejected.</p>
+  <p>Before you submit, open the saved file once and check the face is still clear. Forms often show a preview after upload, and that is the last chance to catch a result that went too far.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li>Read the form's size, format and minimum pixel rules before you start.</li>
+    <li>Resize the photo to about 1200 pixels wide, or the smallest size the form allows.</li>
+    <li>Lower the JPG quality and check the new size shown next to the file.</li>
+    <li>Prefer a plain background and a tighter crop when you can retake the photo.</li>
+    <li>Convert HEIC to JPG before either step.</li>
+  </ul>
+  <p>See also: <a href="/guides/make-a-photo-smaller-to-email/">How to make a photo smaller to email or upload</a> covers the general size numbers for email and websites, and <a href="/guides/iphone-heic-photos-to-jpg/">how to convert iPhone HEIC photos</a> covers files that will not open at all.</p>
+</Base>

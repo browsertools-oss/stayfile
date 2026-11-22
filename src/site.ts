@@ -901,7 +901,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'heic-to-jpg',
     tool: 'img-convert',
-    guide: 'iphone-heic-photos-to-jpg',
+    guide: ['iphone-heic-photos-to-jpg', 'photo-under-100kb-for-a-form'],
     group: 'Images',
     card: 'HEIC to JPG',
     blurb: 'Turn iPhone photos into JPG',
@@ -1868,7 +1868,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'compress-jpg',
     tool: 'img-compress',
-    guide: 'make-a-photo-smaller-to-email',
+    guide: ['make-a-photo-smaller-to-email', 'photo-under-100kb-for-a-form'],
     group: 'Images',
     card: 'Compress JPG',
     blurb: 'Shrink JPG photos for email and upload forms',
@@ -1985,7 +1985,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'resize-jpg',
     tool: 'img-resize',
-    guide: 'make-a-photo-smaller-to-email',
+    guide: ['make-a-photo-smaller-to-email', 'photo-under-100kb-for-a-form'],
     group: 'Images',
     card: 'Resize JPG',
     blurb: 'Set exact pixel sizes on JPGs',
@@ -3226,5 +3226,10 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'add-page-numbers-to-pdf',
     title: 'How to add page numbers to a PDF without Acrobat',
     blurb: 'Why Reader and Preview cannot do it, and the free routes that work before and after export.',
+  },
+  {
+    slug: 'photo-under-100kb-for-a-form',
+    title: 'How to get a photo under 100 KB for an online form',
+    blurb: 'Why a phone photo is far over the limit, and the resize then compress order that gets it under.',
   },
 ];
