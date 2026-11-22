@@ -1,5 +1,5 @@
-- Row 3 is DONE (31b0836) and row 1 is DONE (655fb02): Guides is in the top menu, tool pages can carry a list of guides, and 10 tool pages now link the owner's guides.
-- Next evening run: row 4, the guide on garbled CSV characters in Excel (slug csv-garbled-characters-excel), including the SubFixer sentence the growth brief asks for at the end of the Ã© table section.
-- Then row 5 (PDF too large to email) and the rest of the week table in order.
-- Backlog 0a needs one more pass: a few Extra 5 more sections are around 110 words, under the 150 the plan wants; then issue 13 can close.
-- Metrics: 80 visitors in the last 30 days; ads trigger is 300, Pro trigger is 1,000, so no decision issue.
+- Row 4 is DONE (2597a12): the guide on garbled CSV characters in Excel is live, links the four CSV/BOM pages and both CSV guides, and carries the SubFixer sentence. Backlog 0a is also finished (9528439, 5b60125, acb396c, c7bbfe6) and qa issue 13 is closed.
+- Next morning: row 5, the guide on a PDF that is too large to email (slug pdf-too-large-to-email). It also has to report in ops/next.md whether a real compress-PDF tool would fill a gap.
+- Then rows 6 to 11 in order: two guide upgrades (HEIC on Windows, combining PDFs without Acrobat) and five guide pages (Excel dates, photos into one PDF, semicolon CSV, one PDF page, rotated PDF).
+- After the week rows: backlog 1 and 2 (page numbers guide, save a PDF page as JPG) on runs that have not already shipped a guide.
+- Metrics: 80 visitors in the last 30 days; the ads trigger is 300 and the Pro trigger is 1,000, so no decision issue.
