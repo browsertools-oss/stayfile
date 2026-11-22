@@ -265,6 +265,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'add-page-numbers-to-pdf',
     tool: 'pdf-numbers',
+    guide: 'add-page-numbers-to-pdf',
     group: 'PDF',
     card: 'Add Page Numbers',
     blurb: 'Stamp a number on every page',
@@ -3220,5 +3221,10 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'csv-garbled-characters-excel',
     title: 'CSV shows Ã© or other odd characters in Excel: the fix',
     blurb: 'Why Excel reads a UTF-8 CSV the wrong way, and how to open and save the file so the accents survive.',
+  },
+  {
+    slug: 'add-page-numbers-to-pdf',
+    title: 'How to add page numbers to a PDF without Acrobat',
+    blurb: 'Why Reader and Preview cannot do it, and the free routes that work before and after export.',
   },
 ];

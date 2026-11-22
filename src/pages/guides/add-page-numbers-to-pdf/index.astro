@@ -1,0 +1,64 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to add page numbers to a PDF without Acrobat';
+const description = 'Why the free Acrobat Reader cannot add page numbers, how to do it in Word or Google Docs before export, and how to stamp numbers on a PDF you already have.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-21',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/add-page-numbers-to-pdf/" jsonld={jsonld}>
+  <h1>How to add page numbers to a PDF without Acrobat</h1>
+  <p class="lede">Acrobat Reader cannot add page numbers to a PDF; that belongs to the paid Acrobat application, and Mac Preview has no page number tool either. The reliable free routes are the program that made the document, where page numbers are added before you export to PDF, or a browser tool that stamps numbers onto the PDF you already have.</p>
+
+  <h2>Why the free Acrobat Reader cannot do it</h2>
+  <p>Acrobat Reader opens and prints PDFs for free. Adding page numbers is not in that free set; it belongs to the paid Acrobat application. If you open a PDF in Reader and look through the menus, the page number feature is either missing or leads to an upgrade. Mac Preview has the same gap: it shows and prints pages, but it has no tool that puts numbers on them.</p>
+  <p>That leaves two kinds of fix. Number the document in the program that made it, before the PDF exists, or stamp numbers onto the PDF you already have. The first is cleaner when you still have the source file. The second is the only option when the PDF came from someone else or the source is gone.</p>
+
+  <h2>Number the document before you export</h2>
+  <p>Page numbers added by a word processor are part of the page layout, so they travel into the PDF with the text and keep the font and position you chose. They stay selectable and searchable too.</p>
+  <p><strong>In Word:</strong> add page numbers from the header and footer tools, choosing a position such as bottom centre and a style such as Page 1 of 10. Check the first page if it is a cover, because the default usually numbers it. Then export: choose Save As or Export and pick PDF. The numbers are already on the pages when the PDF is written.</p>
+  <p><strong>In Google Docs:</strong> add page numbers from the Insert menu. Docs lets you choose whether the first page shows a number, which matters for a title page. Then choose File, Download, and PDF Document. The downloaded PDF carries the numbers.</p>
+  <p>This route is the one to take while you are still writing. You get one file, one set of numbers, and nothing to combine afterwards.</p>
+
+  <h2>Stamp numbers on a PDF you already have</h2>
+  <p>When the PDF is finished, or came from someone else, the numbers have to be added to the file itself. On this site, <a href="/add-page-numbers-to-pdf/">Add page numbers to a PDF</a> does that in the browser: the PDF is read in the tab, each page gets a stamped number, and the saved file keeps the pages as they were.</p>
+  <ol>
+    <li>Drop the PDF on the page.</li>
+    <li>Pick the position: bottom centre or top centre.</li>
+    <li>Pick the format: a plain number such as 3, a number with the total such as 3 of 12, or Page 3 of 12.</li>
+    <li>Set the number the first page should get. Leave it at 1 for most files.</li>
+    <li>Click Add page numbers and save the PDF.</li>
+  </ol>
+  <p>The stamp is drawn in Courier at 10 point, centred across the page width, 22 points in from the bottom edge or from the top edge. Courier is a standard PDF font, so the file does not grow by an embedded font; only the short number text is added to each page. You can select the stamped text like any other text in the file.</p>
+
+  <h2>Odd starts, merged files and cover pages</h2>
+  <p>The start number is for a PDF that is one part of a longer document. A chapter that begins at page 10 can be numbered from 10, so its first page reads 10 and the next 11. With the "of" formats the total counts from the same start, so a 30-page file started at 10 ends at Page 39 of 39. That keeps the numbers consistent with the rest of the bound document.</p>
+  <p>If you are joining several PDFs, merge first and number after. <a href="/merge-pdf/">Merge PDF</a> puts the files in the order you choose, and a single pass of numbering then runs across the whole result without restarts or gaps. Numbering each file separately and merging afterwards gives you repeated numbers.</p>
+  <p>A cover page usually should not carry a number. This tool stamps every page, so the cover would get one. One way round it is to remove the cover first with <a href="/remove-pages-from-pdf/">Remove pages from a PDF</a>, number the body, then merge the cover back on with the merge page. The other is to number the document in Word or Google Docs and tell it to leave the first page alone, which is easier when you still have the source.</p>
+
+  <h2>What the stamp leaves alone</h2>
+  <p>The page content is not redrawn. Images keep their quality and text stays selectable, because nothing on the page is rasterised or flattened. The number is a new piece of text drawn on top of the page.</p>
+  <p>Two limits follow from that. Existing page numbers printed in the page content are not found or removed, so a PDF that already has numbers at the bottom ends up with two sets. And anything sitting in the same strip 22 points from the top or bottom edge can be covered by the stamp. If a page has a footer there, pick the top position, or check the first few pages after saving.</p>
+
+  <h2>Checking the saved file</h2>
+  <p>Open the saved PDF, then look at a page in the middle and one at the end to check the number and the total. A file saved as report.pdf comes back as report-numbered.pdf, so the original stays where it was. If the position is wrong, run the original through again with the other setting; the stamp is applied to the file you drop in, not stacked on the previous copy.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li>The free Acrobat Reader and Mac Preview cannot add page numbers.</li>
+    <li>If you still have the source, add the numbers in Word or Google Docs and export the PDF.</li>
+    <li>If you only have the PDF, stamp the numbers with a browser tool and pick the position, the format and the start number.</li>
+    <li>Joining files: merge first, then number.</li>
+    <li>A cover page that should not be numbered: remove it, number the body, merge the cover back.</li>
+  </ul>
+  <p>See also: <a href="/guides/combine-pdf-files/">How to combine PDF files on Windows, Mac and iPhone</a>.</p>
+</Base>
