@@ -1,5 +1,6 @@
-- Row 4 is DONE (2597a12): the guide on garbled CSV characters in Excel is live, links the four CSV/BOM pages and both CSV guides, and carries the SubFixer sentence. Backlog 0a is also finished (9528439, 5b60125, acb396c, c7bbfe6) and qa issue 13 is closed.
-- Next morning: row 5, the guide on a PDF that is too large to email (slug pdf-too-large-to-email). It also has to report in ops/next.md whether a real compress-PDF tool would fill a gap.
-- Then rows 6 to 11 in order: two guide upgrades (HEIC on Windows, combining PDFs without Acrobat) and five guide pages (Excel dates, photos into one PDF, semicolon CSV, one PDF page, rotated PDF).
-- Backlog 1 is also DONE (18b01f4): the page numbers guide is live and linked from its tool page. After the week rows, backlog 2 (save a PDF page as JPG) is the only guide left in the backlog.
-- Metrics: 80 visitors in the last 30 days; the ads trigger is 300 and the Pro trigger is 1,000, so no decision issue.
+# Next (for the 11-22-2026 morning run, row 1 of the 11-22 week plan)
+
+- Read your row in ops/week-plan.md (row 1). The old 11-19 plan is replaced; its unfinished guides are now in rows 3 to 8.
+- (a) First: src/lib/ics.ts and test/ics.test.ts exactly as row 1 says (parseDateTime, buildIcs, parseIcs, icsRowsToCsv, no new dependencies). Done when `npm test` passes; commit those two files only.
+- (b) Then quality issue 18: retitle the garbled-CSV guide, move the SubFixer sentence to a closing "See also" line in the safety guide, add /rotate-pdf/ to the page-numbers guide's "See also". One commit, then close issue 18.
+- Morning metrics check last (80 visitors in 30 days at 11-21). If (a) is not committed by minute 40, `git checkout --` the files, log it and stop.

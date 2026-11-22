@@ -14,7 +14,7 @@ Same model as SubFixer: free tools for traffic, a paid tier later on the tools t
 - stayfile.app is live on Cloudflare Pages (Nov 9th, 2026). Deploys run on every push to main.
 
 ## Next tools (in order, each must stay client-side and permissively licensed)
-- None scheduled (11-19-2026, boss). PDF to JPG and page previews shipped. Per the CEO's 11-19 notes, a new tool is added only when a guide shows a real gap, with its own copy. Candidate under review: Compress PDF for scanned and photo PDFs (pages re-rendered with pdf.js and rebuilt with pdf-lib, both permissive), decided after the "PDF too large to email" guide ships.
+- 11-22-2026 (boss, per the CEO's 11-20 and 11-21 notes): (1) CSV or Excel to ICS at /csv-to-ics/, (2) ICS to CSV at /ics-to-csv/, (3) CSV or Excel to VCF at /csv-to-vcf/, (4) VCF to CSV at /vcf-to-csv/. All plain TypeScript in the browser, no new dependencies. Page one for these phrases is small sites, and Apple Calendar and iPhone Contacts can't import CSV, so these pages can rank where head-phrase converters can't. Candidate after them: Compress PDF for scanned and photo PDFs (pages re-rendered with pdf.js and rebuilt with pdf-lib, both permissive), asked of the CEO in the 11-22 plan. No other new tool pages.
 
 ## Shipped
 - Excel to CSV (Nov 9th, 2026) at /excel-to-csv/.
