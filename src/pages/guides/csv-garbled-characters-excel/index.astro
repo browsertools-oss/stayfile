@@ -1,0 +1,89 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'CSV shows Ã© or other odd characters in Excel: the fix';
+const description = 'Why Excel shows Ã© instead of é in a UTF-8 CSV, how to open the file with the right encoding, and how to save a CSV that opens cleanly.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-21',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/csv-garbled-characters-excel/" jsonld={jsonld}>
+  <h1>CSV shows Ã© or other odd characters in Excel: the fix</h1>
+  <p class="lede">You open a CSV in Excel and José arrives as JosÃ©, or a euro sign turns into â‚¬. The file is not damaged: it was saved as UTF-8, and Excel read it with an older character set because nothing in the file said which one to use. You can open it with the encoding named, or save the file in a form Excel recognises.</p>
+
+  <h2>What the odd characters mean</h2>
+  <p>These are the same bytes read as two different character sets. UTF-8 stores most accented letters and symbols as two or three bytes, while the older Windows code pages store them as one. When Excel reads a UTF-8 file as an older code page, each byte becomes its own character, so a single letter turns into two or three. Nothing is missing from the file. It has been read the wrong way.</p>
+  <table>
+    <thead>
+      <tr><th>You see</th><th>It should be</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Ã©</td><td>é</td></tr>
+      <tr><td>Ã¼</td><td>ü</td></tr>
+      <tr><td>Ã±</td><td>ñ</td></tr>
+      <tr><td>â€™</td><td>’ (a curly apostrophe)</td></tr>
+      <tr><td>â‚¬</td><td>€</td></tr>
+    </tbody>
+  </table>
+  <p>If you edit the misread text and save, Excel writes the wrong characters back to the file, and this time they really are wrong. Fix the reading before you type anything, and keep a copy of the original file.</p>
+  <p>Subtitle files go wrong the same way; SubFixer has <a href="https://subfixer.app/guides/subtitles-weird-characters/">a guide for subtitles that show Ã©</a>.</p>
+
+  <h2>Why Excel guesses the encoding</h2>
+  <p>UTF-8 is one of several ways to store text. To tell them apart, Excel looks for a byte order mark, a short marker at the start of a file that says the text is UTF-8. Many programs that write CSV files do not add one. Without the marker, Excel falls back on the code page from the computer's region settings. On a machine set to an English or Western European region that is a one-byte code page, so a UTF-8 é is read as two characters: Ã©.</p>
+  <p>The same file usually looks correct in Google Sheets or in a text editor set to UTF-8, because those tools assume UTF-8 unless told otherwise. Excel is the program making the guess, so the fix belongs in Excel or in the save format.</p>
+
+  <h2>Fix 1: open the CSV with the encoding named</h2>
+  <p>This is the quickest fix when someone else sent you the file. It tells Excel how to read the bytes instead of letting it guess.</p>
+  <ol>
+    <li>In Excel, open the Data tab and choose From Text/CSV. Do not double-click the file in Explorer, because that goes back through the guess.</li>
+    <li>Select the CSV and confirm the file picker.</li>
+    <li>In the preview window, open the File Origin list and choose 65001: Unicode (UTF-8).</li>
+    <li>Watch the preview. Accented letters and currency signs should turn into the right characters as soon as the setting is applied.</li>
+    <li>Choose Load to bring the data into the sheet.</li>
+  </ol>
+  <p>If the preview still looks wrong after that, the file was not saved as UTF-8 and you are looking at the other problem described further down. If the preview looks right, save the sheet as an .xlsx if you plan to keep working on it. The CSV on disk was fine all along; only the way it was opened was wrong.</p>
+
+  <h2>Fix 2: save a CSV that opens cleanly</h2>
+  <p>When you are the one producing the file, the save format decides whether the next person sees accents or garbage.</p>
+  <ol>
+    <li>In Excel, choose File, then Save As.</li>
+    <li>In the file type list, choose CSV UTF-8 (Comma delimited).</li>
+    <li>Save the file under a name you will recognise.</li>
+  </ol>
+  <p>The plain CSV (Comma delimited) choice writes the text in the computer's older code page, so a name with an accent breaks on a machine set to a different region. CSV UTF-8 writes the text as UTF-8, the format the other programs expect. If a colleague on another continent keeps seeing broken accents in your exports, this setting is the first thing to check.</p>
+
+  <h2>Fix 3: add a byte order mark</h2>
+  <p>A byte order mark is the marker described above: a few bytes at the very start of the file that tell the reader the text is UTF-8. Excel trusts the marker even when the file is opened by double-clicking, so a CSV that carries one usually opens with the accents intact.</p>
+  <p>Some text editors and export tools let you add one when saving. On Stayfile, the CSV downloads on <a href="/json-to-csv/">JSON to CSV</a>, <a href="/excel-to-csv/">Excel to CSV</a>, <a href="/yaml-to-csv/">YAML to CSV</a> and <a href="/tsv-to-csv/">TSV to CSV</a> have a "For Excel: add a UTF-8 BOM" checkbox. It is off by default; tick it when the file is going to Excel on Windows. The TSV downloads always carry one, because a tab-separated file is nearly always opened in a spreadsheet.</p>
+
+  <h2>When the file shows � instead</h2>
+  <p>The opposite mix-up produces the replacement character, �. This happens when a file was saved in an older Windows encoding and the program that opens it assumes UTF-8. The bytes for é are not valid UTF-8, so the reader substitutes � and moves on.</p>
+  <p>No setting in the reader brings the accents back, because the original bytes were never UTF-8. Open the file in the program that wrote it, or in a text editor that lets you choose the encoding, and save it again as UTF-8. Then open or convert it as usual.</p>
+  <p>Be aware that Stayfile's data pages read text files as UTF-8. A CSV saved in an older encoding shows � there too, and the conversion cannot guess the missing accents back. Re-save it as UTF-8 first, then convert it.</p>
+
+  <h2>Google Sheets as a quick check</h2>
+  <p>If you only need to know whether the file is at fault, open a blank Google Sheet and choose File, then Import, then upload the CSV. Sheets reads it as UTF-8 and usually gets it right. When the accents look correct there, the file was UTF-8 all along and Excel was the only problem. When they look wrong there too, the file needs re-saving before anything else.</p>
+
+  <h2>The route that skips the guess</h2>
+  <p>An .xlsx file has no encoding guess to make. It is a zip archive of XML files, and the XML states its own encoding, so accented text goes from one spreadsheet to another without a byte order mark or a File Origin setting.</p>
+  <p><a href="/csv-to-excel/">CSV to Excel</a> reads a UTF-8 CSV in the browser and writes an .xlsx workbook, which is the shortest route to a file that opens with the accents intact on any computer. The same rule applies in the other direction: when you save from Excel, pick the CSV UTF-8 format rather than the plain one.</p>
+  <p>If the CSV is already garbled before it reaches the converter, fix the encoding first. A converter can only carry across the characters it is given.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li>Keep the original file until the accents look right. Saving the misread text makes the mistake permanent.</li>
+    <li>To open a UTF-8 CSV in Excel, use Data and then From Text/CSV, and set File Origin to 65001: Unicode (UTF-8).</li>
+    <li>To save a CSV for other people, choose CSV UTF-8 (Comma delimited).</li>
+    <li>For a file headed to Excel on Windows, tick the "For Excel: add a UTF-8 BOM" box on our CSV pages.</li>
+    <li>A file that shows � was saved in an older encoding. Re-save it as UTF-8 before converting.</li>
+  </ul>
+  <p>See also: <a href="/guides/csv-opens-in-one-column-in-excel/">CSV opens in one column in Excel</a> and <a href="/guides/excel-csv-leading-zeros/">Excel removes leading zeros from a CSV</a>.</p>
+</Base>

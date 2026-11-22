@@ -2505,7 +2505,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'json-to-csv',
     tool: 'json-to-csv',
-    guide: 'open-json-in-excel-or-sheets',
+    guide: ['open-json-in-excel-or-sheets', 'csv-garbled-characters-excel'],
     group: 'Spreadsheets and data',
     card: 'JSON to CSV',
     blurb: 'Open JSON data in a spreadsheet',
@@ -2608,6 +2608,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'excel-to-csv',
     tool: 'xlsx-to-csv',
+    guide: 'csv-garbled-characters-excel',
     group: 'Spreadsheets and data',
     card: 'Excel to CSV',
     blurb: 'Save the first sheet of a workbook as CSV',
@@ -3214,5 +3215,10 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'excel-csv-leading-zeros',
     title: 'Excel removes leading zeros from a CSV: how to keep them',
     blurb: 'Why 02134 becomes 2134, how to stop it, and how to keep long ID numbers exact.',
+  },
+  {
+    slug: 'csv-garbled-characters-excel',
+    title: 'CSV shows Ã© or other odd characters in Excel: the fix',
+    blurb: 'Why Excel reads a UTF-8 CSV the wrong way, and how to open and save the file so the accents survive.',
   },
 ];
