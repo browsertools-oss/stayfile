@@ -1418,9 +1418,9 @@ export const PAGES: ToolPage[] = [
     more: {
       h2: 'How the ICO is built from a WebP',
       paras: [
-        'The WebP is decoded by the browser, drawn at its intrinsic size and then scaled into 16, 32 and 48 pixel pictures at high smoothing quality. All three are packed into one .ico file as 32-bit PNG frames, which current Windows and every current browser read.',
-        'If the WebP is not square, the image is centered on a square canvas and padded with transparency instead of being stretched. The alpha channel is kept, so a transparent background stays transparent in the .ico file.',
-        'Each of the three sizes is drawn from the decoded WebP at high smoothing rather than scaled from one of the others, so the 16 pixel icon keeps its own edge detail.',
+        'The WebP is decoded by the browser, drawn at its intrinsic size and then scaled into 16, 32 and 48 pixel pictures at high smoothing quality. All three are packed into one .ico file as 32-bit PNG frames, which current Windows and every current browser read. Each app picks the entry that matches the space it has, from a 16 pixel tab icon to a 48 pixel desktop shortcut.',
+        'If the WebP is not square, the image is centered on a square canvas and padded with transparency instead of being stretched, so a wide logo keeps its proportions. The alpha channel is kept, so a transparent background stays transparent in the .ico file.',
+        'Each of the three sizes is drawn from the decoded WebP at high smoothing rather than scaled from one of the others, so the 16 pixel icon keeps its own edge detail. The saved file takes the source name, so logo.webp becomes logo.ico, and the .ico holds only these three sizes. No metadata from the WebP is written into it.',
       ],
     },
     steps: ['Drop in your WebP files.', 'Nothing to set. The three sizes are made from your image.', 'Click Save to download the .ico file, or all of them as a zip.'],
@@ -1677,7 +1677,7 @@ export const PAGES: ToolPage[] = [
       paras: [
         'The GIF is decoded by the browser and only its first frame is used. That frame is drawn at its intrinsic size, then scaled into 16, 32 and 48 pixel pictures at high smoothing quality. All three are packed into one .ico file as 32-bit PNG frames, which current Windows and every current browser read.',
         'A GIF uses a 256-color palette, so the decoded frame has at most 256 distinct colors. The ICO stores each size as a full 32-bit PNG, so the palette limit does not expand but the file can hold transparency cleanly. If the GIF is not square, the image is centered on a square canvas and padded with transparency instead of being stretched.',
-        'The GIF\'s palette is not carried into the icon: each PNG frame is written at 32 bits, so the icon can hold more colours than the GIF source did.',
+        'The GIF\'s palette is not carried into the icon: each PNG frame is written at 32 bits, so the icon can hold more colours than the GIF source did. The saved file takes the source name and ends in .ico, and no metadata from the GIF is written into it.',
       ],
     },
     steps: ['Drop in your GIF files.', 'Nothing to set. The three sizes are made from your image.', 'Click Save to download the .ico file, or all of them as a zip.'],
@@ -1709,7 +1709,7 @@ export const PAGES: ToolPage[] = [
       paras: [
         'The GIF is decoded by the browser and only its first frame is used. That frame is drawn onto a canvas and encoded as WebP at the quality you set, 85 by default. A GIF uses a 256-color palette, so the decoded frame has at most 256 distinct colors; the WebP can look softer on photos but is usually smaller.',
         'Transparency is kept. WebP supports an alpha channel, so a GIF with a transparent background stays transparent. In browsers whose canvas cannot write WebP (Safari), the page uses its own WebP encoder (jSquash) with the same quality value, so the output is WebP either way.',
-        'Animated GIFs keep only their first frame. The quality slider starts at 85 and applies to the WebP encode, so a GIF that begins with a blank frame gives a blank WebP.',
+        'Animated GIFs keep only their first frame. The quality slider starts at 85 and applies to the WebP encode, so a GIF that begins with a blank frame gives a blank WebP. The animation timing and the other frames are dropped, the saved file takes the source name and ends in .webp, and no metadata from the GIF is carried over.',
       ],
     },
     steps: ['Drop in your .gif files.', 'WebP is already selected. Move the quality slider if you want smaller files.', 'Click Convert, then save each image or all of them as a zip.'],
