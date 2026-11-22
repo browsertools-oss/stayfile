@@ -1123,7 +1123,7 @@ export const PAGES: ToolPage[] = [
       paras: [
         'The PNG is decoded by the browser and the pixels are re-encoded as AVIF with jSquash, fetched only when you convert. Transparency is kept: the canvas holds the PNG\'s alpha channel and AVIF stores one, so transparent areas stay transparent without a white fill behind them.',
         'The quality slider maps to AVIF\'s 0 to 100 scale shifted down by 25, and the default of 85 becomes 60 in the encoder at speed 8. AVIF is lossy at every setting, so this is the one step where detail is actually discarded. Keep the PNG original if you may need it later.',
-        'The canvas works in 8-bit channels, so a 16-bit PNG is rounded to 8 bits. Text chunks and other metadata inside the PNG are dropped by the re-encode. If the PNG is a screenshot with flat colour and sharp text, compare the saved size against the original before replacing it.',
+        'The canvas works in 8-bit channels, so a 16-bit PNG is rounded to 8 bits. Text chunks and other metadata inside the PNG are dropped by the re-encode. If the PNG is a screenshot with flat colour and sharp text, compare the saved size against the original before replacing it. Current browsers open AVIF, but older desktop programs and some upload forms still refuse it, so keep the PNG until you know the place you are sending the file accepts AVIF.',
       ],
     },
     tool: 'img-convert',
@@ -2832,7 +2832,7 @@ export const PAGES: ToolPage[] = [
       paras: [
         'An array of objects, a single object, an object wrapping one array such as {"data": [...]}, or JSON Lines all work here. Everything nests down to dotted columns, so {"a": {"b": 1}} becomes a column called a.b. A list inside a record stays as JSON text in one cell rather than being split across columns.',
         'Columns are the union of keys across every row in first-appearance order, and a record missing a key gets an empty cell. Pipes inside a value are written as \\| so the table keeps its shape, and line breaks inside a value become <br>, so one record renders as one row on GitHub.',
-        'A column whose non-empty cells are all numbers gets a numeric marker in the separator row, so GitHub right-aligns it. Empty JSON throws an error instead of producing a bare header. The preview can be cut short at 200,000 characters on very large files; the download always holds the full table.',
+        'A column whose non-empty cells are all numbers gets a numeric marker in the separator row, so GitHub right-aligns it. Empty JSON throws an error instead of producing a bare header. A single object becomes a one-row table, with its keys as the columns. The preview can be cut short at 200,000 characters on very large files; the download always holds the full table.',
       ],
     },
     tool: 'json-to-markdown',
@@ -3027,7 +3027,7 @@ export const PAGES: ToolPage[] = [
       paras: [
         'With the first row as column names, each record becomes a YAML mapping keyed by those names, so the output reads like hand-written config. The result is a list of mappings, which is the shape tools expect when they load records into a pipeline or a manifest.',
         'Values are typed the same way as the CSV to JSON page: plain numbers become numbers, true and false become booleans, and values with leading zeros stay text. If any value in a column must stay text, the whole column stays text, so a zip code like 02134 is never quietly turned into 2134.',
-        'Untick "First row is column names" and the output becomes a list of lists instead, one list per row, with no keys at all, which suits data that has no header. js-yaml writes block-style YAML with two-space indentation, and js-yaml itself loads only on the YAML pages, not on the rest of the data tools.',
+        'Untick "First row is column names" and the output becomes a list of lists instead, one list per row, with no keys at all, which suits data that has no header. The separator is detected or picked from comma, semicolon, tab and pipe, which matters for Excel exports from Europe that use semicolons. js-yaml writes block-style YAML with two-space indentation, and js-yaml itself loads only on the YAML pages, not on the rest of the data tools.',
       ],
     },
     tool: 'csv-to-yaml',
