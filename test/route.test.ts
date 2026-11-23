@@ -81,8 +81,9 @@ describe('nextTools', () => {
   });
   test('every data page except JSON to YAML offers a next step', () => {
     // The keys in dataNext must be page slugs; a tool id key there is silently dead.
+    // csv-to-ics gets its next step (ics-to-csv) when that page lands.
     const missing = PAGES
-      .filter((p) => p.group === 'Spreadsheets and data' && p.slug !== 'json-to-yaml')
+      .filter((p) => p.group === 'Spreadsheets and data' && p.slug !== 'json-to-yaml' && p.slug !== 'csv-to-ics')
       .filter((p) => nextTools(p.slug).length === 0)
       .map((p) => p.slug);
     expect(missing).toEqual([]);

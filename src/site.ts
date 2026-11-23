@@ -39,6 +39,7 @@ export type Tool =
   | 'yaml-to-json'
   | 'yaml-to-csv'
   | 'yaml-to-xlsx'
+  | 'csv-to-ics'
   | 'csv-to-yaml'
   | 'csv-to-sql'
   | 'xlsx-to-sql'
@@ -3150,6 +3151,46 @@ export const PAGES: ToolPage[] = [
         a: 'It is doubled, so O\'Hara becomes \'\'O\'\'Hara\'\' inside the statement. That is the standard escape, and every database above reads it the same way.',
       },
       PRIVATE,
+    ],
+  },
+  {
+    slug: 'csv-to-ics',
+    tool: 'csv-to-ics',
+    group: 'Spreadsheets and data',
+    card: 'CSV to ICS',
+    blurb: 'Turn a spreadsheet of dates into a calendar file',
+    title: 'CSV to ICS: turn a spreadsheet into a calendar file',
+    h1: 'Convert CSV or Excel to an ICS calendar file',
+    lede: 'Turn a spreadsheet of events into an .ics file you can add to your calendar. Choose which columns hold the title and the start and end dates, then import the file in Apple Calendar, Google Calendar or Outlook. The file is built in your browser.',
+    description: 'Turn a CSV or Excel list of events into an .ics calendar file in your browser. Apple Calendar, Google Calendar and Outlook import it, and nothing is uploaded.',
+    more: {
+      h2: 'What the calendar file holds',
+      paras: [
+        'Each row becomes one event in the file. The page writes the title, the start, the end, the location and the description, and leaves your other columns out. Times are written without a time zone, so the calendar app that imports the file decides which zone they belong to. That is what you want for your own calendar, and it is worth checking if you send the file to someone in another country.',
+        'An all day row has a start date and no time. Its end date in the file is the day after the last day, because the calendar format treats the end date as exclusive; the page does this for you. If a timed event has no end time, it lasts one hour.',
+        'Repeating events are not expanded and no repeat rule is written. If your sheet holds a weekly meeting, each row is one meeting. Rows with no title or no readable start date are skipped, and the page tells you how many it skipped and which rows they were.',
+      ],
+    },
+    steps: [
+      'Drop in a .csv, .tsv or .xlsx file, or paste the rows.',
+      'Check which column holds the title, the start and the end, and whether your dates are month first or day first.',
+      'Click Download .ics, then open the file in Apple Calendar, Google Calendar or Outlook.',
+    ],
+    faq: [
+      {
+        q: 'Does it handle repeating events?',
+        a: 'No. Each row becomes one event, and no repeat rule is written. A weekly meeting needs a row for every date, or you can add the repeat in the calendar app after you import the file.',
+      },
+      {
+        q: 'Which time zone are the times in?',
+        a: 'The times are written without a time zone, so the calendar app places them in its own time zone. That is the right choice when you import the file into your own calendar. If your sheet uses a different zone, the times will land at the clock time written.',
+      },
+      {
+        q: 'Can I import the file into Google Calendar?',
+        a: 'Yes. Google Calendar on a computer has an Import option in its settings that takes .ics files, and you pick which calendar gets the events. Apple Calendar imports the same file with File > Import, and Outlook opens it as a new calendar you can save.',
+      },
+      PRIVATE,
+      LIMIT,
     ],
   },
 ];
