@@ -235,6 +235,23 @@ export const FORMATS: Record<string, Format> = {
       'The simplicity has a cost. There are no data types, so a program has to guess whether 02134 is a number or a zip code, and whether 3/4 is a date. There is one table per file, no formatting and no formulas. And the separator is not always a comma: in much of Europe it is a semicolon, because the comma is the decimal mark there, which is the usual reason a CSV opens in a single column.',
     ],
   },
+  ics: {
+    id: 'ics',
+    name: 'ICS',
+    full: 'iCalendar (.ics)',
+    facts: {
+      kind: 'Calendar data in plain text (iCalendar)',
+      since: '1998, RFC 2445; current rules RFC 5545 from 2009',
+      by: 'IETF',
+      goodFor: 'Moving events between calendar apps',
+      watch: 'Repeating events and time zones are handled differently by each app',
+      opens: 'Apple Calendar, Google Calendar, Outlook, most phone calendars',
+    },
+    paras: [
+      'An .ics file holds a calendar, or a piece of one: events with a title, start and end, and optional place and notes. Each event is a block of lines between BEGIN:VEVENT and END:VEVENT, and the whole file sits between BEGIN:VCALENDAR and END:VCALENDAR. A calendar app can import the file, and a single event can be sent as an invitation.',
+      'Times can be written without a time zone, in UTC, or with a named zone. With no zone, the app that opens the file places the event in its own time zone, which is what a personal import usually wants. Repeating events carry a rule instead of a copy for every date, and apps do not all expand that rule the same way.',
+    ],
+  },
   tsv: {
     id: 'tsv',
     name: 'TSV',
