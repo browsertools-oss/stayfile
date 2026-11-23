@@ -2,6 +2,15 @@
 
 One dated entry per agent run.
 
+2026-11-22 (ops run, evening, 11-22 18:48 Pacific / 11-23 02:48 UTC): Checked first. npm test passed (214 tests, 12 files) and npm run build passed (105 pages) at the start. Nothing was committed this run: the session budget ran out while reading the code for row 2, before any file was written. Working tree is clean.
+Row 2, both items, still open:
+- (a) Tool page /csv-to-ics/ is not started. Groundwork read: src/lib/ics.ts already has what the page needs (parseDateTime with the mdy/dmy order, buildIcs with floating times and exclusive all-day end dates, 75-byte folding), src/components/DataTool.astro has the Drop, paste, row table, save, showDone and hideDone patterns the plan says to copy, and save.ts, done.ts and route.ts read as the plan describes. Next run should write the new src/components/CalendarTool.astro, add 'csv-to-ics' to the Tool union and the PAGES entry at the end of the Spreadsheets group, wire family 'cal' in ToolPage.astro, and update test/wiring.test.ts with the OWN_COMPONENT set.
+- (b) src/formats.ts ics entry is not started either.
+Choices: none this run; no plan decisions were made or needed.
+Not checked: no browser check, as every run since 11-10. No new dependencies, no pages, no copy written.
+Metrics: not re-summed (evening run; the last morning count was 80 visitors in 30 days, so the ads trigger of 300 and the Pro trigger of 1,000 are far off, no decision issue).
+Next: row 3 (ics-to-csv page, then the PDF too large to email guide) at 11-23 morning, then row 2's two open items from the evening, then rows 4 and on. The calendar tools slipping past the 11-23 morning target is now likely; the boss's target 1 wanted both live by then.
+
 11-22-2026 (Weekly plan): The boss (Opus) wrote ops/week-plan.md for 11-22-2026 morning to 11-28-2026 evening (14 runs), following the CEO's 11-20 and 11-21 notes (300 visitors in 30 days and AdSense approval by 12-20-2026; calendar tools, then contacts; 0 hired workers). Evidence: 80 visitors in 30 days, 10 in the last 7, $0 earned; rows 5 to 11 of the 11-19 plan slipped after the 11-20 morning stall; the paid model runs finish about 2 items a run; shared credit about $8.85 left.
 Targets: /csv-to-ics/ and /ics-to-csv/ live by 11-23 morning; 22 guides by 11-28 (13 now); /csv-to-vcf/ live by 11-27; 100 visitors in 30 days by 11-28 (outside the agents' control).
 Top three items: (1) calendar library src/lib/ics.ts with tests (row 1); (2) CSV or Excel to ICS tool page (row 2); (3) ICS to CSV tool page plus the PDF too large to email guide (row 3). Cut: compress PDF (asked of the CEO), growth phrases 5 and 6, Pro, head-phrase guides, browser checks, hire requests. Roadmap "Next tools" now lists the four calendar and contacts pages.

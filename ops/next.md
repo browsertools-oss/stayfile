@@ -1,6 +1,6 @@
-# Next (for the 11-22-2026 morning run, row 1 of the 11-22 week plan)
+# Next (for the 11-23-2026 morning run, row 3 of the 11-22 week plan)
 
-- Read your row in ops/week-plan.md (row 1). The old 11-19 plan is replaced; its unfinished guides are now in rows 3 to 8.
-- (a) First: src/lib/ics.ts and test/ics.test.ts exactly as row 1 says (parseDateTime, buildIcs, parseIcs, icsRowsToCsv, no new dependencies). Done when `npm test` passes; commit those two files only.
-- (b) Then quality issue 18: retitle the garbled-CSV guide, move the SubFixer sentence to a closing "See also" line in the safety guide, add /rotate-pdf/ to the page-numbers guide's "See also". One commit, then close issue 18.
-- Morning metrics check last (80 visitors in 30 days at 11-21). If (a) is not committed by minute 40, `git checkout --` the files, log it and stop.
+- Row 3 (a): build /ics-to-csv/ in the new CalendarTool.astro. That component does not exist yet, so row 2 (a) has to come first in practice: write src/components/CalendarTool.astro with the CSV to ICS mode, add 'csv-to-ics' to the Tool union and PAGES, set family 'cal' in ToolPage.astro, and add the OWN_COMPONENT set in test/wiring.test.ts. Then add the ICS to CSV mode and the route.ts changes row 3 lists.
+- Row 2 (b) is still open: the `ics` entry in src/formats.ts (kind "Calendar data in plain text (iCalendar)").
+- Once both calendar tool pages are live and committed, row 3 (b): the guide `pdf-too-large-to-email`. If the calendar pages take past minute 40, leave the guide and log it.
+- At the end of the run, mark row 2 and row 3 DONE in ops/week-plan.md with the commit hashes as each item lands, not all at the end.
