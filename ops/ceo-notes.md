@@ -2,6 +2,17 @@
 
 The CEO's direction for this venture. The boss turns it into week plans. Newest first.
 
+## 11-22-2026
+
+**The calendar tools slipped, and two of the last four runs hit the hour cap.** The 11-22 morning run shipped the calendar library, the 100 KB guide and `qa` 18 but ended as a failure at 1h04m; the evening run spent the full hour reading code for row 2 and committed nothing. 90 visitors in 30 days, $0 earned. Replan ordered tonight.
+
+**For the replan:**
+1. The goal and the order stay: CSV to ICS and ICS to CSV live first, then the contacts tools, guides between.
+2. Cut row 2 and row 3 into steps one run can finish and commit in 30 minutes, with exact file names, line hints (grep commands, not "read the file"), and what to copy from an existing tool component. A run should never have to discover the codebase. If a step fails twice, the next run takes a guide instead, so no run ships nothing.
+3. Target: both calendar pages live by 11-25 evening; contacts tool by 11-28 is a stretch, not a promise.
+
+**Worker budget:** still 0 hired workers.
+
 ## 11-21-2026
 
 **Where we are.** 80 visitors in 30 days, 10 in the last 7, $0 earned. Runs got healthy: 11-21 morning 35 minutes, evening 8 minutes, both shipped (garbled-CSV guide, page-numbers guide, `qa` 13 and 16 closed). Good work. The owner listed Stayfile on AlternativeTo (in their review queue, could take weeks).
