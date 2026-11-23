@@ -10,6 +10,7 @@ const jsonld = [
     headline: title,
     description,
     datePublished: '2026-11-17',
+    dateModified: '2026-11-23',
     author: { '@type': 'Organization', name: 'Stayfile' },
     publisher: { '@type': 'Organization', name: 'Stayfile' },
   },
@@ -40,6 +41,11 @@ const jsonld = [
   <h2>On Windows: there is no built-in way</h2>
   <p>Windows 10 and 11 cannot join PDFs without extra software. "Microsoft Print to PDF" prints one document at a time and cannot append files. The free desktop routes involve installing a PDF program, which is more than most people want for a two-minute job.</p>
   <p>The browser route is <a href="/merge-pdf/">Merge PDF</a>. Drop in the files, set the order with the arrows, and save. It runs entirely in your browser: the files are read on your machine, the combined PDF is made there, and nothing is uploaded. That matters when the PDFs are contracts, statements or anything you would not email to a stranger. The page works the same on a Mac or a phone, so it is the one method that covers every device you own.</p>
+
+  <h2>Combining PDFs without Adobe Acrobat</h2>
+  <p>Adobe Acrobat Reader is free and opens, prints and signs PDFs, but joining files is not one of the free features. The Combine Files command belongs to the paid Acrobat application. If Reader offers it, the next screen asks you to subscribe or start a trial. Nothing is wrong with your copy; that limit is the product design.</p>
+  <p>You do not need Acrobat for this job. On a Mac, Preview does it without buying anything: open the files, show the thumbnails, and drag pages from one into the other, as the Mac section above describes. On an iPhone or iPad, the Files app makes a single PDF from the selected files. Both are already on the device.</p>
+  <p>On Windows, with no built-in tool and no Acrobat licence, <a href="/merge-pdf/">Merge PDF</a> covers it in the browser. It costs nothing, needs no install, and works the same on a Mac or a phone if you would rather not use the built-in route. The choice comes down to which tool is already in front of you, not to which one you have to buy.</p>
 
   <h2>Reordering and trimming before or after</h2>
   <p>Merging appends whole files in the order you set. If one of the sources needs pages removed first, do that step before merging with <a href="/remove-pages-from-pdf/">Remove pages from PDF</a>, or pull just the pages you need with <a href="/extract-pages-from-pdf/">Extract pages from PDF</a>. Both make a new PDF and leave the original untouched.</p>
