@@ -3247,7 +3247,7 @@ export const GROUP_SHORT: Record<Group, string> = { PDF: 'PDF', Images: 'Images'
 export const GUIDES: { slug: string; title: string; blurb: string }[] = [
   {
     slug: 'iphone-heic-photos-to-jpg',
-    title: 'iPhone HEIC photos: convert to JPG and stop getting them',
+    title: "iPhone HEIC photos won't open on Windows? Convert to JPG",
     blurb: 'What HEIC is, why Windows will not open it, and how to fix it on the phone and on the PC.',
   },
   {

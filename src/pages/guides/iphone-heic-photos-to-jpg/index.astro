@@ -1,7 +1,7 @@
 ---
 import Base from '../../../layouts/Base.astro';
 import { SITE } from '../../../site';
-const title = 'iPhone HEIC photos: convert to JPG and stop getting them';
+const title = "iPhone HEIC photos won't open on Windows? Convert to JPG";
 const description = 'Why iPhones save photos as HEIC, why Windows and upload forms refuse them, and how to turn the photos you have into JPG.';
 const jsonld = [
   {
@@ -10,6 +10,7 @@ const jsonld = [
     headline: title,
     description,
     datePublished: '2026-11-16',
+    dateModified: '2026-11-23',
     author: { '@type': 'Organization', name: 'Stayfile' },
     publisher: { '@type': 'Organization', name: 'Stayfile' },
   },
@@ -44,6 +45,12 @@ const jsonld = [
   <h2>Open HEIC on Windows without converting</h2>
   <p>If you would rather read HEIC files on the PC as they are, install the HEIF Image Extensions from the Microsoft Store. It is free. For most photos you will also need the HEVC Video Extensions, which usually costs about a dollar, or the free device-manufacturer version if your PC offers it. Once both are in place, File Explorer shows thumbnails and the Photos app opens the files.</p>
   <p>That route fixes one computer. It does nothing for a HEIC photo you email to a colleague, print at a shop, or upload to a form. Converting to JPG fixes every destination at once, which is why it is the better habit when the photo has to leave your devices.</p>
+
+  <h2>When Windows Photos asks for an extension</h2>
+  <p>Windows can open a HEIC photo in the Photos app, but not by itself. The first time you double-click one, Photos may say it cannot open the file or offer to look for an extension in the Microsoft Store. That message means the PC has no HEIF decoder, not that the photo is damaged. The file is fine; Windows is missing the part that reads it.</p>
+  <p>The Store offers two pieces. HEIF Image Extensions is free and lets Photos and File Explorer show HEIC pictures. Many photos also need HEVC Video Extensions, which usually costs about a dollar unless your PC maker offers the free device-manufacturer version. Install both and the same double-click works, with thumbnails in File Explorer.</p>
+  <p>Two catches. This fixes only that PC; the photo still will not open on another computer, in a browser other than Safari, or on most upload forms. And the extensions do not convert anything, so you still hold HEIC files that other people cannot read.</p>
+  <p>Converting the photo to JPG settles it for every destination at once. <a href="/heic-to-jpg/">HEIC to JPG</a> reads the file in the browser, needs no extension from the Store, and works the same on Windows, a Mac and a Chromebook. Install the extensions if you want to look at HEIC files on this one PC; convert when the photo has to leave it.</p>
 
   <h2>What you keep and what you lose</h2>
   <p>Converting here means decoding each photo to raw pixels and encoding a fresh file. A few things follow from that:</p>
