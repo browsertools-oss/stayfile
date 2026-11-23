@@ -3201,6 +3201,7 @@ export const PAGES: ToolPage[] = [
     slug: 'ics-to-csv',
     tool: 'ics-to-csv',
     group: 'Spreadsheets and data',
+    guide: 'export-calendar-to-excel',
     card: 'ICS to CSV',
     blurb: 'List every event of a calendar file in a spreadsheet',
     title: 'ICS to CSV: open a calendar file in Excel',
@@ -3326,5 +3327,10 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'pdf-too-large-to-email',
     title: 'PDF too large to email? Ways to make it smaller',
     blurb: 'Why the attachment bounces, and the fixes in order: fewer pages, parts, a rebuilt scan, or a link.',
+  },
+  {
+    slug: 'export-calendar-to-excel',
+    title: 'How to export a Google or Outlook calendar to Excel',
+    blurb: 'Get a calendar file from Google, Outlook or Apple Calendar, then turn its events into spreadsheet rows.',
   },
 ];

@@ -1,0 +1,61 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to export a Google or Outlook calendar to Excel';
+const description = 'Google, Outlook and Apple Calendar can all hand you a calendar file. Turn it into a spreadsheet with one row per event, ready to count or filter in Excel.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-23',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/export-calendar-to-excel/" jsonld={jsonld}>
+  <h1>How to export a Google or Outlook calendar to Excel</h1>
+  <p class="lede">No calendar app exports straight to an Excel workbook, but each one can give you a calendar file, and that file becomes a spreadsheet in a minute. This guide covers the export route in Google Calendar, Outlook and Apple Calendar, then the conversion to rows you can count and filter in Excel.</p>
+
+  <h2>Google Calendar: export the calendar</h2>
+  <p>Google Calendar on a computer has an export page. Open Settings with the gear icon, find Import and export, and click Export. Google builds a zip file that holds one .ics file for every calendar in the account.</p>
+  <p>Unzip the download first. Each .ics file is named after its calendar, so you can see which is which before you convert anything. Pick the one you need and ignore the rest.</p>
+  <p>If you only want one calendar, open Settings and select that calendar in the left column instead. Its settings page has its own Export calendar link, which downloads that single .ics file without the zip.</p>
+
+  <h2>Classic Outlook for Windows: save a calendar file</h2>
+  <p>In the classic Outlook desktop application, open the calendar, then choose File and Save Calendar. Outlook saves an .ics file. Under More options you can choose the date range, so a whole year does not have to become one enormous file. The .ics is the format to use when you want every field: subject, start, end, place and notes.</p>
+  <p>Classic Outlook can also write a CSV of the calendar directly. Choose File, then Open and Export, then Import/Export. Pick Export to a file, then Comma Separated Values, choose the Calendar folder and a date range, and save. The new Outlook for Windows and Outlook on the web may not offer this CSV export, so use the .ics route there and convert it.</p>
+
+  <h2>Apple Calendar on a Mac</h2>
+  <p>Select the calendar in the sidebar, then choose File, Export, and Export again. Calendar writes an .ics file with the events of that calendar. A Mac can also import and re-export a Google calendar, which is handy when the Google export page is easier to reach on a phone than on a computer.</p>
+
+  <h2>Turn the calendar file into rows in Excel</h2>
+  <p>An .ics file is plain text, so Excel cannot lay it out as a table by itself. <a href="/ics-to-csv/">ICS to CSV</a> does that step in your browser. Drop the .ics file on the page, check the preview, and download the list as .xlsx or .csv.</p>
+  <ol>
+    <li>Drop the .ics file, or paste its text.</li>
+    <li>Check the preview. Every event should have a start date; if the file held no events, the preview stays empty.</li>
+    <li>Download .xlsx to open the list as a workbook, or .csv to import it into another program. The CSV starts with a byte order mark so Excel shows accented names correctly.</li>
+  </ol>
+  <p>The columns are title, start date, start time, end date, end time, all day, location, description, repeats and time zone. That is enough for a pivot table or a filter.</p>
+
+  <h2>What to do with the list in Excel</h2>
+  <p>A calendar export answers questions that the calendar view does not. Sort by the title column to group every meeting with one client, then use a pivot table on the start date and the time to add up hours per client per month. Or filter the start date column to a date range and count the rows to see how many events fall inside a quarter.</p>
+  <p>The all day column separates full-day entries from timed ones, so a holiday does not distort an hours total. The location column is useful for expense claims that ask where a meeting took place.</p>
+
+  <h2>What the spreadsheet will not show</h2>
+  <p>Repeating events are not expanded. A weekly meeting appears once, with its rule in the Repeats column, not once for every week. If you need one row per date, expand the rule in Excel or keep the events in the calendar app.</p>
+  <p>A time written in UTC is shown in the time zone of the computer that converts the file, so it matches the clock on your desk. A time with a named zone keeps the clock time as written, and the zone name goes in the Time zone column. A time with no zone is left alone, because the file does not say where it belongs.</p>
+  <p>The exported file is a copy. Changing rows in Excel does not change the calendar, and deleting the file does not delete any events.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li>Google Calendar: Settings, Import and export, Export, then unzip.</li>
+    <li>Classic Outlook: File, Save Calendar for an .ics; the CSV export is under File, Open and Export.</li>
+    <li>Apple Calendar: select the calendar, File, Export.</li>
+    <li>Convert the .ics with <a href="/ics-to-csv/">ICS to CSV</a> and open the list in Excel.</li>
+    <li>Repeats appear once with their rule, and UTC times use your computer's time zone.</li>
+  </ul>
+  <p>See also: <a href="/guides/csv-garbled-characters-excel/">Why a CSV shows odd characters in Excel</a> covers accented names in the exported list, and <a href="/guides/csv-opens-in-one-column-in-excel/">Why a CSV opens in one column in Excel</a> covers a list that refuses to split into columns.</p>
+</Base>
