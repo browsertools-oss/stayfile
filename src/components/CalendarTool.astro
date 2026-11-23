@@ -3,33 +3,49 @@ import Drop from './Drop.astro';
 import type { Tool } from '../site';
 interface Props { tool: Tool; slug: string }
 const { tool, slug } = Astro.props;
+const toCsv = tool === 'ics-to-csv';
+const accept = toCsv ? '.ics,text/calendar' : '.csv,.tsv,.txt,.xlsx,text/csv';
+const main = toCsv ? 'Drop an .ics calendar file here, or <u>choose one</u>' : 'Drop a CSV or Excel file here, or <u>choose one</u>';
+const pasteLabel = toCsv ? 'Or paste the calendar text' : 'Or paste CSV';
+const placeholder = toCsv
+  ? 'BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:Team lunch\nDTSTART:20261122T123000\nEND:VEVENT\nEND:VCALENDAR'
+  : 'title,start date,start time,location\nTeam lunch,11/22/2026,12:30,Cafe';
 ---
 <section class="tool" data-tool={tool} data-slug={slug}>
-  <Drop accept=".csv,.tsv,.txt,.xlsx,text/csv" main="Drop a CSV or Excel file here, or <u>choose one</u>" sub="or paste below" />
+  <Drop accept={accept} main={main} sub="or paste below" />
   <ul class="files" id="list"></ul>
   <div id="pasteWrap">
-    <label class="hint" for="input" style="display:block;margin:12px 0 6px">Or paste CSV</label>
-    <textarea id="input" rows="6" spellcheck="false" placeholder="title,start date,start time,location&#10;Team lunch,11/22/2026,12:30,Cafe"></textarea>
+    <label class="hint" for="input" style="display:block;margin:12px 0 6px">{pasteLabel}</label>
+    <textarea id="input" rows="6" spellcheck="false" placeholder={placeholder}></textarea>
   </div>
   <button type="button" class="link" id="showText" hidden>Edit the text</button>
 
-  <div class="opts" id="pickers" hidden>
-    <label>Title <select id="f-title"></select></label>
-    <label>Start <select id="f-start"></select></label>
-    <label>Start time <select id="f-startTime"></select></label>
-    <label>End <select id="f-end"></select></label>
-    <label>End time <select id="f-endTime"></select></label>
-    <label>All day <select id="f-allDay"></select></label>
-    <label>Location <select id="f-location"></select></label>
-    <label>Description <select id="f-description"></select></label>
-    <label>Dates are written <select id="order">
-      <option value="mdy">Month first (11/22/2026)</option>
-      <option value="dmy">Day first (22/11/2026)</option>
-    </select></label>
-  </div>
+  {!toCsv && (
+    <div class="opts" id="pickers" hidden>
+      <label>Title <select id="f-title"></select></label>
+      <label>Start <select id="f-start"></select></label>
+      <label>Start time <select id="f-startTime"></select></label>
+      <label>End <select id="f-end"></select></label>
+      <label>End time <select id="f-endTime"></select></label>
+      <label>All day <select id="f-allDay"></select></label>
+      <label>Location <select id="f-location"></select></label>
+      <label>Description <select id="f-description"></select></label>
+      <label>Dates are written <select id="order">
+        <option value="mdy">Month first (11/22/2026)</option>
+        <option value="dmy">Day first (22/11/2026)</option>
+      </select></label>
+    </div>
+  )}
 
   <div class="actions">
-    <button type="button" class="primary" id="go" disabled>Download .ics</button>
+    {toCsv ? (
+      <>
+        <button type="button" class="primary" id="goCsv" disabled>Download .csv</button>
+        <button type="button" class="secondary" id="goXlsx" disabled>Download .xlsx</button>
+      </>
+    ) : (
+      <button type="button" class="primary" id="go" disabled>Download .ics</button>
+    )}
     <span class="status" id="status" aria-live="polite"></span>
   </div>
   <div class="done" id="done" role="status" hidden></div>
@@ -40,95 +56,17 @@ const { tool, slug } = Astro.props;
 
 <script>
   import { parseCsv } from '../lib/data';
-  import { baseName, save } from '../lib/save';
-  import { parseDateTime, buildIcs } from '../lib/ics';
+  import { baseName, save, withBom } from '../lib/save';
+  import { parseDateTime, buildIcs, parseIcs, icsRowsToCsv, type IcsRow } from '../lib/ics';
   import { savedLine } from '../lib/route';
   import { showDone, hideDone } from '../lib/done';
 
   const root = document.querySelector<HTMLElement>('.tool')!;
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
-  const input = $<HTMLTextAreaElement>('input')!, drop = $('drop')!, status = $('status')!, err = $('err')!, list = $('list')!, go = $<HTMLButtonElement>('go')!;
-
-  const FIELDS = ['title', 'start', 'startTime', 'end', 'endTime', 'allDay', 'location', 'description'] as const;
-  type Field = (typeof FIELDS)[number];
-  const REQUIRED: Field[] = ['title', 'start'];
-  // Header words that suggest a column, checked in order. A start or end guess never takes a "time" column.
-  const GUESS: Record<Field, string[]> = {
-    title: ['subject', 'title', 'event', 'name', 'summary'],
-    start: ['start date', 'start', 'date', 'begin'],
-    startTime: ['start time', 'time'],
-    end: ['end date', 'end', 'finish'],
-    endTime: ['end time'],
-    allDay: ['all day event', 'all day', 'allday'],
-    location: ['location', 'place', 'venue', 'where'],
-    description: ['description', 'notes', 'details'],
-  };
-
-  interface Ev {
-    title: string;
-    start: string;
-    startTime?: string;
-    end?: string;
-    endTime?: string;
-    allDay: boolean;
-    location?: string;
-    description?: string;
-  }
-
+  const input = $<HTMLTextAreaElement>('input')!, drop = $('drop')!, status = $('status')!, err = $('err')!, list = $('list')!, doneEl = $('done')!;
+  const toCsv = root.dataset.tool === 'ics-to-csv';
   const MAX = 10;
   let name = 'calendar';
-  let header: string[] = [];
-  let rows: string[][] = [];
-  let events: Ev[] = [];
-  let skippedRows: number[] = [];
-  let map: Record<Field, number> = { title: -1, start: -1, startTime: -1, end: -1, endTime: -1, allDay: -1, location: -1, description: -1 };
-
-  const order = () => $<HTMLSelectElement>('order')!.value as 'mdy' | 'dmy';
-
-  function guess(field: Field): number {
-    const skipTime = field === 'start' || field === 'end';
-    for (const key of GUESS[field]) {
-      let i = header.findIndex((h) => h.toLowerCase() === key);
-      if (i < 0) i = header.findIndex((h) => h.toLowerCase().includes(key) && !(skipTime && /time/.test(h.toLowerCase())));
-      if (i >= 0) return i;
-    }
-    return -1;
-  }
-
-  function fillSelect(id: string, field: Field) {
-    const el = $<HTMLSelectElement>(id)!;
-    el.innerHTML = '';
-    if (!REQUIRED.includes(field)) {
-      const none = document.createElement('option');
-      none.value = '';
-      none.textContent = '(none)';
-      el.append(none);
-    }
-    header.forEach((h, i) => {
-      const o = document.createElement('option');
-      o.value = String(i);
-      o.textContent = h || `column ${i + 1}`;
-      el.append(o);
-    });
-  }
-
-  function readMap() {
-    for (const f of FIELDS) {
-      const el = $<HTMLSelectElement>(`f-${f}`)!;
-      map[f] = el.value === '' ? -1 : Number(el.value);
-    }
-  }
-
-  function renderPickers() {
-    for (const f of FIELDS) fillSelect(`f-${f}`, f);
-    map = { title: -1, start: -1, startTime: -1, end: -1, endTime: -1, allDay: -1, location: -1, description: -1 };
-    for (const f of FIELDS) map[f] = guess(f);
-    if (map.title < 0) map.title = 0;
-    if (map.start < 0) map.start = header.findIndex((h) => /date/i.test(h));
-    if (map.start < 0) map.start = header.length > 1 ? 1 : 0;
-    for (const f of FIELDS) $<HTMLSelectElement>(`f-${f}`)!.value = map[f] < 0 ? '' : String(map[f]);
-    $('pickers')!.hidden = false;
-  }
 
   function table(head: string[], body: string[][]) {
     const th = $('thead')!, tb = $('tbody')!;
@@ -146,120 +84,271 @@ const { tool, slug } = Astro.props;
     $('tableWrap')!.hidden = !body.length;
   }
 
-  const cell = (r: string[], f: Field) => (map[f] < 0 ? '' : (r[map[f]] ?? '')).trim();
-  const clock = (text: string) => (text ? parseDateTime(`2000-01-01 ${text}`, 'mdy')?.time : undefined);
-  const prettyDate = (d?: string) => (d ? `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}` : '');
-  const prettyTime = (t?: string) => (t ? `${t.slice(0, 2)}:${t.slice(2, 4)}` : '');
-
-  function build() {
-    events = [];
-    skippedRows = [];
-    const o = order();
-    rows.forEach((r, i) => {
-      const title = cell(r, 'title');
-      const startText = cell(r, 'start');
-      const start = startText ? parseDateTime(startText, o) : null;
-      if (!title || !start) { skippedRows.push(i + 2); return; }
-      const startTime = clock(cell(r, 'startTime')) ?? start.time;
-      const endText = cell(r, 'end');
-      const end = endText ? parseDateTime(endText, o) : null;
-      const endTime = clock(cell(r, 'endTime')) ?? end?.time;
-      const flagged = /^(yes|true|1|x)$/i.test(cell(r, 'allDay'));
-      events.push({
-        title,
-        start: start.date,
-        startTime,
-        end: end?.date,
-        endTime,
-        allDay: flagged || !startTime,
-        location: cell(r, 'location') || undefined,
-        description: cell(r, 'description') || undefined,
-      });
-    });
-  }
-
-  function render() {
-    err.hidden = true;
-    hideDone($('done'));
-    if (!rows.length) { status.textContent = ''; $('pickers')!.hidden = true; table([], []); go.disabled = true; return; }
-    build();
-    go.disabled = !events.length;
-    table(['Title', 'Start', 'End', 'All day'], events.slice(0, MAX).map((e) => [
-      e.title,
-      `${prettyDate(e.start)}${e.allDay ? '' : ` ${prettyTime(e.startTime)}`}`,
-      `${prettyDate(e.end ?? e.start)}${!e.allDay && e.endTime ? ` ${prettyTime(e.endTime)}` : ''}`,
-      e.allDay ? 'Yes' : 'No',
-    ]));
-    const n = events.length, s = skippedRows.length;
-    const listed = skippedRows.slice(0, 3).join(', ') + (s > 3 ? ', …' : '');
-    status.textContent = `${n} event${n === 1 ? '' : 's'}, ${s} row${s === 1 ? '' : 's'} skipped${s ? ` (rows ${listed})` : ''}.`;
-  }
-
-  function parseText(text: string) {
-    if (!text.trim()) { rows = []; header = []; render(); return; }
-    const p = parseCsv(text, { typed: false });
-    header = p.fields.map((h) => String(h ?? ''));
-    rows = (p.rows as Record<string, unknown>[]).map((r) => header.map((h) => {
-      const v = r[h];
-      return v == null ? '' : String(v);
-    }));
-    renderPickers();
-    render();
-  }
-
-  let timer = 0;
-  input.addEventListener('input', () => { clearTimeout(timer); timer = window.setTimeout(() => {
-    try { parseText(input.value); } catch (e) { err.textContent = (e as Error).message; err.hidden = false; }
-  }, 250); });
-  root.querySelectorAll('#pickers select').forEach((el) => el.addEventListener('change', () => { readMap(); render(); }));
-
-  drop.addEventListener('files', async (e) => {
-    const all = (e as CustomEvent<File[]>).detail;
-    const f = all[0];
+  function showFile(f: File) {
     name = baseName(f.name);
     list.innerHTML = '';
     const li = document.createElement('li');
     li.innerHTML = '<span class="name"></span>';
     li.querySelector('.name')!.textContent = f.name;
     list.append(li);
-    try {
-      if (/\.xlsx$/i.test(f.name)) {
-        const { xlsxToCsv } = await import('../lib/xlsx');
-        const wb = xlsxToCsv(new Uint8Array(await f.arrayBuffer()));
-        input.value = wb.csv;
-      } else {
-        input.value = await f.text();
-      }
-      parseText(input.value);
-    } catch (e) {
-      input.value = '';
-      rows = []; header = []; render();
-      err.textContent = (e as Error).message;
-      err.hidden = false;
-      return;
-    }
     drop.classList.add('compact');
     $('pasteWrap')!.hidden = true;
     $('showText')!.hidden = false;
-  });
+  }
+
   $('showText')!.addEventListener('click', () => {
     $('pasteWrap')!.hidden = false;
     $('showText')!.hidden = true;
     input.focus();
   });
 
-  go.addEventListener('click', () => {
-    if (!events.length) return;
-    const blob = new Blob([buildIcs(events)], { type: 'text/calendar' });
-    const file = `${name}.ics`;
-    save(blob, file);
-    showDone({
-      el: $('done')!, slug: root.dataset.slug!, line: savedLine(file), again: () => save(blob, file),
-      reset: () => {
-        input.value = ''; list.innerHTML = ''; name = 'calendar';
-        drop.classList.remove('compact'); $('pasteWrap')!.hidden = false; $('showText')!.hidden = true;
-        rows = []; header = []; render();
-      },
+  const resetAll = () => {
+    input.value = ''; list.innerHTML = ''; name = 'calendar';
+    drop.classList.remove('compact'); $('pasteWrap')!.hidden = false; $('showText')!.hidden = true;
+  };
+
+  if (toCsv) {
+    const goCsv = $<HTMLButtonElement>('goCsv')!, goXlsx = $<HTMLButtonElement>('goXlsx')!;
+    let events: IcsRow[] = [];
+
+    function render() {
+      err.hidden = true;
+      hideDone(doneEl);
+      if (!input.value.trim()) { events = []; status.textContent = ''; table([], []); goCsv.disabled = true; goXlsx.disabled = true; return; }
+      table(['Title', 'Start date', 'Start time', 'End date', 'All day'], events.slice(0, MAX).map((e) => [
+        e.title, e.startDate, e.startTime, e.endDate, e.allDay,
+      ]));
+      status.textContent = `${events.length} event${events.length === 1 ? '' : 's'} found.`;
+      goCsv.disabled = !events.length;
+      goXlsx.disabled = !events.length;
+    }
+
+    function parseCalendar(text: string) {
+      events = text.trim() ? parseIcs(text) : [];
+      render();
+    }
+
+    let timer = 0;
+    input.addEventListener('input', () => { clearTimeout(timer); timer = window.setTimeout(() => {
+      try { parseCalendar(input.value); } catch (e) { err.textContent = (e as Error).message; err.hidden = false; }
+    }, 250); });
+
+    drop.addEventListener('files', async (e) => {
+      const f = (e as CustomEvent<File[]>).detail[0];
+      showFile(f);
+      try {
+        input.value = await f.text();
+        parseCalendar(input.value);
+      } catch (e) {
+        input.value = ''; events = []; render();
+        err.textContent = (e as Error).message; err.hidden = false;
+      }
     });
-  });
+
+    goCsv.addEventListener('click', () => {
+      if (!events.length) return;
+      const blob = new Blob([withBom(icsRowsToCsv(events))], { type: 'text/csv' });
+      const file = `${name}.csv`;
+      save(blob, file);
+      showDone({ el: doneEl, slug: root.dataset.slug!, line: savedLine(file), again: () => save(blob, file), reset: () => { resetAll(); events = []; render(); } });
+    });
+    goXlsx.addEventListener('click', async () => {
+      if (!events.length) return;
+      goXlsx.disabled = true;
+      status.textContent = 'Building workbook…';
+      try {
+        const { csvToXlsx } = await import('../lib/xlsx');
+        const bytes = csvToXlsx(icsRowsToCsv(events), { delimiter: ',', header: true, typed: false, sheetName: name });
+        goXlsx.disabled = false;
+        render();
+        const blob = new Blob([bytes as BlobPart], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const file = `${name}.xlsx`;
+        save(blob, file);
+        showDone({ el: doneEl, slug: root.dataset.slug!, line: savedLine(file), again: () => save(blob, file), reset: () => { resetAll(); events = []; render(); } });
+      } catch (e) {
+        goXlsx.disabled = false;
+        render();
+        err.textContent = (e as Error).message; err.hidden = false;
+      }
+    });
+  } else {
+    const FIELDS = ['title', 'start', 'startTime', 'end', 'endTime', 'allDay', 'location', 'description'] as const;
+    type Field = (typeof FIELDS)[number];
+    const REQUIRED: Field[] = ['title', 'start'];
+    // Header words that suggest a column, checked in order. A start or end guess never takes a "time" column.
+    const GUESS: Record<Field, string[]> = {
+      title: ['subject', 'title', 'event', 'name', 'summary'],
+      start: ['start date', 'start', 'date', 'begin'],
+      startTime: ['start time', 'time'],
+      end: ['end date', 'end', 'finish'],
+      endTime: ['end time'],
+      allDay: ['all day event', 'all day', 'allday'],
+      location: ['location', 'place', 'venue', 'where'],
+      description: ['description', 'notes', 'details'],
+    };
+
+    interface Ev {
+      title: string;
+      start: string;
+      startTime?: string;
+      end?: string;
+      endTime?: string;
+      allDay: boolean;
+      location?: string;
+      description?: string;
+    }
+
+    const go = $<HTMLButtonElement>('go')!;
+    let header: string[] = [];
+    let rows: string[][] = [];
+    let events: Ev[] = [];
+    let skippedRows: number[] = [];
+    let map: Record<Field, number> = { title: -1, start: -1, startTime: -1, end: -1, endTime: -1, allDay: -1, location: -1, description: -1 };
+
+    const order = () => $<HTMLSelectElement>('order')!.value as 'mdy' | 'dmy';
+
+    function guess(field: Field): number {
+      const skipTime = field === 'start' || field === 'end';
+      for (const key of GUESS[field]) {
+        let i = header.findIndex((h) => h.toLowerCase() === key);
+        if (i < 0) i = header.findIndex((h) => h.toLowerCase().includes(key) && !(skipTime && /time/.test(h.toLowerCase())));
+        if (i >= 0) return i;
+      }
+      return -1;
+    }
+
+    function fillSelect(id: string, field: Field) {
+      const el = $<HTMLSelectElement>(id)!;
+      el.innerHTML = '';
+      if (!REQUIRED.includes(field)) {
+        const none = document.createElement('option');
+        none.value = '';
+        none.textContent = '(none)';
+        el.append(none);
+      }
+      header.forEach((h, i) => {
+        const o = document.createElement('option');
+        o.value = String(i);
+        o.textContent = h || `column ${i + 1}`;
+        el.append(o);
+      });
+    }
+
+    function readMap() {
+      for (const f of FIELDS) {
+        const el = $<HTMLSelectElement>(`f-${f}`)!;
+        map[f] = el.value === '' ? -1 : Number(el.value);
+      }
+    }
+
+    function renderPickers() {
+      for (const f of FIELDS) fillSelect(`f-${f}`, f);
+      map = { title: -1, start: -1, startTime: -1, end: -1, endTime: -1, allDay: -1, location: -1, description: -1 };
+      for (const f of FIELDS) map[f] = guess(f);
+      if (map.title < 0) map.title = 0;
+      if (map.start < 0) map.start = header.findIndex((h) => /date/i.test(h));
+      if (map.start < 0) map.start = header.length > 1 ? 1 : 0;
+      for (const f of FIELDS) $<HTMLSelectElement>(`f-${f}`)!.value = map[f] < 0 ? '' : String(map[f]);
+      $('pickers')!.hidden = false;
+    }
+
+    const cell = (r: string[], f: Field) => (map[f] < 0 ? '' : (r[map[f]] ?? '')).trim();
+    const clock = (text: string) => (text ? parseDateTime(`2000-01-01 ${text}`, 'mdy')?.time : undefined);
+    const prettyDate = (d?: string) => (d ? `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}` : '');
+    const prettyTime = (t?: string) => (t ? `${t.slice(0, 2)}:${t.slice(2, 4)}` : '');
+
+    function build() {
+      events = [];
+      skippedRows = [];
+      const o = order();
+      rows.forEach((r, i) => {
+        const title = cell(r, 'title');
+        const startText = cell(r, 'start');
+        const start = startText ? parseDateTime(startText, o) : null;
+        if (!title || !start) { skippedRows.push(i + 2); return; }
+        const startTime = clock(cell(r, 'startTime')) ?? start.time;
+        const endText = cell(r, 'end');
+        const end = endText ? parseDateTime(endText, o) : null;
+        const endTime = clock(cell(r, 'endTime')) ?? end?.time;
+        const flagged = /^(yes|true|1|x)$/i.test(cell(r, 'allDay'));
+        events.push({
+          title,
+          start: start.date,
+          startTime,
+          end: end?.date,
+          endTime,
+          allDay: flagged || !startTime,
+          location: cell(r, 'location') || undefined,
+          description: cell(r, 'description') || undefined,
+        });
+      });
+    }
+
+    function render() {
+      err.hidden = true;
+      hideDone(doneEl);
+      if (!rows.length) { status.textContent = ''; $('pickers')!.hidden = true; table([], []); go.disabled = true; return; }
+      build();
+      go.disabled = !events.length;
+      table(['Title', 'Start', 'End', 'All day'], events.slice(0, MAX).map((e) => [
+        e.title,
+        `${prettyDate(e.start)}${e.allDay ? '' : ` ${prettyTime(e.startTime)}`}`,
+        `${prettyDate(e.end ?? e.start)}${!e.allDay && e.endTime ? ` ${prettyTime(e.endTime)}` : ''}`,
+        e.allDay ? 'Yes' : 'No',
+      ]));
+      const n = events.length, s = skippedRows.length;
+      const listed = skippedRows.slice(0, 3).join(', ') + (s > 3 ? ', …' : '');
+      status.textContent = `${n} event${n === 1 ? '' : 's'}, ${s} row${s === 1 ? '' : 's'} skipped${s ? ` (rows ${listed})` : ''}.`;
+    }
+
+    function parseText(text: string) {
+      if (!text.trim()) { rows = []; header = []; render(); return; }
+      const p = parseCsv(text, { typed: false });
+      header = p.fields.map((h) => String(h ?? ''));
+      rows = (p.rows as Record<string, unknown>[]).map((r) => header.map((h) => {
+        const v = r[h];
+        return v == null ? '' : String(v);
+      }));
+      renderPickers();
+      render();
+    }
+
+    let timer = 0;
+    input.addEventListener('input', () => { clearTimeout(timer); timer = window.setTimeout(() => {
+      try { parseText(input.value); } catch (e) { err.textContent = (e as Error).message; err.hidden = false; }
+    }, 250); });
+    root.querySelectorAll('#pickers select').forEach((el) => el.addEventListener('change', () => { readMap(); render(); }));
+
+    drop.addEventListener('files', async (e) => {
+      const all = (e as CustomEvent<File[]>).detail;
+      const f = all[0];
+      showFile(f);
+      try {
+        if (/\.xlsx$/i.test(f.name)) {
+          const { xlsxToCsv } = await import('../lib/xlsx');
+          const wb = xlsxToCsv(new Uint8Array(await f.arrayBuffer()));
+          input.value = wb.csv;
+        } else {
+          input.value = await f.text();
+        }
+        parseText(input.value);
+      } catch (e) {
+        input.value = '';
+        rows = []; header = []; render();
+        err.textContent = (e as Error).message;
+        err.hidden = false;
+      }
+    });
+
+    go.addEventListener('click', () => {
+      if (!events.length) return;
+      const blob = new Blob([buildIcs(events)], { type: 'text/calendar' });
+      const file = `${name}.ics`;
+      save(blob, file);
+      showDone({
+        el: doneEl, slug: root.dataset.slug!, line: savedLine(file), again: () => save(blob, file),
+        reset: () => { resetAll(); rows = []; header = []; render(); },
+      });
+    });
+  }
 </script>

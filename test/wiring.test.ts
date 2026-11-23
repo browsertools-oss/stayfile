@@ -41,7 +41,7 @@ describe('route.ts next-step maps', () => {
 describe('DataTool.astro', () => {
   test('every data-family page tool has a Download label', () => {
     // The calendar and contacts pages have their own components.
-    const OWN_COMPONENT = new Set(['csv-to-ics']);
+    const OWN_COMPONENT = new Set(['csv-to-ics', 'ics-to-csv']);
     const dataTools = new Set(PAGES.filter((p) => p.group === 'Spreadsheets and data').map((p) => p.tool));
     expect(dataTools.size).toBeGreaterThan(0);
     for (const t of dataTools) {

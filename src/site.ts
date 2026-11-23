@@ -40,6 +40,7 @@ export type Tool =
   | 'yaml-to-csv'
   | 'yaml-to-xlsx'
   | 'csv-to-ics'
+  | 'ics-to-csv'
   | 'csv-to-yaml'
   | 'csv-to-sql'
   | 'xlsx-to-sql'
@@ -3189,6 +3190,46 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Can I import the file into Google Calendar?',
         a: 'Yes. Google Calendar on a computer has an Import option in its settings that takes .ics files, and you pick which calendar gets the events. Apple Calendar imports the same file with File > Import, and Outlook opens it as a new calendar you can save.',
+      },
+      PRIVATE,
+      LIMIT,
+    ],
+  },
+  {
+    slug: 'ics-to-csv',
+    tool: 'ics-to-csv',
+    group: 'Spreadsheets and data',
+    card: 'ICS to CSV',
+    blurb: 'List every event of a calendar file in a spreadsheet',
+    title: 'ICS to CSV: open a calendar file in Excel',
+    h1: 'Convert an ICS calendar file to CSV or Excel',
+    lede: 'Open a calendar file in Excel or Google Sheets. Every event in the .ics file becomes one row with its dates, place and notes, and the list saves as a CSV or an Excel workbook. The file is read in your browser.',
+    description: 'Turn an .ics calendar file into a CSV or Excel list in your browser. Each event becomes a row with its dates, place and notes. Nothing is uploaded.',
+    more: {
+      h2: 'What each row holds',
+      paras: [
+        'The columns match the event fields: title, start date, start time, end date, end time, all day, location, description, repeats and time zone. An all day event has dates only. The end date shown is the last day of the event, not the day after, because the calendar format stores an exclusive end date and the page adjusts it back.',
+        'A time written in UTC is shown in the time zone of the computer reading the file, so it matches the clock on your desk. A time with a named zone keeps the clock time as written, and the zone name goes in the Time zone column. A time with no zone is left as it is, because the file does not say where it belongs.',
+        'Repeating events are not expanded. A weekly meeting is one row, and its rule sits in the Repeats column. The CSV download starts with a byte order mark so Excel shows accented names correctly.',
+      ],
+    },
+    steps: [
+      'Drop an .ics file, or paste the calendar text.',
+      'Check the preview of the events.',
+      'Download the list as a .csv or .xlsx file.',
+    ],
+    faq: [
+      {
+        q: 'Are repeating events listed for every date?',
+        a: 'No. Each repeating event is one row, and its rule is written in the Repeats column. A weekly meeting is one row, not one row per week. If you need every date, expand the rule in the spreadsheet or keep the events in a calendar app.',
+      },
+      {
+        q: 'Why is a Time zone column empty?',
+        a: 'A time written in UTC is shown in the time zone of your computer and has no zone name to show. A time with a named zone keeps the clock time, and the zone name goes in that column. A time with no zone has nothing to put there.',
+      },
+      {
+        q: 'Where do I get an .ics file from Google Calendar?',
+        a: 'In Google Calendar on a computer, open Settings and find Import and export. Export downloads a zip file with one .ics for each calendar, so unzip it first and pick the calendar you want.',
       },
       PRIVATE,
       LIMIT,
