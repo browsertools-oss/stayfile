@@ -3157,6 +3157,7 @@ export const PAGES: ToolPage[] = [
     slug: 'csv-to-ics',
     tool: 'csv-to-ics',
     group: 'Spreadsheets and data',
+    guide: 'import-spreadsheet-into-apple-calendar',
     card: 'CSV to ICS',
     blurb: 'Turn a spreadsheet of dates into a calendar file',
     title: 'CSV to ICS: turn a spreadsheet into a calendar file',
@@ -3272,5 +3273,10 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'photo-under-100kb-for-a-form',
     title: 'How to get a photo under 100 KB for an online form',
     blurb: 'Why a phone photo is far over the limit, and the resize then compress order that gets it under.',
+  },
+  {
+    slug: 'import-spreadsheet-into-apple-calendar',
+    title: 'How to import an Excel or CSV list into Apple Calendar',
+    blurb: 'Why Calendar needs an .ics file, and how to convert a sheet and import it on a Mac, iPhone or Google Calendar.',
   },
 ];

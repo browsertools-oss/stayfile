@@ -1,0 +1,70 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to import an Excel or CSV list into Apple Calendar';
+const description = 'Apple Calendar imports .ics files but not CSV or Excel. Turn the list into a calendar file, then import it on a Mac, an iPhone or Google Calendar.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-23',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/import-spreadsheet-into-apple-calendar/" jsonld={jsonld}>
+  <h1>How to import an Excel or CSV list into Apple Calendar</h1>
+  <p class="lede">Apple Calendar cannot open a CSV or Excel file, so a spreadsheet of events has to become an .ics calendar file before anything will import it. This guide covers tidying the sheet, converting it in the browser, and importing the result on a Mac, an iPhone or Google Calendar.</p>
+
+  <h2>Why the list has to become an .ics file first</h2>
+  <p>Apple Calendar on a Mac imports .ics files through File, then Import. CSV and Excel are not on that list. The iPhone Calendar app has no import button at all, so there is nothing to tap even if the phone can open the spreadsheet.</p>
+  <p>An .ics file is a plain text file in the iCalendar format, the same format used for meeting invitations sent by email. Each event is a short block of lines inside the file, with a title, a start, an optional end, and optional place and notes. Every calendar app reads that format, which is why it is the one to convert to.</p>
+  <p>The good news is that a calendar list is a simple table. If each row holds one event and one column holds the date, the conversion is mostly a matter of telling a tool which column is which.</p>
+
+  <h2>Tidy the sheet before you convert</h2>
+  <p>Spend two minutes on the spreadsheet first. Most failed imports come from the sheet, not from the converter.</p>
+  <ul>
+    <li>One row per event, with a header row that names every column.</li>
+    <li>A title column and a start date column are required. Everything else is optional.</li>
+    <li>Useful optional columns: start time, end date, end time, location, and a notes or description column.</li>
+    <li>Keep the date column in one style. Mixing real Excel dates with typed text in the same column is the usual cause of events landing on the wrong day.</li>
+    <li>One event per cell. Two dates in one cell cannot be split into two events.</li>
+  </ul>
+  <p>If the file is an Excel workbook and you want a plain CSV before you start, <a href="/excel-to-csv/">Excel to CSV</a> saves the first sheet as comma-separated text with the values as they appear in the cells.</p>
+
+  <h2>Turn the sheet into an .ics file</h2>
+  <p><a href="/csv-to-ics/">CSV to ICS</a> does the conversion in your browser. The file is never uploaded, so a sheet of client meetings or family dates stays on your computer.</p>
+  <ol>
+    <li>Drop the .csv, .tsv or .xlsx file on the page, or paste the rows.</li>
+    <li>Check the column picker. The page guesses Title, Start, Start time, End, Location and the rest from the header names, and you can change any of them.</li>
+    <li>Set "Dates are written" to Month first or Day first, whichever matches your sheet. Slash dates such as 11/22/2026 are read in that order.</li>
+    <li>Read the line under the preview. It says how many events were built and how many rows were skipped. Fix a skipped row by giving it a title and a readable date.</li>
+    <li>Click Download .ics and keep the file.</li>
+  </ol>
+  <p>Rows that hold a date and no time become all day events. A timed event with no end time lasts one hour in the file. Each row becomes one event; if the same meeting repeats every week, it needs a row for each date.</p>
+
+  <h2>Import it into Calendar on a Mac</h2>
+  <ol>
+    <li>Open Calendar.</li>
+    <li>Choose File, then Import, and pick the .ics file you downloaded.</li>
+    <li>Choose which calendar gets the events, then confirm the import.</li>
+  </ol>
+  <p>Create an empty calendar first, with File and New Calendar, and import into that one. If the column choices were wrong, you can undo the whole import by deleting that calendar instead of hunting for individual events. Check the first few events against the spreadsheet before you delete anything, and compare one all day event and one timed event.</p>
+
+  <h2>Put the events on an iPhone</h2>
+  <p>The iPhone Calendar app has no import button, so the file has to reach the phone another way. The direct route is to send yourself the .ics file by email and open the attachment on the phone, then add the events it offers. For a long list this is tedious but it works.</p>
+  <p>The easier route for a big import is a Mac signed in to the same iCloud account. Import the file into an iCloud calendar on the Mac, and the events appear on the iPhone through iCloud. If you do not have a Mac, the Google Calendar route below also syncs to an iPhone once the Google account is added to the phone.</p>
+
+  <h2>Import the same file into Google Calendar</h2>
+  <p>Google Calendar on a computer reads the same .ics file. Open its settings, find Import and export, choose the file, and pick the calendar that should receive the events. After the import, those events sync to every device signed in to that Google account, including an iPhone with the Google account added.</p>
+
+  <h2>What the converted file does not do</h2>
+  <p>Repeating events are not written. Each row is one event, with no repeat rule, so a weekly meeting becomes one meeting on one date unless you give it a row for every week. You can add the repeat in the calendar app afterwards.</p>
+  <p>Times are written without a time zone. The calendar app that imports the file places them in its own time zone, which is what you want for your own calendar. If you send the file to someone in another country, their calendar will read the same clock times in their zone.</p>
+  <p>Columns the page does not use are left out. The title, start, end, location and description are written, and nothing else travels with the event. The saved file is named after the spreadsheet, with .ics on the end, so the original CSV or Excel file is untouched.</p>
+
+  <p>See also: <a href="/guides/csv-opens-in-one-column-in-excel/">Why a CSV opens in one column in Excel</a> covers the separator problem that stops a list loading in the first place. <a href="/guides/csv-garbled-characters-excel/">Why a CSV shows odd characters in Excel</a> covers accented names in the same list.</p>
+</Base>
