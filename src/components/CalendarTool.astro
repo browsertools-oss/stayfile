@@ -29,6 +29,7 @@ const { tool, slug } = Astro.props;
   </div>
 
   <div class="actions">
+    <button type="button" class="primary" id="go" disabled>Download .ics</button>
     <span class="status" id="status" aria-live="polite"></span>
   </div>
   <div class="done" id="done" role="status" hidden></div>
@@ -39,12 +40,14 @@ const { tool, slug } = Astro.props;
 
 <script>
   import { parseCsv } from '../lib/data';
-  import { baseName } from '../lib/save';
-  import { parseDateTime } from '../lib/ics';
+  import { baseName, save } from '../lib/save';
+  import { parseDateTime, buildIcs } from '../lib/ics';
+  import { savedLine } from '../lib/route';
+  import { showDone, hideDone } from '../lib/done';
 
   const root = document.querySelector<HTMLElement>('.tool')!;
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
-  const input = $<HTMLTextAreaElement>('input')!, drop = $('drop')!, status = $('status')!, err = $('err')!, list = $('list')!;
+  const input = $<HTMLTextAreaElement>('input')!, drop = $('drop')!, status = $('status')!, err = $('err')!, list = $('list')!, go = $<HTMLButtonElement>('go')!;
 
   const FIELDS = ['title', 'start', 'startTime', 'end', 'endTime', 'allDay', 'location', 'description'] as const;
   type Field = (typeof FIELDS)[number];
@@ -177,8 +180,10 @@ const { tool, slug } = Astro.props;
 
   function render() {
     err.hidden = true;
-    if (!rows.length) { status.textContent = ''; $('pickers')!.hidden = true; table([], []); return; }
+    hideDone($('done'));
+    if (!rows.length) { status.textContent = ''; $('pickers')!.hidden = true; table([], []); go.disabled = true; return; }
     build();
+    go.disabled = !events.length;
     table(['Title', 'Start', 'End', 'All day'], events.slice(0, MAX).map((e) => [
       e.title,
       `${prettyDate(e.start)}${e.allDay ? '' : ` ${prettyTime(e.startTime)}`}`,
@@ -241,5 +246,20 @@ const { tool, slug } = Astro.props;
     $('pasteWrap')!.hidden = false;
     $('showText')!.hidden = true;
     input.focus();
+  });
+
+  go.addEventListener('click', () => {
+    if (!events.length) return;
+    const blob = new Blob([buildIcs(events)], { type: 'text/calendar' });
+    const file = `${name}.ics`;
+    save(blob, file);
+    showDone({
+      el: $('done')!, slug: root.dataset.slug!, line: savedLine(file), again: () => save(blob, file),
+      reset: () => {
+        input.value = ''; list.innerHTML = ''; name = 'calendar';
+        drop.classList.remove('compact'); $('pasteWrap')!.hidden = false; $('showText')!.hidden = true;
+        rows = []; header = []; render();
+      },
+    });
   });
 </script>
