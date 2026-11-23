@@ -13,6 +13,21 @@ const { tool, slug } = Astro.props;
   </div>
   <button type="button" class="link" id="showText" hidden>Edit the text</button>
 
+  <div class="opts" id="pickers" hidden>
+    <label>Title <select id="f-title"></select></label>
+    <label>Start <select id="f-start"></select></label>
+    <label>Start time <select id="f-startTime"></select></label>
+    <label>End <select id="f-end"></select></label>
+    <label>End time <select id="f-endTime"></select></label>
+    <label>All day <select id="f-allDay"></select></label>
+    <label>Location <select id="f-location"></select></label>
+    <label>Description <select id="f-description"></select></label>
+    <label>Dates are written <select id="order">
+      <option value="mdy">Month first (11/22/2026)</option>
+      <option value="dmy">Day first (22/11/2026)</option>
+    </select></label>
+  </div>
+
   <div class="actions">
     <span class="status" id="status" aria-live="polite"></span>
   </div>
@@ -30,13 +45,76 @@ const { tool, slug } = Astro.props;
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
   const input = $<HTMLTextAreaElement>('input')!, drop = $('drop')!, status = $('status')!, err = $('err')!, list = $('list')!;
 
+  const FIELDS = ['title', 'start', 'startTime', 'end', 'endTime', 'allDay', 'location', 'description'] as const;
+  type Field = (typeof FIELDS)[number];
+  const REQUIRED: Field[] = ['title', 'start'];
+  // Header words that suggest a column, checked in order. A start or end guess never takes a "time" column.
+  const GUESS: Record<Field, string[]> = {
+    title: ['subject', 'title', 'event', 'name', 'summary'],
+    start: ['start date', 'start', 'date', 'begin'],
+    startTime: ['start time', 'time'],
+    end: ['end date', 'end', 'finish'],
+    endTime: ['end time'],
+    allDay: ['all day event', 'all day', 'allday'],
+    location: ['location', 'place', 'venue', 'where'],
+    description: ['description', 'notes', 'details'],
+  };
+
   let name = 'calendar';
   let header: string[] = [];
   let rows: string[][] = [];
+  let map: Record<Field, number> = { title: -1, start: -1, startTime: -1, end: -1, endTime: -1, allDay: -1, location: -1, description: -1 };
+
+  const order = () => $<HTMLSelectElement>('order')!.value as 'mdy' | 'dmy';
+
+  function guess(field: Field): number {
+    const skipTime = field === 'start' || field === 'end';
+    for (const key of GUESS[field]) {
+      let i = header.findIndex((h) => h.toLowerCase() === key);
+      if (i < 0) i = header.findIndex((h) => h.toLowerCase().includes(key) && !(skipTime && /time/.test(h.toLowerCase())));
+      if (i >= 0) return i;
+    }
+    return -1;
+  }
+
+  function fillSelect(id: string, field: Field) {
+    const el = $<HTMLSelectElement>(id)!;
+    el.innerHTML = '';
+    if (!REQUIRED.includes(field)) {
+      const none = document.createElement('option');
+      none.value = '';
+      none.textContent = '(none)';
+      el.append(none);
+    }
+    header.forEach((h, i) => {
+      const o = document.createElement('option');
+      o.value = String(i);
+      o.textContent = h || `column ${i + 1}`;
+      el.append(o);
+    });
+  }
+
+  function readMap() {
+    for (const f of FIELDS) {
+      const el = $<HTMLSelectElement>(`f-${f}`)!;
+      map[f] = el.value === '' ? -1 : Number(el.value);
+    }
+  }
+
+  function renderPickers() {
+    for (const f of FIELDS) fillSelect(`f-${f}`, f);
+    map = { title: -1, start: -1, startTime: -1, end: -1, endTime: -1, allDay: -1, location: -1, description: -1 };
+    for (const f of FIELDS) map[f] = guess(f);
+    if (map.title < 0) map.title = 0;
+    if (map.start < 0) map.start = header.findIndex((h) => /date/i.test(h));
+    if (map.start < 0) map.start = header.length > 1 ? 1 : 0;
+    for (const f of FIELDS) $<HTMLSelectElement>(`f-${f}`)!.value = map[f] < 0 ? '' : String(map[f]);
+    $('pickers')!.hidden = false;
+  }
 
   function render() {
     err.hidden = true;
-    if (!rows.length) { status.textContent = ''; return; }
+    if (!rows.length) { status.textContent = ''; $('pickers')!.hidden = true; return; }
     status.textContent = `${rows.length} row${rows.length === 1 ? '' : 's'}, ${header.length} column${header.length === 1 ? '' : 's'}.`;
   }
 
@@ -48,6 +126,7 @@ const { tool, slug } = Astro.props;
       const v = r[h];
       return v == null ? '' : String(v);
     }));
+    renderPickers();
     render();
   }
 
@@ -55,6 +134,7 @@ const { tool, slug } = Astro.props;
   input.addEventListener('input', () => { clearTimeout(timer); timer = window.setTimeout(() => {
     try { parseText(input.value); } catch (e) { err.textContent = (e as Error).message; err.hidden = false; }
   }, 250); });
+  root.querySelectorAll('#pickers select').forEach((el) => el.addEventListener('change', () => { readMap(); render(); }));
 
   drop.addEventListener('files', async (e) => {
     const all = (e as CustomEvent<File[]>).detail;
