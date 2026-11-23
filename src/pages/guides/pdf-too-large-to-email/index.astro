@@ -1,0 +1,58 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'PDF too large to email? Ways to make it smaller';
+const description = 'Why a big PDF bounces from Gmail or Outlook, and the fixes in order: remove pages, split the file, shrink scans, or send a link instead.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-23',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/pdf-too-large-to-email/" jsonld={jsonld}>
+  <h1>PDF too large to email? Ways to make it smaller</h1>
+  <p class="lede">Mail providers cap attachments at a size most PDFs can exceed, and a scan or a photo album reaches that cap easily. The fix is to send fewer pages, send them in parts, or rebuild a scanned PDF from smaller images. A link works when the file has to stay exactly as it is.</p>
+
+  <h2>Why a PDF that looks normal is too big for email</h2>
+  <p>Gmail and Yahoo Mail allow about 25 MB per message, and Outlook.com and iCloud Mail allow about 20 MB. Those are the limits you hit; the sender often sees a bounce or an error after the message is sent, not before.</p>
+  <p>Attachments also grow on the way out. Mail sends them encoded as text, and that adds about a third to the size. A 20 MB PDF can therefore fail under a 25 MB limit once it is encoded. Treat the limit as lower than the number in the help page.</p>
+  <p>Big PDFs are almost always scans or photos. Text saved from a word processor weighs very little, while every scanned page is a picture of a page, and a picture of a page is many times larger than the same words typed out. That is why a 40-page text document sends fine and a 12-page scan does not.</p>
+
+  <h2>Step 1: remove the pages nobody needs</h2>
+  <p>Most oversized PDFs carry pages the recipient does not want: a cover sheet, an appendix, the terms at the back, blank pages. Removing them is free and loses no quality on the pages that stay.</p>
+  <p>Use <a href="/remove-pages-from-pdf/">Remove pages from a PDF</a> to drop pages by number and save a new file. The remaining pages are copied as they are, so text stays selectable and images keep their resolution. A scan that loses half its pages often falls below the limit with nothing else changed.</p>
+
+  <h2>Step 2: send it in parts</h2>
+  <p>If every page matters, split the file and send two or three emails. <a href="/split-pdf/">Split PDF</a> cuts a file into the ranges you choose, or into one file per page. Ranges that follow the sections of the document are easier for the recipient to follow than an even cut through the middle of a chapter.</p>
+  <p>Put a number in the subject, such as "Report part 1 of 3", so the pieces stay together in the inbox. Splitting copies pages without re-encoding them, so each part opens exactly like the original.</p>
+
+  <h2>On a Mac: Preview can reduce the file size</h2>
+  <p>Mac Preview has a built-in compression option. Open the PDF, choose File, then Export, and set the Quartz Filter to Reduce File Size. Save under a new name so the original is untouched.</p>
+  <p>This filter lowers the quality of the images inside the PDF, sometimes a lot. Check the saved file on screen and print one page before you send it, especially if it holds small print or signatures. When the result is blurry, send it in parts instead.</p>
+
+  <h2>For a scan or a photo PDF: pictures, smaller pictures, then a PDF</h2>
+  <p>This route rebuilds the PDF and usually gives the smallest file, at a cost: the pages become images, so the text is no longer selectable and cannot be searched or copied.</p>
+  <ol>
+    <li>Turn the pages into images with <a href="/pdf-to-jpg/">PDF to JPG</a>. Choose Screen (96 dpi) for a file that will only be read on a screen, or Good (150 dpi) when it may be printed. The page images are saved as JPG at quality 92.</li>
+    <li>Shrink the images with <a href="/compress-image/">Compress image</a>. Its quality slider and maximum width box cut the size further, and it shows the old and new size of each file before you download.</li>
+    <li>Put the smaller images back into a PDF with <a href="/jpg-to-pdf/">JPG to PDF</a>. Each image becomes one page, and the JPG files are placed into the PDF as they are, not re-encoded, so the savings carry over.</li>
+  </ol>
+  <p>Stayfile has no one-click PDF compressor. This three-step route is the way to shrink a scanned PDF here, and it is honest about the trade: the text layer is gone afterwards.</p>
+
+  <h2>Building a PDF from photos: start smaller</h2>
+  <p>When you are making the PDF yourself, shrink the photos first. A phone photo is about 4000 pixels wide, and a page rarely needs more than about 1500. <a href="/compress-image/">Compress image</a> or the guide on <a href="/guides/make-a-photo-smaller-to-email/">making a photo smaller to email</a> takes the width down before the PDF exists, so there is nothing to shrink later.</p>
+  <p>The same page order applies when the photos are already in a PDF: images in, smaller images out, PDF rebuilt.</p>
+
+  <h2>Send a link instead of an attachment</h2>
+  <p>Sometimes the file has to stay exactly as it is, with its text, bookmarks and signatures intact. In that case, do not attach it. Put it in cloud storage and send the link.</p>
+  <p>Gmail offers Google Drive when an attachment is too large, and the recipient opens the file from the link. iCloud Mail offers Mail Drop, which takes files up to 5 GB and keeps them for a limited time. Both keep the original file unchanged, which is the point when the PDF is a signed contract or a drawing that must not be altered.</p>
+  <p>Check that the link is set to allow the recipient to open it, and say in the email how long it will stay available if the service puts an expiry on it.</p>
+
+  <p>See also: <a href="/guides/combine-pdf-files/">How to combine PDF files on Windows, Mac and iPhone</a> and <a href="/guides/make-a-photo-smaller-to-email/">How to make a photo smaller to email or upload</a>.</p>
+</Base>

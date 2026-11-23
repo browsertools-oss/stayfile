@@ -124,6 +124,7 @@ export const PAGES: ToolPage[] = [
     slug: 'split-pdf',
     tool: 'pdf-split',
     group: 'PDF',
+    guide: 'pdf-too-large-to-email',
     card: 'Split PDF',
     blurb: 'Break a PDF into several files',
     preset: { split: 'ranges' },
@@ -197,6 +198,7 @@ export const PAGES: ToolPage[] = [
     slug: 'remove-pages-from-pdf',
     tool: 'pdf-split',
     group: 'PDF',
+    guide: 'pdf-too-large-to-email',
     card: 'Remove PDF pages',
     blurb: 'Delete the pages you do not need',
     preset: { split: 'remove' },
@@ -1830,7 +1832,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'compress-image',
     tool: 'img-compress',
-    guide: 'make-a-photo-smaller-to-email',
+    guide: ['make-a-photo-smaller-to-email', 'pdf-too-large-to-email'],
     group: 'Images',
     card: 'Compress image',
     blurb: 'Shrink photos for email and upload forms',
@@ -3319,5 +3321,10 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'import-spreadsheet-into-apple-calendar',
     title: 'How to import an Excel or CSV list into Apple Calendar',
     blurb: 'Why Calendar needs an .ics file, and how to convert a sheet and import it on a Mac, iPhone or Google Calendar.',
+  },
+  {
+    slug: 'pdf-too-large-to-email',
+    title: 'PDF too large to email? Ways to make it smaller',
+    blurb: 'Why the attachment bounces, and the fixes in order: fewer pages, parts, a rebuilt scan, or a link.',
   },
 ];
