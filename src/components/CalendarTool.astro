@@ -40,6 +40,7 @@ const { tool, slug } = Astro.props;
 <script>
   import { parseCsv } from '../lib/data';
   import { baseName } from '../lib/save';
+  import { parseDateTime } from '../lib/ics';
 
   const root = document.querySelector<HTMLElement>('.tool')!;
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
@@ -60,9 +61,23 @@ const { tool, slug } = Astro.props;
     description: ['description', 'notes', 'details'],
   };
 
+  interface Ev {
+    title: string;
+    start: string;
+    startTime?: string;
+    end?: string;
+    endTime?: string;
+    allDay: boolean;
+    location?: string;
+    description?: string;
+  }
+
+  const MAX = 10;
   let name = 'calendar';
   let header: string[] = [];
   let rows: string[][] = [];
+  let events: Ev[] = [];
+  let skippedRows: number[] = [];
   let map: Record<Field, number> = { title: -1, start: -1, startTime: -1, end: -1, endTime: -1, allDay: -1, location: -1, description: -1 };
 
   const order = () => $<HTMLSelectElement>('order')!.value as 'mdy' | 'dmy';
@@ -112,10 +127,67 @@ const { tool, slug } = Astro.props;
     $('pickers')!.hidden = false;
   }
 
+  function table(head: string[], body: string[][]) {
+    const th = $('thead')!, tb = $('tbody')!;
+    th.innerHTML = ''; tb.innerHTML = '';
+    if (head.length) {
+      const tr = document.createElement('tr');
+      for (const h of head) { const c = document.createElement('th'); c.textContent = h; tr.append(c); }
+      th.append(tr);
+    }
+    for (const r of body) {
+      const tr = document.createElement('tr');
+      for (const v of r) { const c = document.createElement('td'); c.textContent = v; c.title = v; tr.append(c); }
+      tb.append(tr);
+    }
+    $('tableWrap')!.hidden = !body.length;
+  }
+
+  const cell = (r: string[], f: Field) => (map[f] < 0 ? '' : (r[map[f]] ?? '')).trim();
+  const clock = (text: string) => (text ? parseDateTime(`2000-01-01 ${text}`, 'mdy')?.time : undefined);
+  const prettyDate = (d?: string) => (d ? `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}` : '');
+  const prettyTime = (t?: string) => (t ? `${t.slice(0, 2)}:${t.slice(2, 4)}` : '');
+
+  function build() {
+    events = [];
+    skippedRows = [];
+    const o = order();
+    rows.forEach((r, i) => {
+      const title = cell(r, 'title');
+      const startText = cell(r, 'start');
+      const start = startText ? parseDateTime(startText, o) : null;
+      if (!title || !start) { skippedRows.push(i + 2); return; }
+      const startTime = clock(cell(r, 'startTime')) ?? start.time;
+      const endText = cell(r, 'end');
+      const end = endText ? parseDateTime(endText, o) : null;
+      const endTime = clock(cell(r, 'endTime')) ?? end?.time;
+      const flagged = /^(yes|true|1|x)$/i.test(cell(r, 'allDay'));
+      events.push({
+        title,
+        start: start.date,
+        startTime,
+        end: end?.date,
+        endTime,
+        allDay: flagged || !startTime,
+        location: cell(r, 'location') || undefined,
+        description: cell(r, 'description') || undefined,
+      });
+    });
+  }
+
   function render() {
     err.hidden = true;
-    if (!rows.length) { status.textContent = ''; $('pickers')!.hidden = true; return; }
-    status.textContent = `${rows.length} row${rows.length === 1 ? '' : 's'}, ${header.length} column${header.length === 1 ? '' : 's'}.`;
+    if (!rows.length) { status.textContent = ''; $('pickers')!.hidden = true; table([], []); return; }
+    build();
+    table(['Title', 'Start', 'End', 'All day'], events.slice(0, MAX).map((e) => [
+      e.title,
+      `${prettyDate(e.start)}${e.allDay ? '' : ` ${prettyTime(e.startTime)}`}`,
+      `${prettyDate(e.end ?? e.start)}${!e.allDay && e.endTime ? ` ${prettyTime(e.endTime)}` : ''}`,
+      e.allDay ? 'Yes' : 'No',
+    ]));
+    const n = events.length, s = skippedRows.length;
+    const listed = skippedRows.slice(0, 3).join(', ') + (s > 3 ? ', …' : '');
+    status.textContent = `${n} event${n === 1 ? '' : 's'}, ${s} row${s === 1 ? '' : 's'} skipped${s ? ` (rows ${listed})` : ''}.`;
   }
 
   function parseText(text: string) {
