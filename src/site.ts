@@ -41,6 +41,7 @@ export type Tool =
   | 'yaml-to-xlsx'
   | 'csv-to-ics'
   | 'ics-to-csv'
+  | 'csv-to-vcf'
   | 'csv-to-yaml'
   | 'csv-to-sql'
   | 'xlsx-to-sql'
@@ -3233,6 +3234,47 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Where do I get an .ics file from Google Calendar?',
         a: 'In Google Calendar on a computer, open Settings and find Import and export. Export downloads a zip file with one .ics for each calendar, so unzip it first and pick the calendar you want.',
+      },
+      PRIVATE,
+      LIMIT,
+    ],
+  },
+  {
+    slug: 'csv-to-vcf',
+    tool: 'csv-to-vcf',
+    group: 'Spreadsheets and data',
+    card: 'CSV to VCF',
+    blurb: 'Turn a contact list into a file your phone can import',
+    title: 'CSV to VCF: turn a contact spreadsheet into vCards',
+    h1: 'Convert CSV or Excel contacts to a VCF file',
+    lede: 'The iPhone Contacts app and iCloud import vCard (.vcf) files, not CSV or Excel, so a contact spreadsheet has to become a .vcf first. This page does that in your browser: one card per row, in vCard 3.0, which iCloud.com and the iPhone both accept.',
+    description: 'Turn a spreadsheet of contacts into a .vcf file for iPhone, Android or Outlook. One card per row, built in your browser. Nothing is uploaded.',
+    more: {
+      h2: 'What goes into the .vcf file',
+      paras: [
+        'Each row of the spreadsheet becomes one vCard. The card can hold a first name, a last name, a full name, an organization, a job title, a mobile number, a home phone, a work phone, two email addresses, a home address, a birthday and a note. You pick which column of the spreadsheet fills which field, so the sheet does not have to use any particular headings.',
+        'Some things do not go into the file. Photos and contact groups have no column here, so they are left out. A card holds one home address, so a second address in the sheet is ignored. Custom labels such as "main office" are not kept: a phone number is marked mobile, home or work. Any field you leave unmapped stays out of the card, and the phone shows only what is there.',
+        'The file is written as vCard 3.0, the version that iCloud, the iPhone Contacts app, Android and Outlook all read. Newer versions exist, but 3.0 is the one that imports without surprises. Line endings are the Windows style, which the format expects, and long notes are wrapped so a mail app does not cut them off. When you open the file, the phone offers to add the cards to an account you choose.',
+      ],
+    },
+    steps: [
+      'Drop a CSV or Excel file with one row per contact.',
+      'Check which column fills which field.',
+      'Download the .vcf file.',
+      'Open it on the phone and add the contacts.',
+    ],
+    faq: [
+      {
+        q: 'How do I get the file onto my iPhone?',
+        a: 'Email the .vcf to yourself or send it over AirDrop, open it on the phone and choose to add all contacts. On a computer you can also open Contacts on iCloud.com, import the vCard there, and it syncs to the phone.',
+      },
+      {
+        q: 'Is there a limit on how many contacts?',
+        a: 'There is no set limit here, because the file is built on your own computer. Some phone apps cap a free export at about 25 contacts, so if a list stops partway, check the app that made it.',
+      },
+      {
+        q: 'Do my contacts get uploaded?',
+        a: 'No. A contact list is other people\'s personal data, and this page never sends it anywhere. The spreadsheet is read and the .vcf is written in your browser, and closing the tab ends it.',
       },
       PRIVATE,
       LIMIT,

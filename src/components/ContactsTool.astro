@@ -1,0 +1,99 @@
+---
+import Drop from './Drop.astro';
+import type { Tool } from '../site';
+interface Props { tool: Tool; slug: string }
+const { tool, slug } = Astro.props;
+const accept = '.csv,.tsv,.txt,.xlsx,text/csv';
+const main = 'Drop a contact list (CSV or Excel) here, or <u>choose one</u>';
+const placeholder = 'first name,last name,mobile,email\nAna,Lima,+55 11 5555 0100,ana@example.com';
+---
+<section class="tool" data-tool={tool} data-slug={slug}>
+  <Drop accept={accept} main={main} sub="or paste below" />
+  <ul class="files" id="list"></ul>
+  <div id="pasteWrap">
+    <label class="hint" for="input" style="display:block;margin:12px 0 6px">Or paste CSV</label>
+    <textarea id="input" rows="6" spellcheck="false" placeholder={placeholder}></textarea>
+  </div>
+  <button type="button" class="link" id="showText" hidden>Edit the text</button>
+
+  <div class="actions">
+    <span class="status" id="status" aria-live="polite"></span>
+  </div>
+  <p class="error" id="err" role="alert" hidden></p>
+</section>
+
+<script>
+  import { parseCsv } from '../lib/data';
+  import { baseName } from '../lib/save';
+
+  const root = document.querySelector<HTMLElement>('.tool')!;
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
+  const input = $<HTMLTextAreaElement>('input')!, drop = $('drop')!, status = $('status')!, err = $('err')!, list = $('list')!;
+  let name = 'contacts';
+  let header: string[] = [];
+  let rows: string[][] = [];
+
+  function showFile(f: File) {
+    name = baseName(f.name);
+    list.innerHTML = '';
+    const li = document.createElement('li');
+    li.innerHTML = '<span class="name"></span>';
+    li.querySelector('.name')!.textContent = f.name;
+    list.append(li);
+    drop.classList.add('compact');
+    $('pasteWrap')!.hidden = true;
+    $('showText')!.hidden = false;
+  }
+
+  $('showText')!.addEventListener('click', () => {
+    $('pasteWrap')!.hidden = false;
+    $('showText')!.hidden = true;
+    input.focus();
+  });
+
+  const resetAll = () => {
+    input.value = ''; list.innerHTML = ''; name = 'contacts';
+    drop.classList.remove('compact'); $('pasteWrap')!.hidden = false; $('showText')!.hidden = true;
+  };
+
+  function render() {
+    err.hidden = true;
+    if (!rows.length) { status.textContent = ''; return; }
+    status.textContent = `${rows.length} row${rows.length === 1 ? '' : 's'}, ${header.length} column${header.length === 1 ? '' : 's'}.`;
+  }
+
+  function parseText(text: string) {
+    if (!text.trim()) { rows = []; header = []; render(); return; }
+    const p = parseCsv(text, { typed: false });
+    header = p.fields.map((h) => String(h ?? ''));
+    rows = (p.rows as Record<string, unknown>[]).map((r) => header.map((h) => {
+      const v = r[h];
+      return v == null ? '' : String(v);
+    }));
+    render();
+  }
+
+  let timer = 0;
+  input.addEventListener('input', () => { clearTimeout(timer); timer = window.setTimeout(() => {
+    try { parseText(input.value); } catch (e) { err.textContent = (e as Error).message; err.hidden = false; }
+  }, 250); });
+
+  drop.addEventListener('files', async (e) => {
+    const f = (e as CustomEvent<File[]>).detail[0];
+    showFile(f);
+    try {
+      if (/\.xlsx$/i.test(f.name)) {
+        const { xlsxToCsv } = await import('../lib/xlsx');
+        input.value = xlsxToCsv(new Uint8Array(await f.arrayBuffer())).csv;
+      } else {
+        input.value = await f.text();
+      }
+      parseText(input.value);
+    } catch (e) {
+      input.value = '';
+      rows = []; header = []; render();
+      err.textContent = (e as Error).message;
+      err.hidden = false;
+    }
+  });
+</script>
