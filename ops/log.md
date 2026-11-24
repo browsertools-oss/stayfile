@@ -7,11 +7,12 @@ Row 1, all steps: (0) qa 23, four guide fixes: cut "The good news is" in import-
 Row 2: parseVcf and vcfRowsToCsv (2.1, 3.0 and 4.0, bare TYPE params, quoted-printable, item1. prefixes, PHOTO skipped) with round-trip tests, 5615daf; the /csv-to-vcf/ shell (fa31ec7) and the 17-field column picker with header guessing (7ad7b09).
 Row 3: preview of the first 10 contacts, skipped-row count and Download .vcf (d5971df, one commit for preview and download because they share the same render pass); the VCF entry in formats.ts (135c235); /vcf-to-csv/ with CSV and XLSX downloads (4cdb40f) and the route wiring: Kind vcf, .vcf drops, label, both dataNext pairs, route test guard removed (134272c).
 Row 4: guide import-csv-contacts-into-iphone, 7 h2, about 950 words, guide set on csv-to-vcf. e2695b8.
-Row 5: guide export-iphone-contacts-to-excel, 7 h2, about 900 words, guide set on vcf-to-csv. b0031f5. Guides count is 19. The run ends at 243 tests and 113 pages.
+Row 5: guide export-iphone-contacts-to-excel, 7 h2, about 900 words, guide set on vcf-to-csv. b0031f5.
+Row 6: guide save-one-page-of-a-pdf, 7 h2, about 800 words, facts from extract and parseRanges in pdf.ts (range syntax, pages copied rather than redrawn); guide set on extract-pages-from-pdf and added to split-pdf's list. 5832910. Guides count is 20. The run ends at 247 tests and 115 pages.
 Choices: wrote datePublished 2026-11-24 (run date) on the row 4 guide though its row is 11-25. Did not link export-iphone-contacts-to-excel from it because that guide does not exist yet.
 Metrics: sum of the rows in ops/metrics.csv (11-09 to 11-23, blank as 0) is 90 visitors. Ads trigger 300 and Pro trigger 1,000 are far off; no decision issue.
 Not checked: no browser check, as every run since 11-10; verified by tests, the build and reading dist HTML.
-Next: row 6's guide save-one-page-of-a-pdf, then row 7's excel-to-csv sheet picker.
+Next: row 7's excel-to-csv sheet picker on the paid model, then row 8's rotate guide.
 
 11-23-2026 (Weekly plan, replan): The boss (Opus) rewrote ops/week-plan.md for 11-24-2026 morning to 11-29-2026 morning (11 runs), following the CEO's 11-23 replan order (contacts pulled forward, qa 23 first, "if your row is done take the next row" guardrail, deep guide backlog, one item a row from 11-28; 0 hired workers). Evidence: 90 visitors in 30 days, 20 in the last 7, $0 earned; the 11-23 morning run did rows 3 to 5 plus four backlog items in 38 minutes; the 11-22 and 11-23 evening runs committed no work; the old plan file was 55 KB.
 Targets: /csv-to-vcf/ and /vcf-to-csv/ live by 11-25; 23 guides by 11-28 (17 now); /excel-to-csv/ picks any sheet or saves every sheet by 11-27; 110 visitors in 30 days by 11-29 (outside the agents' control).
