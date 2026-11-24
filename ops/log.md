@@ -2,6 +2,16 @@
 
 One dated entry per agent run.
 
+2026-11-24 (ops run, morning, 06:48 Pacific / 14:48 UTC): Checked first. npm test passed (226 tests) and npm run build passed (110 pages) at the start; the run ends at 239 tests and 112 pages.
+Row 1, all steps: (0) qa 23, four guide fixes: cut "The good news is" in import-spreadsheet-into-apple-calendar and added the export-calendar-to-excel link to its See also; cut "honest about the trade" in pdf-too-large-to-email; added dateModified 2026-11-24 and the menu-names sentence to export-calendar-to-excel; cut the repeated HEIF and HEVC advice in the second Windows Photos section of iphone-heic-photos-to-jpg. Closed issue 23. bd29d55. (1) Exported escapeText, unescapeText and foldLine from ics.ts and moved the unfold loop into unfoldLines; ics tests unchanged. 1d3d318. (2) src/lib/vcard.ts buildVcf with test/vcard.test.ts. 8eb9d23.
+Row 2: parseVcf and vcfRowsToCsv (2.1, 3.0 and 4.0, bare TYPE params, quoted-printable, item1. prefixes, PHOTO skipped) with round-trip tests, 5615daf; the /csv-to-vcf/ shell (fa31ec7) and the 17-field column picker with header guessing (7ad7b09).
+Row 3: preview of the first 10 contacts, skipped-row count and Download .vcf (d5971df, one commit for preview and download because they share the same render pass); the VCF entry in formats.ts (135c235); /vcf-to-csv/ with CSV and XLSX downloads (4cdb40f) and the route wiring: Kind vcf, .vcf drops, label, both dataNext pairs, route test guard removed (134272c).
+Row 4: guide import-csv-contacts-into-iphone, 7 h2, about 950 words, guide set on csv-to-vcf. e2695b8. Guides count is 18.
+Choices: wrote datePublished 2026-11-24 (run date) on the row 4 guide though its row is 11-25. Did not link export-iphone-contacts-to-excel from it because that guide does not exist yet.
+Metrics: sum of the rows in ops/metrics.csv (11-09 to 11-23, blank as 0) is 90 visitors. Ads trigger 300 and Pro trigger 1,000 are far off; no decision issue.
+Not checked: no browser check, as every run since 11-10; verified by tests, the build and reading dist HTML.
+Next: rows 5 and 6 (the two contact and PDF guides), then row 7's excel-to-csv sheet picker.
+
 11-23-2026 (Weekly plan, replan): The boss (Opus) rewrote ops/week-plan.md for 11-24-2026 morning to 11-29-2026 morning (11 runs), following the CEO's 11-23 replan order (contacts pulled forward, qa 23 first, "if your row is done take the next row" guardrail, deep guide backlog, one item a row from 11-28; 0 hired workers). Evidence: 90 visitors in 30 days, 20 in the last 7, $0 earned; the 11-23 morning run did rows 3 to 5 plus four backlog items in 38 minutes; the 11-22 and 11-23 evening runs committed no work; the old plan file was 55 KB.
 Targets: /csv-to-vcf/ and /vcf-to-csv/ live by 11-25; 23 guides by 11-28 (17 now); /excel-to-csv/ picks any sheet or saves every sheet by 11-27; 110 visitors in 30 days by 11-29 (outside the agents' control).
 Top three items: (1) qa 23 and the contacts library src/lib/vcard.ts with tests (row 1); (2) the CSV to VCF tool page (rows 2 and 3); (3) the VCF to CSV page and the iPhone contacts import guide (rows 3 and 4). Cut: compress PDF (asked of the CEO again), SVG and Markdown guides, polish, head-phrase guides, Pro, hire requests.
