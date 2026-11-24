@@ -2586,7 +2586,7 @@ export const PAGES: ToolPage[] = [
     slug: 'csv-to-excel',
     tool: 'csv-to-xlsx',
     group: 'Spreadsheets and data',
-    guide: ['csv-opens-in-one-column-in-excel', 'excel-csv-leading-zeros'],
+    guide: ['csv-opens-in-one-column-in-excel', 'excel-csv-leading-zeros', 'stop-excel-changing-numbers-to-dates'],
     card: 'CSV to Excel',
     blurb: 'Save a CSV as a real .xlsx workbook',
     title: 'CSV to Excel converter: save CSV as XLSX online',
@@ -3339,6 +3339,11 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'iphone-heic-photos-to-jpg',
     title: "iPhone HEIC photos won't open on Windows? Convert to JPG",
     blurb: 'What HEIC is, why Windows will not open it, and how to fix it on the phone and on the PC.',
+  },
+  {
+    slug: 'stop-excel-changing-numbers-to-dates',
+    title: 'How to stop Excel turning numbers and codes into dates',
+    blurb: 'Why Excel reads 1-2 and 3/4 as dates, and how to keep codes and numbers exactly as written.',
   },
   {
     slug: 'remove-location-from-photo',

@@ -1,0 +1,48 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to stop Excel turning numbers and codes into dates';
+const description = 'Excel guesses types when it opens a CSV, so 1-2 becomes a date and long codes lose their shape. Turn the guess off, import as text, or convert without the guessing.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-24',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/stop-excel-changing-numbers-to-dates/" jsonld={jsonld}>
+  <h1>How to stop Excel turning numbers and codes into dates</h1>
+  <p class="lede">When Excel opens a CSV, it guesses what each column is, and its guess is often a date. A part number written 1-2 becomes 2-Jan, a score written 3/4 becomes the fourth of March, and a product code written MARCH1 becomes 1-Mar. The guessing is meant to be helpful. For a list of codes it destroys the data, and saving the file makes the change permanent.</p>
+
+  <h2>Why the values change</h2>
+  <p>A CSV file has no data types. Every cell is just text, and the program opening it has to decide whether 02134 is a number or a zip code, and whether 3/4 is a date or a fraction. Excel decides by pattern and by the date settings of the computer, and it does this as the file opens, before you see anything.</p>
+  <p>The damage happens on save. If you open the CSV, find the codes wrong, and save, Excel writes its guesses into the file. The original text is gone. The first rule of fixing this is to keep a copy of the original file before you open it in Excel, so you always have something to go back to.</p>
+
+  <h2>The gene names that became dates</h2>
+  <p>This problem is not only a nuisance for part numbers. In 2020 a committee that names human genes renamed several of them partly because spreadsheets kept reading the names as dates. SEPT1 became SEPTIN1 and MARCH1 became MARCHF1, along with others that ended in a number. Researchers had lost data to a spreadsheet's type guess often enough that renaming the genes was the practical fix.</p>
+  <p>If a naming committee changes the official names of genes to get around a spreadsheet, it is worth taking your own codes seriously.</p>
+
+  <h2>Turn off the guess in Microsoft 365</h2>
+  <p>Recent versions of Microsoft 365 have a setting for this. Choose File, then Options, then Data, and find Automatic data conversion. Among the switches is one for converting continuous letters and numbers to a date; turn it off. There are similar switches for leading zeros and for long numbers, which are worth turning off for the same reason. Menu names can differ a little between app versions.</p>
+  <p>Not every guess has a switch. A date written as a fraction may still be read as a date, so if the values still change, use one of the import routes below as well.</p>
+
+  <h2>Import the file as text</h2>
+  <p>The reliable way in Excel is to bring the file in through the text import, where you set the type of each column. Open a blank workbook, go to Data and choose From Text/CSV, and pick your file. In the preview window, press Transform Data to open the query editor. Select the column with the codes, and set its data type to Text. Do the same for any other column that must not be guessed, then load the result into the sheet.</p>
+  <p>A column set to Text keeps every value exactly as written, including leading zeros and dash-separated codes. It is a couple of extra clicks each time, and it is the safest route inside Excel.</p>
+
+  <h2>The apostrophe trick</h2>
+  <p>For values you type yourself, put an apostrophe before the value. Typing '1-2 gives a cell that shows 1-2 and holds the text 1-2. The apostrophe does not appear in the cell. This works well for a few cells and gets tedious for a whole column; a column already in a CSV needs one of the other routes.</p>
+
+  <h2>Convert the file without the guessing</h2>
+  <p><a href="/csv-to-excel/">CSV to Excel</a> reads the CSV and writes an .xlsx without opening it in Excel, so nothing is guessed the way Excel guesses. A value becomes a number only when it is plain digits with no leading zero, an optional minus sign, and at most one decimal point, or a value in scientific notation such as 1e5. Everything else stays text: 3/4, 1-2, MARCH1, 2026-11-06 and 02134 all keep their characters. Very long digit strings also stay text, because a number that long cannot be held exactly.</p>
+  <p>There is a checkbox on the page called Keep all values as text. Tick it and every cell is written as text, whatever it looks like. That is the choice for a list of codes, account numbers or anything with a leading zero. The conversion runs in your browser and the file is not uploaded. <a href="/tsv-to-excel/">TSV to Excel</a> does the same for a tab-separated file, which is what you get when you copy cells out of another spreadsheet.</p>
+
+  <h2>If the file is already saved with dates</h2>
+  <p>Once Excel has written its guesses into the CSV, the original text cannot be recovered from that file. Go back to the copy you kept, or to the system the list came from, and convert it again as text. If the dates are already in a workbook, changing the column format to General will not bring the text back; the value itself has to be corrected. <a href="/guides/excel-csv-leading-zeros/">Why Excel drops leading zeros in a CSV</a> covers the same kind of damage to codes that start with a zero.</p>
+  <p>See also: <a href="/guides/excel-csv-leading-zeros/">Why Excel drops leading zeros in a CSV</a> and <a href="/guides/csv-opens-in-one-column-in-excel/">Why a CSV opens in one column in Excel</a>.</p>
+</Base>
