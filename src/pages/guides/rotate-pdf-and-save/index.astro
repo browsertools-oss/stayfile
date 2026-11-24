@@ -1,0 +1,54 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to rotate a PDF and save it so it stays rotated';
+const description = 'Why the rotate buttons in a PDF viewer do not save, and how to turn pages for good in Mac Preview or in a browser tool, by 90, 180 or 270 degrees.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-24',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/rotate-pdf-and-save/" jsonld={jsonld}>
+  <h1>How to rotate a PDF and save it so it stays rotated</h1>
+  <p class="lede">A PDF that opens sideways stays sideways until the rotation is saved into the file. The rotate buttons most viewers show change the view on your screen only, so the page turns back as soon as you reopen it. This guide shows how to turn pages for good, either on a Mac or in a browser, and what changes in the file when you do.</p>
+
+  <h2>Why the rotate button does not stick</h2>
+  <p>A PDF stores the direction each page should be shown in. Many viewers let you turn the page on screen without touching that value, which is fine for reading a scan now and wrong for the next person or the next program that opens the file. The angle you set is kept only for as long as the window is open.</p>
+  <p>To test whether a rotation was saved, close the file and open it again. If the page is back to its old angle, the viewer changed the view and not the document.</p>
+
+  <h2>Rotate and save on a Mac</h2>
+  <p>Preview is the free PDF reader that comes with macOS, and its rotate command does write to the file. Open the PDF, then choose Tools and Rotate Left or Rotate Right, or press Cmd+L and Cmd+R. The shortcut works on the page you are looking at when the sidebar is hidden, and on the pages you select when it is shown.</p>
+  <p>After turning the page, choose File and Save, or press Cmd+S, before you close the document. Preview marks the file as edited until you save, and the turn is gone if you close it without saving. Menu names can differ a little between app versions.</p>
+  <p>To turn one page out of many, choose View and then Thumbnails so the pages appear in a side panel, click the page you want, then rotate and save.</p>
+
+  <h2>Rotate and save in the browser</h2>
+  <p>If you are not on a Mac, or the file is already open in a browser, <a href="/rotate-pdf/">Rotate PDF</a> does the job and saves the result as a new file. Drop the PDF on the page, pick Turn right, Turn left or Turn upside down, and press the button. The page tells you how many pages it turned, and the download holds the turned pages.</p>
+  <p>The work happens in your browser. The PDF is not uploaded to a server, which matters for a contract, a medical record or anything else you would not send to a stranger. The original file on your disk is not changed; you get a new one with the turned pages.</p>
+
+  <h2>Turning only some pages</h2>
+  <p>All the routes above can leave most of the document alone. In the browser tool, the page list under the PDF lets you choose which pages to turn; pages you leave out keep their angle. In Preview, select the thumbnails you want before you rotate.</p>
+  <p>If only one or two pages are wrong, this saves the rest of the document from a second turn by mistake. A page turned twice ends up upside down, and a page turned three times is back where it started, so it pays to check what the preview shows before you save.</p>
+
+  <h2>What a rotation changes in the file</h2>
+  <p>A proper rotation changes the angle the page is drawn at. It does not redraw the page or take a picture of it, so the text stays selectable, the images keep their resolution and the file size stays about the same. You can still search the text and copy it out afterwards.</p>
+  <p>Only quarter turns exist in a PDF: 90, 180 or 270 degrees. A tilt of a few degrees to straighten a skewed scan is not a page rotation and needs a tool that redraws the page, which is a different job with its own trade-offs.</p>
+
+  <h2>Sideways scans and what to do next</h2>
+  <p>A page that scanned in landscape usually turns around cleanly, because the scanner wrote it as a whole page that happens to lie on its side. Once it is the right way up, look at the page numbers: a rotated scan often has none at the bottom or has them printed sideways in the margin. <a href="/add-page-numbers-to-pdf/">Add page numbers to a PDF</a> puts a number on each page in the corner you choose.</p>
+  <p>If the PDF is a long scan of separate documents, turning every page is fine, but you may also want to pull out the pages you actually need. <a href="/extract-pages-from-pdf/">Extract pages from a PDF</a> copies the pages you choose into a new file, and the copied pages keep the angle you set.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li>Mac: Tools, Rotate Left or Rotate Right, then File, Save. The turn stays.</li>
+    <li>Browser: open the PDF in <a href="/rotate-pdf/">Rotate PDF</a>, choose the direction and pages, and download the turned file.</li>
+    <li>Close and reopen the file to check the rotation was saved.</li>
+  </ul>
+  <p>See also: <a href="/guides/save-one-page-of-a-pdf/">How to save just one page of a PDF</a> for keeping a single page, and <a href="/guides/add-page-numbers-to-pdf/">add page numbers to a PDF</a> for numbering a turned scan.</p>
+</Base>

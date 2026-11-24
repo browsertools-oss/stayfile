@@ -238,6 +238,7 @@ export const PAGES: ToolPage[] = [
     slug: 'rotate-pdf',
     tool: 'pdf-rotate',
     group: 'PDF',
+    guide: 'rotate-pdf-and-save',
     card: 'Rotate PDF',
     blurb: 'Turn sideways or upside-down pages',
     title: 'Rotate PDF pages online and save the result',
@@ -3338,6 +3339,11 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'iphone-heic-photos-to-jpg',
     title: "iPhone HEIC photos won't open on Windows? Convert to JPG",
     blurb: 'What HEIC is, why Windows will not open it, and how to fix it on the phone and on the PC.',
+  },
+  {
+    slug: 'rotate-pdf-and-save',
+    title: 'How to rotate a PDF and save it so it stays rotated',
+    blurb: 'Why the viewer rotate buttons do not stick, and how to turn pages for good in Preview or in a browser.',
   },
   {
     slug: 'save-one-page-of-a-pdf',
