@@ -772,7 +772,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'convert-image',
     tool: 'img-convert',
-    guide: 'jpg-png-webp-or-avif',
+    guide: ['jpg-png-webp-or-avif', 'remove-location-from-photo'],
     group: 'Images',
     card: 'Convert image',
     blurb: 'Switch between image formats',
@@ -1876,7 +1876,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'compress-jpg',
     tool: 'img-compress',
-    guide: ['make-a-photo-smaller-to-email', 'photo-under-100kb-for-a-form'],
+    guide: ['make-a-photo-smaller-to-email', 'photo-under-100kb-for-a-form', 'remove-location-from-photo'],
     group: 'Images',
     card: 'Compress JPG',
     blurb: 'Shrink JPG photos for email and upload forms',
@@ -3339,6 +3339,11 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'iphone-heic-photos-to-jpg',
     title: "iPhone HEIC photos won't open on Windows? Convert to JPG",
     blurb: 'What HEIC is, why Windows will not open it, and how to fix it on the phone and on the PC.',
+  },
+  {
+    slug: 'remove-location-from-photo',
+    title: 'How to remove the location from a photo before you share it',
+    blurb: 'Phone photos record where they were taken: turn it off when you send, strip it on Windows or a Mac, or convert the picture.',
   },
   {
     slug: 'save-all-excel-sheets-as-csv',

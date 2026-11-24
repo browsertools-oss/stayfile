@@ -1,0 +1,47 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to remove the location from a photo before you share it';
+const description = 'Phone photos often carry the place they were taken. Turn the location off when you send, strip it on Windows or a Mac, or convert the photo so the data is dropped.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-24',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/remove-location-from-photo/" jsonld={jsonld}>
+  <h1>How to remove the location from a photo before you share it</h1>
+  <p class="lede">A photo from a phone usually records where and when it was taken, along with the camera that took it. That data travels with the file when you email it, post it or upload it. This guide shows how to send a photo without the location, on the iPhone, on Windows, on a Mac, and by converting the picture in a browser.</p>
+
+  <h2>What a photo carries</h2>
+  <p>Digital cameras and phones write a block of information into the picture file, called EXIF. It holds the date and time, the camera make and model, the settings used, and for phone photos the GPS position of the place where the shot was taken. Some apps also record the direction the phone was facing.</p>
+  <p>None of that is visible when you look at the photo. It is read by photo apps, photo sites and anything else that opens the file, which is why a photo posted online can sometimes be traced to a street address. If the location matters, it has to be removed from the file itself, not just hidden from view.</p>
+
+  <h2>Send a photo from an iPhone without the location</h2>
+  <p>The Share sheet can leave the location out of a single send. In Photos, open the picture, tap the Share button, then tap Options at the top of the share sheet and turn off Location before you pick Mail, Messages or another app. The copy that goes out has no place recorded.</p>
+  <p>The setting applies to that send, so the photo on the phone is unchanged and the next time you share it the option is there again. Check it each time you send a picture taken at home or anywhere you would not put in public. Menu names can differ a little between app versions.</p>
+
+  <h2>Remove the location on Windows</h2>
+  <p>File Explorer can strip the personal details from a copy of the file. Right-click the photo, choose Properties, open the Details tab, and click Remove Properties and Personal Information at the bottom. Windows then offers to make a copy with some or all of the properties removed; choose the copy and pick the fields, and the location goes.</p>
+  <p>Work on a copy rather than the original if you may want the data later. Once the field is gone, it is gone from that file.</p>
+
+  <h2>Remove the location on a Mac</h2>
+  <p>Preview can show and clear the location data. Open the photo in Preview, choose Tools and then Show Inspector, and look at the GPS tab. If the photo has a location, the tab shows it and offers Remove Location Info. The button appears only when there is a location to remove, so an empty tab means this photo has none.</p>
+  <p>Save the file after the removal, and the photo is clean from then on.</p>
+
+  <h2>Strip it by converting the photo in the browser</h2>
+  <p>A converter that redraws the picture from its pixels cannot carry the old data along, because only pixels are copied. The new file is a fresh picture, so the location, the date and the camera details are left behind.</p>
+  <p><a href="/convert-image/">Convert image</a> works this way. Pick the file, choose JPG, PNG or WebP, and download the result; the new file holds the picture and nothing about where it was taken. <a href="/compress-jpg/">Compress JPG</a> also builds a fresh picture when it re-encodes the file, which drops the data in the same way. One caveat: if compressing a file would make it bigger, the page hands back the original file instead, and that original still has its location. Check the file size and the download before you rely on it. <a href="/heic-to-jpg/">HEIC to JPG</a> also writes a fresh file from the decoded photo.</p>
+  <p>All three run in your browser, so the photo is not uploaded anywhere. That matters here more than usual: the whole point is to keep the location from traveling, and sending the file to a stranger's server first would defeat it. <a href="/guides/are-online-file-converters-safe/">Are online file converters safe?</a> covers what to check in any other converter.</p>
+
+  <h2>Check before you post</h2>
+  <p>Convert or strip the photo first, then open the result and look at its properties. On Windows, the Details tab shows whether a latitude and longitude are still there. On a Mac, the Inspector's GPS tab is the place to look. On the iPhone, the Photos app shows a map line for the photo when it has a location.</p>
+  <p>Some sites remove the data from what they publish, and some keep it. Do not count on the site: strip the photo before you upload it and the question no longer matters. If you send a batch, do the batch through a converter in one go, and keep the originals in a folder of their own.</p>
+  <p>See also: <a href="/guides/are-online-file-converters-safe/">Are online file converters safe?</a> for how to tell a converter that works on your device from one that uploads your file.</p>
+</Base>
