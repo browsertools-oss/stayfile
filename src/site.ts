@@ -2617,7 +2617,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'excel-to-csv',
     tool: 'xlsx-to-csv',
-    guide: 'csv-garbled-characters-excel',
+    guide: ['csv-garbled-characters-excel', 'save-all-excel-sheets-as-csv'],
     group: 'Spreadsheets and data',
     card: 'Excel to CSV',
     blurb: 'Save any sheet of a workbook as CSV',
@@ -3339,6 +3339,11 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'iphone-heic-photos-to-jpg',
     title: "iPhone HEIC photos won't open on Windows? Convert to JPG",
     blurb: 'What HEIC is, why Windows will not open it, and how to fix it on the phone and on the PC.',
+  },
+  {
+    slug: 'save-all-excel-sheets-as-csv',
+    title: 'How to save every sheet of an Excel file as CSV',
+    blurb: 'Save As CSV writes only the active sheet: save each sheet by hand, with a macro, or as one zip in the browser.',
   },
   {
     slug: 'rotate-pdf-and-save',

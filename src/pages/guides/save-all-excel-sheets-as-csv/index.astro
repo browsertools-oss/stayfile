@@ -1,0 +1,48 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to save every sheet of an Excel file as CSV';
+const description = 'Excel saves only the active sheet as CSV. Save each sheet by hand, or turn the whole workbook into one CSV per sheet in your browser.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-24',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/save-all-excel-sheets-as-csv/" jsonld={jsonld}>
+  <h1>How to save every sheet of an Excel file as CSV</h1>
+  <p class="lede">Save As CSV in Excel writes only the sheet you are looking at, not the whole workbook. There is no setting that changes that. This guide covers the ways to get a CSV for every sheet: one sheet at a time by hand, a macro, or a browser page that does the whole workbook at once.</p>
+
+  <h2>Why Save As writes one sheet</h2>
+  <p>CSV has no idea of several tables in one file. A CSV file is a single table of lines, so Excel has nothing to write the other sheets into. When you choose CSV as the save type, Excel warns that the format does not support workbooks with several sheets. Clicking OK is safe: nothing is lost from the workbook you have open, and the CSV it writes holds the active sheet.</p>
+  <p>That warning catches people out. They click OK, see a CSV in the folder, and assume every sheet is inside it. If you open the CSV, it holds one table. The rest of the workbook is still only in the .xlsx file.</p>
+
+  <h2>Save each sheet by hand</h2>
+  <p>Without any extra tools, go through the sheets one by one. Click the tab of the first sheet, choose File and Save As, set the type to CSV, and give the file a name that matches the sheet, such as Sales 2026. Then click the next tab, save again under a new name, and so on.</p>
+  <p>Two things save trouble. Give every file a different name, because saving two sheets to the same name overwrites the first. And after an export, turn back to the workbook and check you are still saving the sheet you think you are, since it is easy to lose track after the fourth tab.</p>
+  <p>A workbook with two or three sheets is fine this way. A dozen sheets is slow and easy to get wrong.</p>
+
+  <h2>A macro, Power Automate or Python</h2>
+  <p>Several other routes appear in answers to this question, and each needs something installed or switched on. A VBA macro can loop through the sheets and save each one, but macros have to be allowed on the computer, and many workplaces turn them off. Power Automate can export from an Excel file in a cloud folder, which needs a Microsoft account and the right plan. A short Python script with a spreadsheet library does the job on a machine set up for it.</p>
+  <p>All three are good for a repeated monthly job. For a one-off export of a workbook someone emailed you, they cost more time than they save.</p>
+
+  <h2>Save every sheet in the browser</h2>
+  <p><a href="/excel-to-csv/">Excel to CSV</a> reads the whole workbook in your browser and writes a CSV for each sheet. Drop the .xlsx on the page. The page shows a list of the sheet names and converts the first one, and you can pick any other sheet from the list to see its CSV in the preview.</p>
+  <p>Press Download every sheet and you get one zip file holding one CSV per sheet. Each file is named after the workbook and the sheet, so Sales 2026 becomes something like Report - Sales 2026.csv. Unzip it and you have the whole workbook as a set of CSV files. The workbook itself is never uploaded; the file is read on your computer.</p>
+  <p>If you want tabs instead of commas, <a href="/excel-to-tsv/">Excel to TSV</a> writes one sheet with tab separators, and <a href="/excel-to-json/">Excel to JSON</a> turns a sheet into a list of records for a program to read.</p>
+
+  <h2>What each CSV keeps</h2>
+  <p>Each cell is written the way Excel shows it, so a date formatted as 2026-11-06 comes out as that text and not as a number. Formulas are not carried over: the CSV holds the value the cell displayed when the workbook was last saved. Number formats such as currency symbols travel as the shown text, so a column of prices keeps its look in the CSV.</p>
+  <p>Charts, colours, merged cells and comments do not go into a CSV, because the format has nowhere to put them. The table of values comes across, and that is all.</p>
+
+  <h2>Check the files after the export</h2>
+  <p>Unzip the folder and count the files against the sheet tabs. Open one with a name that has an accent or a space in it, and check it in a spreadsheet program. If it opens in a single column, the separator is set wrongly; <a href="/guides/csv-opens-in-one-column-in-excel/">Why a CSV opens in one column in Excel</a> covers that. If a code such as 007 has lost its leading zeros, <a href="/guides/excel-csv-leading-zeros/">Why Excel drops leading zeros in a CSV</a> explains the cause and the fix.</p>
+  <p>Once the files look right, keep the original workbook. The CSVs are a copy for another program, and the workbook is still the place where the sheets, formulas and formatting live.</p>
+  <p>See also: <a href="/guides/csv-opens-in-one-column-in-excel/">Why a CSV opens in one column in Excel</a> and <a href="/guides/excel-csv-leading-zeros/">Why Excel drops leading zeros in a CSV</a>.</p>
+</Base>
