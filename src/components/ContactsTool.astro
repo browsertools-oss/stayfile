@@ -42,21 +42,47 @@ const FIELD_LABELS: [string, string][] = [
   </div>
 
   <div class="actions">
+    <button type="button" class="primary" id="go" disabled>Download .vcf</button>
     <span class="status" id="status" aria-live="polite"></span>
   </div>
+  <div class="done" id="done" role="status" hidden></div>
   <p class="error" id="err" role="alert" hidden></p>
+
+  <div class="preview" id="tableWrap" hidden><table><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
 </section>
 
 <script>
   import { parseCsv } from '../lib/data';
-  import { baseName } from '../lib/save';
+  import { baseName, save } from '../lib/save';
+  import { savedLine } from '../lib/route';
+  import { showDone, hideDone } from '../lib/done';
+  import { buildVcf, type Contact } from '../lib/vcard';
 
   const root = document.querySelector<HTMLElement>('.tool')!;
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
-  const input = $<HTMLTextAreaElement>('input')!, drop = $('drop')!, status = $('status')!, err = $('err')!, list = $('list')!;
+  const input = $<HTMLTextAreaElement>('input')!, drop = $('drop')!, status = $('status')!, err = $('err')!, list = $('list')!, doneEl = $('done')!;
+  const MAX = 10;
   let name = 'contacts';
   let header: string[] = [];
   let rows: string[][] = [];
+  let contacts: Contact[] = [];
+  let skipped: number[] = [];
+
+  function table(head: string[], body: string[][]) {
+    const th = $('thead')!, tb = $('tbody')!;
+    th.innerHTML = ''; tb.innerHTML = '';
+    if (head.length) {
+      const tr = document.createElement('tr');
+      for (const h of head) { const c = document.createElement('th'); c.textContent = h; tr.append(c); }
+      th.append(tr);
+    }
+    for (const r of body) {
+      const tr = document.createElement('tr');
+      for (const v of r) { const c = document.createElement('td'); c.textContent = v; c.title = v; tr.append(c); }
+      tb.append(tr);
+    }
+    $('tableWrap')!.hidden = !body.length;
+  }
 
   const FIELDS = ['first', 'last', 'full', 'org', 'jobTitle', 'mobile', 'homePhone', 'workPhone', 'email', 'email2', 'street', 'city', 'region', 'postcode', 'country', 'birthday', 'note'] as const;
   type Field = (typeof FIELDS)[number];
@@ -145,11 +171,68 @@ const FIELD_LABELS: [string, string][] = [
     drop.classList.remove('compact'); $('pasteWrap')!.hidden = false; $('showText')!.hidden = true;
   };
 
+  let map = {} as Record<Field, number>;
+
+  function readMap() {
+    for (const f of FIELDS) {
+      const el = $<HTMLSelectElement>(`f-${f}`)!;
+      map[f] = el.value === '' ? -1 : Number(el.value);
+    }
+  }
+
+  const cell = (r: string[], f: Field) => (map[f] < 0 ? '' : (r[map[f]] ?? '')).trim();
+
+  function build() {
+    contacts = [];
+    skipped = [];
+    rows.forEach((r, i) => {
+      const phones: Contact['phones'] = [];
+      if (cell(r, 'mobile')) phones.push({ value: cell(r, 'mobile'), type: 'cell' });
+      if (cell(r, 'homePhone')) phones.push({ value: cell(r, 'homePhone'), type: 'home' });
+      if (cell(r, 'workPhone')) phones.push({ value: cell(r, 'workPhone'), type: 'work' });
+      const emails: Contact['emails'] = [];
+      if (cell(r, 'email')) emails.push({ value: cell(r, 'email'), type: 'home' });
+      if (cell(r, 'email2')) emails.push({ value: cell(r, 'email2'), type: 'home' });
+
+      const contact: Contact = {
+        first: cell(r, 'first'),
+        last: cell(r, 'last'),
+        full: cell(r, 'full'),
+        org: cell(r, 'org'),
+        jobTitle: cell(r, 'jobTitle'),
+        phones,
+        emails,
+        street: cell(r, 'street'),
+        city: cell(r, 'city'),
+        region: cell(r, 'region'),
+        postcode: cell(r, 'postcode'),
+        country: cell(r, 'country'),
+        birthday: cell(r, 'birthday'),
+        note: cell(r, 'note'),
+      };
+      if (!contact.first && !contact.last && !contact.full && !contact.org && !phones.length && !emails.length) {
+        skipped.push(i + 2);
+        return;
+      }
+      contacts.push(contact);
+    });
+  }
+
   function render() {
     err.hidden = true;
-    if (!rows.length) { status.textContent = ''; $('pickers')!.hidden = true; return; }
-    renderPickers();
-    status.textContent = `${rows.length} row${rows.length === 1 ? '' : 's'}, ${header.length} column${header.length === 1 ? '' : 's'}.`;
+    hideDone(doneEl);
+    if (!rows.length) { status.textContent = ''; $('pickers')!.hidden = true; table([], []); $<HTMLButtonElement>('go')!.disabled = true; return; }
+    readMap();
+    build();
+    $<HTMLButtonElement>('go')!.disabled = !contacts.length;
+    table(['Name', 'Mobile', 'Email'], contacts.slice(0, MAX).map((c) => [
+      [c.first, c.last].filter(Boolean).join(' ') || c.full || c.org || '',
+      c.phones.find((p) => p.type === 'cell')?.value ?? '',
+      c.emails[0]?.value ?? '',
+    ]));
+    const n = contacts.length, s = skipped.length;
+    const listed = skipped.slice(0, 3).join(', ') + (s > 3 ? ', …' : '');
+    status.textContent = `${n} contact${n === 1 ? '' : 's'}, ${s} row${s === 1 ? '' : 's'} skipped${s ? ` (rows ${listed})` : ''}.`;
   }
 
   function parseText(text: string) {
@@ -160,6 +243,7 @@ const FIELD_LABELS: [string, string][] = [
       const v = r[h];
       return v == null ? '' : String(v);
     }));
+    renderPickers();
     render();
   }
 
@@ -167,6 +251,18 @@ const FIELD_LABELS: [string, string][] = [
   input.addEventListener('input', () => { clearTimeout(timer); timer = window.setTimeout(() => {
     try { parseText(input.value); } catch (e) { err.textContent = (e as Error).message; err.hidden = false; }
   }, 250); });
+  root.querySelectorAll('#pickers select').forEach((el) => el.addEventListener('change', () => render()));
+
+  $('go')!.addEventListener('click', () => {
+    if (!contacts.length) return;
+    const blob = new Blob([buildVcf(contacts)], { type: 'text/vcard' });
+    const file = `${name}.vcf`;
+    save(blob, file);
+    showDone({
+      el: doneEl, slug: root.dataset.slug!, line: savedLine(file), again: () => save(blob, file),
+      reset: () => { resetAll(); rows = []; header = []; render(); },
+    });
+  });
 
   drop.addEventListener('files', async (e) => {
     const f = (e as CustomEvent<File[]>).detail[0];
