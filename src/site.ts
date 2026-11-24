@@ -2619,24 +2619,24 @@ export const PAGES: ToolPage[] = [
     guide: 'csv-garbled-characters-excel',
     group: 'Spreadsheets and data',
     card: 'Excel to CSV',
-    blurb: 'Save the first sheet of a workbook as CSV',
+    blurb: 'Save any sheet of a workbook as CSV',
     title: 'Excel to CSV converter: save XLSX as CSV online',
     h1: 'Convert Excel to CSV',
-    lede: 'Save the first sheet of an Excel workbook as a CSV file. Each cell is written the way it is shown in the sheet, so a formatted date or number comes out as you see it.',
-    description: 'Convert Excel .xlsx files to CSV in your browser. Saves the first sheet as comma-separated text. Your workbook is never uploaded.',
+    lede: 'Save a sheet of an Excel workbook as a CSV file, or every sheet at once in one zip. Each cell is written the way it is shown in the sheet, so a formatted date or number comes out as you see it.',
+    description: 'Convert Excel .xlsx files to CSV in your browser. Pick any sheet, or download every sheet as a zip. Your workbook is never uploaded.',
     more: {
       h2: 'What the CSV keeps from the workbook',
       paras: [
-        'Only the first sheet is converted. The page reports how many other sheets the workbook has, and to convert one of those you drag its tab to the front in Excel and drop the file here again. Each cell is written the way Excel shows it, so a date formatted as 2026-11-06 comes out as that text, not as a serial number.',
+        'A workbook with more than one sheet shows a list to pick from, and the CSV follows whichever sheet is chosen. The Download every sheet button writes one CSV per sheet inside a zip, named after the workbook and the sheet. Each cell is written the way Excel shows it, so a date formatted as 2026-11-06 comes out as that text, not as a serial number.',
         'Cells that contain commas, quotes or line breaks are wrapped in quotes, which is how CSV holds those characters inside one value. Numbers come out as plain digits, and an empty cell comes out as nothing between the separators.',
         'Formulas are not carried over; the CSV holds the value each cell displayed when the workbook was last saved. If you need the calculation itself, keep the .xlsx. The saved file can carry a UTF-8 BOM if you tick the Excel option, so accented characters open correctly in Excel.',
       ],
     },
-    steps: ['Drop in an .xlsx file.', 'Check the preview. Only the first sheet is converted.', 'Download the CSV or copy it.'],
+    steps: ['Drop in an .xlsx file.', 'Pick a sheet from the list, or check the first one.', 'Download the CSV, copy it, or download every sheet as a zip.'],
     faq: [
       {
         q: 'What happens to the other sheets?',
-        a: 'Only the first sheet is converted, and the page tells you how many other sheets the workbook has. To get another sheet, drag its tab to the front in Excel, save, and drop the file here again.',
+        a: 'Pick any sheet from the list above the preview, and the CSV follows the one you choose. Download every sheet writes one CSV per sheet inside a single zip, with each file named after the workbook and the sheet.',
       },
       {
         q: 'Are formulas kept?',

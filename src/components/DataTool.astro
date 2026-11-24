@@ -81,8 +81,15 @@ const outLabel = { 'yaml-to-json': 'Download .json', 'yaml-to-csv': 'Download .c
     )}
   </div>
 
+  {tool === 'excel-to-csv' && (
+    <div class="opts">
+      <label id="sheetPick" hidden>Sheet <select id="sheet"></select></label>
+    </div>
+  )}
+
   <div class="actions">
     <button type="button" class="primary" id="go" disabled>{outLabel}</button>
+    {tool === 'excel-to-csv' && <button type="button" class="secondary" id="goZip" disabled>Download every sheet (.zip)</button>}
     {tool !== 'csv-to-xlsx' && tool !== 'json-to-xlsx' && tool !== 'md-to-xlsx' && <button type="button" class="secondary" id="copy" disabled>Copy</button>}
     <span class="status" id="status" aria-live="polite"></span>
   </div>
@@ -95,7 +102,7 @@ const outLabel = { 'yaml-to-json': 'Download .json', 'yaml-to-csv': 'Download .c
 
 <script>
   import { parseCsv, csvToJson, csvToMarkdown, tsvToCsv, csvToTsv, markdownToCsv, markdownToJson, markdownTableRows, jsonRows, columns, jsonToCsv, jsonToMarkdown, csvToSql, sqlTableName, type CsvOptions } from '../lib/data';
-  import { save, baseName, withBom } from '../lib/save';
+  import { save, baseName, withBom, zip } from '../lib/save';
   import { savedLine } from '../lib/route';
   import { showDone, hideDone } from '../lib/done';
 
@@ -115,7 +122,8 @@ const outLabel = { 'yaml-to-json': 'Download .json', 'yaml-to-csv': 'Download .c
   const MAX_ROWS = 50;
   let name = 'data';
   let result = '';
-  let sheetInfo = ''; // Excel only: says how many sheets were left out
+  let sheetInfo = ''; // Excel only: which sheet was converted, and how many the workbook has
+  let workbookBytes: Uint8Array | null = null; // Excel only: kept so another sheet can be read without the file again
 
   const opts = (): CsvOptions => ({
     delimiter: $<HTMLSelectElement>('delim')!.value,
@@ -295,9 +303,11 @@ const outLabel = { 'yaml-to-json': 'Download .json', 'yaml-to-csv': 'Download .c
     if (fromXlsx) {
       try {
         const { xlsxToCsv } = await import('../lib/xlsx');
-        const wb = xlsxToCsv(new Uint8Array(await f.arrayBuffer()));
+        workbookBytes = new Uint8Array(await f.arrayBuffer());
+        const wb = xlsxToCsv(workbookBytes);
         input.value = wb.csv;
-        sheetInfo = wb.sheets.length > 1 ? `Converted the first of ${wb.sheets.length} sheets (${wb.sheets[0]}).` : '';
+        fillSheets(wb.sheets, 0);
+        sheetInfo = wb.sheets.length > 1 ? `Sheet 1 of ${wb.sheets.length}: ${wb.sheets[0]}.` : '';
       } catch (e) {
         input.value = '';
         sheetInfo = '';
@@ -329,12 +339,67 @@ const outLabel = { 'yaml-to-json': 'Download .json', 'yaml-to-csv': 'Download .c
       // For the SQL pages the saved file is .sql, which no page here reads, so the chip carries the source data instead.
       result: tool === 'csv-to-sql' || tool === 'xlsx-to-sql' ? new File([input.value], `${name}.csv`, { type: 'text/csv' }) : new File([blob], file, { type: blob.type }),
       reset: () => {
-        input.value = ''; list.innerHTML = ''; name = 'data'; sheetInfo = '';
+        input.value = ''; list.innerHTML = ''; name = 'data'; sheetInfo = ''; workbookBytes = null;
+        $('sheetPick')?.setAttribute('hidden', '');
+        $<HTMLButtonElement>('goZip') && ($<HTMLButtonElement>('goZip')!.disabled = true);
         drop.classList.remove('compact'); $('pasteWrap')!.hidden = fromXlsx; $('showText')!.hidden = true;
         update();
       },
     });
   };
+
+  // Excel pages with more than one sheet: a list to pick a sheet from, and a zip of every sheet.
+  function fillSheets(sheets: string[], selected: number) {
+    const pick = $('sheetPick'), sel = $<HTMLSelectElement>('sheet');
+    if (!pick || !sel) return;
+    sel.innerHTML = '';
+    for (const s of sheets) {
+      const o = document.createElement('option');
+      o.value = s;
+      o.textContent = s;
+      sel.append(o);
+    }
+    sel.value = sheets[selected] ?? sheets[0] ?? '';
+    pick.hidden = sheets.length < 2;
+    const zipBtn = $<HTMLButtonElement>('goZip');
+    if (zipBtn) zipBtn.disabled = !workbookBytes;
+  }
+
+  $('sheet')?.addEventListener('change', async () => {
+    if (!workbookBytes) return;
+    try {
+      const { xlsxToCsv } = await import('../lib/xlsx');
+      const chosen = $<HTMLSelectElement>('sheet')!.value;
+      const wb = xlsxToCsv(workbookBytes, chosen);
+      input.value = wb.csv;
+      const i = wb.sheets.indexOf(chosen);
+      sheetInfo = wb.sheets.length > 1 ? `Sheet ${i + 1} of ${wb.sheets.length}: ${chosen}.` : '';
+      update();
+    } catch (e) {
+      err.textContent = (e as Error).message;
+      err.hidden = false;
+    }
+  });
+
+  $('goZip')?.addEventListener('click', async () => {
+    if (!workbookBytes) return;
+    const btn = $<HTMLButtonElement>('goZip')!;
+    btn.disabled = true;
+    status.textContent = 'Building the zip…';
+    try {
+      const { xlsxAllToCsv } = await import('../lib/xlsx');
+      const parts = xlsxAllToCsv(workbookBytes);
+      const bytes = await zip(parts.map((p) => ({ name: `${name} - ${p.name}.csv`, data: new Blob([withBom(p.csv)], { type: 'text/csv' }) })));
+      btn.disabled = false;
+      update();
+      done(new Blob([bytes as BlobPart], { type: 'application/zip' }), `${name} csv.zip`);
+    } catch (e) {
+      btn.disabled = false;
+      update();
+      err.textContent = (e as Error).message;
+      err.hidden = false;
+    }
+  });
   go.addEventListener('click', async () => {
     if (tool === 'csv-to-json' || tool === 'xlsx-to-json' || tool === 'md-to-json' || tool === 'yaml-to-json') done(new Blob([result], { type: 'application/json' }), `${name}.json`);
     else if (tool === 'csv-to-yaml' || tool === 'xlsx-to-yaml') done(new Blob([result], { type: 'application/yaml' }), `${name}.yaml`);
