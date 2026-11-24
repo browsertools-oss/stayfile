@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { buildVcf, type Contact } from '../src/lib/vcard';
+import { buildVcf, parseVcf, vcfRowsToCsv, type Contact } from '../src/lib/vcard';
 
 const ana: Contact = {
   first: 'Ana',
@@ -77,5 +77,99 @@ describe('buildVcf', () => {
     // Unfolding gives the original note back.
     const joined = noteLines.map((line, i) => (i === 0 ? line.slice(5) : line.slice(1))).join('');
     expect(joined.replace(/\\,/g, ',').replace(/\\;/g, ';')).toBe(note.trim());
+  });
+});
+
+describe('parseVcf', () => {
+  const third: Contact = {
+    first: 'Chidi',
+    last: 'Eze',
+    phones: [],
+    emails: [{ value: 'chidi@example.org', type: 'home' }],
+    note: 'Work, home; nothing else',
+  };
+
+  test('round trips three contacts built here', () => {
+    const rows = parseVcf(buildVcf([ana, ben, third]));
+    expect(rows).toHaveLength(3);
+
+    expect(rows[0]['First name']).toBe('Ana');
+    expect(rows[0]['Last name']).toBe('Lima');
+    expect(rows[0]['Full name']).toBe('Ana Lima');
+    expect(rows[0].Organization).toBe('Ferro Oficina');
+    expect(rows[0]['Job title']).toBe('Buyer');
+    expect(rows[0].Mobile).toBe('+55 11 5555 0100');
+    expect(rows[0]['Home phone']).toBe('');
+    expect(rows[0]['Work phone']).toBe('+55 11 5555 0200');
+    expect(rows[0].Email).toBe('ana@example.com');
+    expect(rows[0].Street).toBe('Rua das Flores 12');
+    expect(rows[0].City).toBe('Sao Paulo');
+    expect(rows[0].Region).toBe('SP');
+    expect(rows[0].Postcode).toBe('01000-000');
+    expect(rows[0].Country).toBe('Brasil');
+    expect(rows[0].Birthday).toBe('1988-03-14');
+
+    expect(rows[1]['First name']).toBe('Ben');
+    expect(rows[1]['Last name']).toBe('Okafor');
+    expect(rows[1]['Home phone']).toBe('555 0101');
+
+    expect(rows[2]['First name']).toBe('Chidi');
+    expect(rows[2].Email).toBe('chidi@example.org');
+    expect(rows[2].Note).toBe('Work, home; nothing else');
+  });
+
+  test('reads a version 2.1 card with bare TYPE params and quoted-printable names', () => {
+    const card = [
+      'BEGIN:VCARD',
+      'VERSION:2.1',
+      'N;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:M=C3=BCller;J=C3=BCrgen;;;',
+      'TEL;CELL:555 0100',
+      'END:VCARD',
+      '',
+    ].join('\r\n');
+    const [row] = parseVcf(card);
+    expect(row['Last name']).toBe('Müller');
+    expect(row['First name']).toBe('Jürgen');
+    expect(row.Mobile).toBe('555 0100');
+  });
+
+  test('keeps two phones and two emails in their own columns', () => {
+    const card = [
+      'BEGIN:VCARD',
+      'VERSION:3.0',
+      'FN:Rae Snow',
+      'TEL;TYPE=cell,voice:555 0200',
+      'TEL;TYPE=HOME:555 0201',
+      'EMAIL;TYPE=INTERNET,HOME:rae@home.example',
+      'EMAIL;TYPE=INTERNET,WORK:rae@work.example',
+      'END:VCARD',
+    ].join('\r\n');
+    const [row] = parseVcf(card);
+    expect(row.Mobile).toBe('555 0200');
+    expect(row['Home phone']).toBe('555 0201');
+    expect(row.Email).toBe('rae@home.example');
+    expect(row['Email 2']).toBe('rae@work.example');
+  });
+
+  test('strips an item group prefix from the line name', () => {
+    const card = [
+      'BEGIN:VCARD',
+      'VERSION:3.0',
+      'FN:Sam Cole',
+      'item1.EMAIL;type=INTERNET:a@b.co',
+      'END:VCARD',
+    ].join('\r\n');
+
+    const [row] = parseVcf(card);
+    expect(row.Email).toBe('a@b.co');
+  });
+
+  test('writes one CSV row per contact with the named header row', () => {
+    const csv = vcfRowsToCsv(parseVcf(buildVcf([ana, ben])));
+    const lines = csv.split('\r\n');
+    expect(lines[0]).toBe(
+      'First name,Last name,Full name,Organization,Job title,Mobile,Home phone,Work phone,Other phone,Email,Email 2,Street,City,Region,Postcode,Country,Birthday,Note',
+    );
+    expect(lines).toHaveLength(3);
   });
 });
