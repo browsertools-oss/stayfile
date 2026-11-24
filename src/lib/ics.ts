@@ -151,7 +151,7 @@ function utcStamp(now: Date): string {
   );
 }
 
-function escapeText(value: string): string {
+export function escapeText(value: string): string {
   return value
     .replace(/\\/g, '\\\\')
     .replace(/;/g, '\\;')
@@ -159,14 +159,14 @@ function escapeText(value: string): string {
     .replace(/\r\n|\r|\n/g, '\\n');
 }
 
-function unescapeText(value: string): string {
+export function unescapeText(value: string): string {
   return value.replace(/\\([\\;,nN])/g, (_all, ch: string) => (ch === 'n' || ch === 'N' ? '\n' : ch));
 }
 
 const encoder = new TextEncoder();
 
 /** Fold one content line at 75 UTF-8 bytes; continuations start with a space. */
-function foldLine(line: string): string {
+export function foldLine(line: string): string {
   const out: string[] = [];
   let current = '';
   let bytes = 0;
@@ -361,8 +361,8 @@ function toRow(props: Map<string, Prop>): IcsRow {
 
 const SKIP_BLOCKS = new Set(['VALARM', 'VTODO', 'VTIMEZONE']);
 
-export function parseIcs(text: string): IcsRow[] {
-  // Unfold: a line starting with a space or tab continues the line before it.
+/** Unfold: a line starting with a space or tab continues the line before it. */
+export function unfoldLines(text: string): string[] {
   const physical = text.replace(/\r\n?/g, '\n').split('\n');
   const lines: string[] = [];
   for (const line of physical) {
@@ -372,6 +372,11 @@ export function parseIcs(text: string): IcsRow[] {
       lines.push(line);
     }
   }
+  return lines;
+}
+
+export function parseIcs(text: string): IcsRow[] {
+  const lines = unfoldLines(text);
 
   const rows: IcsRow[] = [];
   let props: Map<string, Prop> | null = null;
