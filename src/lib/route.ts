@@ -2,7 +2,7 @@
 // what makes sense after a save, and the names files get. Kept free of the DOM and of the page copy in
 // site.ts so it can be tested and so client bundles stay small.
 
-export type Kind = 'pdf' | 'heic' | 'image' | 'csv' | 'ics' | 'json' | 'yaml' | 'xlsx' | 'text' | 'other';
+export type Kind = 'pdf' | 'heic' | 'image' | 'csv' | 'ics' | 'vcf' | 'json' | 'yaml' | 'xlsx' | 'text' | 'other';
 export type Route = { slug: string; label: string };
 type Named = { name: string; type?: string };
 
@@ -14,6 +14,7 @@ export function kindOf(f: Named): Kind {
   if (t.startsWith('image/') || /\.(jpe?g|png|webp|gif|avif|bmp|ico)$/.test(n)) return 'image';
   if (/\.(csv|tsv)$/.test(n) || t === 'text/csv') return 'csv';
   if (/\.ics$/.test(n) || t === 'text/calendar') return 'ics';
+  if (/\.vcf$/.test(n) || t === 'text/vcard' || t === 'text/x-vcard') return 'vcf';
   if (/\.(json|jsonl|ndjson)$/.test(n) || t === 'application/json') return 'json';
   if (/^(application|text)\/(yaml|x-yaml)/.test(t) || /\.(yaml|yml)$/.test(n)) return 'yaml';
   if (/\.(xlsx)$/.test(n) || t === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') return 'xlsx';
@@ -56,6 +57,7 @@ export function suggestTools(files: Named[]): Route[] {
   }
   if (n > 1) return [];
   if (kinds.has('ics')) return [{ slug: 'ics-to-csv', label: 'List the events in a spreadsheet' }];
+  if (kinds.has('vcf')) return [{ slug: 'vcf-to-csv', label: 'List the contacts in a spreadsheet' }];
   if (kinds.has('csv')) return [{ slug: 'csv-to-excel', label: 'Turn it into an Excel file' }, { slug: 'csv-to-json', label: 'Convert to JSON' }, { slug: 'csv-to-markdown', label: 'Make a Markdown table' }];
   if (kinds.has('json')) return [{ slug: 'json-to-csv', label: 'Convert to CSV' }, { slug: 'json-to-excel', label: 'Turn it into an Excel file' }, { slug: 'json-to-markdown', label: 'Make a Markdown table' }];
   if (kinds.has('yaml')) return [{ slug: 'yaml-to-json', label: 'Convert to JSON' }, { slug: 'yaml-to-csv', label: 'Convert to CSV' }, { slug: 'yaml-to-excel', label: 'Turn it into an Excel file' }];
@@ -70,7 +72,7 @@ export function describeDrop(files: Named[]): string {
   if (!n) return '';
   const kinds = new Set(files.map(kindOf));
   const word = kinds.size > 1 ? (([...kinds].every((k) => k === 'image' || k === 'heic')) ? 'image' : 'file')
-    : ({ pdf: 'PDF', heic: 'iPhone photo', image: 'image', csv: 'CSV file', ics: 'calendar file', json: 'JSON file', yaml: 'YAML file', xlsx: 'Excel file', text: 'text file', other: 'file' } as const)[[...kinds][0]];
+    : ({ pdf: 'PDF', heic: 'iPhone photo', image: 'image', csv: 'CSV file', ics: 'calendar file', vcf: 'contacts file', json: 'JSON file', yaml: 'YAML file', xlsx: 'Excel file', text: 'text file', other: 'file' } as const)[[...kinds][0]];
   return n === 1 ? `${files[0].name}. What should happen to it?` : `${n} ${word}s. What should happen to them?`;
 }
 
@@ -125,6 +127,8 @@ export function nextTools(slug: string): Route[] {
     'yaml-to-excel': [{ slug: 'excel-to-csv', label: 'Convert to CSV' }],
     'csv-to-ics': [{ slug: 'ics-to-csv', label: 'Check the file as a spreadsheet' }],
     'ics-to-csv': [{ slug: 'csv-to-ics', label: 'Turn the list back into a calendar file' }],
+    'csv-to-vcf': [{ slug: 'vcf-to-csv', label: 'Check the file as a spreadsheet' }],
+    'vcf-to-csv': [{ slug: 'csv-to-vcf', label: 'Turn the list back into a contacts file' }],
   };
   if (dataNext[slug]) return dataNext[slug];
   const imgNext: Route[] = [
