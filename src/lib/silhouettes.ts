@@ -80,6 +80,7 @@ export const shapes: Record<string, Shape[]> = {
   'csv-to-yaml': merge(G(14, 12, 52, 68, true), S(74, 34, 32, 46, 4)),
   'csv-to-ics': merge(G(14, 14, 48, 68, true), { fill: [photo(72, 26, 34, 48)], cut: [grid(72, 30, 34, 44, 3, 4), 'M72 30h34'], ink: ['M80 20v12M98 20v12'] }),
   'csv-to-vcf': merge(G(14, 14, 48, 68, true), { fill: [], cut: [], ink: ['M72 26h30v20a6 6 0 0 1 -6 6h-18a6 6 0 0 1 -6 -6z', 'M80 40a6 6 0 1 0 12 0a6 6 0 1 0 -12 0', 'M76 60h22'] }),
+  'vcf-to-csv': merge({ fill: [], cut: [], ink: ['M14 26h30v20a6 6 0 0 1 -6 6h-18a6 6 0 0 1 -6 -6z', 'M22 40a6 6 0 1 0 12 0a6 6 0 1 0 -12 0', 'M18 60h22'] }, G(72, 14, 48, 68, true)),
   'ics-to-csv': merge({ fill: [photo(14, 26, 34, 48)], cut: [grid(14, 30, 34, 44, 3, 4), 'M14 30h34'], ink: ['M22 20v12M40 20v12'] }, G(72, 14, 48, 68, true)),
   'csv-to-sql': merge(G(14, 14, 48, 68, true), { fill: [], cut: [], ink: ['M72 30l12 10-12 10', 'M90 54h16'] }),
   'excel-to-sql': merge(G(14, 14, 48, 68, true), { fill: [], cut: [], ink: ['M72 30l12 10-12 10', 'M90 54h16'] }),

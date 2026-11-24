@@ -42,6 +42,7 @@ export type Tool =
   | 'csv-to-ics'
   | 'ics-to-csv'
   | 'csv-to-vcf'
+  | 'vcf-to-csv'
   | 'csv-to-yaml'
   | 'csv-to-sql'
   | 'xlsx-to-sql'
@@ -3275,6 +3276,46 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Do my contacts get uploaded?',
         a: 'No. A contact list is other people\'s personal data, and this page never sends it anywhere. The spreadsheet is read and the .vcf is written in your browser, and closing the tab ends it.',
+      },
+      PRIVATE,
+      LIMIT,
+    ],
+  },
+  {
+    slug: 'vcf-to-csv',
+    tool: 'vcf-to-csv',
+    group: 'Spreadsheets and data',
+    card: 'VCF to CSV',
+    blurb: 'Open a contacts file as a spreadsheet',
+    title: 'VCF to CSV: open a contacts file in Excel',
+    h1: 'Convert a VCF contacts file to CSV or Excel',
+    lede: 'Opening a .vcf straight in Excel gives you a column of raw lines; this page gives one row per person with named columns. Drop the contacts file and get a list of names, phone numbers, addresses and emails. The file is read in your browser.',
+    description: 'Turn a .vcf contacts file into one row per person in CSV or Excel. Names, phones, emails and addresses in named columns. Nothing is uploaded.',
+    more: {
+      h2: 'The columns you get',
+      paras: [
+        'The list has one row per card and these columns: First name, Last name, Full name, Organization, Job title, Mobile, Home phone, Work phone, Other phone, Email, Email 2, Street, City, Region, Postcode, Country, Birthday and Note. A card with two email addresses fills both columns. A number the file labels with an unusual name, such as main office, goes in Other phone so it is not lost.',
+        'The file is read as text, so the pages stay small and nothing leaves the computer. Cards written by old Android phones, where accented letters are encoded as numbers, are decoded the same way as plain ones. Photos stored in the file are skipped, because a spreadsheet column of image data is of no use.',
+        'The CSV download starts with a byte order mark, so Excel shows accented names correctly, and the Excel download keeps every value as text, so a phone number that starts with a plus sign or a zero stays as written. If you need the list back as a contacts file later, the same list can be turned back into a .vcf.',
+      ],
+    },
+    steps: [
+      'Drop a .vcf contacts file, or paste the card text.',
+      'Check the preview of the first contacts.',
+      'Download the list as a .csv or .xlsx file.',
+    ],
+    faq: [
+      {
+        q: 'How do I get a .vcf from my iPhone?',
+        a: 'On a recent iPhone, open Contacts, tap Lists, then touch and hold a list such as All Contacts and choose Export. On a computer you can open Contacts on iCloud.com, select the contacts and choose Export vCard from the menu.',
+      },
+      {
+        q: 'What happens to photos?',
+        a: 'They are left out. A vCard can carry a photo, but it arrives as encoded image data, and this page skips those lines, so the spreadsheet holds the text fields only.',
+      },
+      {
+        q: 'Which vCard versions work?',
+        a: 'Version 2.1, 3.0 and 4.0 files all read here, including the quoted-printable names that old Android exports use for accented letters.',
       },
       PRIVATE,
       LIMIT,

@@ -82,8 +82,7 @@ describe('nextTools', () => {
   test('every data page except JSON to YAML offers a next step', () => {
     // The keys in dataNext must be page slugs; a tool id key there is silently dead.
     const missing = PAGES
-      // csv-to-vcf gets its next step from the vcf-to-csv page, which is not built yet.
-      .filter((p) => p.group === 'Spreadsheets and data' && p.slug !== 'json-to-yaml' && p.slug !== 'csv-to-vcf')
+      .filter((p) => p.group === 'Spreadsheets and data' && p.slug !== 'json-to-yaml')
       .filter((p) => nextTools(p.slug).length === 0)
       .map((p) => p.slug);
     expect(missing).toEqual([]);

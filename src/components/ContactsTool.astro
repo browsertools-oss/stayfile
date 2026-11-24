@@ -3,9 +3,15 @@ import Drop from './Drop.astro';
 import type { Tool } from '../site';
 interface Props { tool: Tool; slug: string }
 const { tool, slug } = Astro.props;
-const accept = '.csv,.tsv,.txt,.xlsx,text/csv';
-const main = 'Drop a contact list (CSV or Excel) here, or <u>choose one</u>';
-const placeholder = 'first name,last name,mobile,email\nAna,Lima,+55 11 5555 0100,ana@example.com';
+const toCsv = tool === 'vcf-to-csv';
+const accept = toCsv ? '.vcf,text/vcard,text/x-vcard' : '.csv,.tsv,.txt,.xlsx,text/csv';
+const main = toCsv
+  ? 'Drop a .vcf contacts file here, or <u>choose one</u>'
+  : 'Drop a contact list (CSV or Excel) here, or <u>choose one</u>';
+const pasteLabel = toCsv ? 'Or paste the vCard text' : 'Or paste CSV';
+const placeholder = toCsv
+  ? 'BEGIN:VCARD\nVERSION:3.0\nFN:Ana Lima\nN:Lima;Ana;;;\nTEL;TYPE=CELL:+55 11 5555 0100\nEND:VCARD'
+  : 'first name,last name,mobile,email\nAna,Lima,+55 11 5555 0100,ana@example.com';
 const FIELD_LABELS: [string, string][] = [
   ['first', 'First name'],
   ['last', 'Last name'],
@@ -30,19 +36,28 @@ const FIELD_LABELS: [string, string][] = [
   <Drop accept={accept} main={main} sub="or paste below" />
   <ul class="files" id="list"></ul>
   <div id="pasteWrap">
-    <label class="hint" for="input" style="display:block;margin:12px 0 6px">Or paste CSV</label>
+    <label class="hint" for="input" style="display:block;margin:12px 0 6px">{pasteLabel}</label>
     <textarea id="input" rows="6" spellcheck="false" placeholder={placeholder}></textarea>
   </div>
   <button type="button" class="link" id="showText" hidden>Edit the text</button>
 
-  <div class="opts" id="pickers" hidden>
-    {FIELD_LABELS.map(([field, label]) => (
-      <label>{label} <select id={`f-${field}`}></select></label>
-    ))}
-  </div>
+  {!toCsv && (
+    <div class="opts" id="pickers" hidden>
+      {FIELD_LABELS.map(([field, label]) => (
+        <label>{label} <select id={`f-${field}`}></select></label>
+      ))}
+    </div>
+  )}
 
   <div class="actions">
-    <button type="button" class="primary" id="go" disabled>Download .vcf</button>
+    {toCsv ? (
+      <>
+        <button type="button" class="primary" id="goCsv" disabled>Download .csv</button>
+        <button type="button" class="secondary" id="goXlsx" disabled>Download .xlsx</button>
+      </>
+    ) : (
+      <button type="button" class="primary" id="go" disabled>Download .vcf</button>
+    )}
     <span class="status" id="status" aria-live="polite"></span>
   </div>
   <div class="done" id="done" role="status" hidden></div>
@@ -53,20 +68,17 @@ const FIELD_LABELS: [string, string][] = [
 
 <script>
   import { parseCsv } from '../lib/data';
-  import { baseName, save } from '../lib/save';
+  import { baseName, save, withBom } from '../lib/save';
   import { savedLine } from '../lib/route';
   import { showDone, hideDone } from '../lib/done';
-  import { buildVcf, type Contact } from '../lib/vcard';
+  import { buildVcf, parseVcf, vcfRowsToCsv, type Contact, type VcfRow } from '../lib/vcard';
 
   const root = document.querySelector<HTMLElement>('.tool')!;
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
   const input = $<HTMLTextAreaElement>('input')!, drop = $('drop')!, status = $('status')!, err = $('err')!, list = $('list')!, doneEl = $('done')!;
+  const toCsv = root.dataset.tool === 'vcf-to-csv';
   const MAX = 10;
   let name = 'contacts';
-  let header: string[] = [];
-  let rows: string[][] = [];
-  let contacts: Contact[] = [];
-  let skipped: number[] = [];
 
   function table(head: string[], body: string[][]) {
     const th = $('thead')!, tb = $('tbody')!;
@@ -82,70 +94,6 @@ const FIELD_LABELS: [string, string][] = [
       tb.append(tr);
     }
     $('tableWrap')!.hidden = !body.length;
-  }
-
-  const FIELDS = ['first', 'last', 'full', 'org', 'jobTitle', 'mobile', 'homePhone', 'workPhone', 'email', 'email2', 'street', 'city', 'region', 'postcode', 'country', 'birthday', 'note'] as const;
-  type Field = (typeof FIELDS)[number];
-  // Header words that suggest a column, compared after spaces, dashes and underscores are removed.
-  const GUESS: Record<Field, string[]> = {
-    first: ['firstname', 'givenname', 'first'],
-    last: ['lastname', 'familyname', 'surname', 'last'],
-    full: ['name', 'fullname', 'displayname'],
-    org: ['organization', 'organizationname', 'company', 'org'],
-    jobTitle: ['jobtitle', 'title', 'organizationtitle'],
-    mobile: ['mobile', 'mobilephone', 'cell', 'cellphone', 'phone1value', 'phone', 'phonenumber'],
-    homePhone: ['homephone', 'phone2value'],
-    workPhone: ['workphone', 'businessphone', 'phone3value'],
-    email: ['email', 'emailaddress', 'e-mail', 'email1value', 'e-mailaddress', 'e-mail1value'],
-    email2: ['email2', 'e-mail2address', 'e-mail2value', 'email2value'],
-    street: ['street', 'address1street', 'homestreet', 'address'],
-    city: ['city', 'address1city', 'homecity'],
-    region: ['region', 'state', 'address1region', 'homestate'],
-    postcode: ['postcode', 'zip', 'zipcode', 'postalcode', 'address1postalcode', 'homepostalcode'],
-    country: ['country', 'address1country', 'homecountryregion'],
-    birthday: ['birthday', 'dob', 'dateofbirth'],
-    note: ['note', 'notes'],
-  };
-
-  const norm = (s: string) => s.toLowerCase().replace(/[\s\-_]/g, '');
-
-  /** One header per field at most, first match wins in the field order above. */
-  function guessAll(): Record<Field, number> {
-    const used = new Set<number>();
-    const map = {} as Record<Field, number>;
-    for (const f of FIELDS) {
-      let found = -1;
-      for (const key of GUESS[f]) {
-        const k = norm(key);
-        const i = header.findIndex((h, j) => !used.has(j) && norm(h) === k);
-        if (i >= 0) { found = i; break; }
-      }
-      map[f] = found;
-      if (found >= 0) used.add(found);
-    }
-    return map;
-  }
-
-  function fillSelect(field: Field) {
-    const el = $<HTMLSelectElement>(`f-${field}`)!;
-    el.innerHTML = '';
-    const none = document.createElement('option');
-    none.value = '';
-    none.textContent = '(none)';
-    el.append(none);
-    header.forEach((h, i) => {
-      const o = document.createElement('option');
-      o.value = String(i);
-      o.textContent = h || `column ${i + 1}`;
-      el.append(o);
-    });
-  }
-
-  function renderPickers() {
-    for (const f of FIELDS) fillSelect(f);
-    const map = guessAll();
-    for (const f of FIELDS) $<HTMLSelectElement>(`f-${f}`)!.value = map[f] < 0 ? '' : String(map[f]);
-    $('pickers')!.hidden = false;
   }
 
   function showFile(f: File) {
@@ -171,113 +119,243 @@ const FIELD_LABELS: [string, string][] = [
     drop.classList.remove('compact'); $('pasteWrap')!.hidden = false; $('showText')!.hidden = true;
   };
 
-  let map = {} as Record<Field, number>;
+  let onText: (text: string) => void = () => {};
 
-  function readMap() {
-    for (const f of FIELDS) {
-      const el = $<HTMLSelectElement>(`f-${f}`)!;
-      map[f] = el.value === '' ? -1 : Number(el.value);
+  if (toCsv) {
+    const goCsv = $<HTMLButtonElement>('goCsv')!, goXlsx = $<HTMLButtonElement>('goXlsx')!;
+    let found: VcfRow[] = [];
+
+    function render() {
+      err.hidden = true;
+      hideDone(doneEl);
+      if (!found.length) { status.textContent = ''; table([], []); goCsv.disabled = true; goXlsx.disabled = true; return; }
+      table(['Full name', 'Mobile', 'Email'], found.slice(0, MAX).map((r) => [
+        r['Full name'] || [r['First name'], r['Last name']].filter(Boolean).join(' '),
+        r.Mobile,
+        r.Email,
+      ]));
+      status.textContent = `${found.length} contact${found.length === 1 ? '' : 's'} found.`;
+      goCsv.disabled = false;
+      goXlsx.disabled = false;
     }
-  }
 
-  const cell = (r: string[], f: Field) => (map[f] < 0 ? '' : (r[map[f]] ?? '')).trim();
+    onText = (text) => {
+      found = text.trim() ? parseVcf(text) : [];
+      render();
+    };
 
-  function build() {
-    contacts = [];
-    skipped = [];
-    rows.forEach((r, i) => {
-      const phones: Contact['phones'] = [];
-      if (cell(r, 'mobile')) phones.push({ value: cell(r, 'mobile'), type: 'cell' });
-      if (cell(r, 'homePhone')) phones.push({ value: cell(r, 'homePhone'), type: 'home' });
-      if (cell(r, 'workPhone')) phones.push({ value: cell(r, 'workPhone'), type: 'work' });
-      const emails: Contact['emails'] = [];
-      if (cell(r, 'email')) emails.push({ value: cell(r, 'email'), type: 'home' });
-      if (cell(r, 'email2')) emails.push({ value: cell(r, 'email2'), type: 'home' });
-
-      const contact: Contact = {
-        first: cell(r, 'first'),
-        last: cell(r, 'last'),
-        full: cell(r, 'full'),
-        org: cell(r, 'org'),
-        jobTitle: cell(r, 'jobTitle'),
-        phones,
-        emails,
-        street: cell(r, 'street'),
-        city: cell(r, 'city'),
-        region: cell(r, 'region'),
-        postcode: cell(r, 'postcode'),
-        country: cell(r, 'country'),
-        birthday: cell(r, 'birthday'),
-        note: cell(r, 'note'),
-      };
-      if (!contact.first && !contact.last && !contact.full && !contact.org && !phones.length && !emails.length) {
-        skipped.push(i + 2);
-        return;
-      }
-      contacts.push(contact);
+    goCsv.addEventListener('click', () => {
+      if (!found.length) return;
+      const blob = new Blob([withBom(vcfRowsToCsv(found))], { type: 'text/csv' });
+      const file = `${name}.csv`;
+      save(blob, file);
+      showDone({
+        el: doneEl, slug: root.dataset.slug!, line: savedLine(file), again: () => save(blob, file),
+        reset: () => { resetAll(); found = []; render(); },
+      });
     });
-  }
 
-  function render() {
-    err.hidden = true;
-    hideDone(doneEl);
-    if (!rows.length) { status.textContent = ''; $('pickers')!.hidden = true; table([], []); $<HTMLButtonElement>('go')!.disabled = true; return; }
-    readMap();
-    build();
-    $<HTMLButtonElement>('go')!.disabled = !contacts.length;
-    table(['Name', 'Mobile', 'Email'], contacts.slice(0, MAX).map((c) => [
-      [c.first, c.last].filter(Boolean).join(' ') || c.full || c.org || '',
-      c.phones.find((p) => p.type === 'cell')?.value ?? '',
-      c.emails[0]?.value ?? '',
-    ]));
-    const n = contacts.length, s = skipped.length;
-    const listed = skipped.slice(0, 3).join(', ') + (s > 3 ? ', …' : '');
-    status.textContent = `${n} contact${n === 1 ? '' : 's'}, ${s} row${s === 1 ? '' : 's'} skipped${s ? ` (rows ${listed})` : ''}.`;
-  }
+    goXlsx.addEventListener('click', async () => {
+      if (!found.length) return;
+      goXlsx.disabled = true;
+      status.textContent = 'Building workbook…';
+      try {
+        const { csvToXlsx } = await import('../lib/xlsx');
+        const bytes = csvToXlsx(vcfRowsToCsv(found), { delimiter: ',', header: true, typed: false, sheetName: name });
+        goXlsx.disabled = false;
+        render();
+        const blob = new Blob([bytes as BlobPart], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const file = `${name}.xlsx`;
+        save(blob, file);
+        showDone({
+          el: doneEl, slug: root.dataset.slug!, line: savedLine(file), again: () => save(blob, file),
+          reset: () => { resetAll(); found = []; render(); },
+        });
+      } catch (e) {
+        goXlsx.disabled = false;
+        render();
+        err.textContent = (e as Error).message; err.hidden = false;
+      }
+    });
+  } else {
+    const go = $<HTMLButtonElement>('go')!;
+    let header: string[] = [];
+    let rows: string[][] = [];
+    let contacts: Contact[] = [];
+    let skipped: number[] = [];
+    let map = {} as Record<string, number>;
 
-  function parseText(text: string) {
-    if (!text.trim()) { rows = []; header = []; render(); return; }
-    const p = parseCsv(text, { typed: false });
-    header = p.fields.map((h) => String(h ?? ''));
-    rows = (p.rows as Record<string, unknown>[]).map((r) => header.map((h) => {
-      const v = r[h];
-      return v == null ? '' : String(v);
-    }));
-    renderPickers();
-    render();
+    const FIELDS = ['first', 'last', 'full', 'org', 'jobTitle', 'mobile', 'homePhone', 'workPhone', 'email', 'email2', 'street', 'city', 'region', 'postcode', 'country', 'birthday', 'note'] as const;
+    type Field = (typeof FIELDS)[number];
+    // Header words that suggest a column, compared after spaces, dashes and underscores are removed.
+    const GUESS: Record<Field, string[]> = {
+      first: ['firstname', 'givenname', 'first'],
+      last: ['lastname', 'familyname', 'surname', 'last'],
+      full: ['name', 'fullname', 'displayname'],
+      org: ['organization', 'organizationname', 'company', 'org'],
+      jobTitle: ['jobtitle', 'title', 'organizationtitle'],
+      mobile: ['mobile', 'mobilephone', 'cell', 'cellphone', 'phone1value', 'phone', 'phonenumber'],
+      homePhone: ['homephone', 'phone2value'],
+      workPhone: ['workphone', 'businessphone', 'phone3value'],
+      email: ['email', 'emailaddress', 'e-mail', 'email1value', 'e-mailaddress', 'e-mail1value'],
+      email2: ['email2', 'e-mail2address', 'e-mail2value', 'email2value'],
+      street: ['street', 'address1street', 'homestreet', 'address'],
+      city: ['city', 'address1city', 'homecity'],
+      region: ['region', 'state', 'address1region', 'homestate'],
+      postcode: ['postcode', 'zip', 'zipcode', 'postalcode', 'address1postalcode', 'homepostalcode'],
+      country: ['country', 'address1country', 'homecountryregion'],
+      birthday: ['birthday', 'dob', 'dateofbirth'],
+      note: ['note', 'notes'],
+    };
+
+    const norm = (s: string) => s.toLowerCase().replace(/[\s\-_]/g, '');
+
+    /** One header per field at most, first match wins in the field order above. */
+    function guessAll(): Record<Field, number> {
+      const used = new Set<number>();
+      const guess = {} as Record<Field, number>;
+      for (const f of FIELDS) {
+        let found = -1;
+        for (const key of GUESS[f]) {
+          const k = norm(key);
+          const i = header.findIndex((h, j) => !used.has(j) && norm(h) === k);
+          if (i >= 0) { found = i; break; }
+        }
+        guess[f] = found;
+        if (found >= 0) used.add(found);
+      }
+      return guess;
+    }
+
+    function fillSelect(field: Field) {
+      const el = $<HTMLSelectElement>(`f-${field}`)!;
+      el.innerHTML = '';
+      const none = document.createElement('option');
+      none.value = '';
+      none.textContent = '(none)';
+      el.append(none);
+      header.forEach((h, i) => {
+        const o = document.createElement('option');
+        o.value = String(i);
+        o.textContent = h || `column ${i + 1}`;
+        el.append(o);
+      });
+    }
+
+    function renderPickers() {
+      for (const f of FIELDS) fillSelect(f);
+      const guess = guessAll();
+      for (const f of FIELDS) $<HTMLSelectElement>(`f-${f}`)!.value = guess[f] < 0 ? '' : String(guess[f]);
+      $('pickers')!.hidden = false;
+    }
+
+    function readMap() {
+      for (const f of FIELDS) {
+        const el = $<HTMLSelectElement>(`f-${f}`)!;
+        map[f] = el.value === '' ? -1 : Number(el.value);
+      }
+    }
+
+    const cell = (r: string[], f: Field) => (map[f] < 0 ? '' : (r[map[f]] ?? '')).trim();
+
+    function build() {
+      contacts = [];
+      skipped = [];
+      rows.forEach((r, i) => {
+        const phones: Contact['phones'] = [];
+        if (cell(r, 'mobile')) phones.push({ value: cell(r, 'mobile'), type: 'cell' });
+        if (cell(r, 'homePhone')) phones.push({ value: cell(r, 'homePhone'), type: 'home' });
+        if (cell(r, 'workPhone')) phones.push({ value: cell(r, 'workPhone'), type: 'work' });
+        const emails: Contact['emails'] = [];
+        if (cell(r, 'email')) emails.push({ value: cell(r, 'email'), type: 'home' });
+        if (cell(r, 'email2')) emails.push({ value: cell(r, 'email2'), type: 'home' });
+
+        const contact: Contact = {
+          first: cell(r, 'first'),
+          last: cell(r, 'last'),
+          full: cell(r, 'full'),
+          org: cell(r, 'org'),
+          jobTitle: cell(r, 'jobTitle'),
+          phones,
+          emails,
+          street: cell(r, 'street'),
+          city: cell(r, 'city'),
+          region: cell(r, 'region'),
+          postcode: cell(r, 'postcode'),
+          country: cell(r, 'country'),
+          birthday: cell(r, 'birthday'),
+          note: cell(r, 'note'),
+        };
+        if (!contact.first && !contact.last && !contact.full && !contact.org && !phones.length && !emails.length) {
+          skipped.push(i + 2);
+          return;
+        }
+        contacts.push(contact);
+      });
+    }
+
+    function render() {
+      err.hidden = true;
+      hideDone(doneEl);
+      if (!rows.length) { status.textContent = ''; $('pickers')!.hidden = true; table([], []); go.disabled = true; return; }
+      readMap();
+      build();
+      go.disabled = !contacts.length;
+      table(['Name', 'Mobile', 'Email'], contacts.slice(0, MAX).map((c) => [
+        [c.first, c.last].filter(Boolean).join(' ') || c.full || c.org || '',
+        c.phones.find((p) => p.type === 'cell')?.value ?? '',
+        c.emails[0]?.value ?? '',
+      ]));
+      const n = contacts.length, s = skipped.length;
+      const listed = skipped.slice(0, 3).join(', ') + (s > 3 ? ', …' : '');
+      status.textContent = `${n} contact${n === 1 ? '' : 's'}, ${s} row${s === 1 ? '' : 's'} skipped${s ? ` (rows ${listed})` : ''}.`;
+    }
+
+    onText = (text) => {
+      if (!text.trim()) { rows = []; header = []; render(); return; }
+      const p = parseCsv(text, { typed: false });
+      header = p.fields.map((h) => String(h ?? ''));
+      rows = (p.rows as Record<string, unknown>[]).map((r) => header.map((h) => {
+        const v = r[h];
+        return v == null ? '' : String(v);
+      }));
+      renderPickers();
+      render();
+    };
+
+    root.querySelectorAll('#pickers select').forEach((el) => el.addEventListener('change', () => render()));
+
+    go.addEventListener('click', () => {
+      if (!contacts.length) return;
+      const blob = new Blob([buildVcf(contacts)], { type: 'text/vcard' });
+      const file = `${name}.vcf`;
+      save(blob, file);
+      showDone({
+        el: doneEl, slug: root.dataset.slug!, line: savedLine(file), again: () => save(blob, file),
+        reset: () => { resetAll(); rows = []; header = []; render(); },
+      });
+    });
   }
 
   let timer = 0;
   input.addEventListener('input', () => { clearTimeout(timer); timer = window.setTimeout(() => {
-    try { parseText(input.value); } catch (e) { err.textContent = (e as Error).message; err.hidden = false; }
+    try { onText(input.value); } catch (e) { err.textContent = (e as Error).message; err.hidden = false; }
   }, 250); });
-  root.querySelectorAll('#pickers select').forEach((el) => el.addEventListener('change', () => render()));
-
-  $('go')!.addEventListener('click', () => {
-    if (!contacts.length) return;
-    const blob = new Blob([buildVcf(contacts)], { type: 'text/vcard' });
-    const file = `${name}.vcf`;
-    save(blob, file);
-    showDone({
-      el: doneEl, slug: root.dataset.slug!, line: savedLine(file), again: () => save(blob, file),
-      reset: () => { resetAll(); rows = []; header = []; render(); },
-    });
-  });
 
   drop.addEventListener('files', async (e) => {
     const f = (e as CustomEvent<File[]>).detail[0];
     showFile(f);
     try {
-      if (/\.xlsx$/i.test(f.name)) {
+      if (!toCsv && /\.xlsx$/i.test(f.name)) {
         const { xlsxToCsv } = await import('../lib/xlsx');
         input.value = xlsxToCsv(new Uint8Array(await f.arrayBuffer())).csv;
       } else {
         input.value = await f.text();
       }
-      parseText(input.value);
+      onText(input.value);
     } catch (e) {
       input.value = '';
-      rows = []; header = []; render();
+      onText('');
       err.textContent = (e as Error).message;
       err.hidden = false;
     }
