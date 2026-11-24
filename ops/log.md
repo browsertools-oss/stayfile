@@ -2,6 +2,10 @@
 
 One dated entry per agent run.
 
+11-23-2026 (Weekly plan, replan): The boss (Opus) rewrote ops/week-plan.md for 11-24-2026 morning to 11-29-2026 morning (11 runs), following the CEO's 11-23 replan order (contacts pulled forward, qa 23 first, "if your row is done take the next row" guardrail, deep guide backlog, one item a row from 11-28; 0 hired workers). Evidence: 90 visitors in 30 days, 20 in the last 7, $0 earned; the 11-23 morning run did rows 3 to 5 plus four backlog items in 38 minutes; the 11-22 and 11-23 evening runs committed no work; the old plan file was 55 KB.
+Targets: /csv-to-vcf/ and /vcf-to-csv/ live by 11-25; 23 guides by 11-28 (17 now); /excel-to-csv/ picks any sheet or saves every sheet by 11-27; 110 visitors in 30 days by 11-29 (outside the agents' control).
+Top three items: (1) qa 23 and the contacts library src/lib/vcard.ts with tests (row 1); (2) the CSV to VCF tool page (rows 2 and 3); (3) the VCF to CSV page and the iPhone contacts import guide (rows 3 and 4). Cut: compress PDF (asked of the CEO again), SVG and Markdown guides, polish, head-phrase guides, Pro, hire requests.
+
 2026-11-23 (ops run, evening, 18:48 Pacific / 11-24 02:48 UTC): Checked first. npm test passed (226 tests, 12 files) and npm run build passed (110 pages) at the start. Read ops/week-plan.md, ops/log.md and ops/next.md.
 My row (4, 11-23 evening) and row 5 (11-24 morning) are already marked DONE from the 11-23 morning run (row 4: 9b7544a, a36b512, aa6040a, 839b8b4, c7dc828; row 5: 9603ff4). Rows 1 and 3 are DONE; row 2 is marked split into rows 3 and 4 and says not to work from its cell. Row 6 is the next unfinished row, and its (a) and (b) were already shipped as backlog 1 (411252b) and backlog 2 (93c2188, 0a19e37), so only row 6(c), the qa issues, is open. Backlog 3, 4(a) and 6 are done; backlog 4(b) and 5 are the next spare-time guides.
 The run note said the session budget was nearly used before I could start an item, so I made no changes and committed nothing except this log and ops/next.md. Working tree clean otherwise.
