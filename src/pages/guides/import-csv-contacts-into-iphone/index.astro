@@ -1,0 +1,53 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to import a CSV or Excel contact list into an iPhone';
+const description = 'The iPhone reads vCard files, not CSV or Excel. Turn a contact spreadsheet into a .vcf, import it from Mail, Files or iCloud, and check what came in.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-24',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/import-csv-contacts-into-iphone/" jsonld={jsonld}>
+  <h1>How to import a CSV or Excel contact list into an iPhone</h1>
+  <p class="lede">The iPhone cannot open a CSV or Excel file as contacts. The Contacts app and iCloud import only vCard files, which end in .vcf, so a spreadsheet has to be converted first. This guide covers the whole route: tidying the sheet, making the .vcf, getting it onto the phone and checking the result.</p>
+
+  <h2>If the contacts are already in a Google account</h2>
+  <p>Sometimes there is nothing to convert. If the list lives in a Google account, add that account to the iPhone and let it fetch the contacts directly. Open Settings, go to Contacts, choose Accounts, add the Google account and turn Contacts on for it. The names then appear in the Contacts app and stay in step with the account. Menu names can differ a little between app versions.</p>
+  <p>The rest of this guide is for a list that exists only as a file: an export from an old phone, a spreadsheet from work, or a list someone sent you.</p>
+
+  <h2>1. Tidy the spreadsheet first</h2>
+  <p>Open the file in Excel, Numbers or Google Sheets and make it a simple table. The first row should hold column headings, and every row below should be one person. Delete blank rows, title rows and merged cells above the headings, because a converter reads the top row as the names of the columns.</p>
+  <p>Decide which column holds what. A first name column and a last name column are best when the sheet has them. A single name column also works. Phone numbers should be in one column of their own rather than several columns with one number each, and email addresses the same. Save the sheet as CSV if it is an Excel file, or keep the .xlsx and convert that.</p>
+
+  <h2>2. Turn the list into a .vcf file</h2>
+  <p>Open <a href="/csv-to-vcf/">CSV to VCF</a> and drop the spreadsheet on the page. The file is read in the browser, and nothing is uploaded. The page guesses which column fills which field from the headings, so a column called Mobile becomes the mobile number and a column called Email becomes the email address.</p>
+  <p>Check the guesses in the column list and change any that are wrong. A column left at (none) is not written into the cards. Then download the .vcf. If the preview shows 40 contacts and 2 rows skipped, those two rows held no name, phone or email, and leaving them out is usually what you want.</p>
+
+  <h2>3. Put the file on the iPhone</h2>
+  <p>There are two ways, and either works.</p>
+  <p>On the phone itself: email the .vcf to yourself, or send it with AirDrop or a message. Open the attachment on the iPhone, and the phone offers to add the contacts. Choose to add all of them. If the file opens into a list of names instead, tap each one to add.</p>
+  <p>On a computer: open <a href="https://www.icloud.com/contacts" rel="nofollow">Contacts on iCloud.com</a> in a browser, sign in, and use the import command in the settings menu at the bottom of the window to pick the .vcf. The contacts sync to the iPhone within a minute or two, as long as iCloud Contacts is turned on in Settings, Contacts. Menu names can differ a little between app versions.</p>
+
+  <h2>4. Check the contacts and merge duplicates</h2>
+  <p>Open Contacts on the iPhone and look at a few names from the list. Check one with a long phone number and one with an email address, because a column mapped wrongly shows up fastest there.</p>
+  <p>If some names were already on the phone, you now have two copies of each. Recent versions of iOS can find and merge them. In the Contacts app, look for a note about duplicate contacts, usually near the top of the list, and follow it; or search for the word duplicate in Settings. Describe the steps in words if the screens differ, because Apple moves them between releases. The merged contact keeps the details from both copies.</p>
+
+  <h2>Only some contacts came in</h2>
+  <p>An import that stops partway is the most common complaint. Some phone versions stop at the first card they cannot read, so the names that arrived end at the broken one. Find the last person that came in, then look at the row after that in the spreadsheet. A stray line break inside a cell, a quote in the middle of a name or an odd character often causes it. Fix the row, make a new .vcf and import that one again with the remaining rows.</p>
+  <p>The other usual cause is the account. If the new contacts landed on a different account from the one you look at, open Settings, Contacts and check Default Account, then move them or import again with the right account chosen. Also check that iCloud Contacts is turned on at all, since an import into a switched-off account has nowhere to go.</p>
+
+  <h2>What each contact keeps</h2>
+  <p>The conversion writes one card per row, in vCard 3.0, the version the iPhone, iCloud, Android and Outlook all read. The card can hold a first name, a last name, a full name, an organization, a job title, a mobile number, a home phone, a work phone, two email addresses, a home address, a birthday and a note. Anything you did not map is simply absent from the card, and the phone shows the contact without it.</p>
+  <p>Photos and contact groups do not come across, because the spreadsheet has no column for them. A second home address is not kept either. If you later need the list as a spreadsheet again, <a href="/vcf-to-csv/">VCF to CSV</a> turns the contacts file back into rows, and <a href="/excel-to-csv/">Excel to CSV</a> helps when the original is a workbook with more than one sheet.</p>
+  <p>A contact list is other people's personal data, so it is worth knowing where it goes. The converter on this site reads the file and writes the new one inside your browser. Nothing is sent to a server, and closing the tab ends the process. <a href="/guides/are-online-file-converters-safe/">Are online file converters safe?</a> explains what to look for in any other converter you use.</p>
+  <p>Accented names are a common source of debris in the output. <a href="/guides/csv-garbled-characters-excel/">Why a CSV shows odd characters in Excel</a> covers the encoding that causes it in the first place; this converter reads UTF-8 names and the quoted-printable names in old Android exports.</p>
+  <p>See also: <a href="/guides/csv-garbled-characters-excel/">Why a CSV shows odd characters in Excel</a> covers the encoding behind mangled names, and <a href="/guides/are-online-file-converters-safe/">Are online file converters safe?</a> covers what to check before you use one.</p>
+</Base>
