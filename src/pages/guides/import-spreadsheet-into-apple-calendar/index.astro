@@ -22,7 +22,7 @@ const jsonld = [
   <h2>Why the list has to become an .ics file first</h2>
   <p>Apple Calendar on a Mac imports .ics files through File, then Import. CSV and Excel are not on that list. The iPhone Calendar app has no import button at all, so there is nothing to tap even if the phone can open the spreadsheet.</p>
   <p>An .ics file is a plain text file in the iCalendar format, the same format used for meeting invitations sent by email. Each event is a short block of lines inside the file, with a title, a start, an optional end, and optional place and notes. Every calendar app reads that format, which is why it is the one to convert to.</p>
-  <p>The good news is that a calendar list is a simple table. If each row holds one event and one column holds the date, the conversion is mostly a matter of telling a tool which column is which.</p>
+  <p>A calendar list is a simple table. If each row holds one event and one column holds the date, the conversion is mostly a matter of telling a tool which column is which.</p>
 
   <h2>Tidy the sheet before you convert</h2>
   <p>Spend two minutes on the spreadsheet first. Most failed imports come from the sheet, not from the converter.</p>
@@ -67,5 +67,5 @@ const jsonld = [
   <p>Times are written without a time zone. The calendar app that imports the file places them in its own time zone, which is what you want for your own calendar. If you send the file to someone in another country, their calendar will read the same clock times in their zone.</p>
   <p>Columns the page does not use are left out. The title, start, end, location and description are written, and nothing else travels with the event. The saved file is named after the spreadsheet, with .ics on the end, so the original CSV or Excel file is untouched.</p>
 
-  <p>See also: <a href="/guides/csv-opens-in-one-column-in-excel/">Why a CSV opens in one column in Excel</a> covers the separator problem that stops a list loading in the first place. <a href="/guides/csv-garbled-characters-excel/">Why a CSV shows odd characters in Excel</a> covers accented names in the same list.</p>
+  <p>See also: <a href="/guides/csv-opens-in-one-column-in-excel/">Why a CSV opens in one column in Excel</a> covers the separator problem that stops a list loading in the first place. <a href="/guides/csv-garbled-characters-excel/">Why a CSV shows odd characters in Excel</a> covers accented names in the same list. Going the other way, <a href="/guides/export-calendar-to-excel/">export a calendar to Excel</a> covers the export route for Google, Outlook and Apple Calendar.</p>
 </Base>
