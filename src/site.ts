@@ -3286,6 +3286,7 @@ export const PAGES: ToolPage[] = [
     slug: 'vcf-to-csv',
     tool: 'vcf-to-csv',
     group: 'Spreadsheets and data',
+    guide: 'export-iphone-contacts-to-excel',
     card: 'VCF to CSV',
     blurb: 'Open a contacts file as a spreadsheet',
     title: 'VCF to CSV: open a contacts file in Excel',
@@ -3336,6 +3337,11 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'iphone-heic-photos-to-jpg',
     title: "iPhone HEIC photos won't open on Windows? Convert to JPG",
     blurb: 'What HEIC is, why Windows will not open it, and how to fix it on the phone and on the PC.',
+  },
+  {
+    slug: 'export-iphone-contacts-to-excel',
+    title: 'How to export iPhone contacts to Excel for free',
+    blurb: 'Export the vCard from Contacts or iCloud, then turn it into an Excel list with one row per contact.',
   },
   {
     slug: 'import-csv-contacts-into-iphone',

@@ -1,0 +1,53 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to export iPhone contacts to Excel for free';
+const description = 'The iPhone exports contacts as vCard, not CSV. Get the file from Contacts or iCloud and turn it into an Excel list with named columns, free and in your browser.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-24',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/export-iphone-contacts-to-excel/" jsonld={jsonld}>
+  <h1>How to export iPhone contacts to Excel for free</h1>
+  <p class="lede">The iPhone has no CSV export for contacts, but it does export them as vCard, and a vCard becomes an Excel sheet in a minute. The export is free and built into the phone. This guide shows both ways to get the file out and how to turn it into rows of names, numbers and addresses.</p>
+
+  <h2>What the iPhone can export</h2>
+  <p>The Contacts app exports a list as a .vcf file, which holds the contacts as vCard cards. That is the only contact file the phone produces. There is no button that writes a CSV or a workbook, and no setting hides in a menu waiting to be found. The conversion happens afterwards, on a computer or in a browser tab.</p>
+  <p>Most of the time the export is one step. Where the contacts live decides which list you export from, so it helps to know which account holds them before you start.</p>
+
+  <h2>Route 1: export on the phone</h2>
+  <p>On a recent version of iOS, open Contacts and tap Lists at the top of the screen. Touch and hold a list, such as All Contacts or All iCloud, and choose Export from the menu that appears. The phone asks where to send the file; save it to the Files app, or mail it to yourself and open it on a computer.</p>
+  <p>The list names depend on where the contacts are stored. Contacts kept in an iCloud account appear under All iCloud, a Google account has its own list, and contacts saved on the phone alone may sit in a separate group. Exporting All Contacts covers everything in one file when all the accounts are turned on.</p>
+  <p>Menu names can differ a little between app versions. If Export does not appear on the long-press menu, look under Lists and the edit or more options button there.</p>
+
+  <h2>Route 2: export from iCloud on a computer</h2>
+  <p>If the contacts are in iCloud, a computer is the easier place to do the export. Open <a href="https://www.icloud.com/contacts" rel="nofollow">Contacts on iCloud.com</a> in a browser and sign in with the same Apple account as the phone.</p>
+  <p>Select the contacts you want, or press the select-all shortcut to take everything, then choose Export vCard from the menu in the window. The browser downloads a .vcf file. The list matches what the phone shows, because both read the same iCloud account.</p>
+
+  <h2>Turn the .vcf into an Excel file</h2>
+  <p>Open <a href="/vcf-to-csv/">VCF to CSV</a> and drop the .vcf on the page. The file is read in the browser, and nothing is uploaded. The preview shows the first contacts with their names, mobile numbers and email addresses, so you can see at a glance whether the file opened properly.</p>
+  <p>The page reports how many contacts it found. Then choose Download .xlsx, and the workbook lands in your downloads folder with one row per contact and a heading on every column. If you want a plain CSV instead, the Download .csv button gives you one; the CSV starts with a byte order mark, so Excel shows accented names correctly. If the CSV still looks wrong, <a href="/guides/csv-garbled-characters-excel/">Why a CSV shows odd characters in Excel</a> covers the usual encoding cause.</p>
+  <p>Going the other way is just as short. <a href="/csv-to-vcf/">CSV to VCF</a> turns an edited sheet back into a .vcf that the phone can import, and <a href="/excel-to-csv/">Excel to CSV</a> helps when the workbook has more than one sheet and you want a single table from it.</p>
+
+  <h2>Which columns you get</h2>
+  <p>A vCard does not have a fixed set of columns like a spreadsheet, so the converter lays the cards out in a fixed order. Each row has: First name, Last name, Full name, Organization, Job title, Mobile, Home phone, Work phone, Other phone, Email, Email 2, Street, City, Region, Postcode, Country, Birthday and Note.</p>
+  <p>A card with a second phone number that is not a mobile goes in Other phone, so nothing is lost to a wrong label. A card with two email addresses fills both email columns. Columns the phone left empty stay empty in the sheet.</p>
+
+  <h2>What is left out</h2>
+  <p>Photos are not exported. The converter skips the image data stored in a card, because a spreadsheet cannot use it and it makes the file very large. Contact groups and custom labels are not kept either, so a name in a group such as Work appears as an ordinary row.</p>
+  <p>The sheet is the text of your contacts: names, numbers, addresses, birthdays and notes. Anything the card did not hold cannot appear.</p>
+
+  <h2>What to do with the list in Excel</h2>
+  <p>A contact list in Excel is easy to sort and filter. Sort by Organization to see everyone from one company together, or filter the Mobile column to pull out the numbers you need for a group message. Duplicates show up when you sort by last name and then by email, which is faster than scrolling the phone. A mailing list or a mail merge also takes the sheet as it is, with one row per person and a heading on each column.</p>
+  <p>Android phones export a .vcf from their Contacts app too, so the same converter works when the contacts come from an Android phone rather than an iPhone.</p>
+  <p>A contact list is other people's personal data, so it matters where it goes. This converter runs entirely in the browser: the file is read and the workbook is written on your computer, and nothing is sent to a server. <a href="/guides/are-online-file-converters-safe/">Are online file converters safe?</a> covers what to check in any other converter.</p>
+  <p>See also: <a href="/guides/import-csv-contacts-into-iphone/">How to import a CSV or Excel contact list into an iPhone</a> for the trip back.</p>
+</Base>
