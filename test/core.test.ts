@@ -4,7 +4,7 @@ import { deflateSync } from 'node:zlib';
 import { parseRanges, merge, extract, split, burst, rotate, imagesToPdf, placeImage, pageCount, pagesToKeep, textToPdf, addPageNumbers } from '../src/lib/pdf';
 import { typeValue, parseCsv, csvToJson, csvToMarkdown, tsvToCsv, csvToTsv, markdownTableRows, markdownToCsv, markdownToJson, jsonToCsv, jsonRows, flatten, jsonToMarkdown, csvToSql, sqlTableName } from '../src/lib/data';
 import * as XLSX from 'xlsx';
-import { csvToXlsx, xlsxToRows, xlsxToCsv } from '../src/lib/xlsx';
+import { csvToXlsx, xlsxToRows, xlsxToCsv, xlsxAllToCsv } from '../src/lib/xlsx';
 import { targetSize, renameTo, formatBytes, sizeChange, avifQuality } from '../src/lib/image';
 import { PAGES } from '../src/site';
 import { yamlToJson } from '../src/lib/yaml';
@@ -317,6 +317,23 @@ describe('csv and json', () => {
     const out = xlsxToCsv(bytes);
     expect(out.csv.trimEnd()).toBe('a,b\n1,"x, y"');
     expect(out.sheets).toEqual(['First', 'Second']);
+  });
+
+  test('xlsxToCsv reads a named sheet, and xlsxAllToCsv returns every sheet', () => {
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['a', 'b'], [1, 'x']]), 'First');
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet([['z'], [2]]), 'Second');
+    const bytes = new Uint8Array(XLSX.write(wb, { type: 'array', bookType: 'xlsx' }) as ArrayBuffer);
+
+    expect(xlsxToCsv(bytes, 'Second').csv.trimEnd()).toBe('z\n2');
+    expect(xlsxToCsv(bytes, 'Second').sheets).toEqual(['First', 'Second']);
+    // A sheet name that is not in the workbook falls back to the first sheet.
+    expect(xlsxToCsv(bytes, 'Nope').csv.trimEnd()).toBe('a,b\n1,x');
+
+    const all = xlsxAllToCsv(bytes);
+    expect(all.map((s) => s.name)).toEqual(['First', 'Second']);
+    expect(all[0].csv.trimEnd()).toBe('a,b\n1,x');
+    expect(all[1].csv.trimEnd()).toBe('z\n2');
   });
 
   test('xlsxToCsv writes date cells as shown in Excel and keeps the first tab even when it is not Sheet1', () => {
