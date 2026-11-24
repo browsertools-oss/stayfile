@@ -1,0 +1,52 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to save just one page of a PDF';
+const description = 'Save one page of a PDF as its own file with a browser print, Mac Preview, or a page tool that copies the page without redrawing it.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-24',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/save-one-page-of-a-pdf/" jsonld={jsonld}>
+  <h1>How to save just one page of a PDF</h1>
+  <p class="lede">To keep one page of a long PDF as a PDF of its own, either print that page to a new file or copy the page out with a page tool. The print route needs nothing installed, and the copy route keeps the page exactly as it was. This guide covers both, plus what each one does to the page on the way.</p>
+
+  <h2>Save one page with a browser print</h2>
+  <p>Chrome and Edge can save part of a PDF without any extra software. Open the PDF in the browser, then press Ctrl+P on Windows or Cmd+P on a Mac. In the print dialog, set Destination to Save as PDF. Open More settings if the page options are hidden, set Pages to Custom, and type the page you want, such as 3, or a range such as 2-4.</p>
+  <p>Press Save and choose a name. The browser writes a new PDF with only those pages. It runs on your computer, so the file is not uploaded to a print service.</p>
+  <p>The catch is that printing rebuilds each page. Text is drawn again, so a link, a form field or a filled-in signature can be lost, and text that was selectable may come back as a picture in some setups. For an ordinary page of text this does not matter. For a form or a signed contract it does.</p>
+
+  <h2>Save one page with Mac Preview</h2>
+  <p>Preview on a Mac has two quick routes. Open the PDF, choose View and then Thumbnails so the pages appear in a side panel, click the page you want, and drag its thumbnail to the desktop or into a folder. Preview writes a one-page PDF there.</p>
+  <p>The other route is File, Print. Set the page range in the print dialog, then choose PDF at the bottom of the dialog and Save as PDF. Menu names can differ a little between app versions.</p>
+
+  <h2>Copy the page without redrawing it</h2>
+  <p>Printing makes a new picture of the page. A page tool instead copies the page across from the original file, so the text stays selectable, the images keep their resolution and nothing is re-compressed. This is the route to take when a link, a form or the exact contents of the page matter.</p>
+  <p><a href="/extract-pages-from-pdf/">Extract pages from a PDF</a> does this in your browser. Drop the PDF on the page and type the pages you want in the range box. A single number such as 3 takes that page. A range written 2-4 takes three pages into one file. You can separate parts with a comma, and a dash with no end, such as 8-, runs to the last page. A backwards range such as 10-1 reverses the order. Press the button and save the new PDF.</p>
+  <p>The new file holds the pages you chose in the order you asked for, and the original is left alone. If the PDF is locked with a password, remove the password in your PDF reader first, because the tool cannot open an encrypted file.</p>
+
+  <h2>Other ways to get one page out</h2>
+  <p>If you want the rest of the file instead, <a href="/remove-pages-from-pdf/">remove pages from a PDF</a> takes the pages you name out and keeps everything else, which saves typing a long range when the PDF has many pages.</p>
+  <p>If you need every page as its own file, <a href="/split-pdf/">Split PDF</a> writes one PDF per page, or one per range you type, and hands you a zip. When one page is needed as a picture and not a PDF, <a href="/pdf-to-jpg/">PDF to JPG</a> turns the pages into images at a resolution you pick.</p>
+
+  <h2>Which route to choose</h2>
+  <p>Use the browser print when you want a quick copy and the page is plain text or a scan. It is one shortcut and no new tabs. Use a page tool when the page has links, a form, or anything you need to keep exactly as it is, and also when you want several pages in the order you choose.</p>
+  <p>Whichever route you take, open the new file and look at the first page before you send it on. Check that the page you wanted arrived and that the rest of the file stayed behind.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li>Chrome or Edge: open the PDF, Ctrl+P or Cmd+P, Save as PDF, Pages set to Custom with the page number.</li>
+    <li>Mac Preview: show thumbnails and drag the page to the desktop, or File, Print with a page range.</li>
+    <li>Keep the page as it is: <a href="/extract-pages-from-pdf/">Extract pages from a PDF</a> copies the pages in your browser.</li>
+    <li>Every page as its own file: <a href="/split-pdf/">Split PDF</a>.</li>
+  </ul>
+  <p>See also: <a href="/guides/combine-pdf-files/">combine PDF files</a> covers the opposite job, joining several PDFs into one.</p>
+</Base>

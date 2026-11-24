@@ -126,7 +126,7 @@ export const PAGES: ToolPage[] = [
     slug: 'split-pdf',
     tool: 'pdf-split',
     group: 'PDF',
-    guide: 'pdf-too-large-to-email',
+    guide: ['pdf-too-large-to-email', 'save-one-page-of-a-pdf'],
     card: 'Split PDF',
     blurb: 'Break a PDF into several files',
     preset: { split: 'ranges' },
@@ -162,6 +162,7 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'extract-pages-from-pdf',
+    guide: 'save-one-page-of-a-pdf',
     tool: 'pdf-split',
     group: 'PDF',
     card: 'Extract PDF pages',
@@ -3337,6 +3338,11 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'iphone-heic-photos-to-jpg',
     title: "iPhone HEIC photos won't open on Windows? Convert to JPG",
     blurb: 'What HEIC is, why Windows will not open it, and how to fix it on the phone and on the PC.',
+  },
+  {
+    slug: 'save-one-page-of-a-pdf',
+    title: 'How to save just one page of a PDF',
+    blurb: 'Print one page to a new PDF in a browser, drag it out in Preview, or copy the page without redrawing it.',
   },
   {
     slug: 'export-iphone-contacts-to-excel',
