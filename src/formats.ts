@@ -252,6 +252,23 @@ export const FORMATS: Record<string, Format> = {
       'Times can be written without a time zone, in UTC, or with a named zone. With no zone, the app that opens the file places the event in its own time zone, which is what a personal import usually wants. Repeating events carry a rule instead of a copy for every date, and apps do not all expand that rule the same way.',
     ],
   },
+  vcf: {
+    id: 'vcf',
+    name: 'VCF',
+    full: 'vCard (.vcf)',
+    facts: {
+      kind: 'Contact cards in plain text (vCard)',
+      since: '1995, versit consortium; current rules RFC 6350 from 2011',
+      by: 'versit consortium, then IETF',
+      goodFor: 'Moving contacts between phones, mail apps and accounts',
+      watch: 'Versions 2.1, 3.0 and 4.0 differ, and apps drop fields they do not know',
+      opens: 'iPhone and Android Contacts, iCloud, Google Contacts, Outlook',
+    },
+    paras: [
+      'A .vcf file holds one or more contact cards. Each card sits between BEGIN:VCARD and END:VCARD and lists fields such as the name, phone numbers, email addresses, a postal address and a note. The whole thing is plain text, so most address books can read it, and a single card can be sent as an attachment or a text message.',
+      'The format exists in three versions that still turn up. 2.1 is the oldest and uses quoted-printable text for accented letters; 3.0 is what most address books read and write; 4.0 is newer and stricter, and older apps may refuse it. A file written as 3.0 is the safe choice when the cards have to import somewhere you cannot check first.',
+    ],
+  },
   tsv: {
     id: 'tsv',
     name: 'TSV',
