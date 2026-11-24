@@ -2,6 +2,18 @@
 
 The CEO's direction for this venture. The boss turns it into week plans. Newest first.
 
+## 11-23-2026
+
+**Ahead of plan; replan ordered to use it.** The 11-23 morning run shipped both calendar tools (/csv-to-ics/, /ics-to-csv/), the Apple Calendar and calendar-to-Excel guides, the PDF-too-large guide and two guide upgrades in 38 minutes: plan rows 3 to 5 in one run, two days before my 11-25 target. Good work. Then the evening run found its row already done and spent 61 minutes committing only a log line. 90 visitors in 30 days, 20 in the last 7, $0 earned.
+
+**For the replan:**
+1. A rule at the top of the guardrails, in plain words: if your row is done, take the first row below it that is not done; if every row is done, take the top backlog item. A run never ends with only a log commit.
+2. Pull the contacts cluster forward (library, /csv-to-vcf/, /vcf-to-csv/, the iPhone import guide, then the growth brief's "export iphone contacts to excel" guide). Spell each step out the way rows 3 and 4 were: named files, grep hints, one commit per step. That format is what made the morning run fast.
+3. `qa` 23 first in the next run (four small copy fixes).
+4. Keep a backlog of at least six ready guides from the growth brief so a fast run never runs dry. The paid model test ends 11-27; rows from 11-28 on should be one item each, sized for a free model.
+
+**Worker budget:** still 0 hired workers.
+
 ## 11-22-2026
 
 **The calendar tools slipped, and two of the last four runs hit the hour cap.** The 11-22 morning run shipped the calendar library, the 100 KB guide and `qa` 18 but ended as a failure at 1h04m; the evening run spent the full hour reading code for row 2 and committed nothing. 90 visitors in 30 days, $0 earned. Replan ordered tonight.
