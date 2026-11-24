@@ -6,6 +6,25 @@ const { tool, slug } = Astro.props;
 const accept = '.csv,.tsv,.txt,.xlsx,text/csv';
 const main = 'Drop a contact list (CSV or Excel) here, or <u>choose one</u>';
 const placeholder = 'first name,last name,mobile,email\nAna,Lima,+55 11 5555 0100,ana@example.com';
+const FIELD_LABELS: [string, string][] = [
+  ['first', 'First name'],
+  ['last', 'Last name'],
+  ['full', 'Full name'],
+  ['org', 'Organization'],
+  ['jobTitle', 'Job title'],
+  ['mobile', 'Mobile'],
+  ['homePhone', 'Home phone'],
+  ['workPhone', 'Work phone'],
+  ['email', 'Email'],
+  ['email2', 'Email 2'],
+  ['street', 'Street'],
+  ['city', 'City'],
+  ['region', 'Region'],
+  ['postcode', 'Postcode'],
+  ['country', 'Country'],
+  ['birthday', 'Birthday'],
+  ['note', 'Note'],
+];
 ---
 <section class="tool" data-tool={tool} data-slug={slug}>
   <Drop accept={accept} main={main} sub="or paste below" />
@@ -15,6 +34,12 @@ const placeholder = 'first name,last name,mobile,email\nAna,Lima,+55 11 5555 010
     <textarea id="input" rows="6" spellcheck="false" placeholder={placeholder}></textarea>
   </div>
   <button type="button" class="link" id="showText" hidden>Edit the text</button>
+
+  <div class="opts" id="pickers" hidden>
+    {FIELD_LABELS.map(([field, label]) => (
+      <label>{label} <select id={`f-${field}`}></select></label>
+    ))}
+  </div>
 
   <div class="actions">
     <span class="status" id="status" aria-live="polite"></span>
@@ -32,6 +57,70 @@ const placeholder = 'first name,last name,mobile,email\nAna,Lima,+55 11 5555 010
   let name = 'contacts';
   let header: string[] = [];
   let rows: string[][] = [];
+
+  const FIELDS = ['first', 'last', 'full', 'org', 'jobTitle', 'mobile', 'homePhone', 'workPhone', 'email', 'email2', 'street', 'city', 'region', 'postcode', 'country', 'birthday', 'note'] as const;
+  type Field = (typeof FIELDS)[number];
+  // Header words that suggest a column, compared after spaces, dashes and underscores are removed.
+  const GUESS: Record<Field, string[]> = {
+    first: ['firstname', 'givenname', 'first'],
+    last: ['lastname', 'familyname', 'surname', 'last'],
+    full: ['name', 'fullname', 'displayname'],
+    org: ['organization', 'organizationname', 'company', 'org'],
+    jobTitle: ['jobtitle', 'title', 'organizationtitle'],
+    mobile: ['mobile', 'mobilephone', 'cell', 'cellphone', 'phone1value', 'phone', 'phonenumber'],
+    homePhone: ['homephone', 'phone2value'],
+    workPhone: ['workphone', 'businessphone', 'phone3value'],
+    email: ['email', 'emailaddress', 'e-mail', 'email1value', 'e-mailaddress', 'e-mail1value'],
+    email2: ['email2', 'e-mail2address', 'e-mail2value', 'email2value'],
+    street: ['street', 'address1street', 'homestreet', 'address'],
+    city: ['city', 'address1city', 'homecity'],
+    region: ['region', 'state', 'address1region', 'homestate'],
+    postcode: ['postcode', 'zip', 'zipcode', 'postalcode', 'address1postalcode', 'homepostalcode'],
+    country: ['country', 'address1country', 'homecountryregion'],
+    birthday: ['birthday', 'dob', 'dateofbirth'],
+    note: ['note', 'notes'],
+  };
+
+  const norm = (s: string) => s.toLowerCase().replace(/[\s\-_]/g, '');
+
+  /** One header per field at most, first match wins in the field order above. */
+  function guessAll(): Record<Field, number> {
+    const used = new Set<number>();
+    const map = {} as Record<Field, number>;
+    for (const f of FIELDS) {
+      let found = -1;
+      for (const key of GUESS[f]) {
+        const k = norm(key);
+        const i = header.findIndex((h, j) => !used.has(j) && norm(h) === k);
+        if (i >= 0) { found = i; break; }
+      }
+      map[f] = found;
+      if (found >= 0) used.add(found);
+    }
+    return map;
+  }
+
+  function fillSelect(field: Field) {
+    const el = $<HTMLSelectElement>(`f-${field}`)!;
+    el.innerHTML = '';
+    const none = document.createElement('option');
+    none.value = '';
+    none.textContent = '(none)';
+    el.append(none);
+    header.forEach((h, i) => {
+      const o = document.createElement('option');
+      o.value = String(i);
+      o.textContent = h || `column ${i + 1}`;
+      el.append(o);
+    });
+  }
+
+  function renderPickers() {
+    for (const f of FIELDS) fillSelect(f);
+    const map = guessAll();
+    for (const f of FIELDS) $<HTMLSelectElement>(`f-${f}`)!.value = map[f] < 0 ? '' : String(map[f]);
+    $('pickers')!.hidden = false;
+  }
 
   function showFile(f: File) {
     name = baseName(f.name);
@@ -58,7 +147,8 @@ const placeholder = 'first name,last name,mobile,email\nAna,Lima,+55 11 5555 010
 
   function render() {
     err.hidden = true;
-    if (!rows.length) { status.textContent = ''; return; }
+    if (!rows.length) { status.textContent = ''; $('pickers')!.hidden = true; return; }
+    renderPickers();
     status.textContent = `${rows.length} row${rows.length === 1 ? '' : 's'}, ${header.length} column${header.length === 1 ? '' : 's'}.`;
   }
 
