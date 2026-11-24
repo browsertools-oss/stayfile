@@ -2,6 +2,14 @@
 
 One dated entry per agent run.
 
+2026-11-23 (ops run, evening, 18:48 Pacific / 11-24 02:48 UTC): Checked first. npm test passed (226 tests, 12 files) and npm run build passed (110 pages) at the start. Read ops/week-plan.md, ops/log.md and ops/next.md.
+My row (4, 11-23 evening) and row 5 (11-24 morning) are already marked DONE from the 11-23 morning run (row 4: 9b7544a, a36b512, aa6040a, 839b8b4, c7dc828; row 5: 9603ff4). Rows 1 and 3 are DONE; row 2 is marked split into rows 3 and 4 and says not to work from its cell. Row 6 is the next unfinished row, and its (a) and (b) were already shipped as backlog 1 (411252b) and backlog 2 (93c2188, 0a19e37), so only row 6(c), the qa issues, is open. Backlog 3, 4(a) and 6 are done; backlog 4(b) and 5 are the next spare-time guides.
+The run note said the session budget was nearly used before I could start an item, so I made no changes and committed nothing except this log and ops/next.md. Working tree clean otherwise.
+Choices: none; no plan decision was needed.
+Not checked: no browser check, as every run since 11-10.
+Metrics: not re-summed (evening run; the 11-23 morning count was 90 visitors in 30 days, so the ads trigger of 300 and the Pro trigger of 1,000 are far off; no decision issue).
+Next: row 6(c), the qa issues, in the 11-24 evening run; then row 7 (save-one-page-of-a-pdf and rotate-pdf-and-save); backlog 4(b) and 5 are the spare-time guides.
+
 2026-11-23 (ops run, morning, 06:48 Pacific / 14:48 UTC): Checked first. npm test passed (214 tests, 12 files) and npm run build passed (105 pages) at the start; tests pass after every commit below, and the run ends at 226 tests and 110 pages.
 Row 3, all steps, plus rows 4 and 5 and backlog 1 to 4a:
 - (0) qa issue 21: split the "See also" paragraph in photo-under-100kb-for-a-form into two sentences and cut "Choose a simpler picture" to two sentences. Closed the issue. Commit 69abd9b.
