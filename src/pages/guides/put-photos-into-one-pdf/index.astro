@@ -1,0 +1,74 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to put several photos into one PDF';
+const description = 'Put a group of photos into one PDF on an iPhone, Windows or a Mac, or combine JPG, PNG and HEIC files in the browser with one picture per page.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-24',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/put-photos-into-one-pdf/" jsonld={jsonld}>
+  <h1>How to put several photos into one PDF</h1>
+  <p class="lede">Every current phone and computer can turn a group of photos into one PDF without extra software. The route differs by device: Files on an iPhone or iPad, the Print dialog on Windows, and Preview on a Mac, and a browser converter covers the cases where those routes are awkward or the photos are mixed formats.</p>
+
+  <h2>Before you start: order and page shape</h2>
+  <p>Two decisions save time later. The first is the order of the photos. Each route below follows the order in which the files are listed or selected, so sort the folder by name, or rename the photos with numbers in front, if the order matters. A form that asks for front and back of a document is the usual case where it does.</p>
+  <p>The second decision is the page size. A PDF page has fixed dimensions, and a photo rarely has the same shape. Some routes make each page the size of its photo, so the page looks exactly like the picture. Others use a standard page such as A4 or Letter, and the photo is fitted inside it, which leaves white space around the edges. Choose the standard page when the PDF will be printed or attached to a form, and choose the photo size when the PDF is only a container for the pictures.</p>
+  <p>Check the file formats too. iPhones save photos as HEIC by default, and some Windows programs cannot open that format. JPG is the safest format to hand to the built-in routes. If a file refuses to load, convert it to JPG first. <a href="/heic-to-jpg/">HEIC to JPG</a> does that in the browser.</p>
+
+  <h2>On an iPhone or iPad</h2>
+  <p>Recent versions of iOS and iPadOS can make a PDF from photos in the Files app, with no app to install.</p>
+  <ol>
+    <li>Save the photos you want to Files first, or open the folder in Files where they already are.</li>
+    <li>Tap Select, then tap each photo in the order you want the pages.</li>
+    <li>Tap the More button, the circle with three dots, and choose Create PDF.</li>
+    <li>The PDF opens in Files. Rename it, then move or share it.</li>
+  </ol>
+  <p>The selection order becomes the page order, so pick the photos one by one rather than using Select All when the sequence matters. Menu names can differ a little between app versions.</p>
+
+  <h2>On Windows</h2>
+  <p>Windows has no separate photo to PDF tool in the standard install, but the print system includes a PDF printer, and File Explorer can send a group of pictures to it.</p>
+  <ol>
+    <li>Put the photos in one folder and select them in File Explorer. Hold Ctrl to add single files, or Shift to select a run of them.</li>
+    <li>Right-click the selection and choose Print. On Windows 11, Print sits under "Show more options" in the right-click menu.</li>
+    <li>In the print window, set the printer to "Microsoft Print to PDF".</li>
+    <li>Click Print, then choose a name and a folder for the PDF.</li>
+  </ol>
+  <p>The print dialog also controls the page size and how each photo sits on its page, so check those settings before you click Print. The order in the print window follows the selection order from File Explorer.</p>
+
+  <h2>On a Mac</h2>
+  <p>Preview is the built-in route on macOS, and it handles a batch of photos in one pass.</p>
+  <ol>
+    <li>Open the photos in Preview. Selecting several files and double-clicking one opens them all in the same window.</li>
+    <li>Show the sidebar if it is hidden, then select all the thumbnails. Cmd+A selects them.</li>
+    <li>Choose File, then Print.</li>
+    <li>In the print dialog, use the PDF button and choose Save as PDF. Give the file a name and save it.</li>
+  </ol>
+  <p>The sidebar order is the page order, and the arrow buttons under the thumbnails move a photo up or down before you print. Menu names can differ a little between app versions.</p>
+
+  <h2>What the built-in routes keep and lose</h2>
+  <p>All three routes produce a normal PDF with one photo on each page, and all three leave the original photos untouched on the disk or in the photo library. The PDF is a new file made from copies.</p>
+  <p>The print based routes, on Windows and the Mac, build the page from the print settings. That means the page size comes from the dialog rather than from the photo, and a photo that is not page shaped is scaled to fit, usually with margins. A print dialog can also resample the image, so very large photos may lose some detail. The iPhone route builds the PDF from the photos themselves and keeps the picture sharp, but it gives you less control over the page shape.</p>
+  <p>None of these routes is built for a very large set. A PDF holding fifty phone photos can be hundreds of megabytes, which is too much for many mail servers. If the PDF is meant to travel by email, shrink the photos first. <a href="/guides/make-a-photo-smaller-to-email/">Making a photo smaller to email</a> covers the size limits and the ways to hit them.</p>
+
+  <h2>Combine the photos in the browser</h2>
+  <p>When the photos are a mix of formats, or you want a standard page size and full control over the order, use the browser pages. <a href="/jpg-to-pdf/">JPG to PDF</a>, <a href="/png-to-pdf/">PNG to PDF</a> and <a href="/heic-to-pdf/">HEIC to PDF</a> share the same steps, and the files are read and written on your device.</p>
+  <ol>
+    <li>Drop all the photos on the page at once, or add them one at a time.</li>
+    <li>Use the arrow buttons to set the order. The list order is the page order.</li>
+    <li>Pick a page size. "Same as image" makes each page the size of its photo. A4 or Letter gives standard pages, and wide photos are placed on landscape pages rather than squeezed. The margin setting applies only to A4 and Letter.</li>
+    <li>Click Make PDF and save the file.</li>
+  </ol>
+  <p>JPG and PNG files go into the PDF exactly as they are, with no re-encoding, so their quality is unchanged. A HEIC file cannot sit in a PDF directly, so it is read and redrawn as a JPG at quality 0.92 first. That redraw means the date, camera and location details stored in the HEIC do not travel into the PDF. You can mix the formats in one drop, and each image becomes one page.</p>
+  <p>A single image downloads under its own name. Several images download as one PDF named after the first file, with the number of extra photos in the name. The original files stay where they were.</p>
+
+  <p>See also: <a href="/guides/combine-pdf-files/">Combining PDFs into one file</a> covers joining files that are already PDFs, which is a different job from building a PDF out of pictures. <a href="/guides/make-a-photo-smaller-to-email/">Making a photo smaller to email</a> covers shrinking each picture before it goes in.</p>
+</Base>

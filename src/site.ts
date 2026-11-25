@@ -505,6 +505,7 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'jpg-to-pdf',
+    guide: 'put-photos-into-one-pdf',
     tool: 'img-to-pdf',
     group: 'PDF',
     card: 'Images to PDF',
@@ -545,6 +546,7 @@ export const PAGES: ToolPage[] = [
 
   {
     slug: 'png-to-pdf',
+    guide: 'put-photos-into-one-pdf',
     tool: 'img-to-pdf',
     group: 'PDF',
     card: 'PNG to PDF',
@@ -609,6 +611,7 @@ export const PAGES: ToolPage[] = [
 
   {
     slug: 'heic-to-pdf',
+    guide: 'put-photos-into-one-pdf',
     tool: 'img-to-pdf',
     group: 'PDF',
     card: 'HEIC to PDF',
@@ -3454,5 +3457,10 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'export-calendar-to-excel',
     title: 'How to export a Google or Outlook calendar to Excel',
     blurb: 'Get a calendar file from Google, Outlook or Apple Calendar, then turn its events into spreadsheet rows.',
+  },
+  {
+    slug: 'put-photos-into-one-pdf',
+    title: 'How to put several photos into one PDF',
+    blurb: 'The iPhone, Windows and Mac routes for turning a group of photos into one PDF, plus the browser option for mixed formats.',
   },
 ];
