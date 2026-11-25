@@ -1,9 +1,10 @@
 import { describe, test, expect } from 'vitest';
-import { readJpegMeta, stripJpeg, readTiff } from '../src/lib/exif';
+import { readJpegMeta, stripJpeg, readTiff, readPngMeta, stripPng } from '../src/lib/exif';
 
 const u16le = (n: number) => [n & 0xff, (n >> 8) & 0xff];
 const u32le = (n: number) => [n & 0xff, (n >> 8) & 0xff, (n >> 16) & 0xff, (n >> 24) & 0xff];
 const u16be = (n: number) => [(n >> 8) & 0xff, n & 0xff];
+const u32be = (n: number) => [(n >> 24) & 0xff, (n >> 16) & 0xff, (n >> 8) & 0xff, n & 0xff];
 
 function ascii(s: string): number[] {
   return Array.from(s, (c) => c.charCodeAt(0)).concat(0);
@@ -61,8 +62,36 @@ function makeTiff(): number[] {
   return [0x49, 0x49, ...u16le(42), ...u32le(IFD0_AT), ...ifd0, ...exif, ...gps, ...make, ...date, ...lat, ...lon];
 }
 
+function pngChunk(type: string, data: number[]): number[] {
+  const t = Array.from(type, (c) => c.charCodeAt(0));
+  return [...u32be(data.length), ...t, ...data, 0, 0, 0, 0];
+}
+
+function makePng(): Uint8Array {
+  const sig = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+  const ihdr = pngChunk('IHDR', [...u32be(1), ...u32be(1), 8, 2, 0, 0, 0]);
+  const text = pngChunk('tEXt', [...ascii('Author'), ...ascii('Test')]);
+  const exif = pngChunk('eXIf', makeTiff());
+  const idat = pngChunk('IDAT', [0x78, 0x9c, 0x01, 0x02]);
+  const iend = pngChunk('IEND', []);
+  return new Uint8Array([...sig, ...ihdr, ...text, ...exif, ...idat, ...iend]);
+}
+
 function seg(marker: number, payload: number[]): number[] {
   return [0xff, marker, ...u16be(payload.length + 2), ...payload];
+}
+
+function chunkBytes(b: Uint8Array, type: string): number[] | null {
+  let i = 8;
+  while (i + 8 <= b.length) {
+    const len = (((b[i] << 24) | (b[i + 1] << 16) | (b[i + 2] << 8) | b[i + 3]) >>> 0);
+    const t = String.fromCharCode(b[i + 4], b[i + 5], b[i + 6], b[i + 7]);
+    const end = i + 8 + len + 4;
+    if (t === type) return Array.from(b.slice(i, end));
+    if (end <= i) break;
+    i = end;
+  }
+  return null;
 }
 
 function makeJpeg(): Uint8Array {
@@ -192,5 +221,35 @@ describe('stripJpeg', () => {
     expect(() => stripJpeg(random)).not.toThrow();
     expect(() => readJpegMeta(new Uint8Array(0))).not.toThrow();
     expect(() => stripJpeg(new Uint8Array(0))).not.toThrow();
+  });
+});
+
+describe('readPngMeta and stripPng', () => {
+  test('reads the eXIf and text chunks', () => {
+    const meta = readPngMeta(makePng());
+    expect(meta.gps).toEqual({ lat: 37.775, lon: -122.419444 });
+    expect(meta.taken).toBe('2026:11:20 10:30:00');
+    expect(meta.found).toContain('EXIF (camera, date, location)');
+    expect(meta.found).toContain('Text notes');
+  });
+
+  test('strips metadata chunks and keeps the image chunks whole', () => {
+    const input = makePng();
+    const { bytes, removed } = stripPng(input);
+    expect(latin1(bytes).includes('Author')).toBe(false);
+    expect(removed).toContain('EXIF (camera, date, location)');
+    expect(removed).toContain('Text notes');
+    for (const type of ['IHDR', 'IDAT', 'IEND']) {
+      expect(chunkBytes(bytes, type)).toEqual(chunkBytes(input, type));
+    }
+    expect(readPngMeta(bytes).found).toEqual([]);
+  });
+
+  test('broken input never throws', () => {
+    expect(() => readPngMeta(new Uint8Array(0))).not.toThrow();
+    expect(() => stripPng(new Uint8Array([1, 2, 3]))).not.toThrow();
+    const half = makePng().slice(0, 30);
+    expect(() => readPngMeta(half)).not.toThrow();
+    expect(() => stripPng(half)).not.toThrow();
   });
 });

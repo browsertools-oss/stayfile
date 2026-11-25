@@ -309,3 +309,84 @@ export function stripJpeg(b: Uint8Array, keepOrientation = true): { bytes: Uint8
     return { bytes: b, removed };
   }
 }
+
+const PNG_SIG = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+
+function isPng(b: Uint8Array): boolean {
+  if (b.length < 8) return false;
+  for (let i = 0; i < PNG_SIG.length; i++) if (b[i] !== PNG_SIG[i]) return false;
+  return true;
+}
+
+function fourcc(b: Uint8Array, o: number): string {
+  if (o + 4 > b.length) return '';
+  return String.fromCharCode(b[o], b[o + 1], b[o + 2], b[o + 3]);
+}
+
+/** Read the metadata chunks of a PNG without decoding the pixels. */
+export function readPngMeta(b: Uint8Array): PhotoMeta {
+  const meta: PhotoMeta = { found: [] };
+  try {
+    if (!isPng(b)) return meta;
+    let i = 8;
+    while (i + 8 <= b.length) {
+      const len = u32(b, i, false);
+      if (len < 0) break;
+      const type = fourcc(b, i + 4);
+      const dataStart = i + 8;
+      const dataEnd = dataStart + len;
+      if (dataEnd + 4 > b.length) break;
+      if (type === 'eXIf') {
+        addFound(meta.found, 'EXIF (camera, date, location)');
+        const t = readTiff(b, dataStart);
+        if (t.make) meta.make = t.make;
+        if (t.model) meta.model = t.model;
+        if (t.software) meta.software = t.software;
+        if (t.taken) meta.taken = t.taken;
+        if (t.orientation !== undefined) meta.orientation = t.orientation;
+        if (t.gps) meta.gps = t.gps;
+      } else if (type === 'tEXt' || type === 'zTXt' || type === 'iTXt') {
+        addFound(meta.found, 'Text notes');
+      } else if (type === 'tIME') {
+        addFound(meta.found, 'Last edit time');
+      }
+      i = dataEnd + 4;
+      if (type === 'IEND') break;
+    }
+  } catch {
+    // Return whatever was read before the bad byte.
+  }
+  return meta;
+}
+
+/** Copy a PNG without its metadata chunks, keeping every other chunk whole. */
+export function stripPng(b: Uint8Array): { bytes: Uint8Array; removed: string[] } {
+  const removed: string[] = [];
+  try {
+    if (!isPng(b)) return { bytes: b, removed };
+    const out: number[] = [];
+    for (let i = 0; i < 8; i++) out.push(b[i]);
+    let i = 8;
+    while (i + 8 <= b.length) {
+      const len = u32(b, i, false);
+      if (len < 0) break;
+      const type = fourcc(b, i + 4);
+      const end = i + 8 + len + 4;
+      if (end > b.length) break;
+      const drop = type === 'eXIf' || type === 'tEXt' || type === 'zTXt' || type === 'iTXt' || type === 'tIME';
+      if (drop) {
+        const name =
+          type === 'eXIf' ? 'EXIF (camera, date, location)' : type === 'tIME' ? 'Last edit time' : 'Text notes';
+        addFound(removed, name);
+      } else {
+        for (let q = i; q < end; q++) out.push(b[q]);
+      }
+      i = end;
+      if (type === 'IEND') break;
+    }
+    if (i < b.length) for (let q = i; q < b.length; q++) out.push(b[q]);
+    return { bytes: new Uint8Array(out), removed };
+  } catch {
+    return { bytes: b, removed };
+  }
+}

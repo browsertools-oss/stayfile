@@ -7,10 +7,10 @@ const { slug } = Astro.props;
 
 <section class="tool" data-tool="photo-meta" data-slug={slug}>
   <ul class="photo-cards" id="list"></ul>
-  <Drop accept=".jpg,.jpeg,image/jpeg" multiple main="Drop photos here, or <u>choose them</u>" sub="JPG files" />
+  <Drop accept=".jpg,.jpeg,.png,image/jpeg,image/png" multiple main="Drop photos here, or <u>choose them</u>" sub="JPG · PNG files" />
 
   <div class="opts" id="opts" hidden>
-    <label><input type="checkbox" id="keep" checked /> Keep the rotation tag so the photo stays upright</label>
+    <label id="keepWrap"><input type="checkbox" id="keep" checked /> Keep the rotation tag so the photo stays upright</label>
   </div>
 
   <div class="actions" id="actions" hidden>
@@ -36,15 +36,19 @@ const { slug } = Astro.props;
   import { save, zip, baseName } from '../lib/save';
   import { savedLine } from '../lib/route';
   import { showDone, hideDone } from '../lib/done';
-  import { readJpegMeta, stripJpeg, type PhotoMeta } from '../lib/exif';
+  import { readJpegMeta, stripJpeg, readPngMeta, stripPng, type PhotoMeta } from '../lib/exif';
 
   const root = document.querySelector<HTMLElement>('.tool')!;
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
   const list = $('list')!, drop = $('drop')!, go = $<HTMLButtonElement>('go')!;
-  const opts = $('opts')!, actions = $('actions')!, keep = $<HTMLInputElement>('keep')!;
+  const opts = $('opts')!, actions = $('actions')!, keep = $<HTMLInputElement>('keep')!, keepWrap = $('keepWrap')!;
   const status = $('status')!, err = $('err')!, doneEl = $('done')!;
 
-  type Item = { file: File; bytes: Uint8Array; jpeg: boolean; meta?: PhotoMeta };
+  type Kind = 'jpeg' | 'png' | 'other';
+  type Item = { file: File; bytes: Uint8Array; kind: Kind; meta?: PhotoMeta };
+
+  const PNG_SIG = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+  const isPng = (b: Uint8Array) => b.length >= 8 && PNG_SIG.every((v, i) => b[i] === v);
   let items: Item[] = [];
   let gen = 0;
 
@@ -55,10 +59,10 @@ const { slug } = Astro.props;
     name.textContent = it.file.name;
     li.append(name);
 
-    if (!it.jpeg) {
+    if (it.kind === 'other') {
       const p = document.createElement('p');
       p.className = 'note';
-      p.append('This page reads JPG photos. For iPhone HEIC photos, convert to ');
+      p.append('This page reads JPG and PNG photos. For iPhone HEIC photos, convert to ');
       const a = document.createElement('a');
       a.href = '/heic-to-jpg/';
       a.textContent = 'JPG';
@@ -106,27 +110,31 @@ const { slug } = Astro.props;
       const bytes = new Uint8Array(await file.arrayBuffer());
       if (my !== gen) return;
       const jpeg = bytes.length > 1 && bytes[0] === 0xff && bytes[1] === 0xd8;
-      const it: Item = { file, bytes, jpeg, meta: jpeg ? readJpegMeta(bytes) : undefined };
+      const kind: Kind = jpeg ? 'jpeg' : isPng(bytes) ? 'png' : 'other';
+      const meta = kind === 'jpeg' ? readJpegMeta(bytes) : kind === 'png' ? readPngMeta(bytes) : undefined;
+      const it: Item = { file, bytes, kind, meta };
       items.push(it);
       list.append(card(it));
     }
-    const ok = items.filter((i) => i.jpeg);
+    const ok = items.filter((i) => i.kind !== 'other');
     go.disabled = ok.length === 0;
+    keepWrap.hidden = !items.some((i) => i.kind === 'jpeg');
     if (items.length) status.textContent = `Read ${items.length} photo${items.length === 1 ? '' : 's'}.`;
   });
 
   go.addEventListener('click', async () => {
-    const ok = items.filter((i) => i.jpeg);
+    const ok = items.filter((i) => i.kind !== 'other');
     if (!ok.length) return;
 
     const allRemoved: string[] = [];
     const out: { name: string; data: Blob }[] = [];
     for (const it of ok) {
-      const r = stripJpeg(it.bytes, keep.checked);
+      const r = it.kind === 'jpeg' ? stripJpeg(it.bytes, keep.checked) : stripPng(it.bytes);
       for (const n of r.removed) if (!allRemoved.includes(n)) allRemoved.push(n);
+      const ext = it.kind === 'jpeg' ? 'jpg' : 'png';
       out.push({
-        name: `${baseName(it.file.name)}-clean.jpg`,
-        data: new Blob([r.bytes as BlobPart], { type: 'image/jpeg' }),
+        name: `${baseName(it.file.name)}-clean.${ext}`,
+        data: new Blob([r.bytes as BlobPart], { type: it.kind === 'jpeg' ? 'image/jpeg' : 'image/png' }),
       });
     }
 

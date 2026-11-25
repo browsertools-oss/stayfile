@@ -2092,12 +2092,13 @@ export const PAGES: ToolPage[] = [
     blurb: 'See what a photo stores and save a copy without it',
     title: 'Remove EXIF data and location from a photo, no upload',
     h1: 'Remove location and EXIF data from a photo',
-    lede: 'This page shows what a JPG stores about where and when it was taken: the camera, the date and, if location was on, the GPS position. It then saves a copy with those data blocks cut out; the photo is not re-encoded, so the picture is byte for byte the same and never leaves your device.',
-    description: 'See the camera, date and GPS position stored in a JPG and save a copy without them. The photo is not re-encoded and never uploaded.',
+    lede: 'This page shows what a JPG or PNG stores about where and when it was taken: the camera, the date and, if location was on, the GPS position. It then saves a copy with those data blocks cut out; the photo is not re-encoded, so the picture is byte for byte the same and never leaves your device.',
+    description: 'See the camera, date and GPS position stored in a JPG or PNG and save a copy without them. The photo is not re-encoded and never uploaded.',
     more: {
       h2: 'What is removed and what is kept',
       paras: [
         'The EXIF block goes first. It holds the camera make and model, the date and time, the software that edited the file and, when location was on, the GPS position. XMP goes too: it can repeat the date and the position and also record edits. So do the IPTC block, which can carry captions and an author name, and any comment blocks.',
+        'On a PNG the same data sits in named chunks: eXIf holds the camera and the position, tEXt and its compressed forms hold text notes, and tIME holds the last edit time. Those chunks go, and every other chunk is copied whole, image data included.',
         'The color profile stays, because removing it can shift the colors. So does the JPG image data. That data is copied from the start of the scan to the end of the file byte for byte, which is why the picture is not redrawn and no detail is lost.',
         'The rotation tag is its own small block. Phone cameras often write the pixels one way and add a tag that says to turn the picture a quarter turn. Without it, some viewers show the photo sideways, so it is kept by default. Untick the box and every data block is gone.',
         'Nothing is uploaded. The file is read in the browser, the blocks are cut out there, and the clean copy is saved from the page. Closing the tab leaves no copy behind.',
@@ -2120,7 +2121,7 @@ export const PAGES: ToolPage[] = [
       },
       {
         q: 'What about HEIC or PNG?',
-        a: 'HEIC photos from an iPhone are not read here. Convert to JPG at /heic-to-jpg/ first; the JPG made there has no location data. PNG files are not read yet either: JPG only for now.',
+        a: 'HEIC photos from an iPhone are not read here. Convert to JPG at /heic-to-jpg/ first; the JPG made there has no location data. PNG photos are read too, and the rotation tag is a JPG tag, so it only applies to JPG.',
       },
       {
         q: 'Does it remove the location from photos already posted?',
