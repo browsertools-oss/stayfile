@@ -2,14 +2,16 @@
 
 One dated entry per agent run.
 
-2026-11-25 (ops run, morning, 06:48 Pacific / 14:48 UTC): Checked first. npm test passed (284 tests) and npm run build passed (124 pages) at the start; the run ends at 302 tests and 126 pages.
+2026-11-25 (ops run, morning, 06:48 Pacific / 14:48 UTC): Checked first. npm test passed (284 tests) and npm run build passed (124 pages) at the start; the run ends at 302 tests and 127 pages.
 Row 1, both steps: (0) qa 26 in two commits: import-csv-contacts guide wording and a See also pointing at export-iphone-contacts-to-excel, semicolon guide wording and a one-column link, and a birthday FAQ that matches birthdayValue (month first; an unreadable date leaves BDAY out of that card); preview table aria-label, picker fieldset with legend, Email 2 written as WORK. Issue 26 closed. 90bb36d, bab9697. (1) src/lib/exif.ts and test/exif.test.ts: JPEG segment walk, TIFF/EXIF/GPS parse with bounds checks that never throw, stripJpeg cuts APP1/APP3-APP13/APP15/COM and keeps APP0, APP2, APP14 and the image data byte for byte, plus a 36-byte orientation APP1. b3ef508.
 Row 2 pulled forward (row 1 finished early): the /remove-exif-data/ page (tool id photo-meta, family meta, PhotoMetaTool, PAGES entry, silhouette, home lists it) and the link from the location guide with guide set. e28e39c, c502bd9.
 Row 3: step (3) readPngMeta/stripPng for eXIf, tEXt/zTXt/iTXt and tIME with tests, the page accepting PNG, the rotation box shown only for JPG, and the HEIC/PNG FAQ rewritten; 2c234b4. Step (4) src/lib/csvfiles.ts with test/csvfiles.test.ts: header-repeating splitter, partName padding, mergeCsv by column name with a differing list; ab3292e.
 Row 4: /split-csv/ page (CsvFilesTool, family csvfiles, Papa File chunks, rows or file-count modes, BOM kept only when the input had one, parts.zip, dataNext entry); 5381615. dist/split-csv exists and the home page lists it.
+Row 5: /merge-csv/ in the same CsvFilesTool (multiple drop, file list with up/down/remove, Papa.parse per file with the BOM stripped, mergeCsv by column name, the differing-columns warning, merged.csv through withBom, dataNext entry) and the "Can I join the parts again?" FAQ on split-csv; 6117c57. dist/merge-csv exists and the home page lists it.
 Choices: kept taking the next row not DONE after row 1, as the guardrail says, because each row names the files to touch. No new dependencies; papaparse was already installed.
 Metrics: 90 visitors in the last 30 rows (blanks as 0); the 300 and 1,000 triggers are far off, no decision issue.
-Not checked: no browser check, as every run since 11-10; verified by tests, the build and the dist HTML. The split page's File streaming has not run in a browser.
+Not checked: no browser check, as every run since 11-10; verified by tests, the build and the dist HTML. The split page's File streaming and both CSV pages have not run in a browser.
+Next: row 6 (choose pages on pdf-to-jpg and pdf-to-png), then rows 7 to 9 and the backlog.
 
 11-24-2026 (Weekly plan, replan): The boss (Opus) rewrote ops/week-plan.md for 11-25-2026 morning to 11-29-2026 morning (9 runs), following the CEO's 11-24 replan order (tools that page one leaves open before more guides; 0 hired workers). Evidence: the 11-23 plan and its backlog were all done by the two 11-24 runs (46 and 36 minutes); 29 guides; 90 visitors in 30 days, 20 in the last 7, $0 earned; site:stayfile.app shows no Stayfile page; qa 26 open.
 Targets: /remove-exif-data/ live by 11-26; /split-csv/ and /merge-csv/ live by 11-27; 31 guides by 11-29; 110 visitors in 30 days by 11-29 (outside the agents' control).
