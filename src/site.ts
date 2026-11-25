@@ -2087,6 +2087,7 @@ export const PAGES: ToolPage[] = [
     slug: 'remove-exif-data',
     tool: 'photo-meta',
     group: 'Images',
+    guide: 'remove-location-from-photo',
     card: 'Remove photo data',
     blurb: 'See what a photo stores and save a copy without it',
     title: 'Remove EXIF data and location from a photo, no upload',
