@@ -1,0 +1,61 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to save a PDF page as a JPG or PNG';
+const description = 'Turn a page of a PDF into a picture with Preview on a Mac, or with a browser page that renders JPG or PNG at screen, good or print resolution.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-24',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/save-pdf-page-as-jpg/" jsonld={jsonld}>
+  <h1>How to save a PDF page as a JPG or PNG</h1>
+  <p class="lede">A PDF page becomes a picture when a program draws it on a canvas and writes the pixels as JPG or PNG. On a Mac, Preview can export one page at a time, and on Windows there is no built-in export, so the browser route below covers both systems and turns every page into its own image file.</p>
+
+  <h2>On a Mac with Preview</h2>
+  <p>Preview opens PDFs and can export a page as an image without any extra software.</p>
+  <ol>
+    <li>Open the PDF in Preview.</li>
+    <li>Show the sidebar and select the page you want. Only the selected page is exported.</li>
+    <li>Choose File, then Export.</li>
+    <li>Set Format to JPEG or PNG, choose where to save it, and click Save.</li>
+  </ol>
+  <p>Export handles one page per action, so a ten page PDF needs ten exports, each with its own name. Menu names can differ a little between app versions.</p>
+
+  <h2>On Windows</h2>
+  <p>Windows has no built-in command that exports a PDF page as an image. The usual workaround is a screenshot, which shows the page at the size it appears on screen. That is enough for a thumbnail or a quick message, but a full page viewed to fit the window is far below the resolution of the original, so small text turns soft and printed output looks blurred.</p>
+  <p>If the picture is going into a document or a form, use a route that draws the page at a chosen resolution instead of capturing the screen. The browser pages below do that and work on Windows, a Mac and Linux.</p>
+
+  <h2>Save a page as JPG or PNG in the browser</h2>
+  <p><a href="/pdf-to-jpg/">PDF to JPG</a> and <a href="/pdf-to-png/">PDF to PNG</a> use the same steps. The PDF is read on your device, and only the picture files you download leave it.</p>
+  <ol>
+    <li>Drop the PDF on the page.</li>
+    <li>Pick a resolution: Screen (96 dpi), Good (150 dpi) or Print (300 dpi).</li>
+    <li>Click Make JPG or Make PNG.</li>
+    <li>Save the file, or the zip when the PDF has more than one page.</li>
+  </ol>
+  <p>Every page becomes its own image. A single page downloads under its own name. A longer PDF downloads as a zip, with one file per page and the page number in each name, so the pages stay in order. The original PDF is not changed.</p>
+  <p>The page is drawn from scratch on a canvas. That means the result is a picture, not a PDF page: text stops being selectable, links stop working, and the image has a white background behind anything that was transparent. A JPG is written at quality 0.92, which is high for photos and slightly soft for thin lines and small text. PNG keeps every pixel exactly and is the better choice for a page of text or a diagram, at the cost of a larger file.</p>
+
+  <h2>Which resolution to choose</h2>
+  <p>Screen resolution, 96 dpi, suits a thumbnail, a chat message or a preview. The file is small and opens fast anywhere. Good, 150 dpi, is the default and suits most uses, including a picture in a document or a slide.</p>
+  <p>Print resolution, 300 dpi, is the choice when the picture will be printed or when a form asks for a clear copy of a document page. A letter sized page at 300 dpi is roughly 2,550 by 3,300 pixels, so the file is large, and a long PDF at that setting produces a heavy zip. Raise the resolution only when the extra detail matters.</p>
+  <p>Higher resolution does not add detail that the PDF does not contain. If the original page holds a small scan or a low quality photo, drawing it at 300 dpi makes a bigger file from the same pixels. It does help when the page holds vector text or line art, because those are redrawn sharply at the new size.</p>
+
+  <h2>When you only want one page</h2>
+  <p>The browser pages turn every page into an image, which is wasteful when one page is all you need. Split the page out first with <a href="/extract-pages-from-pdf/">Extract pages from a PDF</a>, which copies the chosen pages into a new PDF without redrawing them. Then run that small PDF through the image page, and delete the extra files.</p>
+  <p>The <a href="/guides/save-one-page-of-a-pdf/">Save just one page of a PDF</a> guide covers the other ways to get a single page file before converting it.</p>
+
+  <h2>Check the result</h2>
+  <p>Open the JPG or PNG at full size and look at the smallest text on the page. If it is soft, try the next resolution up and compare the file sizes. Check the edges too: a page with a thin border can pick up a white margin, since the picture has to end somewhere and the canvas is painted white first.</p>
+  <p>If the image will be attached to a form with a size limit, compress it afterwards. A 300 dpi page often passes the limit once it is saved as JPG at a lower quality. <a href="/compress-jpg/">Compress JPG</a> does that in the browser and shows the size before you save.</p>
+
+  <p>See also: <a href="/guides/save-one-page-of-a-pdf/">How to save just one page of a PDF</a> covers cutting the page out before any conversion. <a href="/guides/pdf-too-large-to-email/">PDF too large to email</a> covers the reverse problem, where the PDF itself has to shrink.</p>
+</Base>

@@ -312,6 +312,7 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'pdf-to-jpg',
+    guide: 'save-pdf-page-as-jpg',
     tool: 'pdf-to-jpg',
     group: 'PDF',
     card: 'PDF to JPG',
@@ -352,6 +353,7 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'pdf-to-png',
+    guide: 'save-pdf-page-as-jpg',
     tool: 'pdf-to-png',
     group: 'PDF',
     card: 'PDF to PNG',
@@ -3468,5 +3470,10 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'excel-csv-semicolon-instead-of-comma',
     title: 'Why Excel saves a CSV with semicolons, and how to get commas',
     blurb: 'Excel follows the Windows list separator, which is a semicolon where the decimal mark is a comma. Here is the fix.',
+  },
+  {
+    slug: 'save-pdf-page-as-jpg',
+    title: 'How to save a PDF page as a JPG or PNG',
+    blurb: 'Export a page in Preview, or render it in the browser at screen, good or print resolution, one image per page.',
   },
 ];
