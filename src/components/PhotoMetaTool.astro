@@ -1,0 +1,150 @@
+---
+import Drop from './Drop.astro';
+
+interface Props { slug: string }
+const { slug } = Astro.props;
+---
+
+<section class="tool" data-tool="photo-meta" data-slug={slug}>
+  <ul class="photo-cards" id="list"></ul>
+  <Drop accept=".jpg,.jpeg,image/jpeg" multiple main="Drop photos here, or <u>choose them</u>" sub="JPG files" />
+
+  <div class="opts" id="opts" hidden>
+    <label><input type="checkbox" id="keep" checked /> Keep the rotation tag so the photo stays upright</label>
+  </div>
+
+  <div class="actions" id="actions" hidden>
+    <button type="button" class="primary" id="go" disabled>Save clean copy</button>
+    <span class="status" id="status" aria-live="polite"></span>
+  </div>
+
+  <div class="done" id="done" role="status" hidden></div>
+  <p class="error" id="err" role="alert" hidden></p>
+</section>
+
+<style is:global>
+  .photo-cards { list-style: none; margin: 0 0 12px; padding: 0; }
+  .photo-cards li { border: 1px solid var(--line); border-radius: var(--r); background: var(--field); padding: 10px 14px; margin: 0 0 8px; }
+  .photo-cards .fname { font-weight: 600; margin-bottom: 4px; overflow-wrap: anywhere; }
+  .photo-cards table { border-collapse: collapse; width: 100%; }
+  .photo-cards th { text-align: left; font-weight: 600; width: 10em; padding: 3px 10px 3px 0; vertical-align: top; }
+  .photo-cards td { padding: 3px 0; overflow-wrap: anywhere; }
+  .photo-cards .note { margin: 4px 0 0; }
+</style>
+
+<script>
+  import { save, zip, baseName } from '../lib/save';
+  import { savedLine } from '../lib/route';
+  import { showDone, hideDone } from '../lib/done';
+  import { readJpegMeta, stripJpeg, type PhotoMeta } from '../lib/exif';
+
+  const root = document.querySelector<HTMLElement>('.tool')!;
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
+  const list = $('list')!, drop = $('drop')!, go = $<HTMLButtonElement>('go')!;
+  const opts = $('opts')!, actions = $('actions')!, keep = $<HTMLInputElement>('keep')!;
+  const status = $('status')!, err = $('err')!, doneEl = $('done')!;
+
+  type Item = { file: File; bytes: Uint8Array; jpeg: boolean; meta?: PhotoMeta };
+  let items: Item[] = [];
+  let gen = 0;
+
+  function card(it: Item): HTMLLIElement {
+    const li = document.createElement('li');
+    const name = document.createElement('div');
+    name.className = 'fname';
+    name.textContent = it.file.name;
+    li.append(name);
+
+    if (!it.jpeg) {
+      const p = document.createElement('p');
+      p.className = 'note';
+      p.append('This page reads JPG photos. For iPhone HEIC photos, convert to ');
+      const a = document.createElement('a');
+      a.href = '/heic-to-jpg/';
+      a.textContent = 'JPG';
+      p.append(a, ' first; the JPG made there has no location data.');
+      li.append(p);
+      return li;
+    }
+
+    const m = it.meta!;
+    const table = document.createElement('table');
+    const add = (label: string, value: string) => {
+      const tr = document.createElement('tr');
+      const th = document.createElement('th');
+      th.scope = 'row';
+      th.textContent = label;
+      const td = document.createElement('td');
+      td.textContent = value;
+      tr.append(th, td);
+      table.append(tr);
+    };
+    const camera = [m.make, m.model].filter(Boolean).join(' ');
+    add('Camera', camera || 'None');
+    add('Taken', m.taken || 'None');
+    add('Software', m.software || 'None');
+    add('Location', m.gps ? `${m.gps.lat.toFixed(6)}, ${m.gps.lon.toFixed(6)}` : 'None');
+    add('Also in the file', m.found.length ? m.found.join(', ') : 'Nothing found');
+    li.append(table);
+    return li;
+  }
+
+  drop.addEventListener('files', async (e) => {
+    const files = [...(e as CustomEvent<File[]>).detail];
+    gen++;
+    const my = gen;
+    items = [];
+    list.innerHTML = '';
+    hideDone(doneEl);
+    err.hidden = true;
+    status.textContent = '';
+    go.disabled = true;
+    opts.hidden = files.length === 0;
+    actions.hidden = files.length === 0;
+
+    for (const file of files) {
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      if (my !== gen) return;
+      const jpeg = bytes.length > 1 && bytes[0] === 0xff && bytes[1] === 0xd8;
+      const it: Item = { file, bytes, jpeg, meta: jpeg ? readJpegMeta(bytes) : undefined };
+      items.push(it);
+      list.append(card(it));
+    }
+    const ok = items.filter((i) => i.jpeg);
+    go.disabled = ok.length === 0;
+    if (items.length) status.textContent = `Read ${items.length} photo${items.length === 1 ? '' : 's'}.`;
+  });
+
+  go.addEventListener('click', async () => {
+    const ok = items.filter((i) => i.jpeg);
+    if (!ok.length) return;
+
+    const allRemoved: string[] = [];
+    const out: { name: string; data: Blob }[] = [];
+    for (const it of ok) {
+      const r = stripJpeg(it.bytes, keep.checked);
+      for (const n of r.removed) if (!allRemoved.includes(n)) allRemoved.push(n);
+      out.push({
+        name: `${baseName(it.file.name)}-clean.jpg`,
+        data: new Blob([r.bytes as BlobPart], { type: 'image/jpeg' }),
+      });
+    }
+
+    const removed = allRemoved.length ? allRemoved.join(', ') : 'nothing';
+    let again: () => void;
+    let line: string;
+    let result: File | undefined;
+    if (out.length === 1) {
+      const only = out[0];
+      again = () => save(only.data, only.name);
+      line = `${savedLine(only.name)} Removed: ${removed}.`;
+      result = new File([only.data], only.name, { type: 'image/jpeg' });
+    } else {
+      const data = await zip(out);
+      again = () => save(data, 'photos-clean.zip', 'application/zip');
+      line = `${savedLine('photos-clean.zip', out.length)} Removed: ${removed}.`;
+    }
+    again();
+    showDone({ el: doneEl, slug: root.dataset.slug!, line, again, result });
+  });
+</script>
