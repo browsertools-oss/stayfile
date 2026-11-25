@@ -1,0 +1,48 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'CSV too big for Google Sheets? What to do';
+const description = 'Google Sheets allows 10 million cells per spreadsheet, so a wide CSV can fail even with few rows. Drop columns, split the file, or use Excel.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-25',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/csv-too-big-for-google-sheets/" jsonld={jsonld}>
+  <h1>CSV too big for Google Sheets? What to do</h1>
+  <p class="lede">Google Sheets allows 10 million cells in one spreadsheet, counted across every sheet in it, so a file can be too big even when its row count looks small. This guide shows how to work out the size, which columns to drop, and how to split the file or move it to Excel.</p>
+
+  <h2>Why the row count is not the whole story</h2>
+  <p>Google Sheets does not limit rows on their own. It limits cells: 10 million per spreadsheet, across all the sheets inside it. A cell is one row and one column together. A file with many columns uses up the allowance much faster than a narrow file with the same number of rows.</p>
+  <p>That is why a CSV with 200,000 rows can fail while a different file with 400,000 rows imports without trouble. The first one might have 60 columns, which is 12 million cells, and the second might have 12 columns, which is under 5 million. Rows times columns is the number that matters.</p>
+
+  <h2>Work out the size of your file</h2>
+  <p>Open the CSV in a text editor or a spreadsheet and count the columns in the header row. Multiply that by the number of data rows. If the result is under 10 million, the file fits, at least on paper. If it is over, Sheets will refuse it or stop partway through the import.</p>
+  <p>Importing also gets slow well before the limit. A file close to 10 million cells can take a long time to upload and can make the spreadsheet sluggish to open afterwards. For day-to-day work, a file of a few million cells is already unpleasant in a browser tab.</p>
+  <p>Count the rows with care. A quoted cell can contain a line break, so the number of lines in the file is not always the number of rows. Open it in a spreadsheet that shows the row count, or split it first and count the parts.</p>
+
+  <h2>Drop the columns you do not need</h2>
+  <p>The quickest fix is often to remove columns. If you only need three of the sixty, delete the rest before you import. That cuts the cell count by a wide margin and keeps the file in one piece.</p>
+  <p>You can delete columns in a spreadsheet program that opens the file, then save it as CSV again. If the file is too big to open, a small script or a command line tool can cut the columns, but that is more work than most people need. Opening the file with <a href="/csv-to-excel/">CSV to Excel</a> gives you a spreadsheet view where you can drop the columns and save a smaller CSV.</p>
+
+  <h2>Split the file into parts</h2>
+  <p>If you need every column, split the rows instead. <a href="/split-csv/">Split CSV</a> cuts a CSV into parts of a set number of rows, with the header row repeated at the top of each part. Import each part into its own spreadsheet, and each one stays under the cell limit.</p>
+  <p>Pick a row count that leaves room for the columns. For a file with 60 columns, 150,000 rows per part is 9 million cells, which fits with a little to spare. For a narrow file with 10 columns, you can go much higher. The page reads the file in pieces rather than all at once, so the input has no set size limit, though the finished parts are held in memory until you save.</p>
+  <p>Keep the parts together in a folder and note the order. A single spreadsheet cannot hold the whole set, so the folder is now your record of it.</p>
+
+  <h2>Use Excel for a bigger file</h2>
+  <p>Excel has a different limit: 1,048,576 rows and 16,384 columns in one sheet, with no overall cell cap like the Sheets one. A long, narrow file that fails in Sheets often fits in one Excel sheet. If you need the file back as CSV later, <a href="/excel-to-csv/">Excel to CSV</a> saves the sheet, or every sheet in a workbook.</p>
+  <p>The guide on <a href="/guides/csv-too-large-for-excel/">opening a CSV that is too big for Excel</a> covers what to do when the file is over that limit too, including the Excel data model and a database.</p>
+
+  <h2>Check each spreadsheet after the import</h2>
+  <p>After each import, check the row count against the part you split, and look at the last row to make sure nothing was cut off. If all the values land in one column, the separator was read wrongly: <a href="/guides/csv-opens-in-one-column-in-excel/">Why a CSV opens in one column in Excel</a> explains the cause. If a code such as 007 lost its leading zeros, <a href="/guides/excel-csv-leading-zeros/">Why Excel drops leading zeros in a CSV</a> covers that.</p>
+  <p>Keep the original CSV until every part is imported and checked. The spreadsheets are copies for a tool with a limit, and the original is the one record of the whole set.</p>
+  <p>See also: <a href="/guides/csv-too-large-for-excel/">CSV too big for Excel? How to open all the rows</a> and <a href="/guides/csv-opens-in-one-column-in-excel/">Why a CSV opens in one column in Excel</a>.</p>
+</Base>

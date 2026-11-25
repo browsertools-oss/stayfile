@@ -3689,4 +3689,10 @@ export const GUIDES: { slug: string; title: string; blurb: string; topic: string
     title: 'How to see what a photo reveals before you share it',
     blurb: 'Phone photos often store the camera, the date and the GPS position. Where to check on iPhone, Windows, Mac and in the browser.',
   },
+  {
+    slug: 'csv-too-big-for-google-sheets',
+    topic: 'Spreadsheets and CSV',
+    title: 'CSV too big for Google Sheets? What to do',
+    blurb: 'Sheets allows 10 million cells per spreadsheet. Drop columns, split the CSV into parts, or move the file to Excel.',
+  },
 ];
