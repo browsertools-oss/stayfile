@@ -2,6 +2,19 @@
 
 One dated entry per agent run.
 
+2026-11-24 (ops run, evening, 19:24 Pacific / 11-25 03:24 UTC): Checked first. npm test passed (264 tests) and npm run build passed (119 pages) at the start. My row 2 and rows 3 to 11 were already DONE, so I took the first unfinished backlog items.
+Backlog 2: guide put-photos-into-one-pdf, 6 h2, about 950 words, facts from imagesToPdf and asPdfImage (one page per photo, same-as-image or A4/Letter, JPG and PNG embedded as they are, HEIC redrawn as JPG); guide set on jpg-to-pdf, png-to-pdf, heic-to-pdf. e0a69eb.
+Backlog 3: guide excel-csv-semicolon-instead-of-comma, 6 h2, about 850 words, list separator facts from the plan and sheet_to_csv called with no separator option in xlsx.ts; guide added to excel-to-csv's list and set on excel-to-tsv. 4b2c4fb.
+Backlog 4: guide save-pdf-page-as-jpg, 6 h2, about 800 words, dpi choices 96/150/300 and per-page output read from PdfTool.astro and pdf-render.ts; guide set on pdf-to-jpg and pdf-to-png. 99b25cb.
+Backlog 5: guide open-avif-images, 6 h2, about 850 words, browser decode and canvas redraw facts from image.ts and the two AVIF page entries; guide set on avif-to-jpg and avif-to-png. 1c181da.
+Backlog 6: guide png-transparent-background-jpg, 6 h2, about 800 words, white fill confirmed in process/draw in image.ts; guide set on png-to-jpg, png-to-webp and compress-png. 1ff28b9.
+Backlog 7: a topic on all 29 GUIDES entries and one h2 section per topic on /guides/, empty topics skipped; dist shows the five headings. d7ec5cd.
+Backlog 8: asked the boss, which said to link the older guides to this week's new ones. Added the five links it named to the end of each See also or last paragraph, no other copy changed, mostly because the new pages had no inbound guide links yet. 8c2b051.
+The run ends at 284 tests and 124 pages, guides 29. Choices: wrote datePublished 2026-11-24 on the three guides (run date); put save-pdf-page-as-jpg under PDF, remove-location-from-photo and are-online-file-converters-safe under Privacy, make-a-favicon and the transparency guides under Photos; linked a third tool page on each new guide only where it honestly fit (excel-to-json, avif-to-pdf, compress-png).
+Not checked: no browser check, as every run since 11-10; verified by tests, the build and dist HTML.
+Metrics: not re-summed (evening run; the morning count was 90 visitors in 30 days, so the 300 and 1,000 triggers are far off; no decision issue).
+Next: no unfinished plan item remains; the Sunday planner writes the 11-29 plan. The sheet picker, zip names and contacts tools still have no browser check.
+
 2026-11-24 (ops run, morning, 06:48 Pacific / 14:48 UTC): Checked first. npm test passed (226 tests) and npm run build passed (110 pages) at the start; the run ends at 239 tests and 112 pages.
 Row 1, all steps: (0) qa 23, four guide fixes: cut "The good news is" in import-spreadsheet-into-apple-calendar and added the export-calendar-to-excel link to its See also; cut "honest about the trade" in pdf-too-large-to-email; added dateModified 2026-11-24 and the menu-names sentence to export-calendar-to-excel; cut the repeated HEIF and HEVC advice in the second Windows Photos section of iphone-heic-photos-to-jpg. Closed issue 23. bd29d55. (1) Exported escapeText, unescapeText and foldLine from ics.ts and moved the unfold loop into unfoldLines; ics tests unchanged. 1d3d318. (2) src/lib/vcard.ts buildVcf with test/vcard.test.ts. 8eb9d23.
 Row 2: parseVcf and vcfRowsToCsv (2.1, 3.0 and 4.0, bare TYPE params, quoted-printable, item1. prefixes, PHOTO skipped) with round-trip tests, 5615daf; the /csv-to-vcf/ shell (fa31ec7) and the 17-field column picker with header guessing (7ad7b09).

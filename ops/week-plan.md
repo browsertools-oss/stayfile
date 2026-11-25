@@ -111,7 +111,7 @@ Take the first row below yours that is not marked DONE and do it. If every row i
 5. **Guide** slug `open-avif-images`, title "Saved an AVIF image you can't open? Convert it". Same shape as `open-webp-images`. Tools /avif-to-jpg/, /avif-to-png/; confirm in src/lib/image.ts how AVIF is decoded and what is lost before saying it. Link guides `open-webp-images` and `jpg-png-webp-or-avif`. DONE 1c181da
 6. **Guide** slug `png-transparent-background-jpg`, title "Why a PNG gets a white or black background as a JPG". JPG has no transparency, so a converter must fill it; confirm the fill color in src/lib/image.ts; to keep the see-through part keep PNG or use /png-to-webp/. Tools /png-to-jpg/, /png-to-webp/, /compress-png/. Link `jpg-png-webp-or-avif`. DONE 1ff28b9
 7. **Guides page by topic.** Add `topic` to each `GUIDES` entry, one of "Spreadsheets and CSV", "Calendars and contacts", "PDF", "Photos and images", "Privacy"; src/pages/guides/index.astro renders an `<h2>` per topic with its guides; empty topics don't render. Done: tests and build pass, dist/guides/index.html shows the headings. DONE d7ec5cd
-8. Only after all of the above: ask the boss.
+8. Only after all of the above: ask the boss. DONE 8c2b051
 
 ## Cut, and why
 

@@ -221,3 +221,23 @@ After that, stop. No new pages, guides or Pro work, and no browser check. Don't 
 5. Commit with explicit paths, add `DONE <hash>` to backlog 1, and put one line in your log entry.
 
 If nothing is committed by the 25-minute mark, run `git checkout --` on the files you touched, log "backlog 1 not finished", and stop. Leave backlog 2 for a later run.
+
+## 2026-11-25T03:23:27Z
+
+**Q:** Evening run 11-24 (UTC 11-25 03:23). Row 2 and rows 3 to 11 are all DONE, and backlog 1 (stop-excel-changing-numbers-to-dates), 2 (put-photos-into-one-pdf), 3 (excel-csv-semicolon-instead-of-comma), 4 (save-pdf-page-as-jpg), 5 (open-avif-images), 6 (png-transparent-background-jpg) and 7 (guides page by topic) are now DONE and committed. Guides count is 29, tests 284 pass, build 124 pages. I have about 18 minutes left. Backlog 8 says ask you. What should I do with the rest of this run, or should I wrap up now?
+
+**A:** Every row and backlog item 1 to 7 is done, so backlog 8 is answered here. A new guide won't fit safely in 18 minutes on a free model. Spend the time linking older guides to the new ones, so search crawlers and readers reach the new pages.
+
+1. In ops/week-plan.md, add ` DONE 1ff28b9` to the end of backlog 6 (it's missing).
+2. Add one link to the existing "See also" line, the last paragraph, of each of these five files. Change nothing else in them.
+   - `src/pages/guides/excel-csv-leading-zeros/index.astro`: `<a href="/guides/stop-excel-changing-numbers-to-dates/">stop Excel turning numbers into dates</a>`
+   - `src/pages/guides/csv-opens-in-one-column-in-excel/index.astro`: `<a href="/guides/excel-csv-semicolon-instead-of-comma/">why Excel saves a CSV with semicolons</a>`
+   - `src/pages/guides/open-webp-images/index.astro`: `<a href="/guides/open-avif-images/">open AVIF images</a>`
+   - `src/pages/guides/combine-pdf-files/index.astro`: `<a href="/guides/put-photos-into-one-pdf/">put several photos into one PDF</a>`
+   - `src/pages/guides/jpg-png-webp-or-avif/index.astro`: `<a href="/guides/png-transparent-background-jpg/">why a PNG gets a white or black background as a JPG</a>`
+
+   Use "and" or a comma so each sentence still reads right. No dashes.
+3. You're done when `npm test` and `npm run build` pass and `grep -c "stop-excel-changing-numbers-to-dates" dist/guides/excel-csv-leading-zeros/index.html` prints at least 1.
+4. Commit the six files by path with the message "Link older guides to this week's new guides".
+
+If time runs short, commit whichever links already pass the tests, log what's left, and stop. Don't start a new guide.

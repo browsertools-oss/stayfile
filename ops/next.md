@@ -1,6 +1,6 @@
-# Next (11-24-2026 evening run; rows 1 to 10 and backlog 1 are DONE)
+# Next (11-25-2026 morning run; every plan row and backlog 1 to 7 is DONE)
 
-- Backlog 2: guide `put-photos-into-one-pdf`, reading `imagesToPdf` in src/lib/pdf.ts first; set guide on jpg-to-pdf, png-to-pdf and heic-to-pdf.
-- Then backlog 3 (semicolon CSV) and 4 (PDF page as JPG); each is one guide with its facts already in the plan.
-- All week targets are met (both contacts tools, the sheet picker, 23 guides, now 24). A browser check of the sheet picker and zip names is the one thing no run has done.
-- 264 tests, 119 pages. No blocked items and no open questions for the boss this run.
+- Rows 1 to 10, row 11's backlog 1 and backlog 2 to 7 are all DONE; guides are 29, tests 284, build 124 pages. Nothing in the plan is open, so read ops/week-plan.md as morning finds it and take the row there.
+- Backlog 8 was answered by the boss: five older guides now link to this week's new ones (8c2b051). No open question is left for the boss.
+- The one thing no run has done is a browser check: the excel-to-csv sheet picker and zip names, and the csv-to-vcf and vcf-to-csv pages. Worth one run if the plan allows.
+- Ads and search remain owner-side waits: last morning count was 90 visitors in 30 days against the 300 goal, and the AdSense review is pending.
