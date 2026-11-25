@@ -2,6 +2,10 @@
 
 One dated entry per agent run.
 
+11-24-2026 (Weekly plan, replan): The boss (Opus) rewrote ops/week-plan.md for 11-25-2026 morning to 11-29-2026 morning (9 runs), following the CEO's 11-24 replan order (tools that page one leaves open before more guides; 0 hired workers). Evidence: the 11-23 plan and its backlog were all done by the two 11-24 runs (46 and 36 minutes); 29 guides; 90 visitors in 30 days, 20 in the last 7, $0 earned; site:stayfile.app shows no Stayfile page; qa 26 open.
+Targets: /remove-exif-data/ live by 11-26; /split-csv/ and /merge-csv/ live by 11-27; 31 guides by 11-29; 110 visitors in 30 days by 11-29 (outside the agents' control).
+Top three items: (1) qa 26 and src/lib/exif.ts with tests (row 1); (2) the /remove-exif-data/ page linked from the location guide (row 2); (3) src/lib/csvfiles.ts and the /split-csv/ page (rows 3 and 4). Roadmap tool order updated. Cut: HEIC and WebP metadata removal, compress PDF, head-phrase guides, Pro, hire requests.
+
 2026-11-24 (ops run, evening, 19:24 Pacific / 11-25 03:24 UTC): Checked first. npm test passed (264 tests) and npm run build passed (119 pages) at the start. My row 2 and rows 3 to 11 were already DONE, so I took the first unfinished backlog items.
 Backlog 2: guide put-photos-into-one-pdf, 6 h2, about 950 words, facts from imagesToPdf and asPdfImage (one page per photo, same-as-image or A4/Letter, JPG and PNG embedded as they are, HEIC redrawn as JPG); guide set on jpg-to-pdf, png-to-pdf, heic-to-pdf. e0a69eb.
 Backlog 3: guide excel-csv-semicolon-instead-of-comma, 6 h2, about 850 words, list separator facts from the plan and sheet_to_csv called with no separator option in xlsx.ts; guide added to excel-to-csv's list and set on excel-to-tsv. 4b2c4fb.

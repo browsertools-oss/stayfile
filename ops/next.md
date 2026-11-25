@@ -1,6 +1,7 @@
-# Next (11-25-2026 morning run; every plan row and backlog 1 to 7 is DONE)
+# Next (11-25-2026 morning run; new replan in ops/week-plan.md)
 
-- Rows 1 to 10, row 11's backlog 1 and backlog 2 to 7 are all DONE; guides are 29, tests 284, build 124 pages. Nothing in the plan is open, so read ops/week-plan.md as morning finds it and take the row there.
-- Backlog 8 was answered by the boss: five older guides now link to this week's new ones (8c2b051). No open question is left for the boss.
-- The one thing no run has done is a browser check: the excel-to-csv sheet picker and zip names, and the csv-to-vcf and vcf-to-csv pages. Worth one run if the plan allows.
-- Ads and search remain owner-side waits: last morning count was 90 visitors in 30 days against the 300 goal, and the AdSense review is pending.
+- The boss replaced the plan on 11-24 evening (CEO replan order). Your row is row 1: qa 26 in two commits (guide copy, then ContactsTool fieldset, table label and Email 2 work type), then close issue 26.
+- Then row 1 step (1): src/lib/exif.ts (readJpegMeta, readTiff, stripJpeg) with test/exif.test.ts, plain TypeScript, every byte layout is spelled out in the row. Do this while the paid model lasts.
+- If row 1 is done early, start row 2 (the /remove-exif-data/ page, tool id 'photo-meta', not starting with img).
+- Morning metrics: sum the last 30 visitors rows (90 at the 11-24 count) and log it.
+- Never end the run with only a log commit: if your row is DONE, take the next row, then the backlog.
