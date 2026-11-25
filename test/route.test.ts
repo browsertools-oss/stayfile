@@ -39,11 +39,11 @@ describe('suggestTools', () => {
     expect(suggestTools([f('IMG_1.heic'), f('b.jpg')])[0].slug).toBe('heic-to-jpg');
   });
   test('images lead with making them smaller', () => {
-    expect(slugs(suggestTools([f('a.jpg')]))).toEqual(['compress-image', 'convert-image', 'resize-image', 'jpg-to-pdf']);
+    expect(slugs(suggestTools([f('a.jpg')]))).toEqual(['compress-image', 'convert-image', 'resize-image', 'remove-exif-data', 'jpg-to-pdf']);
     expect(suggestTools([f('a.jpg'), f('b.png')]).at(-1)!.label).toBe('Put them in one PDF');
   });
   test('one CSV or JSON file maps to its converters', () => {
-    expect(slugs(suggestTools([f('sales.csv')]))).toEqual(['csv-to-excel', 'csv-to-json', 'csv-to-markdown']);
+    expect(slugs(suggestTools([f('sales.csv')]))).toEqual(['csv-to-excel', 'csv-to-json', 'csv-to-markdown', 'split-csv']);
     expect(slugs(suggestTools([f('rows.json')]))).toEqual(['json-to-csv', 'json-to-excel', 'json-to-markdown']);
   });
   test('one Excel file maps to the Excel converters', () => {
@@ -62,7 +62,7 @@ describe('suggestTools', () => {
   test('mixed or unknown sets get no suggestion', () => {
     expect(suggestTools([])).toEqual([]);
     expect(suggestTools([f('a.pdf'), f('b.jpg')])).toEqual([]);
-    expect(suggestTools([f('a.csv'), f('b.csv')])).toEqual([]);
+    expect(slugs(suggestTools([f('a.csv'), f('b.csv')]))).toEqual(['merge-csv']);
     expect(suggestTools([f('a.docx')])).toEqual([]);
   });
 });

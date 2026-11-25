@@ -51,14 +51,17 @@ export function suggestTools(files: Named[]): Route[] {
         { slug: 'convert-image', label: 'Change the format' },
         { slug: 'resize-image', label: `Resize ${many}` },
       );
+      const jpgPng = files.every((f) => /\.(jpe?g|png)$/i.test(f.name) || /^image\/(jpeg|png)$/i.test(f.type ?? ''));
+      if (jpgPng) out.push({ slug: 'remove-exif-data', label: 'Remove the location and camera data' });
     }
     out.push({ slug: 'jpg-to-pdf', label: n > 1 ? 'Put them in one PDF' : 'Turn it into a PDF' });
     return out;
   }
+  if (n > 1 && kinds.size === 1 && kinds.has('csv')) return [{ slug: 'merge-csv', label: 'Merge them into one CSV' }];
   if (n > 1) return [];
   if (kinds.has('ics')) return [{ slug: 'ics-to-csv', label: 'List the events in a spreadsheet' }];
   if (kinds.has('vcf')) return [{ slug: 'vcf-to-csv', label: 'List the contacts in a spreadsheet' }];
-  if (kinds.has('csv')) return [{ slug: 'csv-to-excel', label: 'Turn it into an Excel file' }, { slug: 'csv-to-json', label: 'Convert to JSON' }, { slug: 'csv-to-markdown', label: 'Make a Markdown table' }];
+  if (kinds.has('csv')) return [{ slug: 'csv-to-excel', label: 'Turn it into an Excel file' }, { slug: 'csv-to-json', label: 'Convert to JSON' }, { slug: 'csv-to-markdown', label: 'Make a Markdown table' }, { slug: 'split-csv', label: 'Split it into smaller files' }];
   if (kinds.has('json')) return [{ slug: 'json-to-csv', label: 'Convert to CSV' }, { slug: 'json-to-excel', label: 'Turn it into an Excel file' }, { slug: 'json-to-markdown', label: 'Make a Markdown table' }];
   if (kinds.has('yaml')) return [{ slug: 'yaml-to-json', label: 'Convert to JSON' }, { slug: 'yaml-to-csv', label: 'Convert to CSV' }, { slug: 'yaml-to-excel', label: 'Turn it into an Excel file' }];
   if (kinds.has('xlsx')) return [{ slug: 'excel-to-csv', label: 'Convert to CSV' }, { slug: 'excel-to-json', label: 'Convert to JSON' }, { slug: 'excel-to-markdown', label: 'Make a Markdown table' }];
