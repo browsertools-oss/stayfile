@@ -20,6 +20,7 @@ export type Tool =
   | 'img-resize'
   | 'photo-meta'
   | 'csv-split'
+  | 'csv-merge'
   | 'img-ico'
   | 'csv-to-json'
   | 'csv-to-markdown'
@@ -3426,6 +3427,50 @@ export const PAGES: ToolPage[] = [
       {
         q: 'How do I open the parts in Excel?',
         a: 'Open them one by one. Each stays under the row limit if you pick 1,000,000 rows or fewer.',
+      },
+      {
+        q: 'Can I join the parts again?',
+        a: 'Yes. Save the parts, then drop them on /merge-csv/ and it writes them back into one file with a single header row.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'merge-csv',
+    tool: 'csv-merge',
+    group: 'Spreadsheets and data',
+    card: 'Merge CSV',
+    blurb: 'Join several CSV files into one, header once',
+    title: 'Merge CSV files into one, header kept once',
+    h1: 'Merge CSV files into one',
+    lede: 'This page joins several CSV files with the same columns into one file with one header row. Files with different columns are matched by column name and you are told which ones differ; nothing is uploaded.',
+    description: 'Join several CSV files into one with a single header row. Columns are matched by name and files that differ are named. Nothing is uploaded.',
+    more: {
+      h2: "When the columns don't match",
+      paras: [
+        'The first row of each file is its header. Columns are matched by name, not by position, so a file where City comes before Name still lands in the right columns. The output header is the union of every header you drop in, in the order the columns first appear.',
+        'If a file is missing a column, those cells are left empty. If a file has an extra column, the rows from the other files get an empty cell there. Either way the file is named in the warning above the download button, so you can check it before you use the result.',
+        'Tick Add a column with the file name when you need to tell rows apart after the merge. The name goes in the first column of every row. The saved file is always merged.csv, with a byte order mark so Excel reads accented text correctly.',
+      ],
+    },
+    steps: [
+      'Drop two or more CSV files.',
+      'Put them in the order you want with the up and down buttons.',
+      'Tick the file name column if you need to tell the sources apart.',
+      'Download merged.csv.',
+    ],
+    faq: [
+      {
+        q: 'Do the files need the same columns?',
+        a: 'No. Columns are matched by name, and a missing column is left empty. The files that differ from the first one are named so you can check them.',
+      },
+      {
+        q: 'What order are rows in?',
+        a: 'File order first, in the order you added the files, then the row order inside each file. Use the up and down buttons to change the file order before you merge.',
+      },
+      {
+        q: 'Can I merge Excel files?',
+        a: 'Save each one as CSV first with /excel-to-csv/, which can also save every sheet in a workbook. Then drop the CSV files here.',
       },
       PRIVATE,
     ],
