@@ -2620,7 +2620,7 @@ export const PAGES: ToolPage[] = [
   {
     slug: 'excel-to-csv',
     tool: 'xlsx-to-csv',
-    guide: ['csv-garbled-characters-excel', 'save-all-excel-sheets-as-csv'],
+    guide: ['csv-garbled-characters-excel', 'save-all-excel-sheets-as-csv', 'excel-csv-semicolon-instead-of-comma'],
     group: 'Spreadsheets and data',
     card: 'Excel to CSV',
     blurb: 'Save any sheet of a workbook as CSV',
@@ -2690,6 +2690,7 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'excel-to-tsv',
+    guide: 'excel-csv-semicolon-instead-of-comma',
     tool: 'xlsx-to-tsv',
     group: 'Spreadsheets and data',
     card: 'Excel to TSV',
@@ -3462,5 +3463,10 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'put-photos-into-one-pdf',
     title: 'How to put several photos into one PDF',
     blurb: 'The iPhone, Windows and Mac routes for turning a group of photos into one PDF, plus the browser option for mixed formats.',
+  },
+  {
+    slug: 'excel-csv-semicolon-instead-of-comma',
+    title: 'Why Excel saves a CSV with semicolons, and how to get commas',
+    blurb: 'Excel follows the Windows list separator, which is a semicolon where the decimal mark is a comma. Here is the fix.',
   },
 ];

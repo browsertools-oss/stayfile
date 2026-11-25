@@ -1,0 +1,69 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'Why Excel saves a CSV with semicolons, and how to get commas';
+const description = 'Excel writes CSV with the list separator from your region settings, so a comma decimal mark turns it into semicolons. Why it happens and how to get commas.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-24',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/excel-csv-semicolon-instead-of-comma/" jsonld={jsonld}>
+  <h1>Why Excel saves a CSV with semicolons, and how to get commas</h1>
+  <p class="lede">Excel writes a CSV with the list separator from your region settings, and where the decimal mark is a comma that separator is a semicolon. The file is still a valid CSV, but tools that expect commas read each line as one value, so this guide covers why it happens and the ways to get commas back.</p>
+
+  <h2>Where the semicolons come from</h2>
+  <p>CSV stands for comma separated values, but the format has no single fixed separator. Programs decide the separator from the computer's regional settings. Windows calls this the list separator, and it is the character the system uses to divide one list entry from the next.</p>
+  <p>In regions where the decimal mark is a period, the list separator is normally a comma. In regions where the decimal mark is a comma, such as much of Europe and South America, a comma cannot do both jobs. Typing 3,14 for a decimal number and also using commas between fields would make a file impossible to read. The system uses a semicolon as the list separator instead, and Excel follows it when it exports.</p>
+  <p>Excel has no setting of its own that says "save CSV with this separator". The Save As command reads the Windows setting at the moment it writes the file. That is why the same workbook produces commas on one computer and semicolons on another, and why changing the file's name or extension changes nothing.</p>
+
+  <h2>Why the file opens in one column</h2>
+  <p>A program that expects commas looks for a comma on each line and finds none. Everything before the line break becomes a single value, so all the columns land in the first cell of the row. Excel does the same when its own list separator is a comma. The data is not damaged; it is only being read with the wrong divider.</p>
+  <p>This is the mirror image of the problem where <a href="/guides/csv-opens-in-one-column-in-excel/">a comma CSV opens in one column</a> on a computer set up for semicolons. Both cases come from the same setting, and both are fixed the same ways.</p>
+
+  <h2>Fix 1: change the separators inside Excel</h2>
+  <p>This route changes Excel only and leaves Windows alone. It suits a single export from a machine you control.</p>
+  <ol>
+    <li>In Excel, choose File, then Options.</li>
+    <li>Open the Advanced tab and scroll to the editing options.</li>
+    <li>Untick "Use system separators". The decimal separator and thousands separator boxes become editable.</li>
+    <li>Set the decimal separator to a period and the thousands separator to a comma. Click OK.</li>
+    <li>Save the file as CSV. The fields are now separated by commas.</li>
+    <li>Go back and tick "Use system separators" again, so typed numbers behave as they did before.</li>
+  </ol>
+  <p>While the boxes are unticked, Excel reads and displays numbers in the format you set, so a number typed as 3,14 is taken as text. Keep the changed settings for the export only. Menu names can differ a little between app versions.</p>
+
+  <h2>Fix 2: change the Windows list separator</h2>
+  <p>This changes the separator for every program that asks Windows for it, so the new CSV and anything else saved afterwards will use commas.</p>
+  <ol>
+    <li>Open Control Panel and go to Region.</li>
+    <li>Click Additional settings.</li>
+    <li>Find the List separator box and change the semicolon to a comma.</li>
+    <li>Click OK in both windows.</li>
+  </ol>
+  <p>Close every Excel window before you test. Excel reads the regional setting when it starts, so a window that was already open keeps the old separator even after the change. Reopen the workbook, save the CSV again, and check the result.</p>
+  <p>The change reaches further than CSV files. Formulas written with semicolons, such as =SUM(A1;B1), are usually written with commas in a region whose list separator is a comma, because the same character divides arguments. Existing formulas may need their separators changed after the switch. If other people use the computer, or a macro depends on the current setting, prefer Fix 1 or the browser route below.</p>
+
+  <h2>Fix 3: write commas in the browser</h2>
+  <p><a href="/excel-to-csv/">Excel to CSV</a> reads an .xlsx workbook and writes the CSV itself, with a comma between fields. The converter calls the CSV writer without a separator option, so the output always uses commas, whatever the computer's region settings are. Your workbook is read on your device and never uploaded.</p>
+  <ol>
+    <li>Drop the .xlsx file on the page.</li>
+    <li>Pick the sheet you want from the list.</li>
+    <li>Download the CSV, or download every sheet as one zip of separate files.</li>
+  </ol>
+  <p>Each cell is written the way the sheet shows it, so a date comes out as the text you see rather than as a serial number. A cell that contains a comma is wrapped in quotes, which is how CSV keeps that comma inside the value instead of treating it as a divider.</p>
+  <p>If the next program wants tabs rather than commas, <a href="/excel-to-tsv/">Excel to TSV</a> writes a tab between fields, which avoids the separator question entirely. When the CSV is only a step toward another tool that reads structured data, <a href="/excel-to-json/">Excel to JSON</a> writes the sheet as JSON and no separator is involved.</p>
+
+  <h2>Check the file before you send it</h2>
+  <p>Open the saved file in a plain text editor and look at one line. A comma separated file shows commas between the values, and any value that contains a comma sits inside quotes. Semicolons between values mean the export picked up the regional setting again, so the change did not take effect, or the file came from the other computer.</p>
+  <p>Then open the CSV in the program that has to read it and confirm the values sit in separate columns. If they all sit in the first column, the reader expects a different separator from the one in the file. The link below covers that case from the other side.</p>
+
+  <p>See also: <a href="/guides/csv-opens-in-one-column-in-excel/">Why a CSV opens in one column in Excel</a> covers the comma file that lands in a single column, which is the same setting seen from the opposite direction. <a href="/guides/csv-garbled-characters-excel/">Why a CSV shows odd characters in Excel</a> covers accented text that breaks during the same kind of import.</p>
+</Base>
