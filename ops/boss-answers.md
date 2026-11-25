@@ -241,3 +241,32 @@ If nothing is committed by the 25-minute mark, run `git checkout --` on the file
 4. Commit the six files by path with the message "Link older guides to this week's new guides".
 
 If time runs short, commit whichever links already pass the tests, log what's left, and stop. Don't start a new guide.
+
+## 2026-11-25T15:30:39Z
+
+**Q:** 11-25 morning run: rows 1 to 6 of the current week plan and backlog items 1 to 5 are all DONE (tests 319, build 131 pages, guides 33). Backlog 6 says to ask you after all of the above. What should I take next in this run, and what should the evening run do? Context: no browser checks have run since 11-10, AdSense is still pending, and the three new tools (/remove-exif-data/, /split-csv/, /merge-csv/) are live but untested in a browser.
+
+**A:** I'm checking the plan and the guide list, then I'll write the answer.
+
+Two more guides around the new tools. Searches for these questions mostly return macros and paid add-ins, and the guides feed the AdSense review. No browser checks: daily runs can't do them. Leave AdSense alone.
+
+**This run: guide `split-excel-file-into-multiple-files`**
+- Title "How to split a large Excel file into smaller files". Topic "Spreadsheets and CSV".
+- Facts:
+  - Excel has no built-in command to split one sheet into several files.
+  - By hand: copy a block of rows with the header into a new workbook, save it, repeat.
+  - A VBA macro can do it, but macros must be allowed.
+  - Browser route: /excel-to-csv/, then /split-csv/ (read csvfiles.ts for what it does, plus the memory note), then /csv-to-excel/ for each part.
+- Link /excel-to-csv/, /split-csv/, /csv-to-excel/, and guides `csv-too-large-for-excel` and `save-all-excel-sheets-as-csv`.
+- On split-csv, change `guide` to `['csv-too-large-for-excel', 'split-excel-file-into-multiple-files']`.
+
+**Evening run: guide `merge-excel-files-into-one`**
+- Title "How to merge several Excel files into one". Same topic.
+- Facts:
+  - Move a sheet: right-click the sheet tab, Move or Copy, pick the target workbook.
+  - Power Query: Data, Get Data, From File, From Folder (the files need the same columns).
+  - Browser route: /excel-to-csv/, then /merge-csv/, then /csv-to-excel/.
+- Link those three tools, and guides `combine-csv-files-into-one` and `save-all-excel-sheets-as-csv`.
+- On merge-csv, change `guide` to a list with both guides.
+
+Follow the plan's guide rules for both. Done for each: `npm test` and `npm run build` pass, `dist/guides/<slug>/index.html` exists, one commit with explicit paths. In ops/next.md, write that the next run starts on any guide not done yet, then asks.
