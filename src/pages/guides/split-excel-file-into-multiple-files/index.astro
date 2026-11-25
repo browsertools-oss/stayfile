@@ -1,0 +1,49 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to split a large Excel file into smaller files';
+const description = 'Excel has no split command, so cut a sheet by hand, use a macro, or save it as CSV and split the rows in the browser.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-25',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/split-excel-file-into-multiple-files/" jsonld={jsonld}>
+  <h1>How to split a large Excel file into smaller files</h1>
+  <p class="lede">Excel has no command that splits one sheet into several files, so a large workbook has to be cut by hand, with a macro, or by going through CSV. This guide covers all three routes and shows how to keep the header row on every part.</p>
+
+  <h2>Why Excel has no split command</h2>
+  <p>A workbook is a container for sheets, not for rows. Excel can add sheets, move them and copy them, but nothing in the ribbon takes a long sheet and writes the first thousand rows to one file, the next thousand to another, and so on. The feature people look for does not exist in a stock install.</p>
+  <p>That is why searches for this question return macros and paid add-ins. Both work, but there is a simpler route when you only need the split once: save the sheet as CSV and cut the rows in a browser, then open each part in Excel again.</p>
+
+  <h2>Split a sheet by hand</h2>
+  <p>The manual method is to copy a block of rows into a new workbook. Select the header row and the first block of data rows, copy them, paste them into a new workbook, and save it with a name that shows the part number. Then repeat with the next block, until every row is in a file.</p>
+  <p>Two things go wrong. People forget to copy the header row into each new file, so the later parts have no column names. And people lose count of where the last block ended. Write the row numbers down before you start, such as rows 2 to 1001 in the first file and 1002 to 2001 in the second, and check them as you go.</p>
+  <p>For one split of a few thousand rows, this is quick enough. For a file with hundreds of thousands of rows, or a job you repeat every month, it is slow and easy to get wrong.</p>
+
+  <h2>Use a macro if you do it often</h2>
+  <p>A short VBA macro can do the same job in one click: it reads the row count, copies blocks into new workbooks, and saves each one. The catch is that macros must be allowed to run. Many offices block them by policy, and a file with a macro is itself a risk if it came from someone else.</p>
+  <p>If macros are allowed and you split the same kind of file often, the macro is worth setting up. If macros are blocked, or you only need this once, use another route.</p>
+
+  <h2>Split it in the browser</h2>
+  <p>The browser route needs no macro and no add-in. Start with <a href="/excel-to-csv/">Excel to CSV</a> and save the sheet as a CSV. If the workbook has several sheets, that page can save every sheet in one go, so each sheet becomes its own CSV to split.</p>
+  <p>Then open <a href="/split-csv/">Split CSV</a>, drop the CSV, and choose a number of rows per part or a number of files. Tick the header box, which is on by default, so every part starts with the column names. The page breaks the file between rows, so a cell with a comma or a line break stays with its row.</p>
+  <p>The page reads the file in pieces rather than all at once, so there is no set size limit on the input. The finished parts are held in the browser memory until you save, though, so a very large file can fail on a phone or a small laptop. That note is on the page, and it is worth reading before a big job.</p>
+  <p>Each part saves as its own CSV, or as one zip when there are several. Open a part with <a href="/csv-to-excel/">CSV to Excel</a> to get it back into a spreadsheet, and repeat for each one.</p>
+
+  <h2>Put the parts back into Excel</h2>
+  <p>If you need the parts as Excel files rather than CSVs, open each CSV and save it as an .xlsx. The values come across as text or numbers as the CSV wrote them, so check that codes such as 007 still start with a zero and that dates did not change shape on the way through.</p>
+  <p>The guide on <a href="/guides/save-all-excel-sheets-as-csv/">saving every sheet as CSV</a> covers the first step if the workbook has several sheets. The guide on <a href="/guides/csv-too-large-for-excel/">opening a CSV that is too big for Excel</a> covers what to do when a single part is still too large for one sheet.</p>
+
+  <h2>Check the parts before you delete anything</h2>
+  <p>Add up the data rows in the parts and compare the total with the original sheet. If the numbers differ, a part was cut short or a header row was counted as data. Open the last part and look at its final row, then open the first and check the header.</p>
+  <p>Keep the original workbook until every part has been checked. The parts are copies for a tool or a person that needs a smaller file, and the workbook is still the only record of the whole set.</p>
+  <p>See also: <a href="/guides/csv-too-large-for-excel/">CSV too big for Excel? How to open all the rows</a> and <a href="/guides/save-all-excel-sheets-as-csv/">How to save every sheet of an Excel file as CSV</a>.</p>
+</Base>

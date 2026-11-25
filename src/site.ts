@@ -3405,7 +3405,7 @@ export const PAGES: ToolPage[] = [
     slug: 'split-csv',
     tool: 'csv-split',
     group: 'Spreadsheets and data',
-    guide: 'csv-too-large-for-excel',
+    guide: ['csv-too-large-for-excel', 'split-excel-file-into-multiple-files'],
     card: 'Split CSV',
     blurb: 'Cut a big CSV into parts, header repeated',
     title: 'Split a CSV file into smaller files, header in each',
@@ -3694,5 +3694,11 @@ export const GUIDES: { slug: string; title: string; blurb: string; topic: string
     topic: 'Spreadsheets and CSV',
     title: 'CSV too big for Google Sheets? What to do',
     blurb: 'Sheets allows 10 million cells per spreadsheet. Drop columns, split the CSV into parts, or move the file to Excel.',
+  },
+  {
+    slug: 'split-excel-file-into-multiple-files',
+    topic: 'Spreadsheets and CSV',
+    title: 'How to split a large Excel file into smaller files',
+    blurb: 'Excel has no split command. Cut the sheet by hand, use a macro, or save it as CSV and split the rows in the browser.',
   },
 ];
