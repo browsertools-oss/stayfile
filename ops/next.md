@@ -1,6 +1,7 @@
 # Next (11-25-2026 evening run)
 
-- Row 7: the guide csv-too-large-for-excel, then row 8 (combine-csv-files-into-one) and row 9 (backlog 1). Rows 1 to 6 are DONE, so the only code left this week is done.
-- Backlog after the guides: row-drop routing for the new tools (merge-csv, split-csv, remove-exif-data) and the Email 2 WORK test.
-- The /remove-exif-data/, /split-csv/, /merge-csv/ and PDF page-choice flows have not run in a browser; open them if a run has time, especially the CSV File streaming.
+- Rows 1 to 8 are DONE, so all the week's tools are live and there are 31 guides. Row 9 is backlog 1: the guide check-photo-metadata, with guide set on remove-exif-data as a list.
+- Then backlog 2: home drop routing for merge-csv, split-csv and remove-exif-data, with the route.test.ts expectations.
+- Then backlog 4 (Email 2 WORK test) and backlog 5 (links from three older guides).
+- The new pages have not run in a browser; open the CSV File streaming and the photo page if a run has time.
 - Morning metrics next: sum the last 30 visitors rows (90 at the 11-25 count).
