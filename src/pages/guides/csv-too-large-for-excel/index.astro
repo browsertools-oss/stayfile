@@ -1,0 +1,49 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'CSV too big for Excel? How to open all the rows';
+const description = 'Excel stops at 1,048,576 rows, so a bigger CSV opens short and saving cuts the rest. Split the file, use the data model, or move it to a database.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-25',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/csv-too-large-for-excel/" jsonld={jsonld}>
+  <h1>CSV too big for Excel? How to open all the rows</h1>
+  <p class="lede">Excel stops at 1,048,576 rows and 16,384 columns in one sheet, so a bigger CSV opens short: Excel shows a warning that says "File not loaded completely", and the rows past the limit are not there. This guide covers the ways to reach all the rows, from splitting the file to holding the full set in Excel's data model or a database.</p>
+
+  <h2>Why the rest of the rows disappear</h2>
+  <p>A worksheet has a fixed limit of 1,048,576 rows and 16,384 columns. That number has not changed for many versions of Excel. When you open a CSV with more rows than that, Excel reads up to the limit and then stops. A warning appears that says "File not loaded completely", and the sheet holds only the first part of the file. The rows that did not fit are not hidden or scrolled off the bottom. They were never loaded.</p>
+  <p>The danger comes next. If you save the sheet, Excel writes what is loaded, so the file you save has lost everything past the limit. The original CSV on disk is untouched, so keep it. Work on a copy, or split the file before you edit anything, and never save over the original after Excel has warned you.</p>
+  <p>The warning is easy to miss because Excel still opens a full-looking sheet. Check the row count in the status bar, or scroll to the end, before you trust a large file that came in from somewhere else.</p>
+
+  <h2>Split the CSV into parts that fit</h2>
+  <p>The simplest fix is to cut the file into pieces smaller than the limit. <a href="/split-csv/">Split CSV</a> does that in your browser. Drop the file, choose 1,000,000 rows per part or fewer, and tick the header box so every part starts with the column names. Each part then opens on its own in Excel, and every part stays under the row limit.</p>
+  <p>The page reads the file in pieces rather than holding all of it as one string, so there is no set size limit on the input. The finished parts are held in the browser memory until you save them, though, so a file of several hundred MB can fail on a phone or a small laptop. That note is on the page itself, and it is worth heeding before you start a very large job.</p>
+  <p>Splitting breaks the file between rows, never through one, so a quoted cell with a line break stays with its row. When you need the whole set again in one file, <a href="/merge-csv/">Merge CSV</a> joins the parts by column name and writes a single header row. It also names any file whose columns differ from the first one, which is useful when the parts came from different exports with a column added or dropped somewhere.</p>
+
+  <h2>Put the full file in Excel's data model</h2>
+  <p>Excel can hold more rows than a sheet if you keep them in the data model instead of on a worksheet. Choose Data, then Get Data, then From Text/CSV, and pick the file. In the preview window, choose Load To rather than Load. In the box that appears, pick Only Create Connection, and tick Add this data to the Data Model. The data is loaded into the model and not into a sheet, so the worksheet row limit does not apply.</p>
+  <p>You can then build a pivot table from the model and pull in the rows and columns you need. The file is still read by Excel, so a very large one takes time and memory, and the first load can look as if nothing is happening. Menu names can differ a little between app versions.</p>
+  <p>This route keeps the whole set available without making a second copy on disk, which helps when the CSV is an export you receive every month and the columns stay the same.</p>
+
+  <h2>Check the Google Sheets limit</h2>
+  <p>Google Sheets measures a different limit: 10 million cells per spreadsheet, counted across all the sheets in it. Rows times columns is what counts. A file of 200,000 rows and 60 columns is 12 million cells, so it will not fit, even though it has far fewer rows than Excel allows. A narrow file can hold more rows than an Excel sheet; a wide one hits the ceiling much sooner.</p>
+  <p>Importing also gets slow well before the limit, so a file near 10 million cells is painful to work with even when it is accepted. If the file is wide, drop the columns you do not need before you import it. If it is long and you only need one slice, filter it first in a spreadsheet that can open it, or in a database.</p>
+
+  <h2>Use a database for a file that keeps growing</h2>
+  <p>If the file is a regular export and it grows every month, a spreadsheet is the wrong long-term home for it. A database such as MySQL, PostgreSQL or SQLite has no row limit of this kind, and a query returns the rows you ask for without loading the whole file into a grid. The guide on <a href="/guides/import-csv-into-mysql-postgresql-sqlite/">importing a CSV into MySQL, PostgreSQL or SQLite</a> covers the steps for each one.</p>
+  <p>This is more setup than a spreadsheet, so it suits a file you work with often, not a one-off you need to look at once. For a single job, splitting the file with the browser page is faster than installing a database.</p>
+
+  <h2>Open the parts and check them</h2>
+  <p>Open each part in Excel or in <a href="/csv-to-excel/">CSV to Excel</a> and check the row count and the last row. If a part opens in a single column, the separator is set wrongly: <a href="/guides/csv-opens-in-one-column-in-excel/">Why a CSV opens in one column in Excel</a> covers that. If a code such as 007 has lost its leading zeros, <a href="/guides/excel-csv-leading-zeros/">Why Excel drops leading zeros in a CSV</a> explains why and how to keep them.</p>
+  <p>Keep the original CSV until you have checked every part. A split file is a copy for a tool with a limit, and the original is the one record of the whole set.</p>
+  <p>See also: <a href="/guides/csv-opens-in-one-column-in-excel/">Why a CSV opens in one column in Excel</a> and <a href="/guides/import-csv-into-mysql-postgresql-sqlite/">how to import a CSV into MySQL, PostgreSQL or SQLite</a>.</p>
+</Base>

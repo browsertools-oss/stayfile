@@ -3405,6 +3405,7 @@ export const PAGES: ToolPage[] = [
     slug: 'split-csv',
     tool: 'csv-split',
     group: 'Spreadsheets and data',
+    guide: 'csv-too-large-for-excel',
     card: 'Split CSV',
     blurb: 'Cut a big CSV into parts, header repeated',
     title: 'Split a CSV file into smaller files, header in each',
@@ -3668,5 +3669,11 @@ export const GUIDES: { slug: string; title: string; blurb: string; topic: string
     topic: 'Photos and images',
     title: 'Why a PNG gets a white or black background as a JPG',
     blurb: 'JPG cannot hold transparency, so the converter fills it. Why white or black appears and how to keep the see-through part.',
+  },
+  {
+    slug: 'csv-too-large-for-excel',
+    topic: 'Spreadsheets and CSV',
+    title: 'CSV too big for Excel? How to open all the rows',
+    blurb: 'Excel stops at 1,048,576 rows and saving cuts the rest. Split the file, load it into the data model, or move it to a database.',
   },
 ];
