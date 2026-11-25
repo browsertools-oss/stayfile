@@ -1,0 +1,49 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to combine several CSV files into one';
+const description = 'Join CSV files in Command Prompt or Terminal, with Excel Power Query, or in the browser. Keep one header row and match columns by name.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-25',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/combine-csv-files-into-one/" jsonld={jsonld}>
+  <h1>How to combine several CSV files into one</h1>
+  <p class="lede">Combining several CSV files into one means writing the first file's header once and then adding the data rows from every file under it. The command line can do that in a moment, but it copies each file's header into the middle of the result, so the joined file ends up with extra header rows among the data. This guide covers the quick ways and the ones that keep the header clean.</p>
+
+  <h2>What a good combined file looks like</h2>
+  <p>A CSV holds one table. When you join several files, the result should have one header row at the top and then every data row, with nothing in between. That is the shape a spreadsheet, a database or a script expects when it reads the file.</p>
+  <p>The trouble is that every source file has its own header. A plain join copies each one along with its rows, so the header from the second file lands in the middle as if it were a data row. Sorting the result or loading it into a database then treats that repeated header as real data, which can break a numeric column or add a row that should not be there.</p>
+
+  <h2>Join the files in Command Prompt or Terminal</h2>
+  <p>On Windows, open Command Prompt in the folder that holds the files and run <code>copy *.csv combined.csv</code>. On a Mac or Linux machine, open Terminal in the same folder and run <code>cat *.csv &gt; combined.txt</code>. Both commands read the files in name order and write one file after another.</p>
+  <p>Neither command knows about headers. The header from the first file ends up at the top, and the header from every other file is copied into the middle as a row. If the files are small, you can open the result and delete the repeated header rows by hand. For a handful of files that is quick; for dozens it is not.</p>
+  <p>One more catch on Windows: if the output is named <code>combined.csv</code> and you run the command a second time, the pattern <code>*.csv</code> matches the output too, so the file can swallow its own earlier copy. Give the output a name that does not end in .csv, such as <code>combined.txt</code>, then rename it when the command has finished. The Mac and Linux command above does the same by writing to <code>combined.txt</code>.</p>
+  <p>Both commands also assume the files use the same column order and the same separator. If one file came from a different export, the rows can land under the wrong headings, and nothing warns you.</p>
+
+  <h2>Combine them in Excel with Power Query</h2>
+  <p>Excel has a way to combine a whole folder of CSV files and keep one header. Put the files in their own folder, then choose Data, then Get Data, then From File, then From Folder. Point Excel at the folder, and in the window that opens choose Combine. Power Query reads the files, uses the first file's header, and stacks the rows from the rest under it.</p>
+  <p>This is the better choice when you have many files, because it does the header handling for you and you can refresh the result when the folder changes. It needs the files to share their columns, and it takes more clicks than the command line. Menu names can differ a little between app versions.</p>
+
+  <h2>Merge them in the browser</h2>
+  <p><a href="/merge-csv/">Merge CSV</a> does the join in your browser and writes one header row. Drop the files, put them in the order you want with the up and down buttons, and download the result. It matches columns by name rather than by position, so a file where City comes before Name still lands in the right columns, and a column that only some files have is kept.</p>
+  <p>If the files do not all have the same columns, the page names the ones that differ and leaves the missing cells empty. That warning is the part the command line has no way to give you. You can also add a column with the file name, which helps when you need to tell rows from different months or branches apart after the merge.</p>
+  <p>Nothing is uploaded. The files are read and joined in the browser, and the saved file is a copy on your computer.</p>
+
+  <h2>When the files come from Excel</h2>
+  <p>A workbook is not a CSV yet. Save each sheet as a CSV first with <a href="/excel-to-csv/">Excel to CSV</a>, which can also save every sheet in a workbook in one go, then merge the CSVs. If you only need the merged table back in Excel, open the result with <a href="/csv-to-excel/">CSV to Excel</a>.</p>
+  <p>If a workbook has many sheets, the guide on <a href="/guides/save-all-excel-sheets-as-csv/">saving every sheet as CSV</a> covers the options. Do that first, because a merge works on the CSV files, not on the workbook.</p>
+
+  <h2>Check the row count after the merge</h2>
+  <p>Count the data rows in each source file, add them up, and compare the total with the merged file. If the numbers differ, one file probably had a different separator, a quoted cell with a line break, or a repeated header. Fixing the source file is easier than fixing the merged one.</p>
+  <p>If the merged file turns out to be too large for one Excel sheet, the guide on <a href="/guides/csv-too-large-for-excel/">opening a CSV that is too big for Excel</a> covers the next step. Keep the source files until you have checked the total, because they are the only record of what went in.</p>
+  <p>See also: <a href="/guides/save-all-excel-sheets-as-csv/">How to save every sheet of an Excel file as CSV</a> and <a href="/guides/csv-too-large-for-excel/">CSV too big for Excel? How to open all the rows</a>.</p>
+</Base>

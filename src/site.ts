@@ -3450,6 +3450,7 @@ export const PAGES: ToolPage[] = [
     slug: 'merge-csv',
     tool: 'csv-merge',
     group: 'Spreadsheets and data',
+    guide: 'combine-csv-files-into-one',
     card: 'Merge CSV',
     blurb: 'Join several CSV files into one, header once',
     title: 'Merge CSV files into one, header kept once',
@@ -3675,5 +3676,11 @@ export const GUIDES: { slug: string; title: string; blurb: string; topic: string
     topic: 'Spreadsheets and CSV',
     title: 'CSV too big for Excel? How to open all the rows',
     blurb: 'Excel stops at 1,048,576 rows and saving cuts the rest. Split the file, load it into the data model, or move it to a database.',
+  },
+  {
+    slug: 'combine-csv-files-into-one',
+    topic: 'Spreadsheets and CSV',
+    title: 'How to combine several CSV files into one',
+    blurb: 'Join CSV files in Command Prompt or Terminal, with Excel Power Query, or in the browser, and keep a single header row.',
   },
 ];
