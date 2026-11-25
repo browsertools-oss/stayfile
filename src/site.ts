@@ -820,6 +820,7 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'png-to-jpg',
+    guide: 'png-transparent-background-jpg',
     tool: 'img-convert',
     group: 'Images',
     card: 'PNG to JPG',
@@ -1776,6 +1777,7 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'png-to-webp',
+    guide: 'png-transparent-background-jpg',
     tool: 'img-convert',
     guide: 'jpg-png-webp-or-avif',
     group: 'Images',
@@ -1923,6 +1925,7 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'compress-png',
+    guide: 'png-transparent-background-jpg',
     tool: 'img-compress',
     group: 'Images',
     card: 'Compress PNG',
@@ -3482,5 +3485,10 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'open-avif-images',
     title: "Saved an AVIF image you can't open? Convert it",
     blurb: 'Why older apps refuse AVIF, and how to get a JPG or PNG that opens anywhere, with or without transparency.',
+  },
+  {
+    slug: 'png-transparent-background-jpg',
+    title: 'Why a PNG gets a white or black background as a JPG',
+    blurb: 'JPG cannot hold transparency, so the converter fills it. Why white or black appears and how to keep the see-through part.',
   },
 ];

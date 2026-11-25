@@ -1,0 +1,58 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'Why a PNG gets a white or black background as a JPG';
+const description = 'JPG has no transparency, so a converter has to fill the see-through parts. Why white and black appear, and how to keep the transparency in PNG or WebP.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-24',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/png-transparent-background-jpg/" jsonld={jsonld}>
+  <h1>Why a PNG gets a white or black background as a JPG</h1>
+  <p class="lede">A transparent area in a PNG has no colour of its own, and a JPG cannot store transparency at all, so whatever makes the JPG has to choose a colour for those pixels. Most software fills them with white, some fills them with black, and that fill is the background you see. Keeping the file as PNG or WebP is the way to keep the see-through part.</p>
+
+  <h2>Why a JPG cannot keep the transparency</h2>
+  <p>Every pixel in a JPG holds a colour. The format has no way to say "this pixel shows whatever is behind it", which is what a transparent pixel means in a PNG. When a transparent PNG is opened for conversion, those pixels arrive with no colour value, and the encoder has to write something into the JPG for each one.</p>
+  <p>Software picks a fill colour at that moment. Photo editors often use white because it matches paper and looks normal in a document. Some tools leave the canvas at its default, which is black, and that is where a black background comes from. Other tools let you choose a matte colour in the export dialog. The result depends entirely on the setting the program used, not on the PNG itself.</p>
+  <p>This is why the same PNG can come out with a white background on one computer and a black one on another. The file never held a background colour to copy. The converter supplied one.</p>
+
+  <h2>What this site's PNG to JPG page does</h2>
+  <p><a href="/png-to-jpg/">PNG to JPG</a> paints the canvas white before it draws the PNG. The transparent pixels therefore become white in the JPG, never black. The page then encodes a fresh JPG from those pixels at the quality you set, with 85 as the default.</p>
+  <ol>
+    <li>Drop the PNG files on the page.</li>
+    <li>Leave JPG selected and move the quality slider if you want a smaller file.</li>
+    <li>Click Convert, then save the image or the zip.</li>
+  </ol>
+  <p>Nothing else from the PNG travels into the JPG. The date, camera and location details recorded in the original file are dropped, because the conversion works from the pixels only. The pixel dimensions stay the same unless you resize the image first.</p>
+
+  <h2>Keep the transparency in a PNG</h2>
+  <p>If the see-through part is the point of the image, a logo, an icon or a cut-out product shot, do not convert it to JPG. Keep the PNG, or shrink it while it stays a PNG.</p>
+  <p><a href="/compress-png/">Compress PNG</a> re-saves a PNG at a smaller maximum width and keeps the alpha channel, so the transparent areas stay transparent and the pixels stay exact. PNG is lossless, so re-saving removes almost nothing on its own; most of the size saving comes from reducing the width. The page shows the new size before you save, and hands back the original unchanged if the result would be bigger.</p>
+
+  <h2>Keep the transparency and get a smaller file</h2>
+  <p>When the file has to be small as well as see-through, <a href="/png-to-webp/">PNG to WebP</a> is the useful swap. WebP keeps the alpha channel, so the transparent background survives, and it compresses photos and graphics far better than PNG. A large PNG logo often becomes a small WebP with the see-through area intact.</p>
+  <p>The catch is support. WebP opens in every current browser and in many apps, but some older photo viewers and upload forms still refuse it. If the destination is a website, an app or a modern document, WebP is a good choice. If it is an older desktop program, test one file before converting a folder.</p>
+
+  <h2>When a white or black background is what you want</h2>
+  <p>Sometimes the fill is not a problem but the goal. A photo with no transparency converts to JPG to save space, since JPG files of photos are usually far smaller than the PNGs they came from. A form or a print shop that asks for JPG will accept the white background, and a document that sits on white paper shows no edge at all.</p>
+  <p>If a black background appears and you wanted white, the converter chose black. Run the same PNG through a tool that lets you set the fill, or through the page above, which uses white. If you wanted black on purpose, a photo editor can add a black matte before export.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li>Transparent area matters: keep PNG, or compress it while it stays PNG.</li>
+    <li>Transparent area matters and the file must be small: convert to WebP.</li>
+    <li>No transparency, or the destination wants JPG: convert to JPG and expect white behind the see-through parts.</li>
+    <li>Background came out black: the converter filled it that way, so use one that fills white.</li>
+  </ul>
+  <p>The pages here read and write the image in the browser. Nothing is uploaded, so a logo or a product photo stays on your device.</p>
+
+  <p>See also: <a href="/guides/jpg-png-webp-or-avif/">JPG, PNG, WebP or AVIF</a> explains which format suits which job, including when transparency matters. <a href="/guides/open-webp-images/">Saved a WebP image you can't open? Convert it</a> covers what to do when an older app refuses the WebP you just made.</p>
+</Base>
