@@ -2,7 +2,9 @@
 import Base from '../../layouts/Base.astro';
 import { GUIDES, SITE } from '../../site';
 const title = `Guides | ${SITE.name}`;
-const description = 'Plain answers to file problems: iPhone HEIC photos, shrinking photos, picking an image format, combining PDFs, JSON in Excel, favicons and converter privacy.';
+const description = 'Plain answers to common file problems: photo formats, shrinking images, PDFs, spreadsheets, calendars, contacts and converter privacy.';
+const TOPICS = ['Spreadsheets and CSV', 'Calendars and contacts', 'PDF', 'Photos and images', 'Privacy'];
+const sections = TOPICS.map((topic) => ({ topic, guides: GUIDES.filter((g) => g.topic === topic) })).filter((s) => s.guides.length > 0);
 ---
 <Base title={title} description={description} path="/guides/">
   <div class="board bleed band" data-family="any">
@@ -11,15 +13,16 @@ const description = 'Plain answers to file problems: iPhone HEIC photos, shrinki
       <p class="lede">Short guides to the problems behind the file tools: what the file is, why the usual app will not open it, and the steps that fix it.</p>
     </div>
   </div>
-  <section class="row first">
-    <h2>All guides</h2>
-    <div>
-      {GUIDES.length === 0 && <p>The first guides are on the way. Check back soon.</p>}
-      <ul class="guides">
-        {GUIDES.map((g) => <li><a href={`/guides/${g.slug}/`}><span class="gt">{g.title}</span><span class="gb">{g.blurb}</span></a></li>)}
-      </ul>
-    </div>
-  </section>
+  {sections.map((s, i) => (
+    <section class={`row${i === 0 ? ' first' : ''}`}>
+      <h2>{s.topic}</h2>
+      <div>
+        <ul class="guides">
+          {s.guides.map((g) => <li><a href={`/guides/${g.slug}/`}><span class="gt">{g.title}</span><span class="gb">{g.blurb}</span></a></li>)}
+        </ul>
+      </div>
+    </section>
+  ))}
 </Base>
 <style>
   .band { padding-bottom: 40px; }
