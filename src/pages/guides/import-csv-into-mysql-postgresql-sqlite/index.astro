@@ -50,7 +50,7 @@ IGNORE 1 LINES;</code></pre>
 
   <h2>The short version</h2>
   <p>Create the table, then pick the command that matches where you are: LOAD DATA for MySQL, \copy for PostgreSQL, .import for SQLite. When you are stuck behind a web console or a locked-down host, generate INSERTs with the CSV to SQL page and paste them. Either way, check the types of the target columns before you load, because the database will happily store "00123" as 123 if you let it.</p>
-  <p>See also: <a href="/guides/csv-opens-in-one-column-in-excel/">CSV opens in one column in Excel: why and how to fix it</a>.</p>
+  <p>See also: <a href="/guides/csv-opens-in-one-column-in-excel/">CSV opens in one column in Excel: why and how to fix it</a>. If the export is too big for one load, <a href="/split-csv/">split a large CSV</a> into parts first.</p>
 </Base>
 <style>
   pre { font-family: var(--mono, monospace); overflow-x: auto; }
