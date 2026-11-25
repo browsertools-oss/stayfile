@@ -3291,6 +3291,10 @@ export const PAGES: ToolPage[] = [
         q: 'Do my contacts get uploaded?',
         a: 'No. A contact list is other people\'s personal data, and this page never sends it anywhere. The spreadsheet is read and the .vcf is written in your browser, and closing the tab ends it.',
       },
+      {
+        q: 'How are birthdays read?',
+        a: 'Month first, so 03/04/1990 is read as March 4. Write birthdays as 1990-03-04 to be sure. A birthday that can\'t be read is left out of that contact.',
+      },
       PRIVATE,
       LIMIT,
     ],

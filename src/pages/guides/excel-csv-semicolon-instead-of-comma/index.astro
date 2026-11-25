@@ -58,12 +58,12 @@ const jsonld = [
     <li>Pick the sheet you want from the list.</li>
     <li>Download the CSV, or download every sheet as one zip of separate files.</li>
   </ol>
-  <p>Each cell is written the way the sheet shows it, so a date comes out as the text you see rather than as a serial number. A cell that contains a comma is wrapped in quotes, which is how CSV keeps that comma inside the value instead of treating it as a divider.</p>
+  <p>Each cell is written as the formatted text Excel shows, so a date comes out as the text you see rather than as a serial number. A cell that contains a comma is wrapped in quotes, which is how CSV keeps that comma inside the value instead of treating it as a divider.</p>
   <p>If the next program wants tabs rather than commas, <a href="/excel-to-tsv/">Excel to TSV</a> writes a tab between fields, which avoids the separator question entirely. When the CSV is only a step toward another tool that reads structured data, <a href="/excel-to-json/">Excel to JSON</a> writes the sheet as JSON and no separator is involved.</p>
 
   <h2>Check the file before you send it</h2>
   <p>Open the saved file in a plain text editor and look at one line. A comma separated file shows commas between the values, and any value that contains a comma sits inside quotes. Semicolons between values mean the export picked up the regional setting again, so the change did not take effect, or the file came from the other computer.</p>
-  <p>Then open the CSV in the program that has to read it and confirm the values sit in separate columns. If they all sit in the first column, the reader expects a different separator from the one in the file. The link below covers that case from the other side.</p>
+  <p>Then open the CSV in the program that has to read it and confirm the values sit in separate columns. If they all sit in the first column, the reader expects a different separator from the one in the file. <a href="/guides/csv-opens-in-one-column-in-excel/">The one-column guide</a> covers that case from the other side.</p>
 
   <p>See also: <a href="/guides/csv-opens-in-one-column-in-excel/">Why a CSV opens in one column in Excel</a> covers the comma file that lands in a single column, which is the same setting seen from the opposite direction. <a href="/guides/csv-garbled-characters-excel/">Why a CSV shows odd characters in Excel</a> covers accented text that breaks during the same kind of import.</p>
 </Base>
