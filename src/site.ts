@@ -19,6 +19,7 @@ export type Tool =
   | 'img-compress'
   | 'img-resize'
   | 'photo-meta'
+  | 'csv-split'
   | 'img-ico'
   | 'csv-to-json'
   | 'csv-to-markdown'
@@ -3387,6 +3388,46 @@ export const PAGES: ToolPage[] = [
       },
       PRIVATE,
       LIMIT,
+    ],
+  },
+  {
+    slug: 'split-csv',
+    tool: 'csv-split',
+    group: 'Spreadsheets and data',
+    card: 'Split CSV',
+    blurb: 'Cut a big CSV into parts, header repeated',
+    title: 'Split a CSV file into smaller files, header in each',
+    h1: 'Split a large CSV file',
+    lede: 'This page cuts a CSV file into smaller files of a set number of rows, or into a set number of files, with the header row repeated in each one. Excel stops at 1,048,576 rows, so a bigger file has to be split before it opens fully; the file is read in your browser and never uploaded.',
+    description: 'Split a large CSV into smaller files by row count or file count, with the header row repeated in every part. Nothing is uploaded.',
+    more: {
+      h2: 'How big a file it takes',
+      paras: [
+        'The file is read in pieces, not all at once, so there is no set size or part limit on the input. The finished parts are held in the browser memory until you save them, though, so a file of several hundred MB can fail on a phone or a small laptop. Split that one on a computer with more memory, or cut it in two with a text editor first.',
+        'Quoted cells with commas or line breaks stay in one row, because the file is parsed as CSV rather than split on newlines. Each part breaks between rows, so no row is cut in half.',
+        'The part names follow the original: data.csv becomes data-part-1.csv, data-part-2.csv and so on, padded to the same width when there are ten or more. With several parts you get one zip file to download. If the file has no header row, untick the box and every part starts with data.',
+      ],
+    },
+    steps: [
+      'Drop one CSV file.',
+      'Choose rows per file, or the number of files.',
+      'Tick the header box if the first row is a header.',
+      'Split and save the parts.',
+    ],
+    faq: [
+      {
+        q: 'Is the header in every file?',
+        a: 'Yes, when the header box is ticked, which is the default. The first row is written at the top of every part and is not counted as a data row.',
+      },
+      {
+        q: 'Can a row be cut in half?',
+        a: 'No. Parts break between rows, and a quoted cell that contains a line break stays with its row.',
+      },
+      {
+        q: 'How do I open the parts in Excel?',
+        a: 'Open them one by one. Each stays under the row limit if you pick 1,000,000 rows or fewer.',
+      },
+      PRIVATE,
     ],
   },
 ];

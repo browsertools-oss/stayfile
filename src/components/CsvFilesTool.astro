@@ -1,0 +1,213 @@
+---
+import Drop from './Drop.astro';
+import type { Tool } from '../site';
+
+interface Props { tool: Tool; slug: string }
+const { tool, slug } = Astro.props;
+---
+
+<section class="tool" data-tool={tool} data-slug={slug}>
+  <ul class="files" id="list"></ul>
+  <Drop accept=".csv,.tsv,.txt,text/csv" main="Drop a CSV file here, or <u>choose one</u>" sub="CSV files" />
+
+  <div class="opts" id="opts" hidden>
+    <div class="seg" role="radiogroup" aria-label="How to split">
+      <label><input type="radio" name="mode" value="rows" checked /><span>Rows per file</span></label>
+      <label><input type="radio" name="mode" value="files" /><span>Number of files</span></label>
+    </div>
+    <label id="rowsWrap">Rows per file <input type="number" id="rows" min="1" value="100000" /></label>
+    <label id="filesWrap" hidden>Number of files <input type="number" id="files" min="1" value="2" /></label>
+    <label><input type="checkbox" id="header" checked /> First row is a header, repeat it in every file</label>
+  </div>
+
+  <div class="actions" id="actions" hidden>
+    <button type="button" class="primary" id="go" disabled>Split</button>
+    <span class="status" id="status" aria-live="polite"></span>
+  </div>
+
+  <div class="done" id="done" role="status" hidden></div>
+  <p class="error" id="err" role="alert" hidden></p>
+</section>
+
+<script>
+  import Papa from 'papaparse';
+  import { save, zip, baseName } from '../lib/save';
+  import { savedLine } from '../lib/route';
+  import { showDone, hideDone } from '../lib/done';
+  import { makeSplitter, partName, rowsPerPartFor } from '../lib/csvfiles';
+
+  const root = document.querySelector<HTMLElement>('.tool')!;
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
+  const list = $('list')!, drop = $('drop')!, go = $<HTMLButtonElement>('go')!;
+  const opts = $('opts')!, actions = $('actions')!, status = $('status')!;
+  const err = $('err')!, doneEl = $('done')!;
+  const rows = $<HTMLInputElement>('rows')!, files = $<HTMLInputElement>('files')!;
+  const rowsWrap = $('rowsWrap')!, filesWrap = $('filesWrap')!;
+  const header = $<HTMLInputElement>('header')!;
+  const mode = () => document.querySelector<HTMLInputElement>('input[name="mode"]:checked')?.value ?? 'rows';
+
+  let file: File | null = null;
+  const BOM_CHAR = String.fromCharCode(0xfeff);
+
+  function syncMode() {
+    const byRows = mode() === 'rows';
+    rowsWrap.hidden = !byRows;
+    filesWrap.hidden = byRows;
+  }
+
+  function showFile(f: File) {
+    file = f;
+    list.innerHTML = '';
+    const li = document.createElement('li');
+    const name = document.createElement('span');
+    name.className = 'name';
+    name.textContent = f.name;
+    li.append(name);
+    list.append(li);
+    opts.hidden = false;
+    actions.hidden = false;
+    go.disabled = false;
+    hideDone(doneEl);
+    err.hidden = true;
+    status.textContent = '';
+  }
+
+  async function hasBom(f: File): Promise<boolean> {
+    const head = new Uint8Array(await f.slice(0, 3).arrayBuffer());
+    return head.length === 3 && head[0] === 0xef && head[1] === 0xbb && head[2] === 0xbf;
+  }
+
+  /** Read the whole file once and count the data rows. */
+  function countRows(f: File): Promise<number> {
+    return new Promise((resolve, reject) => {
+      let seen = 0;
+      let first = true;
+      Papa.parse<string[]>(f as unknown as string, {
+        skipEmptyLines: true,
+        chunk: (res) => {
+          const data = res.data as string[][];
+          if (first && data.length && header.checked) {
+            const cell = data[0][0] ?? '';
+            if (cell.charCodeAt(0) === 0xfeff) data[0][0] = cell.slice(1);
+          }
+          for (const row of data) {
+            if (header.checked && first) {
+              first = false;
+              continue;
+            }
+            first = false;
+            if (!(row.length === 1 && (row[0] ?? '') === '')) seen++;
+          }
+        },
+        complete: () => resolve(seen),
+        error: (e: unknown) => reject(e),
+      });
+    });
+  }
+
+  /** Read the file again and hand back one CSV string per part. */
+  function splitFile(f: File, per: number, bom: boolean): Promise<{ parts: string[]; rows: number }> {
+    return new Promise((resolve, reject) => {
+      const parts: string[] = [];
+      let dataRows = 0;
+      let first = true;
+      let n = 0;
+      const splitter = makeSplitter({
+        header: header.checked,
+        rowsPerPart: per,
+        onPart: (csv) => {
+          n++;
+          status.textContent = `Writing part ${n}...`;
+          parts.push((bom ? BOM_CHAR : '') + csv);
+        },
+      });
+      Papa.parse<string[]>(f as unknown as string, {
+        skipEmptyLines: true,
+        chunk: (res) => {
+          const data = res.data as string[][];
+          for (const row of data) {
+            if (header.checked && first) {
+              const cell = row[0] ?? '';
+              if (cell.charCodeAt(0) === 0xfeff) row[0] = cell.slice(1);
+              first = false;
+              continue;
+            }
+            first = false;
+            if (!(row.length === 1 && (row[0] ?? '') === '')) dataRows++;
+          }
+          splitter.push(data);
+        },
+        complete: () => {
+          splitter.end();
+          resolve({ parts, rows: dataRows });
+        },
+        error: (e: unknown) => reject(e),
+      });
+    });
+  }
+
+  drop.addEventListener('files', (e) => {
+    const picked = [...(e as CustomEvent<File[]>).detail];
+    if (picked.length) showFile(picked[0]);
+  });
+
+  go.addEventListener('click', async () => {
+    if (!file) return;
+    const f = file;
+    go.disabled = true;
+    err.hidden = true;
+    status.textContent = '';
+
+    try {
+      const bom = await hasBom(f);
+      let per: number;
+      if (mode() === 'files') {
+        status.textContent = 'Counting rows...';
+        const total = await countRows(f);
+        per = rowsPerPartFor(total, Math.max(1, Number(files.value) || 2));
+      } else {
+        per = Math.max(1, Math.floor(Number(rows.value) || 100000));
+      }
+
+      const { parts, rows: dataRows } = await splitFile(f, per, bom);
+      if (!parts.length) {
+        err.textContent = 'No rows were found in that file.';
+        err.hidden = false;
+        return;
+      }
+
+      const base = baseName(f.name);
+      const out = parts.map((csv, i) => ({
+        name: partName(base, i + 1, parts.length),
+        data: new Blob([csv], { type: 'text/csv' }),
+      }));
+
+      let again: () => void;
+      let line: string;
+      let result: File | undefined;
+      if (out.length === 1) {
+        again = () => save(out[0].data, out[0].name);
+        line = savedLine(out[0].name);
+        result = new File([out[0].data], out[0].name, { type: 'text/csv' });
+      } else {
+        const zipped = await zip(out);
+        again = () => save(zipped, `${base}-parts.zip`, 'application/zip');
+        line = savedLine(`${base}-parts.zip`, out.length);
+      }
+
+      status.textContent = `${dataRows} rows into ${out.length} file${out.length === 1 ? '' : 's'}.`;
+      again();
+      showDone({ el: doneEl, slug: root.dataset.slug!, line, again, result });
+    } catch {
+      err.textContent = 'That file could not be read as CSV.';
+      err.hidden = false;
+    } finally {
+      go.disabled = false;
+    }
+  });
+
+  for (const r of document.querySelectorAll<HTMLInputElement>('input[name="mode"]')) {
+    r.addEventListener('change', syncMode);
+  }
+  syncMode();
+</script>

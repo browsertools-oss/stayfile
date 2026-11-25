@@ -6,6 +6,7 @@ import DataTool from './DataTool.astro';
 import CalendarTool from './CalendarTool.astro';
 import ContactsTool from './ContactsTool.astro';
 import PhotoMetaTool from './PhotoMetaTool.astro';
+import CsvFilesTool from './CsvFilesTool.astro';
 import Silhouette from './Silhouette.astro';
 import { SITE, PAGES, GROUP_ID, GUIDES, type ToolPage } from '../site';
 import { formatsFor } from '../formats';
@@ -22,7 +23,7 @@ const FACT_ROWS: [keyof (typeof formats)[number]['facts'], string][] = [
   ['watch', 'Watch out for'],
   ['opens', 'Opens in'],
 ];
-const family = page.tool === 'photo-meta' ? 'meta' : page.tool === 'csv-to-vcf' || page.tool === 'vcf-to-csv' ? 'contacts' : page.tool === 'csv-to-ics' || page.tool === 'ics-to-csv' ? 'cal' : page.tool.startsWith('pdf') || page.tool === 'img-to-pdf' || page.tool === 'text-to-pdf' ? 'pdf' : page.tool.startsWith('img') ? 'img' : 'data';
+const family = page.tool === 'csv-split' || page.tool === 'csv-merge' ? 'csvfiles' : page.tool === 'photo-meta' ? 'meta' : page.tool === 'csv-to-vcf' || page.tool === 'vcf-to-csv' ? 'contacts' : page.tool === 'csv-to-ics' || page.tool === 'ics-to-csv' ? 'cal' : page.tool.startsWith('pdf') || page.tool === 'img-to-pdf' || page.tool === 'text-to-pdf' ? 'pdf' : page.tool.startsWith('img') ? 'img' : 'data';
 // Show the pages that share a format with this one, then the rest, capped at eight so a
 // twenty-card group does not bury the page under its own related list.
 const STOP = new Set(['to', 'from', 'a', 'the']);
@@ -74,6 +75,7 @@ const jsonld = [
       {family === 'cal' && <CalendarTool tool={page.tool} slug={page.slug} />}
       {family === 'contacts' && <ContactsTool tool={page.tool} slug={page.slug} />}
       {family === 'meta' && <PhotoMetaTool slug={page.slug} />}
+      {family === 'csvfiles' && <CsvFilesTool tool={page.tool} slug={page.slug} />}
     </div>
   </div>
   <aside class="ad-slot" aria-hidden="true" data-ad-slot></aside>

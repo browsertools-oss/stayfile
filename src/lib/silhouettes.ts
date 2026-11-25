@@ -84,6 +84,7 @@ export const shapes: Record<string, Shape[]> = {
   'ics-to-csv': merge({ fill: [photo(14, 26, 34, 48)], cut: [grid(14, 30, 34, 44, 3, 4), 'M14 30h34'], ink: ['M22 20v12M40 20v12'] }, G(72, 14, 48, 68, true)),
   'csv-to-sql': merge(G(14, 14, 48, 68, true), { fill: [], cut: [], ink: ['M72 30l12 10-12 10', 'M90 54h16'] }),
   'remove-exif-data': merge(G(14, 14, 48, 68, true), { fill: [], cut: [], ink: ['M72 30l12 10-12 10', 'M90 54h16'] }),
+  'split-csv': merge(G(14, 14, 48, 68, true), { fill: [], cut: [], ink: ['M72 26h16v8H72zM72 38h16v8H72zM72 50h16v8H72z'] }),
   'excel-to-sql': merge(G(14, 14, 48, 68, true), { fill: [], cut: [], ink: ['M72 30l12 10-12 10', 'M90 54h16'] }),
   'markdown-to-json': merge(G(16, 16, 54, 66, true), { fill: ['M84 32q-6 0 -6 6v7q0 4 -4 4q4 0 4 4v7q0 6 6 6', 'M100 32q6 0 6 6v7q0 4 4 4q-4 0 -4 4v7q0 6 -6 6'], cut: [] }),
   'tsv-to-json': merge(G(16, 16, 54, 66, true), { fill: [`M84 30q-6 0 -6 6v8q0 4 -4 4q4 0 4 4v8q0 6 6 6`, `M96 30q6 0 6 6v8q0 4 4 4q-4 0 -4 4v8q0 6 -6 6`], cut: [] }),
