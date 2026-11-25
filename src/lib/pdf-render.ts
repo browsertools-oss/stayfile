@@ -71,6 +71,7 @@ export async function pdfToImages(
   dpi: number,
   format: 'jpg' | 'png',
   onPage?: (page: number, total: number) => void,
+  pages?: number[],
 ): Promise<Uint8Array[]> {
   const pdfjs = await import('pdfjs-dist');
   const workerSrc = (await import('pdfjs-dist/build/pdf.worker.mjs?url')).default;
@@ -78,10 +79,11 @@ export async function pdfToImages(
 
   const doc = await pdfjs.getDocument({ data: bytes, isEvalSupported: false }).promise;
   const out: Uint8Array[] = [];
+  const list = pages && pages.length ? pages : Array.from({ length: doc.numPages }, (_, k) => k + 1);
   try {
-    for (let i = 1; i <= doc.numPages; i++) {
-      onPage?.(i, doc.numPages);
-      const page = await doc.getPage(i);
+    for (let i = 0; i < list.length; i++) {
+      onPage?.(i + 1, list.length);
+      const page = await doc.getPage(list[i]);
       const viewport = page.getViewport({ scale: dpi / 72 });
       const canvas = document.createElement('canvas');
       canvas.width = Math.ceil(viewport.width);

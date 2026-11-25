@@ -67,7 +67,8 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
             <option value="300">Print (300 dpi)</option>
           </select>
         </label>
-        <p class="hint">Higher numbers make sharper pages and bigger files. Every page becomes its own {tool === 'pdf-to-png' ? 'PNG' : 'JPG'}.</p>
+        <label class="full">Pages (leave empty for all) <input id="pages" placeholder="1-3, 5" autocomplete="off" /></label>
+        <p class="hint">Type the pages you want, like 1-3, 5, or leave the box empty for every page. Each page becomes its own {tool === 'pdf-to-png' ? 'PNG' : 'JPG'}.</p>
       </div>
     )}
     {tool === 'pdf-to-text' && (
@@ -350,13 +351,16 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
         const format = tool === 'pdf-to-png' ? 'png' : 'jpg';
         const dpi = +$<HTMLSelectElement>('dpi')!.value;
         const { pdfToImages } = await import('../lib/pdf-render'); // pdf.js loads only on this page, when it runs
-        const pages = await pdfToImages(new Uint8Array(await first.file.arrayBuffer()), dpi, format, (i, n) => {
+        const box = $<HTMLInputElement>('pages');
+        const chosen = box && box.value.trim() ? parseRanges(box.value, first.pages!).flat().map((p) => p + 1) : undefined;
+        const images = await pdfToImages(new Uint8Array(await first.file.arrayBuffer()), dpi, format, (i, n) => {
           status.textContent = `Drawing page ${i} of ${n}…`;
-        });
-        const n = pages.length;
+        }, chosen);
+        const n = images.length;
         const mime = format === 'png' ? 'image/png' : 'image/jpeg';
-        if (n === 1) put(pages[0], `${name}.${format}`, mime);
-        else put(await zip(pages.map((d, i) => ({ name: pageImageName(name, i + 1, n, format), data: d }))), `${name}-${format}.zip`, 'application/zip', n);
+        const real = (i: number) => (chosen ? chosen[i] : i + 1);
+        if (n === 1) put(images[0], chosen ? pageImageName(name, real(0), 1, format) : `${name}.${format}`, mime);
+        else put(await zip(images.map((d, i) => ({ name: pageImageName(name, real(i), n, format), data: d }))), `${name}-${format}.zip`, 'application/zip', n);
         done = `Made ${n} ${format.toUpperCase()}${n === 1 ? '' : 's'} at ${dpi} dpi.`;
       } else if (tool === 'pdf-to-text') {
         const { pdfToText } = await import('../lib/pdf-render'); // pdf.js loads only on this page, when it runs

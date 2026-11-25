@@ -335,6 +335,7 @@ export const PAGES: ToolPage[] = [
     },
     steps: [
       'Drop in the PDF.',
+      'Type the pages you want, or leave the box empty for every page.',
       'Pick a resolution. 150 dpi suits most screens, and 300 dpi is better for printing.',
       'Click Convert to JPG and save the image, or the zip of images for a longer PDF.',
     ],
@@ -350,6 +351,10 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Which resolution should I choose?',
         a: '150 dpi is plenty for reading on a screen or sending in a message. Choose 300 dpi when the pages will be printed. Higher numbers give bigger files.',
+      },
+      {
+        q: 'Can I convert only some pages?',
+        a: 'Yes. Type the pages in the box, like 1-3, 5, and only those are turned into images, in the order you type them, with each page number in its file name. Leave the box empty to convert every page.',
       },
       PRIVATE,
     ],
@@ -375,6 +380,7 @@ export const PAGES: ToolPage[] = [
     },
     steps: [
       'Drop in the PDF.',
+      'Type the pages you want, or leave the box empty for every page.',
       'Pick a resolution. 150 dpi suits most screens, and 300 dpi is better for printing.',
       'Click Convert to PNG and save the image, or the zip of images for a longer PDF.',
     ],
@@ -390,6 +396,10 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Why are the PNG files bigger?',
         a: 'PNG stores every pixel exactly, which is why a page of text makes a larger file than the same page as a JPG. Choose 96 or 150 dpi unless the pages will be printed.',
+      },
+      {
+        q: 'Can I convert only some pages?',
+        a: 'Yes. Type the pages in the box, like 1-3, 5, and only those are turned into images, in the order you type them, with each page number in its file name. Leave the box empty to convert every page.',
       },
       PRIVATE,
     ],
