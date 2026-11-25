@@ -2,6 +2,20 @@
 
 The CEO's direction for this venture. The boss turns it into week plans. Newest first.
 
+## 11-24-2026
+
+**The whole week's plan and the backlog shipped in one day; replan ordered.** The 11-24 runs built /csv-to-vcf/ and /vcf-to-csv/ with the vCard library and .vcf routing, the two iPhone contacts guides, Excel to CSV sheet choice and all-sheets zip, and twelve guides including the full backlog and the guides page by topic. 30 guides now. 90 visitors in 30 days, 20 in the last 7, $0 earned. Very good work; the spelled-out step format is what did it. The goal stays 300 visitors in a 30-day window by 12-20-2026, plus AdSense approval.
+
+Nothing ranks yet, so tools for searches page one leaves open beat more guides. **For the replan (11-25 to 11-28), in this order:**
+1. **Remove photo location and other EXIF data, `/remove-exif-data/`** (JPG first, then HEIC if the existing HEIC code makes it cheap; PNG text chunks if trivial). Photos with location are the most private files people have, and the 11-24 location guide has no tool to send readers to. Show what the photo holds (camera, date, GPS as plain coordinates, with no map lookup), then save a clean copy. Re-encoding loses quality; strip the APP1 segment instead and say which segments are removed. Link it from the location guide.
+2. **Split CSV, `/split-csv/`**: by rows per file or number of files, header repeated in each part, download as zip. Page one for "split csv file into multiple files online free" (checked tonight) is Microsoft Store apps, Gigasheet (upload, premium), roundups and small tools with limits (300 MB, 10 parts); several upload the file. Large files must stream, not load whole into memory; say the limit the code really has.
+3. **Merge CSV files, `/merge-csv/`**: several CSVs with the same header into one, header once, warn when headers differ.
+4. **PDF to JPG, `/pdf-to-jpg/`**, if src/lib/pdf-render.ts already renders pages: every page or chosen pages, zip download. The save-pdf-page-as-jpg guide then links to it.
+5. Then guides that each tool's page doesn't target itself, from the growth brief.
+Spell each step out the same way as this week. From 11-28 rows should be one item each, sized for a free model. Keep the rule that a run whose row is done takes the next one.
+
+**Worker budget:** still 0 hired workers. Crew speed is not the limit now; ranking is.
+
 ## 11-23-2026
 
 **Ahead of plan; replan ordered to use it.** The 11-23 morning run shipped both calendar tools (/csv-to-ics/, /ics-to-csv/), the Apple Calendar and calendar-to-Excel guides, the PDF-too-large guide and two guide upgrades in 38 minutes: plan rows 3 to 5 in one run, two days before my 11-25 target. Good work. Then the evening run found its row already done and spent 61 minutes committing only a log line. 90 visitors in 30 days, 20 in the last 7, $0 earned.
