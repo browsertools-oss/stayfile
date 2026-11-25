@@ -1,0 +1,48 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to see what a photo reveals before you share it';
+const description = 'Phone photos often store the camera, the date and the GPS position. Check what a photo reveals on iPhone, Windows, Mac or in the browser before you share it.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-25',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/check-photo-metadata/" jsonld={jsonld}>
+  <h1>How to see what a photo reveals before you share it</h1>
+  <p class="lede">A phone photo often records the camera model, the date and time and, when location was on, the GPS position. Checking those before you share a photo takes a few seconds on a phone, a computer or a browser page. This guide shows where to look on each one.</p>
+
+  <h2>What a photo can carry</h2>
+  <p>The main block is EXIF. Cameras and phones write it into the file when the picture is taken, and it can hold the make and model of the camera, the date and time, the software that edited the file and, if location was on, the latitude and longitude. Some phones also record which way the camera was pointing.</p>
+  <p>There are other blocks too. XMP can repeat the date and the position and can record edits made in an editor. IPTC can hold captions and an author name. Comment blocks can hold anything a program chose to write. A color profile is usually present as well, which is not personal data and is better left in place.</p>
+  <p>Not every photo has all of these. A picture saved by a screenshot or exported by a social site often has none, because the app rebuilt the image from its pixels and wrote a fresh file.</p>
+
+  <h2>Check a photo on an iPhone</h2>
+  <p>Open the photo in Photos and swipe up, or tap the info button, which is an i in a circle. The panel shows the date and time, the camera and the lens, and, when the photo has a position, a small map of where it was taken. Tap the map to open the place in Maps.</p>
+  <p>If the map is missing, that photo has no location stored, or the app has hidden it. Photos and videos taken with location services turned off for the camera app do not get a position in the first place.</p>
+
+  <h2>Check a photo on Windows</h2>
+  <p>Right-click the file in File Explorer, choose Properties, and open the Details tab. The list shows the camera make and model, the date taken, the dimensions and, when the file has one, a latitude and longitude. Scroll the list to see every field the file carries.</p>
+  <p>The Details tab is a plain view of the file's metadata, so it works on a JPG copied from anywhere. It does not show every block, but it shows the ones most likely to reveal where and when the photo was taken.</p>
+
+  <h2>Check a photo on a Mac</h2>
+  <p>Open the photo in Preview, choose Tools, then Show Inspector. The info tab shows the camera, the date and the file details, and a GPS tab appears when the file has a position. The GPS tab lists the latitude and longitude and links to the place on a map.</p>
+  <p>If there is no GPS tab, the file has no position stored. Menu names can differ a little between app versions.</p>
+
+  <h2>Check it in the browser</h2>
+  <p><a href="/remove-exif-data/">Remove photo data</a> reads a JPG or PNG in your browser and lists what it finds before you save anything. It shows the camera make and model, the date taken, the software, the position as latitude and longitude, and the other blocks in the file: EXIF, XMP, IPTC captions and author, comments, and the color profile. For a PNG it lists the eXIf block, text notes and the last edit time.</p>
+  <p>The same page then saves a copy with those blocks cut out, which is the step that makes the check worthwhile. Nothing is uploaded, so the photo does not leave your device while you look.</p>
+  <p>iPhone HEIC photos are not read on that page. Convert one to JPG first with <a href="/heic-to-jpg/">HEIC to JPG</a>, then check the copy. A file that was re-encoded by <a href="/compress-jpg/">Compress JPG</a> is a fresh picture with a new, smaller set of data, so check that copy rather than the original.</p>
+
+  <h2>What happens when you post or send it</h2>
+  <p>Many social sites remove this data when you post a photo, but not all of them, and the rules can change. Files sent as documents or by email usually keep their metadata, because the file is passed along as it is. Say often and usually here rather than always: the safe habit is to check the file you are about to share.</p>
+  <p>If you want the photo to keep its position, keep the original and share that copy. If you want the position gone, remove it before you send. The guide on <a href="/guides/remove-location-from-photo/">removing the location from a photo</a> covers the phone and computer routes, and <a href="/guides/are-online-file-converters-safe/">Are online file converters safe?</a> covers what to check before you trust another site with the file.</p>
+  <p>See also: <a href="/guides/remove-location-from-photo/">How to remove the location from a photo before you share it</a> and <a href="/guides/are-online-file-converters-safe/">Are online file converters safe?</a>.</p>
+</Base>

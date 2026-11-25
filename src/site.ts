@@ -2099,7 +2099,7 @@ export const PAGES: ToolPage[] = [
     slug: 'remove-exif-data',
     tool: 'photo-meta',
     group: 'Images',
-    guide: 'remove-location-from-photo',
+    guide: ['remove-location-from-photo', 'check-photo-metadata'],
     card: 'Remove photo data',
     blurb: 'See what a photo stores and save a copy without it',
     title: 'Remove EXIF data and location from a photo, no upload',
@@ -3682,5 +3682,11 @@ export const GUIDES: { slug: string; title: string; blurb: string; topic: string
     topic: 'Spreadsheets and CSV',
     title: 'How to combine several CSV files into one',
     blurb: 'Join CSV files in Command Prompt or Terminal, with Excel Power Query, or in the browser, and keep a single header row.',
+  },
+  {
+    slug: 'check-photo-metadata',
+    topic: 'Privacy',
+    title: 'How to see what a photo reveals before you share it',
+    blurb: 'Phone photos often store the camera, the date and the GPS position. Where to check on iPhone, Windows, Mac and in the browser.',
   },
 ];
