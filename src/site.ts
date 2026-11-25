@@ -1031,6 +1031,7 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'avif-to-jpg',
+    guide: 'open-avif-images',
     tool: 'img-convert',
     group: 'Images',
     card: 'AVIF to JPG',
@@ -1067,6 +1068,7 @@ export const PAGES: ToolPage[] = [
   },
   {
     slug: 'avif-to-png',
+    guide: 'open-avif-images',
     tool: 'img-convert',
     group: 'Images',
     card: 'AVIF to PNG',
@@ -3475,5 +3477,10 @@ export const GUIDES: { slug: string; title: string; blurb: string }[] = [
     slug: 'save-pdf-page-as-jpg',
     title: 'How to save a PDF page as a JPG or PNG',
     blurb: 'Export a page in Preview, or render it in the browser at screen, good or print resolution, one image per page.',
+  },
+  {
+    slug: 'open-avif-images',
+    title: "Saved an AVIF image you can't open? Convert it",
+    blurb: 'Why older apps refuse AVIF, and how to get a JPG or PNG that opens anywhere, with or without transparency.',
   },
 ];

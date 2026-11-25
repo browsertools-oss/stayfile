@@ -1,0 +1,59 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = "Saved an AVIF image you can't open? Convert it";
+const description = 'Why AVIF files are hard to open in older apps, and how to turn one into a JPG or PNG in the browser, with or without transparency.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-24',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/open-avif-images/" jsonld={jsonld}>
+  <h1>Saved an AVIF image you can't open? Convert it</h1>
+  <p class="lede">An AVIF file is a modern image format that many older photo viewers, email apps and upload forms cannot read, even though your browser shows it without trouble. Converting it to JPG or PNG takes a few seconds and needs no software beyond the browser you are using now.</p>
+
+  <h2>Why the AVIF will not open</h2>
+  <p>AVIF is built on a video codec, the same family of compression used for streaming. It reaches the same visual quality as JPG at a much smaller file size, which is why websites and apps have started to save images this way. The format is newer than JPG and PNG, so support arrived later in desktop programs.</p>
+  <p>A browser is usually the newest piece of image software on a computer, and current versions of Chrome, Firefox, Edge and Safari read AVIF. A photo viewer from a few years ago, a print shop's software, an older version of Office or a government upload form often does not. Some refuse the file by its extension; others fail when they try to decode it. The result looks the same: a file that will not open.</p>
+  <p>Before converting, check what the destination accepts. A form that lists JPG and PNG wants one of those, and an email app that shows a blank attachment will usually handle a JPG.</p>
+
+  <h2>Convert it to JPG</h2>
+  <p><a href="/avif-to-jpg/">AVIF to JPG</a> is the route for photos and anything going to an upload form or an older app. Your browser decodes the AVIF, the page draws it on a canvas at the same size, and a new JPG is written from those pixels.</p>
+  <ol>
+    <li>Drop the .avif files on the page.</li>
+    <li>JPG is already selected. Move the quality slider if you want a smaller file; 85 is the default and suits most photos.</li>
+    <li>Click Convert, then save the image or all of them as a zip.</li>
+  </ol>
+  <p>JPG has no transparency, so any see-through part of the AVIF is painted white before the file is written. The default quality of 85 is high enough that the difference is hard to see in a normal photo.</p>
+
+  <h2>Keep the transparency with PNG</h2>
+  <p>When the picture has a transparent background, such as a logo, an icon or a cut-out product shot, use <a href="/avif-to-png/">AVIF to PNG</a> instead. PNG keeps the alpha channel, so the transparent areas stay transparent, and it is lossless, so the conversion adds no damage of its own.</p>
+  <p>The PNG is usually much larger than the AVIF you started with. AVIF compresses photos hard, and PNG keeps every pixel, so a small AVIF can become a large PNG. That size jump is expected. Use PNG when the transparency or exact pixels matter, and JPG when the destination only needs a picture that opens.</p>
+
+  <h2>What the conversion leaves behind</h2>
+  <p>Both routes draw the image through a canvas and save a new file from the pixels. The AVIF itself is not copied into the output, so details stored alongside the picture do not travel with it. The date, the camera model and any location recorded in the file are dropped. If that information matters, keep the original AVIF and convert a copy for the app that needs it.</p>
+  <p>AVIF can hold 10 bits per colour channel, while the canvas path works in 8 bits. A very smooth gradient, such as a sky or a studio backdrop, can show a little banding that the AVIF did not. In normal photos at the default quality this is hard to spot.</p>
+  <p>Text in the image is redrawn as pixels, which is normal for any conversion to JPG or PNG. A screenshot or a page of text keeps its look but stops being selectable, because it was never text in the AVIF either.</p>
+
+  <h2>When the destination wants a document</h2>
+  <p>Some print shops, offices and archives ask for a PDF rather than a picture. <a href="/avif-to-pdf/">AVIF to PDF</a> places each image on its own page. A PDF cannot hold AVIF directly, so the page is drawn and a high-quality JPG goes inside the PDF. If the image has transparency, flatten it on the background colour you want first, since a PDF page has no see-through area.</p>
+  <p>For a document made of several pictures, add them all at once and set the order before saving, so the pages come out in the right sequence.</p>
+
+  <h2>The short version</h2>
+  <ul>
+    <li>Photo, upload form, email attachment, older app: convert to JPG.</li>
+    <li>Transparent background or exact pixels needed: convert to PNG.</li>
+    <li>The destination asks for a document: convert to PDF.</li>
+    <li>You will edit the image further: convert to PNG, edit, and let the editor save its own format.</li>
+  </ul>
+  <p>All of these pages run in the browser. The image is read and written on your device, and nothing is uploaded. If the file still will not load, update your browser, since the page relies on the browser to decode AVIF in the first place.</p>
+
+  <p>See also: <a href="/guides/open-webp-images/">Saved a WebP image you can't open? Convert it</a> covers the same problem with the other modern web format. <a href="/guides/jpg-png-webp-or-avif/">JPG, PNG, WebP or AVIF</a> explains which format suits which job.</p>
+</Base>
