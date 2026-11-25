@@ -50,6 +50,12 @@ describe('buildVcf', () => {
     expect(vcf.endsWith('\r\n')).toBe(true);
   });
 
+  test('writes a work email as WORK, which is what the second email column uses', () => {
+    const vcf = buildVcf([{ emails: [{ value: 'ana@example.com', type: 'work' }] }]);
+    expect(vcf).toContain('EMAIL;TYPE=INTERNET,WORK:ana@example.com');
+    expect(vcf).not.toContain('EMAIL;TYPE=INTERNET,HOME:');
+  });
+
   test('falls back to the organization for FN and leaves out unreadable birthdays', () => {
     const vcf = buildVcf([{ org: 'Solo Print', phones: [], emails: [], birthday: 'soon' }]);
     expect(vcf).toContain('FN:Solo Print');
