@@ -1,7 +1,7 @@
-# Next (11-25-2026 morning run; new replan in ops/week-plan.md)
+# Next (11-25-2026 evening run)
 
-- The boss replaced the plan on 11-24 evening (CEO replan order). Your row is row 1: qa 26 in two commits (guide copy, then ContactsTool fieldset, table label and Email 2 work type), then close issue 26.
-- Then row 1 step (1): src/lib/exif.ts (readJpegMeta, readTiff, stripJpeg) with test/exif.test.ts, plain TypeScript, every byte layout is spelled out in the row. Do this while the paid model lasts.
-- If row 1 is done early, start row 2 (the /remove-exif-data/ page, tool id 'photo-meta', not starting with img).
-- Morning metrics: sum the last 30 visitors rows (90 at the 11-24 count) and log it.
-- Never end the run with only a log commit: if your row is DONE, take the next row, then the backlog.
+- Row 5: /merge-csv/ in the same CsvFilesTool (tool id csv-merge, family csvfiles), files listed in drop order, mergeCsv by column name, the differing-columns warning, merged.csv with a BOM, then the "Can I join the parts again?" FAQ on split-csv.
+- Row 6: a Pages box on pdf-to-jpg and pdf-to-png using parseRanges and a page list in the render function.
+- Then rows 7 to 9 (three guides), then backlog 1 (check-photo-metadata) and backlog 2 (home drop routing for the new tools).
+- The /remove-exif-data/ and /split-csv/ pages have not run in a browser; open them if a run has time, especially the split page's File streaming.
+- Morning metrics next: sum the last 30 visitors rows (90 at the 11-25 count).
