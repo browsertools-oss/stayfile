@@ -2,6 +2,14 @@
 
 One dated entry per agent run.
 
+2026-11-25 (ops run, evening, 18:48 Pacific / 11-26 02:48 UTC): Checked first. npm test passed (323 tests) and npm run build passed (132 pages) at the start; the run ends at 331 tests and 134 pages, guides 36.
+Rows 1 to 8 and backlog 1 to 5 were already DONE, so I took the boss's named evening item: guide merge-excel-files-into-one, 6 h2, about 900 words, Move or Copy, Power Query From Folder, and Excel to CSV then Merge CSV then CSV to Excel, with notes on the header and row order; guide is now a list on merge-csv. 73ca180.
+Asked the boss for the next item because the plan and backlog were exhausted. It named guide photo-sideways-after-upload: 6 h2, about 900 words, the Orientation tag, why viewers disagree, rotate and save a copy, the tag that metadata stripping can remove (stripJpeg keeps it by default, confirmed), and the browser clean route; guide appended to remove-exif-data's list. b40da59.
+Choices: left the "saved copy is upright" claim off the compress/resize sentence because no browser check is possible, so those pages are linked without a promise about orientation. No new dependencies.
+Metrics: 90 visitors in the last 30 rows from the 11-25 morning count; the 300 and 1,000 triggers are far off, no decision issue.
+Not checked: no browser check, as every run since 11-10; verified by tests, the build and the dist HTML.
+Next: no unfinished plan item remains; the 11-29 plan is next. Start on any guide not done, then ask the boss (boss).
+
 2026-11-25 (ops run, morning, 06:48 Pacific / 14:48 UTC): Checked first. npm test passed (284 tests) and npm run build passed (124 pages) at the start; the run ends at 323 tests and 132 pages, guides 34.
 Row 1, both steps: (0) qa 26 in two commits: import-csv-contacts guide wording and a See also pointing at export-iphone-contacts-to-excel, semicolon guide wording and a one-column link, and a birthday FAQ that matches birthdayValue (month first; an unreadable date leaves BDAY out of that card); preview table aria-label, picker fieldset with legend, Email 2 written as WORK. Issue 26 closed. 90bb36d, bab9697. (1) src/lib/exif.ts and test/exif.test.ts: JPEG segment walk, TIFF/EXIF/GPS parse with bounds checks that never throw, stripJpeg cuts APP1/APP3-APP13/APP15/COM and keeps APP0, APP2, APP14 and the image data byte for byte, plus a 36-byte orientation APP1. b3ef508.
 Row 2 pulled forward (row 1 finished early): the /remove-exif-data/ page (tool id photo-meta, family meta, PhotoMetaTool, PAGES entry, silhouette, home lists it) and the link from the location guide with guide set. e28e39c, c502bd9.

@@ -1,6 +1,6 @@
-# Next (11-25-2026 evening run)
+# Next (11-26-2026 morning run)
 
-- The boss answered the backlog 6 question: this run did guide split-excel-file-into-multiple-files. The evening run does guide merge-excel-files-into-one (move a sheet with Move or Copy, Power Query From Folder, or Excel to CSV then Merge CSV then CSV to Excel; set guide on merge-csv as a list).
-- After that, start on any guide not done yet, then ask the boss. No browser checks, and leave AdSense alone (boss).
-- Guide count is 34, tests 323, 132 pages. The three new tools are live but have no browser check.
-- Morning metrics next: sum the last 30 visitors rows (90 at the 11-25 count).
+- Every plan row and backlog item is DONE, and the boss's extra guides (split-excel-file-into-multiple-files, merge-excel-files-into-one, photo-sideways-after-upload) are committed.
+- Start on any guide not done yet, then ask the boss; take one guide at a time and do not start anything else without direction.
+- Guide count is 36, tests 331, 134 pages. No browser checks since 11-10.
+- Morning metrics: sum the last 30 visitors rows (90 at the 11-25 count).
