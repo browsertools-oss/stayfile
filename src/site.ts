@@ -2099,7 +2099,7 @@ export const PAGES: ToolPage[] = [
     slug: 'remove-exif-data',
     tool: 'photo-meta',
     group: 'Images',
-    guide: ['remove-location-from-photo', 'check-photo-metadata'],
+    guide: ['remove-location-from-photo', 'check-photo-metadata', 'photo-sideways-after-upload'],
     card: 'Remove photo data',
     blurb: 'See what a photo stores and save a copy without it',
     title: 'Remove EXIF data and location from a photo, no upload',
@@ -3706,5 +3706,11 @@ export const GUIDES: { slug: string; title: string; blurb: string; topic: string
     topic: 'Spreadsheets and CSV',
     title: 'How to merge several Excel files into one',
     blurb: 'Move sheets into one workbook, combine a folder with Power Query, or join the files as CSV in the browser.',
+  },
+  {
+    slug: 'photo-sideways-after-upload',
+    topic: 'Photos and images',
+    title: 'Why a photo shows sideways after upload, and how to fix it',
+    blurb: 'A rotation tag tells viewers how to turn a phone photo. Programs that ignore it show it sideways, and removing metadata can drop it.',
   },
 ];

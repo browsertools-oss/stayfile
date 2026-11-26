@@ -1,0 +1,57 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'Why a photo shows sideways after upload, and how to fix it';
+const description = 'A phone photo can look upright in the gallery and sideways elsewhere. The rotation tag explains it, and saving a turned copy fixes it.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-25',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/photo-sideways-after-upload/" jsonld={jsonld}>
+  <h1>Why a photo shows sideways after upload, and how to fix it</h1>
+  <p class="lede">A photo that looks right on your phone but sideways on a website or in an email usually has a rotation tag that the other app ignored. Phones often store the picture as the camera sensor saw it and add a note that says how far it should be turned. The fix takes a minute: open the photo in a photo app, rotate it, and save a copy with the picture itself turned.</p>
+
+  <h2>What the rotation tag is</h2>
+  <p>When you take a photo, the camera sensor records the scene in a fixed direction. The phone knows whether you held it upright, sideways or upside down, so it can write a small note into the file. That note is the Orientation tag. It does not change a single pixel. It tells whatever opens the file how many degrees to turn the picture before showing it on screen.</p>
+  <p>The tag sits among the other metadata in the photo, the same block that holds the camera model and the date. Its value is a number. A value of 1 means the picture is already the right way up, and values from 2 to 8 describe a turn, a flip, or both. A phone that was held sideways for a wide shot usually records a turn of 90 degrees one way or the other.</p>
+  <p>Most of the time this works without you noticing. The gallery on your phone reads the tag, turns the photo and shows it correctly. The file on disk is still the version from the sensor, with the note attached, and that is exactly as intended.</p>
+
+  <h2>Why one app shows it upright and another does not</h2>
+  <p>An app or site that ignores the tag shows the photo as the sensor saw it, which looks sideways or upside down. That is why the same file can look correct in your gallery and wrong in an upload form, an email, or an older image viewer. The file did not change between those places. One program read the note and the other did not.</p>
+  <p>This is common with photos taken on a phone held sideways to fit a wide scene, and with photos taken upside down by accident. It is not a sign that the file is broken or that the upload failed. The picture data is intact. A viewer simply skipped the instruction that came with it.</p>
+  <p>It can also happen after a file has been passed between programs. One app saves the photo back without the tag, and the next app has nothing to go on. The picture is still the original, but the turn instruction is gone.</p>
+
+  <h2>Rotate the photo and save a copy</h2>
+  <p>The reliable fix is to turn the picture itself and save a new copy, so no app has to read a tag. Do it in the photo app you already have.</p>
+  <ol>
+    <li>Open the photo in the photo app on the phone or computer.</li>
+    <li>Find the edit or adjust command, then the rotate control.</li>
+    <li>Turn the photo until it is upright on screen.</li>
+    <li>Save the change, then save or export a copy under a new name.</li>
+  </ol>
+  <p>On a phone, the built-in Photos app has an edit view with a rotate button. On a computer, the usual image viewers have the same control under a tools or edit menu. Menu names can differ a little between app versions, so look for the rotate icon if the label is not where you expect it.</p>
+  <p>Save under a new name rather than over the original. That keeps one copy with the first version of the photo, in case the turn comes out the wrong way and you want to start again. It also leaves the original date and quality untouched while you test which copy opens correctly in the place you need it.</p>
+
+  <h2>Removing metadata can bring the sideways photo back</h2>
+  <p>If a photo was upright before you cleaned it and sideways afterwards, the cleaning removed the rotation tag. That happens when a tool strips every metadata block without keeping the orientation note. The picture data is untouched, but the note that told viewers how to turn it is gone, so the next app shows the file the way the sensor recorded it.</p>
+  <p><a href="/remove-exif-data/">Remove photo data</a> handles this case. The page cuts out the camera, date, location and other data blocks, and it writes back a small orientation tag when the original had one. The box "Keep the rotation tag so the photo stays upright" is ticked by default. Leave it ticked unless you have already turned the picture itself, because without the tag some phone photos show sideways again.</p>
+  <p>This is the trade people miss. Removing location and camera details is worth doing before you share a photo, but a cleaner that drops every block takes the rotation note with the rest. The photo is then private and sideways, which is a worse result than either alone.</p>
+
+  <h2>A clean copy that keeps the rotation</h2>
+  <p>Open <a href="/remove-exif-data/">Remove photo data</a>, drop the JPG or PNG, and look at what the page finds. It lists the camera, the date, the software and any GPS position, plus the other blocks in the file. Tick or clear the rotation box, then press Save clean copy. The photo is not re-encoded, so the image bytes are the same as the original and only the data blocks are cut.</p>
+  <p>For iPhone HEIC photos, the page asks you to convert first. <a href="/heic-to-jpg/">HEIC to JPG</a> makes a JPG you can then clean. To make a smaller file for an email or a form, <a href="/compress-jpg/">Compress JPG</a> and <a href="/resize-jpg/">Resize JPG</a> save a new copy at the size you choose. Check that copy before you upload it, since a new file can behave differently from the original.</p>
+  <p>If the copy is still sideways after cleaning, the sure fix is the one above: turn the picture in a photo app and save that version. A tag can be ignored by a careless viewer, but pixels that are already turned cannot be shown the wrong way up.</p>
+
+  <h2>Check before you upload</h2>
+  <p>Open the saved copy in two places: the phone gallery and a computer viewer, or the upload form itself. If both show it upright, the file is ready. If one still shows it sideways, that app is not reading the tag, and saving a turned copy is the answer rather than cleaning the file again.</p>
+  <p>If you want to know what else the photo carries, <a href="/guides/check-photo-metadata/">How to see what a photo reveals before you share it</a> walks through the iPhone, Windows, Mac and browser checks. <a href="/guides/remove-location-from-photo/">How to remove location data from a photo</a> covers the GPS position in more detail, including what stays in the file after a clean.</p>
+  <p>See also: <a href="/guides/check-photo-metadata/">How to see what a photo reveals before you share it</a> and <a href="/guides/remove-location-from-photo/">How to remove location data from a photo</a>.</p>
+</Base>
