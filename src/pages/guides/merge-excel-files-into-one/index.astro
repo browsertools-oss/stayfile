@@ -1,0 +1,55 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to merge several Excel files into one';
+const description = 'Excel has no merge command. Move sheets into one workbook, combine a folder with Power Query, or join the files as CSV in your browser.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-25',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/merge-excel-files-into-one/" jsonld={jsonld}>
+  <h1>How to merge several Excel files into one</h1>
+  <p class="lede">Excel has no single command that merges several workbooks into one. You can move the sheets into one workbook by hand, combine a folder of files with Power Query, or turn the files into CSV and join them in a browser page. The right route depends on how many files you have and whether their columns match.</p>
+
+  <h2>Why there is no merge command</h2>
+  <p>Excel treats each workbook as its own file. A sheet belongs to one workbook at a time, so joining two workbooks means either moving sheets between them or reading their contents into a new table. The commands Excel does have are built for one of those two jobs: Move or Copy moves a sheet, and Power Query reads files and combines their rows.</p>
+  <p>That is why answers to this question often mention macros. A macro can repeat the moves for you, but it still does the same thing sheet by sheet, and macros have to be allowed on the computer. For a few files, the routes below take less time than setting one up.</p>
+
+  <h2>Move sheets into one workbook</h2>
+  <p>Open both workbooks in Excel. Right-click the sheet tab you want to move, choose Move or Copy, and pick the target workbook in the list. The sheet lands in that workbook, and you can repeat the step for the other tabs. Menu names can differ a little between app versions.</p>
+  <p>A moved sheet keeps its cells, formulas and formatting, which is the reason to use this route when the files are real workbooks rather than plain tables. The catch is that the sheet leaves the workbook it came from when you move it. If you need the original to stay complete, work on copies of the files first.</p>
+  <p>This suits two or three workbooks with a handful of sheets each. With a folder of twenty exports, it becomes a long afternoon, and one missed tab is easy to overlook.</p>
+
+  <h2>Combine a folder with Power Query</h2>
+  <p>Power Query can read every file in a folder and stack them into one table. In Excel, go to Data, then Get Data, then From File, then From Folder, and point it at the folder. Menu names can differ a little between app versions.</p>
+  <p>The files need the same columns. Power Query matches them by column name and fills an empty cell where a file lacks one, so a folder of exports from the same system combines cleanly. If one file has an extra column, that column shows up in the result as well, and you can see it in the preview before you load the table.</p>
+  <p>This route is the one to use when a new file arrives in the folder every week and you want to refresh the combined table rather than repeat the work. It takes some clicks to set up the first time, and the result is a query inside the workbook, not a separate file on disk.</p>
+
+  <h2>Join the files as CSV in the browser</h2>
+  <p>If the files are tables rather than workbooks, or you want the merged file without opening Excel, use three Stayfile pages in order. All three run in your browser and the files are never uploaded.</p>
+  <ol>
+    <li><a href="/excel-to-csv/">Excel to CSV</a> turns each workbook into CSV. It can save every sheet in a workbook at once as a zip, one CSV per sheet.</li>
+    <li><a href="/merge-csv/">Merge CSV</a> joins the CSV files into one. Drop two or more files, put them in the order you want, and download merged.csv. The first row of each file is its header. Columns are matched by name, not by position, so a file where City comes before Name still lands in the right columns. If a file is missing a column, those cells are left empty, and the file is named in a warning so you can check it.</li>
+    <li><a href="/csv-to-excel/">CSV to Excel</a> turns the merged CSV back into an .xlsx workbook. Numbers are stored as numbers, so you can sum and sort them as soon as the file opens.</li>
+  </ol>
+  <p>This route works best when the files are exports with the same columns, such as monthly reports from one system. It also avoids opening each file in Excel, which is where a stray click can save over an original.</p>
+  <p>Save the CSVs into one folder first, and name them so they sort in the order you want. The merge page keeps them in a list until you download merged.csv, and it names any file whose columns differ from the first one, so a mismatch shows up before the download rather than after.</p>
+
+  <h2>Keep the header and the order straight</h2>
+  <p>Every route has the same weak point: the header row. A merged table should have one header at the top and data rows under it. When you move sheets, each tab keeps its own header, so the joined workbook has a header in the middle unless you delete the repeated ones. When you join CSV files, the merge page keeps a single header and matches the columns by name, so the repeated header rows do not end up as data.</p>
+  <p>Order matters too. Rows come out in file order, then row order inside each file, so rename the files if you want them to sort a certain way, or reorder them with the up and down buttons on the merge page. If you need to tell the sources apart later, tick the file name column and each row carries the name of the file it came from.</p>
+  <p>If a repeated header has slipped into the data, look for a row where every column holds a label rather than a value and delete it. That row is the header of a second file that was pasted in below the first, and removing it leaves a single clean table.</p>
+
+  <h2>Check the result before you use it</h2>
+  <p>Open the merged file and look at four things: one header at the top, the row count you expected, no column of blank cells where a value should be, and codes with leading zeros still intact. If a code such as 007 has lost its zeros, the file was read as numbers; <a href="/guides/combine-csv-files-into-one/">How to combine several CSV files into one</a> covers that problem along with the command-line route. <a href="/guides/save-all-excel-sheets-as-csv/">How to save every sheet of an Excel file as CSV</a> explains getting the CSVs out of a workbook in the first place.</p>
+  <p>Keep the originals until the merged copy looks right. A merge that goes wrong is easy to redo, but only while the source files are still there. Once you are happy, the merged workbook can replace the folder of separate files for everyday use, and the originals can go into an archive folder.</p>
+  <p>See also: <a href="/guides/combine-csv-files-into-one/">How to combine several CSV files into one</a> and <a href="/guides/save-all-excel-sheets-as-csv/">How to save every sheet of an Excel file as CSV</a>.</p>
+</Base>

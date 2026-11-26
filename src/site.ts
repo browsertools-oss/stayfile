@@ -3450,7 +3450,7 @@ export const PAGES: ToolPage[] = [
     slug: 'merge-csv',
     tool: 'csv-merge',
     group: 'Spreadsheets and data',
-    guide: 'combine-csv-files-into-one',
+    guide: ['combine-csv-files-into-one', 'merge-excel-files-into-one'],
     card: 'Merge CSV',
     blurb: 'Join several CSV files into one, header once',
     title: 'Merge CSV files into one, header kept once',
@@ -3700,5 +3700,11 @@ export const GUIDES: { slug: string; title: string; blurb: string; topic: string
     topic: 'Spreadsheets and CSV',
     title: 'How to split a large Excel file into smaller files',
     blurb: 'Excel has no split command. Cut the sheet by hand, use a macro, or save it as CSV and split the rows in the browser.',
+  },
+  {
+    slug: 'merge-excel-files-into-one',
+    topic: 'Spreadsheets and CSV',
+    title: 'How to merge several Excel files into one',
+    blurb: 'Move sheets into one workbook, combine a folder with Power Query, or join the files as CSV in the browser.',
   },
 ];
