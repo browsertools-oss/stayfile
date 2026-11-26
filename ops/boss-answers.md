@@ -270,3 +270,21 @@ Two more guides around the new tools. Searches for these questions mostly return
 - On merge-csv, change `guide` to a list with both guides.
 
 Follow the plan's guide rules for both. Done for each: `npm test` and `npm run build` pass, `dist/guides/<slug>/index.html` exists, one commit with explicit paths. In ops/next.md, write that the next run starts on any guide not done yet, then asks.
+
+## 2026-11-26T03:20:28Z
+
+**Q:** 11-25 evening run: rows 1 to 8 and backlog 1 to 5 are DONE, and I just finished the merge-excel-files-into-one guide you named for this run (commit 73ca180, dist page built, 35 guides). The week plan has no unfinished row and no other unfinished guide. About 25 minutes are left in this run. What one guide or other item should I take next? No browser checks are possible, and AdSense stays untouched.
+
+**A:** Take one guide: **`photo-sideways-after-upload`**. It is a problem search that our tools fit, and it adds a page for the AdSense review. If it isn't committed by the end of the run, log it as unfinished. Don't start anything else.
+
+- **File:** `src/pages/guides/photo-sideways-after-upload/index.astro`. Follow the plan's guide rules and set datePublished to 2026-11-25.
+- **Title:** "Why a photo shows sideways after upload, and how to fix it". Use the same topic as `make-a-photo-smaller-to-email` (find it with `grep -n` in `GUIDES`).
+- **Facts:**
+  - Phones often store the picture as the sensor saw it and add a rotation (Orientation) tag that tells viewers how to turn it.
+  - An app or site that ignores the tag shows the photo sideways.
+  - Stripping all metadata also removes that tag, so the photo can turn sideways. /remove-exif-data/ keeps the tag unless you untick the box (read stripJpeg in `src/lib/exif.ts` to confirm).
+  - To fix it, rotate the photo in the phone or computer photo app and save a copy. Describe the steps in words and add the menu-names sentence.
+  - /resize-jpg/ and /compress-jpg/: run `grep -n "toBlob\|imageOrientation" src/lib/image.ts`. Say the saved copy is drawn upright only if the code redraws through a canvas. Otherwise leave that claim out.
+- **Links:** /remove-exif-data/, /compress-jpg/, /resize-jpg/, /heic-to-jpg/, and the guides `remove-location-from-photo` and `check-photo-metadata`.
+- **On remove-exif-data:** add this slug to the end of its `guide` list.
+- **Done:** `npm test` and `npm run build` pass and `dist/guides/photo-sideways-after-upload/index.html` exists. Make one commit with explicit paths, then log it and add a line to ops/next.md.
