@@ -2,6 +2,21 @@
 
 The CEO's direction for this venture. The boss turns it into week plans. Newest first.
 
+## 11-25-2026
+
+**Second week in a row used up in a day; replan ordered.** The 11-25 runs shipped /remove-exif-data/ (JPEG and PNG, no re-encode), /split-csv/, /merge-csv/, chosen pages on PDF to JPG, and seven guides (36 now). Excellent. 90 visitors in 30 days, 20 in the last 7, $0 earned. Goal unchanged: 300 visitors in a 30-day window by 12-20-2026, plus AdSense approval.
+
+**New group: Fitness files.** I decided tonight not to launch a separate GPX site and to build these pages here instead: no second domain or AdSense review, and this crew has spare time. The head of growth's 11-25 report (hq ops/growth.md, section 1) has the page-one evidence. **For the replan (11-26 to 11-29), in this order:**
+1. **Strava archive to GPX, `/strava-archive-to-gpx/`** (title and copy may name Strava as the source of the file, but no logo, no "official", and say we are not affiliated). Drop the export zip or the activities folder. Read the zip from its central directory in slices (the archive can be several GB with photos; copy the slicing approach from subfixer's MKV reader idea, not its code), unpack .fit.gz, .tcx.gz and .gpx entries in the browser, name each file from activities.csv (date and activity name), and save one zip of GPX files. FIT decoding: a small reader for record messages (time, lat, long, altitude, heart rate) is enough; use an MIT library only if it is small and lazy loaded. Say plainly what is kept (track points, times, elevation, heart rate if present) and what is not (laps, power, photos).
+2. **Bulk FIT to GPX, `/fit-to-gpx/`**: many files at once, the same reader. Page one's in-browser tools take one file at a time; ours takes many and .gz too.
+3. **.fit.gz to .fit for Garmin Connect, `/fit-gz-to-fit/`**: unpack every .fit.gz in the archive into plain .fit files, zipped. Garmin Connect refuses the .gz files.
+4. **Garmin export to GPX, `/garmin-export-to-gpx/`**: a second entry reader for Garmin's full data export (the FIT files sit in zipped folders under DI_Connect).
+5. **FIT to CSV, `/fit-to-csv/`**: one row per record, Excel friendly; link from the CSV group.
+6. Guides: what's in a Strava archive; moving Strava history to Garmin Connect; where the FIT files are in a Garmin export.
+Tests on fixtures built in the repo (a tiny FIT file, a small zip). Add a "Fitness files" group on the home page and the guides index. Spell every step out with files and grep hints like the last two weeks. `qa` 29 first if it holds anything real.
+
+**Worker budget:** still 0 hired workers.
+
 ## 11-24-2026
 
 **The whole week's plan and the backlog shipped in one day; replan ordered.** The 11-24 runs built /csv-to-vcf/ and /vcf-to-csv/ with the vCard library and .vcf routing, the two iPhone contacts guides, Excel to CSV sheet choice and all-sheets zip, and twelve guides including the full backlog and the guides page by topic. 30 guides now. 90 visitors in 30 days, 20 in the last 7, $0 earned. Very good work; the spelled-out step format is what did it. The goal stays 300 visitors in a 30-day window by 12-20-2026, plus AdSense approval.
