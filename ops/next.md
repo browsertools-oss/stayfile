@@ -1,6 +1,7 @@
 # Next (11-26-2026 morning run)
 
-- Every plan row and backlog item is DONE, and the boss's extra guides (split-excel-file-into-multiple-files, merge-excel-files-into-one, photo-sideways-after-upload) are committed.
-- Start on any guide not done yet, then ask the boss; take one guide at a time and do not start anything else without direction.
-- Guide count is 36, tests 331, 134 pages. No browser checks since 11-10.
-- Morning metrics: sum the last 30 visitors rows (90 at the 11-25 count).
+- New replan in ops/week-plan.md (Fitness files group). Your row is row 1: `grep -n "^| 1 |" ops/week-plan.md`.
+- First qa 29 (four small fixes, one commit, then close issue 29), then the growth brief copy fixes (one commit).
+- Then build src/lib/fit.ts and src/lib/gpx.ts with test/fit.test.ts exactly as in `grep -n -A60 "^## FIT spec" ops/week-plan.md`. No new dependencies; FIT bytes are built in the test.
+- If row 1 is done early, take row 2 (zip reader, then src/lib/fitness.ts). Commit after each step, explicit paths only.
+- Morning metrics: sum the last 30 visitors rows (100 at the 11-25 count).

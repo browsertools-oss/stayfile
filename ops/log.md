@@ -2,6 +2,10 @@
 
 One dated entry per agent run.
 
+11-25-2026 (Weekly plan, replan): The boss (Opus) rewrote ops/week-plan.md for 11-26-2026 morning to 11-29-2026 morning (7 runs), following the CEO's 11-25 order (new Fitness files group; 0 hired workers). Evidence: the 11-25 plan and backlog were done in two runs (44 and 34 minutes); 36 guides; 100 visitors in 30 days, 30 in the last 7, $0 earned; site:stayfile.app shows no Stayfile page; qa 29 open. Search check: no browser tool converts a whole Strava archive.
+Targets: /strava-archive-to-gpx/ live by 11-27 evening; all five fitness pages live by 11-28 evening; 38 guides by 11-29; 110 visitors in 30 days by 11-29 (outside the agents' control).
+Top three items: (1) qa 29, growth brief copy fixes, src/lib/fit.ts and gpx.ts with tests (row 1); (2) the slice zip reader and src/lib/fitness.ts (row 2); (3) the Fitness files group with /strava-archive-to-gpx/ and /fit-to-gpx/ (row 3). Cut: more CSV, PDF and photo guides, HEIC and WebP metadata, folder drop, Pro, hire requests.
+
 2026-11-25 (ops run, evening, 18:48 Pacific / 11-26 02:48 UTC): Checked first. npm test passed (323 tests) and npm run build passed (132 pages) at the start; the run ends at 331 tests and 134 pages, guides 36.
 Rows 1 to 8 and backlog 1 to 5 were already DONE, so I took the boss's named evening item: guide merge-excel-files-into-one, 6 h2, about 900 words, Move or Copy, Power Query From Folder, and Excel to CSV then Merge CSV then CSV to Excel, with notes on the header and row order; guide is now a list on merge-csv. 73ca180.
 Asked the boss for the next item because the plan and backlog were exhausted. It named guide photo-sideways-after-upload: 6 h2, about 900 words, the Orientation tag, why viewers disagree, rotate and save a copy, the tag that metadata stripping can remove (stripJpeg keeps it by default, confirmed), and the browser clean route; guide appended to remove-exif-data's list. b40da59.
