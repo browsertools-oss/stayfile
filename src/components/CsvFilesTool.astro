@@ -182,11 +182,18 @@ const merge = tool === 'csv-merge';
         b.onclick = fn;
         li.append(b);
       };
-      mk('↑', 'Move up', () => move(i - 1), i === 0);
-      mk('↓', 'Move down', () => move(i + 1), i === mergeFiles.length - 1);
+      mk('↑', 'Move up', () => {
+        move(i - 1);
+        status.textContent = `Moved ${f.name} up`;
+      }, i === 0);
+      mk('↓', 'Move down', () => {
+        move(i + 1);
+        status.textContent = `Moved ${f.name} down`;
+      }, i === mergeFiles.length - 1);
       mk('✕', 'Remove', () => {
         mergeFiles.splice(i, 1);
         renderMerge();
+        status.textContent = `Removed ${f.name}`;
       }, false);
       list.append(li);
     });

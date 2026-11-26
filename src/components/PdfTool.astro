@@ -67,7 +67,7 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
             <option value="300">Print (300 dpi)</option>
           </select>
         </label>
-        <label class="full">Pages (leave empty for all) <input id="pages" placeholder="1-3, 5" autocomplete="off" /></label>
+        <label class="full" for="pages">Pages (leave empty for all) <input id="pages" placeholder="1-3, 5" autocomplete="off" /></label>
         <p class="hint">Type the pages you want, like 1-3, 5, or leave the box empty for every page. Each page becomes its own {tool === 'pdf-to-png' ? 'PNG' : 'JPG'}.</p>
       </div>
     )}
@@ -353,12 +353,13 @@ const action = { 'pdf-merge': 'Merge PDFs', 'pdf-split': split === 'extract' ? '
         const { pdfToImages } = await import('../lib/pdf-render'); // pdf.js loads only on this page, when it runs
         const box = $<HTMLInputElement>('pages');
         const chosen = box && box.value.trim() ? parseRanges(box.value, first.pages!).flat().map((p) => p + 1) : undefined;
+        const wanted = chosen?.filter((p) => p >= 1 && p <= first.pages!);
         const images = await pdfToImages(new Uint8Array(await first.file.arrayBuffer()), dpi, format, (i, n) => {
           status.textContent = `Drawing page ${i} of ${n}…`;
-        }, chosen);
+        }, wanted);
         const n = images.length;
         const mime = format === 'png' ? 'image/png' : 'image/jpeg';
-        const real = (i: number) => (chosen ? chosen[i] : i + 1);
+        const real = (i: number) => (wanted ? wanted[i] : i + 1);
         if (n === 1) put(images[0], chosen ? pageImageName(name, real(0), 1, format) : `${name}.${format}`, mime);
         else put(await zip(images.map((d, i) => ({ name: pageImageName(name, real(i), n, format), data: d }))), `${name}-${format}.zip`, 'application/zip', n);
         done = `Made ${n} ${format.toUpperCase()}${n === 1 ? '' : 's'} at ${dpi} dpi.`;

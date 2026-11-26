@@ -146,7 +146,7 @@ const { slug } = Astro.props;
       const only = out[0];
       again = () => save(only.data, only.name);
       line = `${savedLine(only.name)} Removed: ${removed}.`;
-      result = new File([only.data], only.name, { type: 'image/jpeg' });
+      result = new File([only.data], only.name, { type: only.kind === 'jpeg' ? 'image/jpeg' : 'image/png' });
     } else {
       const data = await zip(out);
       again = () => save(data, 'photos-clean.zip', 'application/zip');

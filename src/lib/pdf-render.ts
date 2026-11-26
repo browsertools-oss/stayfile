@@ -79,8 +79,11 @@ export async function pdfToImages(
 
   const doc = await pdfjs.getDocument({ data: bytes, isEvalSupported: false }).promise;
   const out: Uint8Array[] = [];
-  const list = pages && pages.length ? pages : Array.from({ length: doc.numPages }, (_, k) => k + 1);
   try {
+    const list = pages
+      ? pages.filter((p) => Number.isInteger(p) && p >= 1 && p <= doc.numPages)
+      : Array.from({ length: doc.numPages }, (_, k) => k + 1);
+    if (!list.length) throw new Error(`The PDF has ${doc.numPages} page${doc.numPages === 1 ? '' : 's'}.`);
     for (let i = 0; i < list.length; i++) {
       onPage?.(i + 1, list.length);
       const page = await doc.getPage(list[i]);
