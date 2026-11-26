@@ -1,7 +1,7 @@
-# Next (11-26-2026 morning run)
+# Next (11-26-2026 evening run)
 
-- New replan in ops/week-plan.md (Fitness files group). Your row is row 1: `grep -n "^| 1 |" ops/week-plan.md`.
-- First qa 29 (four small fixes, one commit, then close issue 29), then the growth brief copy fixes (one commit).
-- Then build src/lib/fit.ts and src/lib/gpx.ts with test/fit.test.ts exactly as in `grep -n -A60 "^## FIT spec" ops/week-plan.md`. No new dependencies; FIT bytes are built in the test.
-- If row 1 is done early, take row 2 (zip reader, then src/lib/fitness.ts). Commit after each step, explicit paths only.
-- Morning metrics: sum the last 30 visitors rows (100 at the 11-25 count).
+- Rows 1 and 2 are DONE; take row 3: `grep -n "^| 3 |" ops/week-plan.md`.
+- Group wiring in src/site.ts, ToolPage.astro and guides/index.astro, then /strava-archive-to-gpx/ with the 'fit-strava' tool in a new FitnessTool.astro (copy the frame from CsvFilesTool.astro).
+- Then /fit-to-gpx/ ('fit-gpx') in the same component. Copy rules and specs are in `## Page spec` and the row 3 cell.
+- Each page: npm test and npm run build, dist/<slug>/index.html, explicit-path commit, then DONE <hash> in the row.
+- Morning metrics: sum the last 30 visitors rows (100 at the 11-26 count).
