@@ -2117,7 +2117,7 @@ export const PAGES: ToolPage[] = [
       ],
     },
     steps: [
-      'Drop a JPG photo, or several.',
+      'Drop a JPG or PNG photo, or several.',
       'Read what the photo stores: camera, date, software and location.',
       'Choose whether to keep the rotation tag.',
       'Save the clean copy.',
@@ -2138,6 +2138,10 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Does it remove the location from photos already posted?',
         a: 'No. This works on the copy you save. A photo already posted stays as it was, because the site keeps the copy it received.',
+      },
+      {
+        q: 'Can\'t Windows or a Mac do this?',
+        a: 'Partly. Windows can remove some fields from a photo\'s Properties, but leaves others, and Preview on a Mac removes only the location. This page removes the EXIF, XMP and IPTC blocks in one step.',
       },
       PRIVATE,
     ],
@@ -3433,7 +3437,7 @@ export const PAGES: ToolPage[] = [
       },
       {
         q: 'Can a row be cut in half?',
-        a: 'No. Parts break between rows, and a quoted cell that contains a line break stays with its row.',
+        a: 'No. Parts break between rows, and a quoted cell that contains a line break stays with its row. Blank rows are left out, so the parts can hold a few rows fewer than the file has lines.',
       },
       {
         q: 'How do I open the parts in Excel?',
@@ -3474,7 +3478,7 @@ export const PAGES: ToolPage[] = [
     faq: [
       {
         q: 'Do the files need the same columns?',
-        a: 'No. Columns are matched by name, and a missing column is left empty. The files that differ from the first one are named so you can check them.',
+        a: 'Columns are matched by name, not position, so files with the columns in a different order merge fine. A missing column is left empty. The files that differ from the first one are named so you can check them.',
       },
       {
         q: 'What order are rows in?',
@@ -3680,7 +3684,7 @@ export const GUIDES: { slug: string; title: string; blurb: string; topic: string
   {
     slug: 'combine-csv-files-into-one',
     topic: 'Spreadsheets and CSV',
-    title: 'How to combine several CSV files into one',
+    title: 'Combine CSV files into one Excel sheet',
     blurb: 'Join CSV files in Command Prompt or Terminal, with Excel Power Query, or in the browser, and keep a single header row.',
   },
   {

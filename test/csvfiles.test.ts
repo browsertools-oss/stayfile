@@ -45,6 +45,30 @@ describe('makeSplitter', () => {
     expect(parts[0][1]).toEqual(['x, y', 'line one\nline two']);
   });
 
+  test('a quoted cell with a line break in the last row of a part stays one row', () => {
+    const parts = split(
+      [
+        ['name', 'note'],
+        ['Ann', 'ok'],
+        ['Ben', 'line one\nline two'],
+        ['Cat', 'fine'],
+      ],
+      2,
+      true,
+    );
+    expect(parts).toHaveLength(2);
+    expect(parts[0]).toEqual([
+      ['name', 'note'],
+      ['Ann', 'ok'],
+      ['Ben', 'line one\nline two'],
+    ]);
+    expect(parts[1]).toEqual([
+      ['name', 'note'],
+      ['Cat', 'fine'],
+    ]);
+    expect(parts.flat()).toHaveLength(5);
+  });
+
   test('empty rows are skipped', () => {
     const parts = split([['a'], [''], ['1'], ['']], 10, true);
     expect(parts[0]).toEqual([['a'], ['1']]);
