@@ -1,13 +1,13 @@
-# Foreman report 11-25-2026
+# Foreman report 11-26-2026
 
-**Runs (last 24h):** The 11-24 morning run (45m) and the 11-24 evening run (36m) both finished green. The last failure was 11-22 morning, a 1h4m timeout. Nothing is in flight.
+**Runs (last 24h):** Both runs finished green: 11-25 morning (43m) and 11-25 evening (34m). No failures, no timeouts. Nothing is in flight.
 
-**Shipped:** The workers finished the whole 11-23 plan and backlog 1 to 7: the guides page grouped by topic (d7ec5cd), five older guides linked to the new ones (8c2b051), and backlog 5 and 7 marked done (e60dc05). I confirmed these in the code and by running the tests. `npm test` passes (284 tests, 13 files). The topic grouping is in src/pages/guides/index.astro, and open-webp-images links to open-avif-images. `src/pages/guides/` holds 30 entries (29 guides plus the index), which matches the 29 in the log. I did not run a build. Nothing was marked DONE falsely.
+**Shipped:** The 11-25 evening run finished the guide `merge-excel-files-into-one` (73ca180). It then took the boss's answer and added `photo-sideways-after-upload` (b40da59). The guide file exists. `src/pages/guides/` holds 37 entries (36 guides plus the index), which matches "36 guides" in the plan. I did not run a build or the tests this morning. The previous plan and its backlog are all done.
 
-**Open qa issue:** #26 (QA notes, 1849707) is open. Its five fixes are not in the code yet. That is expected, because the new weekly plan was written after it was filed. Plan row 1, item (0), already lists all five fixes with exact files and text. I did not close #26. Close it after row 1's two commits land.
+**Open qa issue:** #29 (QA notes, 49615ac) is open. I checked all four notes against the code and none is fixed yet. That is expected, because the plan was written after the issue was filed. Row 1 item (0) already lists each fix with the exact file and line, and the line numbers still match: PhotoMetaTool.astro 149, pdf-render.ts 82, site.ts 2120 and 3435. I did not close #29. It closes after row 1's commit lands.
 
-**Plan changes:** None. The boss's 11-24 replan is current, row 1 is first in line, and nothing is marked DONE yet, so there was nothing to undo. No worker mistake repeated in the last day, so I added no guardrail.
+**Plan changes:** None. The boss's 11-25 22:30 replan is current, nothing is marked DONE yet, and the first row starts with the qa fixes. No worker mistake repeated, so I added no guardrail.
 
-**Watch today:** Row 1 is heavy. It holds the qa fixes plus the EXIF reader, and rows 2 and 3 are also large. The "finish earlier steps first" rule covers the overflow. If row 1 step (1) is not DONE by tonight, I will split it.
+**Watch today:** Row 1 holds the qa fixes, the growth copy and the FIT reader, and that is a lot for one run. The "finish earlier steps first" rule carries the rest into row 2. If FIT step (1) is not DONE after tonight's run, I will split it.
 
-**Needs the boss:** Nothing for now. A reminder: the check for a goal of 110 visitors by 11-29 relies on search traffic, and `site:stayfile.app` showed no ranking pages on 11-24. This is outside the workers' control.
+**Needs the boss:** Nothing for now. The visitor goal (110 in 30 days) depends on search traffic, which the workers don't control.
