@@ -110,6 +110,8 @@ export function nextTools(slug: string): Route[] {
   const dataNext: Record<string, Route[]> = {
     'split-csv': [{ slug: 'csv-to-excel', label: 'Turn a part into Excel' }],
     'fit-to-csv': [{ slug: 'csv-to-excel', label: 'Turn it into Excel' }],
+    'whatsapp-chat-to-excel': [{ slug: 'whatsapp-chat-to-pdf', label: 'Make a printable PDF' }],
+    'whatsapp-chat-to-pdf': [{ slug: 'whatsapp-chat-to-excel', label: 'Turn it into a spreadsheet' }],
     'merge-csv': [{ slug: 'csv-to-excel', label: 'Turn it into Excel' }],
     'csv-to-json': [{ slug: 'json-to-excel', label: 'Open it in Excel' }, { slug: 'json-to-csv', label: 'Convert back to CSV' }],
     'tsv-to-json': [{ slug: 'json-to-excel', label: 'Open it in Excel' }],

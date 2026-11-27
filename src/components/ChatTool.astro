@@ -5,6 +5,7 @@ import type { Tool } from '../site';
 interface Props { tool: Tool; slug: string }
 const { tool, slug } = Astro.props;
 const excel = tool === 'chat-xlsx';
+const print = tool === 'chat-pdf';
 ---
 
 <section class="tool" data-tool={tool} data-slug={slug}>
@@ -22,6 +23,14 @@ const excel = tool === 'chat-xlsx';
     {excel && (
       <label><input type="checkbox" id="system" /> Include system lines (joined, left, security notices)</label>
     )}
+    {print && (
+      <>
+        <label>Show on the right
+          <select id="right"><option value="">Nobody</option></select>
+        </label>
+        <label><input type="checkbox" id="sysPrint" /> Include system lines</label>
+      </>
+    )}
   </div>
 
   <div class="actions" id="actions" hidden>
@@ -31,8 +40,13 @@ const excel = tool === 'chat-xlsx';
         <button type="button" id="csv" disabled>Save as CSV</button>
       </>
     )}
+    {print && (
+      <button type="button" class="primary" id="print" disabled>Print or save as PDF</button>
+    )}
     <span class="status" id="status" aria-live="polite"></span>
   </div>
+
+  {print && <div id="chat-print" class="chat-print" hidden></div>}
 
   <div class="done" id="done" hidden></div>
   <p class="error" id="err" role="alert" hidden></p>
@@ -42,7 +56,7 @@ const excel = tool === 'chat-xlsx';
   import Papa from 'papaparse';
   import { save, withBom } from '../lib/save';
   import { fileSource, listZip, readEntry, type ByteSource, type ZipEntry } from '../lib/zipread';
-  import { readChat, chatRows, chatTitle, findChatTxt, type Chat } from '../lib/whatsapp';
+  import { readChat, chatRows, chatTitle, findChatTxt, isChatImage, type Chat } from '../lib/whatsapp';
   import { savedLine } from '../lib/route';
   import { showDone, hideDone } from '../lib/done';
 
@@ -56,17 +70,24 @@ const excel = tool === 'chat-xlsx';
   const ambig = $('ambig'), orderSel = $<HTMLSelectElement>('order');
   const system = $<HTMLInputElement>('system');
   const btnXlsx = $<HTMLButtonElement>('xlsx'), btnCsv = $<HTMLButtonElement>('csv');
+  const btnPrint = $<HTMLButtonElement>('print');
+  const preview = $('chat-print');
+  const rightSel = $<HTMLSelectElement>('right');
+  const sysPrint = $<HTMLInputElement>('sysPrint');
 
   let fileName = '';
   let rawText = '';
   let chat: Chat | null = null;
   let zipData: { src: ByteSource; entries: ZipEntry[] } | null = null;
   let order: 'dmy' | 'mdy' | undefined;
+  let imageUrls: string[] = [];
 
   function showError(message: string) {
     chat = null;
     if (btnXlsx) btnXlsx.disabled = true;
     if (btnCsv) btnCsv.disabled = true;
+    if (btnPrint) btnPrint.disabled = true;
+    if (preview) preview.hidden = true;
     status.textContent = '';
     err.textContent = message;
     err.hidden = false;
@@ -78,6 +99,7 @@ const excel = tool === 'chat-xlsx';
     actions.hidden = false;
     if (btnXlsx) btnXlsx.disabled = false;
     if (btnCsv) btnCsv.disabled = false;
+    if (btnPrint) btnPrint.disabled = false;
     err.hidden = true;
     status.textContent = '';
     hideDone(doneEl);
@@ -93,6 +115,143 @@ const excel = tool === 'chat-xlsx';
       ambig.hidden = !chat.ambiguous;
       orderSel.value = chat.order === 'mdy' ? 'mdy' : 'dmy';
     }
+    if (preview) {
+      fillRight();
+      void renderPreview();
+    }
+  }
+
+  /** The senders the print page can put on the right. */
+  function fillRight() {
+    if (!rightSel || !chat) return;
+    const current = rightSel.value;
+    rightSel.replaceChildren();
+    const none = document.createElement('option');
+    none.value = '';
+    none.textContent = 'Nobody';
+    rightSel.append(none);
+    for (const sender of chat.senders) {
+      const o = document.createElement('option');
+      o.value = sender;
+      o.textContent = sender;
+      rightSel.append(o);
+    }
+    rightSel.value = chat.senders.includes(current) ? current : '';
+  }
+
+  /** Build the printable copy of the chat, photos in place where the zip has them. */
+  async function renderPreview() {
+    if (!preview || !chat) return;
+    for (const url of imageUrls) URL.revokeObjectURL(url);
+    imageUrls = [];
+    const right = rightSel?.value ?? '';
+    const includeSystem = sysPrint?.checked ?? false;
+    const messages = chat.messages;
+
+    preview.replaceChildren();
+
+    const h2 = document.createElement('h2');
+    h2.textContent = chatTitle(fileName);
+    preview.append(h2);
+
+    const meta = document.createElement('p');
+    meta.className = 'chat-meta';
+    meta.textContent = `${messages.length.toLocaleString()} messages, ${messages[0].date} to ${messages[messages.length - 1].date}`;
+    preview.append(meta);
+
+    const made = document.createElement('p');
+    made.className = 'chat-meta';
+    made.textContent = `Made on stayfile.app from the WhatsApp export file ${fileName} on ${new Date().toISOString().slice(0, 10)}. Stayfile is not affiliated with WhatsApp.`;
+    preview.append(made);
+
+    const byBase = new Map<string, ZipEntry>();
+    if (zipData) {
+      for (const e of zipData.entries) byBase.set(e.name.split('/').pop() ?? e.name, e);
+    }
+    const MAX_IMAGES = 300;
+    const MAX_BYTES = 20 * 1024 * 1024;
+    const imageJobs: { el: HTMLElement; entry: ZipEntry }[] = [];
+    let imageCount = 0;
+    let lastDate = '';
+
+    for (const m of messages) {
+      if (!includeSystem && m.kind === 'system') continue;
+      if (m.date !== lastDate) {
+        lastDate = m.date;
+        const day = document.createElement('h3');
+        day.textContent = m.date;
+        preview.append(day);
+      }
+
+      const msg = document.createElement('div');
+      msg.className = 'msg';
+      if (m.kind === 'system') msg.classList.add('sys');
+      if (m.kind === 'omitted' || m.kind === 'deleted') msg.classList.add('muted');
+      if (right && m.sender === right) msg.classList.add('right');
+
+      const head = document.createElement('div');
+      head.className = 'msg-head';
+      const time = document.createElement('span');
+      time.textContent = m.time;
+      head.append(time);
+      if (m.kind !== 'system' && m.sender) {
+        const who = document.createElement('b');
+        who.textContent = m.sender;
+        head.append(' ', who);
+      }
+      msg.append(head);
+
+      if (m.text) {
+        const p = document.createElement('p');
+        p.textContent = m.text;
+        msg.append(p);
+      }
+
+      if (m.attachment) {
+        const entry = byBase.get(m.attachment);
+        if (zipData && isChatImage(m.attachment) && entry && entry.size <= MAX_BYTES && imageCount < MAX_IMAGES) {
+          imageJobs.push({ el: msg, entry });
+          imageCount++;
+        } else {
+          const p = document.createElement('p');
+          p.className = 'chat-attach';
+          p.textContent = `[Attachment: ${m.attachment}]`;
+          msg.append(p);
+        }
+      }
+      preview.append(msg);
+    }
+
+    preview.hidden = false;
+
+    let done = 0;
+    for (const job of imageJobs) {
+      done++;
+      status.textContent = `Adding photo ${done} of ${imageJobs.length}...`;
+      try {
+        const bytes = await readEntry(zipData!.src, job.entry);
+        const name = job.entry.name;
+        const type = /\.png$/i.test(name)
+          ? 'image/png'
+          : /\.webp$/i.test(name)
+            ? 'image/webp'
+            : /\.gif$/i.test(name)
+              ? 'image/gif'
+              : 'image/jpeg';
+        const url = URL.createObjectURL(new Blob([bytes], { type }));
+        imageUrls.push(url);
+        const img = document.createElement('img');
+        img.alt = name.split('/').pop() ?? name;
+        img.src = url;
+        job.el.append(img);
+      } catch {
+        const p = document.createElement('p');
+        p.className = 'chat-attach';
+        p.textContent = `[Attachment: ${job.entry.name.split('/').pop() ?? job.entry.name}]`;
+        job.el.append(p);
+      }
+    }
+    status.textContent = imageJobs.length ? 'Ready to print.' : '';
   }
 
   async function readFile(file: File) {
@@ -191,4 +350,50 @@ const excel = tool === 'chat-xlsx';
     status.textContent = savedLine(name);
     showDone({ el: doneEl, slug: root.dataset.slug!, line: savedLine(name), again });
   });
+
+  sysPrint?.addEventListener('change', () => {
+    void renderPreview();
+  });
+
+  rightSel?.addEventListener('change', () => {
+    void renderPreview();
+  });
+
+  btnPrint?.addEventListener('click', async () => {
+    if (!preview) return;
+    const imgs = [...preview.querySelectorAll('img')];
+    await Promise.all(imgs.map((i) => i.decode().catch(() => {})));
+    document.body.classList.add('printing-chat');
+    window.print();
+  });
+
+  window.addEventListener('afterprint', () => document.body.classList.remove('printing-chat'));
 </script>
+
+<style is:global>
+  .chat-print {
+    margin: 22px 0;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    background: var(--card);
+  }
+  .chat-print h2 { margin: 0 0 4px; font-size: 22px; }
+  .chat-print h3 { margin: 20px 0 8px; font-size: 13px; color: var(--muted); font-weight: 600; }
+  .chat-print .chat-meta { margin: 2px 0; font-size: 12px; color: var(--muted); }
+  .chat-print .msg { width: fit-content; max-width: 92%; margin: 0 0 10px; }
+  .chat-print .msg-head { font-size: 12px; color: var(--muted); }
+  .chat-print .msg p { margin: 2px 0 0; white-space: pre-wrap; }
+  .chat-print .msg.sys { color: var(--muted); font-style: italic; }
+  .chat-print .msg.muted { color: var(--muted); }
+  .chat-print .msg.right { margin-left: auto; background: var(--field); padding: 6px 9px; border-radius: 8px; }
+  .chat-print .msg img { display: block; max-width: 60%; max-height: 320px; margin-top: 5px; border-radius: 6px; }
+  .chat-print .chat-attach { font-size: 13px; color: var(--muted); }
+
+  @media print {
+    body.printing-chat * { visibility: hidden }
+    body.printing-chat #chat-print, body.printing-chat #chat-print * { visibility: visible }
+    body.printing-chat #chat-print { position: absolute; left: 0; top: 0; width: 100% }
+    body.printing-chat #chat-print .msg { break-inside: avoid }
+  }
+</style>

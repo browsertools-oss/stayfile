@@ -3759,6 +3759,46 @@ export const PAGES: ToolPage[] = [
       PRIVATE,
     ],
   },
+  {
+    slug: 'whatsapp-chat-to-pdf',
+    tool: 'chat-pdf',
+    group: 'Chat exports',
+    card: 'WhatsApp chat to PDF',
+    blurb: 'A clean printable copy of a chat, photos included',
+    title: 'Save a WhatsApp chat as a PDF, photos included',
+    h1: 'Save a WhatsApp chat as a PDF',
+    lede: 'Drop the WhatsApp export and get a clean, dated page of the chat with each sender, time and message, photos shown in place, ready to print or save as a PDF. The chat and its photos are read on your device and never uploaded, and Stayfile is not affiliated with WhatsApp.',
+    description: 'Turn a WhatsApp chat export into a printable page with senders, times, messages and photos, then save it as a PDF from your browser. Nothing is uploaded.',
+    more: {
+      h2: 'What the PDF shows, and the limits',
+      paras: [
+        'The header names the export file and the date the page was made. Times are the ones the exporting phone wrote, and the messages keep their line breaks.',
+        'The chat text is read whole, because an export is a text file and usually only a few MB. Photos are read one at a time from the zip, and up to 300 are shown in place. Any other photos, and every video, voice note and document, are listed by name.',
+        'The PDF is made by your browser print dialog, which keeps every language and emoji right. On a phone the print option is in the browser share or menu button. Menu names can differ a little between browsers.',
+      ],
+    },
+    steps: [
+      'Export the chat with media if you want the photos.',
+      'Drop the .zip, or the .txt for text only.',
+      'Pick whose messages go on the right if you like.',
+      'Press Print or save as PDF and choose Save as PDF as the printer.',
+    ],
+    faq: [
+      {
+        q: 'Why is there no download button?',
+        a: "The browser's Save as PDF keeps every language and emoji right, and the text stays searchable. A file made by the page itself could not.",
+      },
+      {
+        q: 'Are voice notes and videos in the PDF?',
+        a: 'No. They are listed by name. Photos up to 300 are shown in place.',
+      },
+      {
+        q: 'Is this made by WhatsApp?',
+        a: "No. Stayfile is not affiliated with WhatsApp or Meta. The page reads the export file that WhatsApp's Export chat option saves on your phone.",
+      },
+      PRIVATE,
+    ],
+  },
 ];
 
 export const GROUPS: Group[] = ['PDF', 'Images', 'Spreadsheets and data', 'Fitness files', 'Chat exports'];
