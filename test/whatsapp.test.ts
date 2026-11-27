@@ -172,6 +172,23 @@ describe('names and safety', () => {
   });
 });
 
+describe('edge cases', () => {
+  test('5,000 messages read in under two seconds', () => {
+    const lines = Array.from({ length: 5000 }, (_, i) => `20/11/2026, 14:05 - Anna: message ${i}`);
+    const started = Date.now();
+    const chat = readChat(lines.join('\n'));
+    const elapsed = Date.now() - started;
+    expect(chat.messages).toHaveLength(5000);
+    expect(elapsed).toBeLessThan(2000);
+  });
+
+  test('a colon inside the message text is kept', () => {
+    const chat = readChat('20/11/2026, 14:05 - Anna: time: 5pm');
+    expect(chat.messages[0].sender).toBe('Anna');
+    expect(chat.messages[0].text).toBe('time: 5pm');
+  });
+});
+
 describe('rowsToXlsx', () => {
   test('a message that starts with = stays text', () => {
     const bytes = rowsToXlsx([['message'], ['=1+1']]);
