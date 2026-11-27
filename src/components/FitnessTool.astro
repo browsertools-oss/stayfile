@@ -6,11 +6,12 @@ interface Props { tool: Tool; slug: string }
 const { tool, slug } = Astro.props;
 const strava = tool === 'fit-strava';
 const fitGpx = tool === 'fit-gpx';
+const fitGz = tool === 'fit-gz';
 ---
 
 <section class="tool" data-tool={tool} data-slug={slug}>
   <ul class="files" id="list"></ul>
-  {strava && (
+  {(strava || fitGz) && (
     <Drop accept=".zip,.fit,.gz,.tcx,.gpx,.csv,application/zip" multiple main="Drop your Strava export zip here, or <u>choose it</u>" sub="The zip Strava emails you, or the files from its activities folder" />
   )}
   {fitGpx && (
@@ -27,7 +28,7 @@ const fitGpx = tool === 'fit-gpx';
   )}
 
   <div class="actions" id="actions" hidden>
-    <button type="button" class="primary" id="go" disabled>Convert to GPX</button>
+    <button type="button" class="primary" id="go" disabled>{fitGz ? 'Unpack' : 'Convert to GPX'}</button>
     <span class="status" id="status" aria-live="polite"></span>
   </div>
 
@@ -39,7 +40,7 @@ const fitGpx = tool === 'fit-gpx';
   import { save, baseName } from '../lib/save';
   import { showDone, hideDone } from '../lib/done';
   import { fileSource, listZip, readEntry, zipWriter } from '../lib/zipread';
-  import { readActivitiesCsv, isActivityPath, outName, convert, type ActivityInfo } from '../lib/fitness';
+  import { readActivitiesCsv, isActivityPath, outName, convert, unpack, type ActivityInfo } from '../lib/fitness';
 
   const root = document.querySelector<HTMLElement>('.tool')!;
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
@@ -52,6 +53,7 @@ const fitGpx = tool === 'fit-gpx';
   const typeWrap = $('typeWrap');
   const extras = $<HTMLInputElement>('extras');
   const strava = root.dataset.tool === 'fit-strava';
+  const fitGz = root.dataset.tool === 'fit-gz';
 
   const MAX_ENTRY = 100 * 1024 * 1024;
   let picked: File[] = [];
@@ -281,5 +283,57 @@ const fitGpx = tool === 'fit-gpx';
     }
   }
 
-  go.addEventListener('click', () => { if (strava) doConvert(); else doFitGpx(); });
+  /** Unpack every activity file in the archive into a plain file, keeping the FIT bytes as they are. */
+  async function doFitGz() {
+    if (!picked.length) return;
+    go.disabled = true;
+    err.hidden = true;
+    status.textContent = 'Reading the archive...';
+    try {
+      const { items } = await collect(picked);
+      if (!items.length) {
+        status.textContent = '';
+        err.textContent = 'No activity files were found in those files.';
+        err.hidden = false;
+        return;
+      }
+      const w = zipWriter();
+      let saved = 0, bad = 0;
+      for (let i = 0; i < items.length; i++) {
+        const it = items[i];
+        status.textContent = `Reading activity ${i + 1} of ${items.length}...`;
+        if (it.size > MAX_ENTRY) { bad++; continue; }
+        let bytes: Uint8Array;
+        try { bytes = await it.read(); } catch { bad++; continue; }
+        let u: { path: string; bytes: Uint8Array };
+        try { u = unpack(it.path, bytes); } catch { bad++; continue; }
+        const lower = u.path.toLowerCase();
+        const ext = lower.endsWith('.fit') ? 'fit' : lower.endsWith('.tcx') ? 'tcx' : lower.endsWith('.gpx') ? 'gpx' : undefined;
+        if (!ext) { bad++; continue; }
+        w.add(outName(it.info, it.path, ext), u.bytes);
+        saved++;
+      }
+
+      if (!saved) {
+        status.textContent = '';
+        err.textContent = 'No FIT, GPX or TCX files were found in that archive.' + skipLine(0, bad);
+        err.hidden = false;
+        return;
+      }
+      const blob = w.finish();
+      const again = () => save(blob, 'activities-fit.zip', 'application/zip');
+      const line = summary(saved, 0, bad);
+      save(blob, 'activities-fit.zip', 'application/zip');
+      status.textContent = line;
+      showDone({ el: doneEl, slug: root.dataset.slug!, line, again });
+    } catch {
+      status.textContent = '';
+      err.textContent = 'That file could not be read as a zip archive.';
+      err.hidden = false;
+    } finally {
+      go.disabled = picked.length === 0;
+    }
+  }
+
+  go.addEventListener('click', () => { if (strava) doConvert(); else if (fitGz) doFitGz(); else doFitGpx(); });
 </script>

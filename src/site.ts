@@ -51,7 +51,8 @@ export type Tool =
   | 'xlsx-to-sql'
   | 'json-to-yaml'
   | 'fit-strava'
-  | 'fit-gpx';
+  | 'fit-gpx'
+  | 'fit-gz';
 
 export type Group = 'PDF' | 'Images' | 'Spreadsheets and data' | 'Fitness files';
 
@@ -3530,6 +3531,10 @@ export const PAGES: ToolPage[] = [
         a: 'A skipped activity had no GPS track, which usually means a treadmill run, a trainer ride or a pool swim recorded without position. The count at the end separates those from files that could not be read at all.',
       },
       {
+        q: 'Can I get FIT files instead?',
+        a: 'Yes. If you want the original FIT files for Garmin Connect or another app, /fit-gz-to-fit/ unpacks the same archive without converting anything.',
+      },
+      {
         q: 'Is this made by Strava?',
         a: 'No. Stayfile is not affiliated with Strava. The page reads the archive file that Strava lets you download from your account.',
       },
@@ -3572,6 +3577,47 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Why is my GPX empty?',
         a: 'The activity probably had no GPS track, which happens in a treadmill run, a trainer ride or a pool swim. Those activities are skipped and counted in the result. A FIT file with a damaged header is counted as unreadable.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'fit-gz-to-fit',
+    tool: 'fit-gz',
+    group: 'Fitness files',
+    card: '.fit.gz to FIT',
+    blurb: "Unpack Strava's .fit.gz files for Garmin Connect",
+    title: 'Unpack .fit.gz files to FIT for Garmin Connect',
+    h1: 'Unpack .fit.gz files into FIT files',
+    lede: "Garmin Connect's import takes .fit, .gpx and .tcx files but not the .gz files in a Strava archive. This page unpacks every one into plain files named by date and activity, in one zip, on your device.",
+    description: "Unpack a Strava archive's .fit.gz files into plain FIT files for Garmin Connect, named by date and activity, in one zip. Nothing is uploaded.",
+    more: {
+      h2: 'Moving the files into Garmin Connect',
+      paras: [
+        'The import page in Garmin Connect on the web accepts .fit, .gpx and .tcx activity files. Sign in, find the upload or import option, and choose the files from the zip this page saved. Menu names can differ a little between app versions.',
+        'FIT keeps the most data of the three formats: laps, power and the device details stay in the file. Some people report upload errors with TCX or GPX files that go away when the same activity is sent as FIT. That is why this page leaves the FIT files alone.',
+        'Upload in batches if you have a lot of activities. A few dozen at a time is easier to watch, and any file Garmin refuses is easy to spot and retry.',
+        'The .gz wrapper only holds compression; the FIT bytes inside are not changed. Each output takes the date and the activity name from activities.csv in the archive, so the list in Garmin Connect is easy to read.',
+      ],
+    },
+    steps: [
+      'Request and download your archive in your Strava account settings.',
+      'Drop the zip on this page, or the files from its activities folder.',
+      'Press Unpack and save activities-fit.zip.',
+      'Upload the .fit files to Garmin Connect.',
+    ],
+    faq: [
+      {
+        q: 'Why does Garmin Connect refuse my .fit.gz file?',
+        a: 'Garmin Connect reads .fit, .gpx and .tcx activity files, and a .fit.gz file is still gzipped, so it does not open it. Unpack it on this page first and upload the .fit file inside.',
+      },
+      {
+        q: 'Are the files changed?',
+        a: 'No. The FIT bytes are exactly what was inside the .gz file. The name becomes the date and activity name from the archive, but the contents do not change.',
+      },
+      {
+        q: 'Is this made by Strava or Garmin?',
+        a: 'No. Stayfile is not affiliated with Strava or Garmin. The page reads the archive file that Strava lets you download from your account, and the files it saves are the ones inside it.',
       },
       PRIVATE,
     ],
