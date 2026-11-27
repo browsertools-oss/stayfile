@@ -3588,6 +3588,7 @@ export const PAGES: ToolPage[] = [
     slug: 'fit-gz-to-fit',
     tool: 'fit-gz',
     group: 'Fitness files',
+    guide: 'move-strava-to-garmin-connect',
     card: '.fit.gz to FIT',
     blurb: "Unpack Strava's .fit.gz files for Garmin Connect",
     title: 'Unpack .fit.gz files to FIT for Garmin Connect',
@@ -3937,5 +3938,11 @@ export const GUIDES: { slug: string; title: string; blurb: string; topic: string
     topic: 'Fitness files',
     title: "What's in your Strava archive, and how to open it",
     blurb: 'What the zip holds, what .fit.gz means, and how to open the activity files.',
+  },
+  {
+    slug: 'move-strava-to-garmin-connect',
+    topic: 'Fitness files',
+    title: 'How to move your Strava history to Garmin Connect',
+    blurb: 'The export is the way across: unpack the .fit.gz files and import the FIT files into Garmin Connect.',
   },
 ];

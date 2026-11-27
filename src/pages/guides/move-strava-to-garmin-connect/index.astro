@@ -1,0 +1,52 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to move your Strava history to Garmin Connect';
+const description = 'Strava cannot send your history to Garmin Connect. Download the archive, unpack the .fit.gz files, and import the FIT files on the Garmin site.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-26',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/move-strava-to-garmin-connect/" jsonld={jsonld}>
+  <h1>How to move your Strava history to Garmin Connect</h1>
+  <p class="lede">Strava has no button that sends your activities to Garmin Connect, and Garmin Connect has no option that pulls them from Strava. The route is to download your Strava archive, unpack the files it holds, and import them into Garmin Connect yourself. This guide gives the steps in order.</p>
+
+  <h2>There is no transfer button</h2>
+  <p>Both services are separate accounts. An activity recorded on a Garmin device can reach Strava through Garmin's own sync when you connect the accounts, but that link only carries new activities. History that already sits in Strava does not move back the other way, and Strava does not offer an export that writes into Garmin Connect.</p>
+  <p>What you can do is take the files Strava lets you download and feed them to Garmin Connect's import page. Garmin Connect treats an imported activity file much like one sent from a watch, so the track, times and sensor data land in your account.</p>
+
+  <h2>Download your Strava archive</h2>
+  <p>On strava.com, open Settings, then My Account, and find the area for downloading or deleting your account. The option to request your archive sits there. Menu names can differ a little between app versions.</p>
+  <p>Strava emails you a link when the export is ready. For a large history, with years of activities and posted photos, the wait can be long. Download the zip and keep it somewhere you can find again. The guide to <a href="/guides/strava-archive-whats-inside/">what is in a Strava archive</a> goes through the contents in detail; the short version is that the activities folder holds one file per activity in the format the device recorded.</p>
+
+  <h2>Unpack the .fit.gz files</h2>
+  <p>Garmin Connect imports .fit, .gpx and .tcx activity files, and not the .gz files in a Strava archive. Most activities from a watch or bike computer arrive as .fit.gz, which is a FIT file with gzip compression around it, so they need one more step before Garmin will take them.</p>
+  <p><a href="/fit-gz-to-fit/">.fit.gz to FIT</a> does that step for the whole archive. Drop the zip on the page and it unpacks every activity into a plain file, named by date and activity, in one zip. The FIT bytes are not changed; only the .gz wrapper is removed. Activities that were already .gpx or .tcx come out as they are, because Garmin Connect imports those as well.</p>
+  <p>If you would rather see the activities on a map first, <a href="/strava-archive-to-gpx/">Strava archive to GPX</a> converts the archive to GPX. That is useful for a route planner, but for Garmin Connect the FIT files are the better choice, for the reasons in the next section.</p>
+
+  <h2>Import the files in Garmin Connect</h2>
+  <p>Do this in Garmin Connect on a computer, where the import option is easiest to find. Sign in, look for the upload or import option in the activity area of the site, and choose the files from the zip you saved. Menu names can differ a little between app versions.</p>
+  <p>Each file is matched to the activity it holds. Garmin Connect may refuse an activity that is already in your account as a duplicate, so an activity that came from a Garmin watch and already synced there does not need importing at all. Import the ones that are missing instead of the whole folder.</p>
+
+  <h2>Why FIT is the best format to import</h2>
+  <p>FIT keeps the most data of the three formats. Laps, power and the device details stay in the file when it goes into Garmin Connect. TCX is Garmin's own XML format with laps and heart rate, and GPX is plain XML that most map apps read but which carries only the track, times and elevation.</p>
+  <p>Some people report upload errors with TCX or GPX files that go away when the same activity is sent as a FIT file. That is another reason to import the FIT files from the archive rather than a converted GPX.</p>
+  <p><a href="/fit-to-gpx/">FIT to GPX</a> converts a single FIT file when you need a GPX for a different map or route app, and works for one file at a time or several at once.</p>
+
+  <h2>Upload in batches</h2>
+  <p>A large history is easier to import in batches. A few dozen files at a time is enough to watch, and if the page stalls, try fewer files at once. Splitting a long history into several smaller imports also makes it easy to see which files were accepted and which were refused.</p>
+  <p>Keep the unpacked folder until the import looks complete in Garmin Connect. If a batch fails, the files are still there to try again.</p>
+
+  <h2>What does not come across</h2>
+  <p>An activity that only exists in Strava as GPX keeps its track and times in Garmin Connect, but not laps or power, because a GPX file has no standard place for them. Activities that were recorded on a Garmin device and already sent to Strava are best left to sync back from the device or from Garmin Connect itself, since the original FIT has the most detail.</p>
+  <p>Photos and descriptions posted on Strava are part of the archive but not part of the activity files, so they do not move to Garmin Connect with the import.</p>
+  <p>See also: the guide to <a href="/guides/strava-archive-whats-inside/">what is in a Strava archive</a> and <a href="/fit-gz-to-fit/">unpacking .fit.gz files</a>.</p>
+</Base>
