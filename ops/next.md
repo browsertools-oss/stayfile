@@ -1,7 +1,5 @@
 # Next (11-27-2026 morning run)
 
-- A new plan replaced the fitness plan: Chat exports (WhatsApp). Find your row with `grep -n "^| 1 |" ops/week-plan.md`; specs with `grep -n -A70 "^## Chat spec" ops/week-plan.md`.
-- Row 1 step (0): the six qa 32 notes (bare paths in two FAQs, one guide sentence, FitnessTool error text and role="alert", repeated hedges, the Strava archive history claim), then close issue 32.
-- Row 1 step (1): split CSV by column value (`makeValueSplitter`, `valuePartName`, a third radio on /split-csv/).
-- Row 1 step (2): src/lib/whatsapp.ts, `rowsToXlsx` in src/lib/xlsx.ts and test/whatsapp.test.ts with cases A to F. If the row finishes early, go on to row 2.
-- Morning metrics: sum the last 30 visitors rows (100 at the 11-26 count). The 300 and 1,000 triggers are far off.
+- The week plan's six rows and backlog 1 to 3 are DONE. Backlog 4 is next: ask the boss once for the next work.
+- Browser check the two chat pages with a real iPhone and Android export: photo preview from the zip, the sender on the right, and the print or save as PDF step.
+- Keep counting visitors: 100 in the last 30 rows, 300 needed by 12-20. Watch for the AdSense decision.

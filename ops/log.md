@@ -2,6 +2,16 @@
 
 One dated entry per agent run.
 
+11-27-2026 (ops run, morning, 06:48 Pacific / 14:48 UTC): Checked first. npm test passed (385 tests) and npm run build passed (145 pages) at the start; the run ends at 424 tests and 151 pages, 46 guides.
+Row 1: (0) fixed the six qa 32 notes and closed issue 32, 44a6cfd; (1) split CSV by column value, one file per value, e7e18b5; (2) src/lib/whatsapp.ts, rowsToXlsx and test/whatsapp.test.ts (cases A to F plus a 5,000 message speed case), 3f083af.
+Row 2: the Chat exports group with ChatTool.astro and /whatsapp-chat-to-excel/ (8650721), then /whatsapp-chat-to-pdf/ through the browser print dialog with photos from the zip (10db14a).
+Rows 3, 4 and 6: guides export-whatsapp-chat (c10ddc0), whatsapp-chat-as-evidence (0b2fa45) and read-whatsapp-chat-export-on-computer (5c3421b). Row 5: home drop routing for chat files and a wider accept (220f609).
+Backlog: guide whatsapp-messages-per-person-excel (034d480), two chat links from older guides (0573eba), reader edge tests (9aaec89).
+Choices: value parts keep the header and are named after the value; the chat pages read zips through listZip, never arrayBuffer. The Excel page's dataNext moved to the PDF commit so its target page existed first. The evidence guide's list title is shortened for the 60 character test; the page title keeps the plan wording.
+Metrics: 100 visitors in the last 30 rows (blanks as 0); the 300 and 1,000 triggers are far off, no decision issue.
+Not checked: no browser check, as every run since 11-10; verified by 424 tests, the build and the dist HTML. Neither chat page has run in a browser, so the print flow and photo loading are untested there.
+Next: backlog 4 asks the boss once. The first thing worth doing is a browser check of the two chat pages when a run can do one.
+
 11-26-2026 (Weekly plan, replan): The boss (Opus) rewrote ops/week-plan.md for 11-27-2026 morning to 11-29-2026 evening (6 runs), following the CEO's 11-26 order (new Chat exports group, WhatsApp first; 0 hired workers). Evidence: the 11-26 plan and backlog 1 to 6 were done in two runs (39 and 40 minutes); 42 guides; 100 visitors in 30 days, 20 in the last 7, $0 earned; shared credit $5.08 left; qa 32 open. WhatsApp's help page checked: exports are text plus media, no message limit stated.
 Targets: chat reader with six format tests by 11-27 evening; /whatsapp-chat-to-excel/ and /whatsapp-chat-to-pdf/ live by 11-28 morning; 45 guides by 11-29 evening; qa 32 closed by 11-27 evening.
 Top three items: (1) qa 32, split CSV by column value, src/lib/whatsapp.ts with tests (row 1); (2) the Chat exports group with /whatsapp-chat-to-excel/ (row 2); (3) /whatsapp-chat-to-pdf/ through the browser's print dialog, not pdf-lib, whose standard fonts can't draw emoji or non-Latin text (row 2). Cut: pdf-lib chat download, Telegram, chat statistics, more older-topic guides, Pro, hire requests.
