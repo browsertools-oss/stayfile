@@ -2,7 +2,7 @@
 // what makes sense after a save, and the names files get. Kept free of the DOM and of the page copy in
 // site.ts so it can be tested and so client bundles stay small.
 
-export type Kind = 'pdf' | 'heic' | 'fit' | 'image' | 'csv' | 'ics' | 'vcf' | 'json' | 'yaml' | 'xlsx' | 'text' | 'other';
+export type Kind = 'pdf' | 'heic' | 'fit' | 'chat' | 'image' | 'csv' | 'ics' | 'vcf' | 'json' | 'yaml' | 'xlsx' | 'text' | 'other';
 export type Route = { slug: string; label: string };
 type Named = { name: string; type?: string };
 
@@ -19,6 +19,8 @@ export function kindOf(f: Named): Kind {
   if (/\.(json|jsonl|ndjson)$/.test(n) || t === 'application/json') return 'json';
   if (/^(application|text)\/(yaml|x-yaml)/.test(t) || /\.(yaml|yml)$/.test(n)) return 'yaml';
   if (/\.(xlsx)$/.test(n) || t === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') return 'xlsx';
+  const last = n.split('/').pop() ?? n;
+  if (last === '_chat.txt' || (n.startsWith('whatsapp chat') && /\.(txt|zip)$/.test(n))) return 'chat';
   if (/\.(txt|md|markdown|log)$/.test(n) || t === 'text/plain' || t === 'text/markdown') return 'text';
   return 'other';
 }
@@ -36,6 +38,12 @@ export function suggestTools(files: Named[]): Route[] {
     return [
       { slug: 'fit-to-gpx', label: 'Turn into GPX' },
       { slug: 'fit-to-csv', label: 'Turn into a spreadsheet' },
+    ];
+  }
+  if (kinds.size === 1 && kinds.has('chat')) {
+    return [
+      { slug: 'whatsapp-chat-to-excel', label: 'Turn into a spreadsheet' },
+      { slug: 'whatsapp-chat-to-pdf', label: 'Make a printable PDF' },
     ];
   }
   if (kinds.size === 1 && kinds.has('pdf')) {

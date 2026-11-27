@@ -66,6 +66,19 @@ describe('suggestTools', () => {
     expect(suggestTools([f('run.fit')])[0].label).toBe('Turn into GPX');
     expect(slugs(suggestTools([f('a.fit'), f('b.fit')]))).toEqual(['fit-to-gpx', 'fit-to-csv']);
   });
+  test('WhatsApp exports suggest the two chat pages', () => {
+    expect(kindOf(f('WhatsApp Chat with Anna.zip'))).toBe('chat');
+    expect(kindOf(f('_chat.txt'))).toBe('chat');
+    expect(kindOf(f('WhatsApp Chat - Ben.txt'))).toBe('chat');
+    expect(slugs(suggestTools([f('WhatsApp Chat with Anna.zip')]))).toEqual([
+      'whatsapp-chat-to-excel',
+      'whatsapp-chat-to-pdf',
+    ]);
+    expect(kindOf(f('notes.txt'))).toBe('text');
+    expect(slugs(suggestTools([f('notes.txt')]))).toEqual(['text-to-pdf']);
+    expect(kindOf(f('photos.zip'))).toBe('other');
+    expect(suggestTools([f('photos.zip')])).toEqual([]);
+  });
   test('a zip is not routed', () => {
     expect(kindOf(f('export.zip'))).toBe('other');
     expect(suggestTools([f('export.zip')])).toEqual([]);
