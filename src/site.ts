@@ -3722,6 +3722,7 @@ export const PAGES: ToolPage[] = [
     slug: 'whatsapp-chat-to-excel',
     tool: 'chat-xlsx',
     group: 'Chat exports',
+    guide: 'export-whatsapp-chat',
     card: 'WhatsApp chat to Excel',
     blurb: 'Every message as a row in a spreadsheet',
     title: 'Export a WhatsApp chat to Excel or CSV, no upload',
@@ -3763,6 +3764,7 @@ export const PAGES: ToolPage[] = [
     slug: 'whatsapp-chat-to-pdf',
     tool: 'chat-pdf',
     group: 'Chat exports',
+    guide: 'export-whatsapp-chat',
     card: 'WhatsApp chat to PDF',
     blurb: 'A clean printable copy of a chat, photos included',
     title: 'Save a WhatsApp chat as a PDF, photos included',
@@ -4060,5 +4062,11 @@ export const GUIDES: { slug: string; title: string; blurb: string; topic: string
     topic: 'Fitness files',
     title: 'How to get your Strava data into Excel',
     blurb: 'activities.csv gives one row per activity; a FIT file gives one row per second. How to open both in Excel.',
+  },
+  {
+    slug: 'export-whatsapp-chat',
+    topic: 'Chat exports',
+    title: 'How to export a WhatsApp chat on iPhone or Android',
+    blurb: 'Where the Export chat option is, what the file holds, and how to open it as a spreadsheet or a PDF.',
   },
 ];

@@ -1,0 +1,46 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to export a WhatsApp chat on iPhone or Android';
+const description = 'How to use Export chat in WhatsApp on an iPhone, Android or the web, what the file holds, and how to open it as a spreadsheet or a PDF.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-27',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/export-whatsapp-chat/" jsonld={jsonld}>
+  <h1>How to export a WhatsApp chat on iPhone or Android</h1>
+  <p class="lede">WhatsApp can save a copy of any chat as a file, and the Export chat option is in a different place on each kind of phone. This guide shows where to find it, what the file holds, and how to open it once you have it.</p>
+
+  <h2>Export a chat on an iPhone</h2>
+  <p>Open the chat you want to save. Tap the contact or group name at the top of the screen to open the chat details, then tap Export chat. WhatsApp asks whether to include the media, so choose Attach Media or Without Media. It then opens the share sheet, where you pick where the file goes. Save to Files keeps a copy on the phone, and you can also send it to yourself by email or to another app.</p>
+  <p>Attach Media adds the photos, voice notes and documents that were sent in the chat. Without Media keeps only the text, which makes a much smaller file for a long conversation. If you are not sure which you need, export without media first and look at the result. The two choices decide the size of the file as much as the length of the chat.</p>
+
+  <h2>Export a chat on Android</h2>
+  <p>Open the chat, tap the three dot menu, then More, then Export chat. Choose Include media or Without media, and WhatsApp asks which app should receive the file. Pick Google Drive, email or another app that can store or send a file. The export leaves WhatsApp at that point, so the app you pick decides where the copy ends up.</p>
+  <p>The steps are the same for a person and for a group. The name of the chat becomes part of the file name, which helps when you export several conversations. If you pick an app that only sends files, such as email, the export arrives as an attachment you can save later. Menu names can differ a little between app versions.</p>
+
+  <h2>Export a chat in WhatsApp on the web</h2>
+  <p>In a chat on WhatsApp for the web, open the three dot More options menu and choose Export chat. You can export All messages or set a custom date range. Press Export and the browser saves a ZIP file. WhatsApp's help page says this export carries no media and arrives as a ZIP, so it holds the text and nothing else.</p>
+  <p>The date range is useful when you only need one month or one week and the full chat is long. A range that is too narrow can leave out the start of a conversation, so check the first message in the file before you rely on it. The browser usually saves the ZIP to the Downloads folder, or asks where to put it, depending on its settings.</p>
+
+  <h2>What the export contains</h2>
+  <p>An export from an iPhone is a ZIP file. Inside are a text file called <code>_chat.txt</code> and, when you chose Attach Media, the photos and files from the chat. An export from Android is a text file named after the chat, such as <code>WhatsApp Chat with Anna.txt</code>, plus the media files, often zipped by the app you sent it to.</p>
+  <p>The text file holds the date, time, sender and message for each line, and the names of any attachments. It opens in any plain text editor, so you can check it before you convert it. A long chat with media can be large, especially when it holds a lot of photos or video. If a transfer fails or older messages are missing, export the chat again without media and you get a smaller file.</p>
+
+  <h2>What an export is not</h2>
+  <p>WhatsApp's help page describes an export as a text file, not a backup, so it cannot be imported back into WhatsApp. It is a copy to read and keep, not a way to move a chat to a new phone.</p>
+  <p>Some messages are left out by design. View once messages and disappearing messages are not exported, so a chat that used them gives a file with gaps. Deleted messages can appear as a short notice rather than the original text. Keep that in mind when you read the file later, especially if you need the full conversation.</p>
+  <p>Keep the original export file unchanged if you may need to check it again. The pages below read it and make a new file, so the export itself stays as WhatsApp wrote it.</p>
+
+  <h2>Open the export in a spreadsheet or a PDF</h2>
+  <p>Once you have the file, you can read it in a plain text editor, but a long chat is hard to follow that way. To turn it into a table, drop the ZIP or text file on the <a href="/whatsapp-chat-to-excel/">WhatsApp chat to Excel page</a>. It writes one row per message with the date, time, sender, message and attachment name, and saves an Excel or CSV file.</p>
+  <p>To read the chat with its photos in place, drop the ZIP on the <a href="/whatsapp-chat-to-pdf/">WhatsApp chat to PDF page</a>. The page shows the conversation in order and uses the browser print dialog to save it as a PDF. Both pages read the export on your device and do not upload it, and neither needs an account. If you want to know how to check that yourself, the guide to <a href="/guides/are-online-file-converters-safe/">whether online file converters are safe</a> explains what to look for.</p>
+</Base>
