@@ -59,6 +59,17 @@ describe('suggestTools', () => {
     expect(suggestTools([f('notes.txt')])[0].label).toBe('Turn it into a PDF');
     expect(suggestTools([f('notes.txt'), f('log.md')])).toEqual([]);
   });
+  test('FIT files suggest GPX and a spreadsheet', () => {
+    expect(kindOf(f('run.fit'))).toBe('fit');
+    expect(kindOf(f('run.fit.gz'))).toBe('fit');
+    expect(slugs(suggestTools([f('run.fit')]))).toEqual(['fit-to-gpx', 'fit-to-csv']);
+    expect(suggestTools([f('run.fit')])[0].label).toBe('Turn into GPX');
+    expect(slugs(suggestTools([f('a.fit'), f('b.fit')]))).toEqual(['fit-to-gpx', 'fit-to-csv']);
+  });
+  test('a zip is not routed', () => {
+    expect(kindOf(f('export.zip'))).toBe('other');
+    expect(suggestTools([f('export.zip')])).toEqual([]);
+  });
   test('mixed or unknown sets get no suggestion', () => {
     expect(suggestTools([])).toEqual([]);
     expect(suggestTools([f('a.pdf'), f('b.jpg')])).toEqual([]);

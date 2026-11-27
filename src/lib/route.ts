@@ -2,7 +2,7 @@
 // what makes sense after a save, and the names files get. Kept free of the DOM and of the page copy in
 // site.ts so it can be tested and so client bundles stay small.
 
-export type Kind = 'pdf' | 'heic' | 'image' | 'csv' | 'ics' | 'vcf' | 'json' | 'yaml' | 'xlsx' | 'text' | 'other';
+export type Kind = 'pdf' | 'heic' | 'fit' | 'image' | 'csv' | 'ics' | 'vcf' | 'json' | 'yaml' | 'xlsx' | 'text' | 'other';
 export type Route = { slug: string; label: string };
 type Named = { name: string; type?: string };
 
@@ -10,6 +10,7 @@ export function kindOf(f: Named): Kind {
   const n = f.name.toLowerCase();
   const t = (f.type ?? '').toLowerCase();
   if (t === 'application/pdf' || n.endsWith('.pdf')) return 'pdf';
+  if (/\.fit(\.gz)?$/.test(n)) return 'fit';
   if (/^image\/hei[cf]/.test(t) || /\.hei[cf]$/.test(n)) return 'heic';
   if (t.startsWith('image/') || /\.(jpe?g|png|webp|gif|avif|bmp|ico)$/.test(n)) return 'image';
   if (/\.(csv|tsv)$/.test(n) || t === 'text/csv') return 'csv';
@@ -31,6 +32,12 @@ export function suggestTools(files: Named[]): Route[] {
   const kinds = new Set(files.map(kindOf));
   const n = files.length;
   if (kinds.has('other')) return [];
+  if (kinds.size === 1 && kinds.has('fit')) {
+    return [
+      { slug: 'fit-to-gpx', label: 'Turn into GPX' },
+      { slug: 'fit-to-csv', label: 'Turn into a spreadsheet' },
+    ];
+  }
   if (kinds.size === 1 && kinds.has('pdf')) {
     return n > 1
       ? [{ slug: 'merge-pdf', label: `Merge ${n} PDFs into one` }]
@@ -75,7 +82,7 @@ export function describeDrop(files: Named[]): string {
   if (!n) return '';
   const kinds = new Set(files.map(kindOf));
   const word = kinds.size > 1 ? (([...kinds].every((k) => k === 'image' || k === 'heic')) ? 'image' : 'file')
-    : ({ pdf: 'PDF', heic: 'iPhone photo', image: 'image', csv: 'CSV file', ics: 'calendar file', vcf: 'contacts file', json: 'JSON file', yaml: 'YAML file', xlsx: 'Excel file', text: 'text file', other: 'file' } as const)[[...kinds][0]];
+    : ({ pdf: 'PDF', heic: 'iPhone photo', fit: 'FIT file', image: 'image', csv: 'CSV file', ics: 'calendar file', vcf: 'contacts file', json: 'JSON file', yaml: 'YAML file', xlsx: 'Excel file', text: 'text file', other: 'file' } as const)[[...kinds][0]];
   return n === 1 ? `${files[0].name}. What should happen to it?` : `${n} ${word}s. What should happen to them?`;
 }
 
