@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import { GUIDES, SITE } from '../../site';
 const title = `Guides | ${SITE.name}`;
 const description = 'Plain answers to common file problems: photo formats, shrinking images, PDFs, spreadsheets, calendars, contacts and converter privacy.';
-const TOPICS = ['Spreadsheets and CSV', 'Calendars and contacts', 'PDF', 'Photos and images', 'Fitness files', 'Privacy'];
+const TOPICS = ['Spreadsheets and CSV', 'Calendars and contacts', 'PDF', 'Photos and images', 'Fitness files', 'Chat exports', 'Privacy'];
 const sections = TOPICS.map((topic) => ({ topic, guides: GUIDES.filter((g) => g.topic === topic) })).filter((s) => s.guides.length > 0);
 ---
 <Base title={title} description={description} path="/guides/">

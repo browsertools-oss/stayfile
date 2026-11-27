@@ -8,6 +8,7 @@ import ContactsTool from './ContactsTool.astro';
 import PhotoMetaTool from './PhotoMetaTool.astro';
 import CsvFilesTool from './CsvFilesTool.astro';
 import FitnessTool from './FitnessTool.astro';
+import ChatTool from './ChatTool.astro';
 import Silhouette from './Silhouette.astro';
 import { SITE, PAGES, GROUP_ID, GUIDES, type ToolPage } from '../site';
 import { formatsFor } from '../formats';
@@ -24,7 +25,7 @@ const FACT_ROWS: [keyof (typeof formats)[number]['facts'], string][] = [
   ['watch', 'Watch out for'],
   ['opens', 'Opens in'],
 ];
-const family = page.tool.startsWith('fit-') ? 'fitness' : page.tool === 'csv-split' || page.tool === 'csv-merge' ? 'csvfiles' : page.tool === 'photo-meta' ? 'meta' : page.tool === 'csv-to-vcf' || page.tool === 'vcf-to-csv' ? 'contacts' : page.tool === 'csv-to-ics' || page.tool === 'ics-to-csv' ? 'cal' : page.tool.startsWith('pdf') || page.tool === 'img-to-pdf' || page.tool === 'text-to-pdf' ? 'pdf' : page.tool.startsWith('img') ? 'img' : 'data';
+const family = page.tool.startsWith('chat-') ? 'chat' : page.tool.startsWith('fit-') ? 'fitness' : page.tool === 'csv-split' || page.tool === 'csv-merge' ? 'csvfiles' : page.tool === 'photo-meta' ? 'meta' : page.tool === 'csv-to-vcf' || page.tool === 'vcf-to-csv' ? 'contacts' : page.tool === 'csv-to-ics' || page.tool === 'ics-to-csv' ? 'cal' : page.tool.startsWith('pdf') || page.tool === 'img-to-pdf' || page.tool === 'text-to-pdf' ? 'pdf' : page.tool.startsWith('img') ? 'img' : 'data';
 // Show the pages that share a format with this one, then the rest, capped at eight so a
 // twenty-card group does not bury the page under its own related list.
 const STOP = new Set(['to', 'from', 'a', 'the']);
@@ -78,6 +79,7 @@ const jsonld = [
       {family === 'meta' && <PhotoMetaTool slug={page.slug} />}
       {family === 'csvfiles' && <CsvFilesTool tool={page.tool} slug={page.slug} />}
       {family === 'fitness' && <FitnessTool tool={page.tool} slug={page.slug} />}
+      {family === 'chat' && <ChatTool tool={page.tool} slug={page.slug} />}
     </div>
   </div>
   <aside class="ad-slot" aria-hidden="true" data-ad-slot></aside>
@@ -127,7 +129,7 @@ const jsonld = [
   </section>
   {related.length > 0 && (
     <section class="row">
-      <h2>Other {page.group === 'Fitness files' ? 'fitness' : page.group === 'Spreadsheets and data' ? 'data' : page.group === 'PDF' ? 'PDF' : 'image'} tools</h2>
+      <h2>Other {page.group === 'Chat exports' ? 'chat' : page.group === 'Fitness files' ? 'fitness' : page.group === 'Spreadsheets and data' ? 'data' : page.group === 'PDF' ? 'PDF' : 'image'} tools</h2>
       <ul class="related">{related.map((p) => <li><a href={`/${p.slug}/`}><Silhouette slug={p.slug} /><span>{p.card}</span></a></li>)}</ul>
     </section>
   )}

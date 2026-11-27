@@ -1,0 +1,194 @@
+---
+import Drop from './Drop.astro';
+import type { Tool } from '../site';
+
+interface Props { tool: Tool; slug: string }
+const { tool, slug } = Astro.props;
+const excel = tool === 'chat-xlsx';
+---
+
+<section class="tool" data-tool={tool} data-slug={slug}>
+  <ul class="files" id="list"></ul>
+  <Drop accept=".txt,.zip,text/plain,application/zip" main="Drop your WhatsApp export here, or <u>choose it</u>" sub="The .zip or .txt from Export chat" />
+
+  <div class="opts" id="opts" hidden>
+    <p class="summary" id="summary" aria-live="polite"></p>
+    <p id="ambig" hidden><label>Dates in this file are
+      <select id="order">
+        <option value="dmy">Day first (20/11)</option>
+        <option value="mdy">Month first (11/20)</option>
+      </select>
+    </label></p>
+    {excel && (
+      <label><input type="checkbox" id="system" /> Include system lines (joined, left, security notices)</label>
+    )}
+  </div>
+
+  <div class="actions" id="actions" hidden>
+    {excel && (
+      <>
+        <button type="button" class="primary" id="xlsx" disabled>Save as Excel (.xlsx)</button>
+        <button type="button" id="csv" disabled>Save as CSV</button>
+      </>
+    )}
+    <span class="status" id="status" aria-live="polite"></span>
+  </div>
+
+  <div class="done" id="done" hidden></div>
+  <p class="error" id="err" role="alert" hidden></p>
+</section>
+
+<script>
+  import Papa from 'papaparse';
+  import { save, withBom } from '../lib/save';
+  import { fileSource, listZip, readEntry, type ByteSource, type ZipEntry } from '../lib/zipread';
+  import { readChat, chatRows, chatTitle, findChatTxt, type Chat } from '../lib/whatsapp';
+  import { savedLine } from '../lib/route';
+  import { showDone, hideDone } from '../lib/done';
+
+  const root = document.querySelector<HTMLElement>('.tool')!;
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
+  const list = $('list')!;
+  const drop = $('drop')!;
+  const opts = $('opts')!, actions = $('actions')!, status = $('status')!;
+  const err = $('err')!, doneEl = $('done')!;
+  const summary = $('summary');
+  const ambig = $('ambig'), orderSel = $<HTMLSelectElement>('order');
+  const system = $<HTMLInputElement>('system');
+  const btnXlsx = $<HTMLButtonElement>('xlsx'), btnCsv = $<HTMLButtonElement>('csv');
+
+  let fileName = '';
+  let rawText = '';
+  let chat: Chat | null = null;
+  let zipData: { src: ByteSource; entries: ZipEntry[] } | null = null;
+  let order: 'dmy' | 'mdy' | undefined;
+
+  function showError(message: string) {
+    chat = null;
+    if (btnXlsx) btnXlsx.disabled = true;
+    if (btnCsv) btnCsv.disabled = true;
+    status.textContent = '';
+    err.textContent = message;
+    err.hidden = false;
+  }
+
+  function render() {
+    if (!chat) return;
+    opts.hidden = false;
+    actions.hidden = false;
+    if (btnXlsx) btnXlsx.disabled = false;
+    if (btnCsv) btnCsv.disabled = false;
+    err.hidden = true;
+    status.textContent = '';
+    hideDone(doneEl);
+    if (summary) {
+      const n = chat.messages.length.toLocaleString();
+      const p = chat.senders.length;
+      const people = `${p.toLocaleString()} ${p === 1 ? 'person' : 'people'}`;
+      const first = chat.messages[0].date;
+      const last = chat.messages[chat.messages.length - 1].date;
+      summary.textContent = `${n} messages from ${people}, ${first} to ${last}.`;
+    }
+    if (ambig && orderSel) {
+      ambig.hidden = !chat.ambiguous;
+      orderSel.value = chat.order === 'mdy' ? 'mdy' : 'dmy';
+    }
+  }
+
+  async function readFile(file: File) {
+    fileName = file.name;
+    rawText = '';
+    zipData = null;
+    order = undefined;
+    err.hidden = true;
+    hideDone(doneEl);
+    status.textContent = 'Reading the export...';
+
+    list.innerHTML = '';
+    const li = document.createElement('li');
+    const name = document.createElement('span');
+    name.className = 'name';
+    name.textContent = file.name;
+    li.append(name);
+    list.append(li);
+
+    if (/\.zip$/i.test(file.name) || file.type === 'application/zip') {
+      try {
+        const src = fileSource(file);
+        const entries = await listZip(src);
+        const found = findChatTxt(entries.map((e) => e.name));
+        if (!found) {
+          showError('There is no chat text file in that zip. It should hold _chat.txt or a WhatsApp Chat .txt file.');
+          return;
+        }
+        const entry = entries.find((e) => e.name === found)!;
+        rawText = new TextDecoder().decode(await readEntry(src, entry));
+        zipData = { src, entries };
+      } catch {
+        showError('There is no chat text file in that zip. It should hold _chat.txt or a WhatsApp Chat .txt file.');
+        return;
+      }
+    } else {
+      try {
+        rawText = await file.text();
+      } catch {
+        showError('That file could not be read.');
+        return;
+      }
+    }
+
+    chat = readChat(rawText, order ? { order } : undefined);
+    if (!chat.messages.length) {
+      showError('No messages found. Is this a WhatsApp export file?');
+      return;
+    }
+    render();
+  }
+
+  drop.addEventListener('files', (e) => {
+    const picked = [...(e as CustomEvent<File[]>).detail];
+    if (!picked.length) return;
+    void readFile(picked[0]);
+  });
+
+  orderSel?.addEventListener('change', () => {
+    order = orderSel.value === 'mdy' ? 'mdy' : 'dmy';
+    if (!rawText) return;
+    chat = readChat(rawText, { order });
+    if (!chat.messages.length) {
+      showError('No messages found. Is this a WhatsApp export file?');
+      return;
+    }
+    render();
+  });
+
+  btnXlsx?.addEventListener('click', async () => {
+    if (!chat) return;
+    status.textContent = 'Building the workbook...';
+    try {
+      const { rowsToXlsx } = await import('../lib/xlsx');
+      const rows = chatRows(chat, { system: system?.checked ?? false });
+      const bytes = rowsToXlsx(rows, 'Chat', [11, 9, 22, 80, 36]);
+      const name = `${chatTitle(fileName)}.xlsx`;
+      const type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+      const again = () => save(bytes, name, type);
+      again();
+      status.textContent = savedLine(name);
+      showDone({ el: doneEl, slug: root.dataset.slug!, line: savedLine(name), again });
+    } catch {
+      showError('The workbook could not be built.');
+    }
+  });
+
+  btnCsv?.addEventListener('click', () => {
+    if (!chat) return;
+    const rows = chatRows(chat, { system: system?.checked ?? false, csv: true });
+    const csv = Papa.unparse(rows, { newline: '\r\n' });
+    const name = `${chatTitle(fileName)}.csv`;
+    const blob = new Blob([withBom(csv)], { type: 'text/csv' });
+    const again = () => save(blob, name, 'text/csv');
+    again();
+    status.textContent = savedLine(name);
+    showDone({ el: doneEl, slug: root.dataset.slug!, line: savedLine(name), again });
+  });
+</script>

@@ -54,9 +54,11 @@ export type Tool =
   | 'fit-gpx'
   | 'fit-gz'
   | 'fit-garmin'
-  | 'fit-csv';
+  | 'fit-csv'
+  | 'chat-xlsx'
+  | 'chat-pdf';
 
-export type Group = 'PDF' | 'Images' | 'Spreadsheets and data' | 'Fitness files';
+export type Group = 'PDF' | 'Images' | 'Spreadsheets and data' | 'Fitness files' | 'Chat exports';
 
 export interface Preset {
   split?: 'extract' | 'ranges' | 'every' | 'remove';
@@ -3715,13 +3717,55 @@ export const PAGES: ToolPage[] = [
       PRIVATE,
     ],
   },
+  // ---------- Chat exports ----------
+  {
+    slug: 'whatsapp-chat-to-excel',
+    tool: 'chat-xlsx',
+    group: 'Chat exports',
+    card: 'WhatsApp chat to Excel',
+    blurb: 'Every message as a row in a spreadsheet',
+    title: 'Export a WhatsApp chat to Excel or CSV, no upload',
+    h1: 'Turn a WhatsApp chat into a spreadsheet',
+    lede: "Drop the file WhatsApp's Export chat saves and get one row per message with date, time, sender, message and attachment name, as Excel or CSV. The chat is read on your device and never uploaded, and Stayfile is not affiliated with WhatsApp.",
+    description: 'Turn a WhatsApp chat export into an Excel or CSV file with one row per message: date, time, sender, message and attachment. Nothing is uploaded.',
+    more: {
+      h2: 'What each column holds',
+      paras: [
+        'The date is written as year, month, day, so a spreadsheet sorts it in order without any setting. The time is the one the phone wrote, in 24 hour form, with seconds when the file has them.',
+        'The sender is the name saved in the contacts of the phone that exported the chat. When the number is not saved there, the sender is the number instead. The message text keeps its line breaks, so a long message stays one row and does not split.',
+        'The attachment column holds a file name when the export included media, such as a photo, a voice note or a document. When media was left out, the message keeps the note the phone wrote, such as "image omitted" or "<Media omitted>".',
+        'System lines, the encryption notice and the notes about people joining or leaving, are left out unless you tick the box. iPhone and Android write the export file in different ways and both are read here. There is no message limit on this page.',
+      ],
+    },
+    steps: [
+      'In WhatsApp, open the chat and use Export chat.',
+      'Drop the .zip or .txt file the export made.',
+      'Check the dates if the page asks whether they are day or month first.',
+      'Save as Excel or CSV.',
+    ],
+    faq: [
+      {
+        q: 'My dates look wrong',
+        a: 'The day and the month can swap when the numbers fit both orders. The page guesses from the whole file and asks when it cannot tell. Change the answer on the page and every date is read again.',
+      },
+      {
+        q: 'Why does a message start with an apostrophe in the CSV?',
+        a: 'A message that starts with =, + or @ gets one in front in the CSV, so a spreadsheet does not run it as a formula. The Excel file keeps the text as it is.',
+      },
+      {
+        q: 'Is this made by WhatsApp?',
+        a: "No. Stayfile is not affiliated with WhatsApp or Meta. The page reads the export file that WhatsApp's Export chat option saves on your phone.",
+      },
+      PRIVATE,
+    ],
+  },
 ];
 
-export const GROUPS: Group[] = ['PDF', 'Images', 'Spreadsheets and data', 'Fitness files'];
+export const GROUPS: Group[] = ['PDF', 'Images', 'Spreadsheets and data', 'Fitness files', 'Chat exports'];
 
 // Anchor ids on the home page and short labels for the header nav.
-export const GROUP_ID: Record<Group, string> = { PDF: 'pdf', Images: 'images', 'Spreadsheets and data': 'data', 'Fitness files': 'fitness' };
-export const GROUP_SHORT: Record<Group, string> = { PDF: 'PDF', Images: 'Images', 'Spreadsheets and data': 'Data', 'Fitness files': 'Fitness' };
+export const GROUP_ID: Record<Group, string> = { PDF: 'pdf', Images: 'images', 'Spreadsheets and data': 'data', 'Fitness files': 'fitness', 'Chat exports': 'chat' };
+export const GROUP_SHORT: Record<Group, string> = { PDF: 'PDF', Images: 'Images', 'Spreadsheets and data': 'Data', 'Fitness files': 'Fitness', 'Chat exports': 'Chats' };
 
 // Guides under /guides/. A guide goes in only when it is finished and passes the word-count test.
 export const GUIDES: { slug: string; title: string; blurb: string; topic: string }[] = [
