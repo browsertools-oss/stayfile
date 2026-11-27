@@ -3722,7 +3722,7 @@ export const PAGES: ToolPage[] = [
     slug: 'whatsapp-chat-to-excel',
     tool: 'chat-xlsx',
     group: 'Chat exports',
-    guide: 'export-whatsapp-chat',
+    guide: ['export-whatsapp-chat', 'whatsapp-messages-per-person-excel'],
     card: 'WhatsApp chat to Excel',
     blurb: 'Every message as a row in a spreadsheet',
     title: 'Export a WhatsApp chat to Excel or CSV, no upload',
@@ -4080,5 +4080,11 @@ export const GUIDES: { slug: string; title: string; blurb: string; topic: string
     topic: 'Chat exports',
     title: 'How to read a WhatsApp chat export on a computer',
     blurb: 'How to unzip the export, open _chat.txt on Windows or Mac, and read the chat with its photos or as a table.',
+  },
+  {
+    slug: 'whatsapp-messages-per-person-excel',
+    topic: 'Chat exports',
+    title: 'Count WhatsApp messages per person in Excel',
+    blurb: 'Turn the export into a table, then use a pivot table to count messages per person and per month.',
   },
 ];

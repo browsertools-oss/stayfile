@@ -1,0 +1,47 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'Count WhatsApp messages per person in Excel';
+const description = 'Turn a WhatsApp export into a table, then use a pivot table to count messages per person and per month in Excel or Google Sheets.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-27',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/whatsapp-messages-per-person-excel/" jsonld={jsonld}>
+  <h1>Count WhatsApp messages per person in Excel</h1>
+  <p class="lede">A WhatsApp export is one long text file, which is hard to count by hand. Once it is a table with one row per message, a pivot table in Excel can count the messages for each person and each month in a few clicks.</p>
+
+  <h2>Make the spreadsheet first</h2>
+  <p>Drop the export file on the <a href="/whatsapp-chat-to-excel/">WhatsApp chat to Excel page</a> and save the .xlsx file. The page reads the chat on your device, so nothing is uploaded. The result has one row per message, with the date, time, sender, message and attachment name in separate columns.</p>
+  <p>Open the file in Excel. The first row is a header, and each row below it is one message. This is the table the pivot table will read, so check that the sender column holds the names you expect before you build anything on it.</p>
+
+  <h2>Insert a pivot table</h2>
+  <p>Click any cell inside the table, then choose Insert and PivotTable. Excel selects the whole table for you, so accept the range it shows. Choose to put the pivot table on a new worksheet and press OK. A new sheet opens with an empty pivot table and a field list on the right.</p>
+  <p>The field list has one entry for each column in the table. You drag a field into one of four areas: Rows, Columns, Values or Filters. The next two sections show which field goes where for the two counts people ask for most.</p>
+
+  <h2>Count the messages per person</h2>
+  <p>Drag the sender field into Rows. Each sender becomes one row of the pivot table. Then drag the message field into Values. Excel counts the entries rather than adding them up, because a message is text, and the count appears beside each sender.</p>
+  <p>If the Values box shows Sum of message instead of Count of message, click the field in Values, choose Value Field Settings, and pick Count. Sort the result from largest to smallest to see who sent the most messages in the chat.</p>
+  <p>The sender is the name saved in the contacts of the phone that exported the chat, or the number when it was not saved. Two exports from different phones can give different names for the same person, so count within one export rather than across several.</p>
+
+  <h2>Messages per month</h2>
+  <p>For messages over time, drag the date field into Columns as well as the message field in Values. Excel may group the dates automatically. If it does not, right click a date in the pivot table, choose Group, and pick Months. Each month then becomes a column, and each cell counts the messages in that month.</p>
+  <p>If grouping is awkward, add a helper column to the table. Type <code>=LEFT(A2,7)</code> next to the date column and fill it down. The date is stored as text in year, month, day order, so the first seven characters are the year and month. Use that helper column in Rows or Columns instead of the full date.</p>
+
+  <h2>Leave out the system lines</h2>
+  <p>The Excel page leaves system lines out by default, so the table usually holds only real messages. If you ticked the box to include them, their sender cell is empty. Add the sender field as a Filter and clear the blank entry, and the counts cover real messages only.</p>
+  <p>The same filter is useful for checking the result. If a name appears once with a large count and once with a small one, the two may be a saved name and a number for the same person. Read a few messages from each group before you decide whether to combine them.</p>
+
+  <h2>The same steps in Google Sheets</h2>
+  <p>Google Sheets has the same pivot table under Insert. Open the .xlsx file in Sheets, or import the CSV the Excel page also saves, then choose Insert and Pivot table. Put sender in Rows and message in Values, and set the summary to COUNTA if Sheets does not choose a count by itself.</p>
+  <p>Menu names can differ a little between app versions. Whichever program you use, the table is the same, so a pivot table built in one opens in the other with its counts intact.</p>
+  <p>If the CSV opens as one column instead of a table, the import read the separator wrongly. The guide to <a href="/guides/csv-opens-in-one-column-in-excel/">why a CSV opens in one column in Excel</a> covers the fix, and the guide to <a href="/guides/export-whatsapp-chat/">exporting a WhatsApp chat</a> shows how to get the file in the first place.</p>
+</Base>
