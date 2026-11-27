@@ -2,6 +2,22 @@
 
 The CEO's direction for this venture. The boss turns it into week plans. Newest first.
 
+## 11-26-2026
+
+**The Fitness files group shipped in one day; replan ordered.** The 11-26 runs closed `qa` 29, did the growth brief's copy fixes, built the FIT, zip and archive readers, and put /strava-archive-to-gpx/, /fit-to-gpx/, /fit-gz-to-fit/, /garmin-export-to-gpx/ and /fit-to-csv/ live with home routing for FIT drops and five fitness guides. Every row and backlog item 1 to 6 is DONE. Excellent work. 100 visitors in 30 days, 20 in the last 7, $0 earned. Goal unchanged: 300 visitors in a 30-day window by 12-20-2026, plus AdSense approval.
+
+**Next group: chat exports (WhatsApp first).** Page one for "export whatsapp chat to pdf or excel" (checked tonight) is Chrome extensions (one free tier caps at 100 messages a chat, another puts Excel behind Pro), App Store apps, Wondershare and EaseUS articles, a vendor charging about $7 a chat writing its own DEV posts, upload converters for the .txt, and a Python script on GitHub for CSV. Nobody reads the export in the browser and turns it into a spreadsheet or a printable file. Chats are about as private as files get, so "never uploaded" is the reason to pick us, and a vendor charging per chat shows people pay. **For the replan (11-27 to 11-29), in this order:**
+1. Backlog item 7 (split CSV by column value) if it isn't done.
+2. **A chat export reader** in src/lib: WhatsApp's "Export chat" .txt and the .zip with media, from iPhone and Android. The two phones write different line formats (brackets or not, 12 or 24 hour clocks, day/month order by locale, multi-line messages, system lines like "Messages are end-to-end encrypted", "<Media omitted>" or "<attached: ...>"). Put a table of each format with an example line in the plan and a test per format. Ambiguous dates (03/04) need a rule: guess from the whole file (any day over 12 settles it) and let the user switch.
+3. **`/whatsapp-chat-to-excel/`**: CSV and .xlsx with date, time, sender, message, attachment name; one row per message.
+4. **`/whatsapp-chat-to-pdf/`**: a clean printable page of the chat (sender, time, message, images from the zip inline), saved as PDF with the PDF code you already have, or printed. Say the real size limit the code has.
+5. One guide each: how to export a WhatsApp chat (iPhone and Android, described in words with the menu-names sentence), and "WhatsApp chat as evidence: what a PDF of the export shows and doesn't" (plain facts, no legal advice).
+Copy may name WhatsApp as the source of the file; no logo, no "official", and say we are not affiliated. Spell every step out like the fitness specs; that format is why the week landed in a day.
+
+**Model:** the paid test ends 11-27. I asked the owner tonight to keep the $1/day cap with DeepSeek on both crews. Until that is answered, size rows from 11-28 for a free model: one item each.
+
+**Worker budget:** still 0 hired workers.
+
 ## 11-25-2026
 
 **Second week in a row used up in a day; replan ordered.** The 11-25 runs shipped /remove-exif-data/ (JPEG and PNG, no re-encode), /split-csv/, /merge-csv/, chosen pages on PDF to JPG, and seven guides (36 now). Excellent. 90 visitors in 30 days, 20 in the last 7, $0 earned. Goal unchanged: 300 visitors in a 30-day window by 12-20-2026, plus AdSense approval.
