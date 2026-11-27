@@ -5,6 +5,7 @@ import type { Tool } from '../site';
 interface Props { tool: Tool; slug: string }
 const { tool, slug } = Astro.props;
 const strava = tool === 'fit-strava';
+const fitGpx = tool === 'fit-gpx';
 ---
 
 <section class="tool" data-tool={tool} data-slug={slug}>
@@ -12,13 +13,18 @@ const strava = tool === 'fit-strava';
   {strava && (
     <Drop accept=".zip,.fit,.gz,.tcx,.gpx,.csv,application/zip" multiple main="Drop your Strava export zip here, or <u>choose it</u>" sub="The zip Strava emails you, or the files from its activities folder" />
   )}
+  {fitGpx && (
+    <Drop accept=".fit,.gz,.tcx" multiple main="Drop FIT files here, or <u>choose files</u>" sub="FIT, .fit.gz and TCX files" />
+  )}
 
-  <div class="opts" id="opts" hidden>
-    <label id="typeWrap" hidden>Activity types
-      <select id="type"><option value="all">All types</option></select>
-    </label>
-    <label><input type="checkbox" id="extras" checked /> Include heart rate and cadence</label>
-  </div>
+  {strava && (
+    <div class="opts" id="opts" hidden>
+      <label id="typeWrap" hidden>Activity types
+        <select id="type"><option value="all">All types</option></select>
+      </label>
+      <label><input type="checkbox" id="extras" checked /> Include heart rate and cadence</label>
+    </div>
+  )}
 
   <div class="actions" id="actions" hidden>
     <button type="button" class="primary" id="go" disabled>Convert to GPX</button>
@@ -30,7 +36,7 @@ const strava = tool === 'fit-strava';
 </section>
 
 <script>
-  import { save } from '../lib/save';
+  import { save, baseName } from '../lib/save';
   import { showDone, hideDone } from '../lib/done';
   import { fileSource, listZip, readEntry, zipWriter } from '../lib/zipread';
   import { readActivitiesCsv, isActivityPath, outName, convert, type ActivityInfo } from '../lib/fitness';
@@ -40,11 +46,12 @@ const strava = tool === 'fit-strava';
   const list = $('list')!;
   const drop = $('drop')!;
   const go = $<HTMLButtonElement>('go')!;
-  const opts = $('opts')!, actions = $('actions')!, status = $('status')!;
+  const opts = $('opts'), actions = $('actions')!, status = $('status')!;
   const err = $('err')!, doneEl = $('done')!;
-  const typeSel = $<HTMLSelectElement>('type')!;
-  const typeWrap = $('typeWrap')!;
-  const extras = $<HTMLInputElement>('extras')!;
+  const typeSel = $<HTMLSelectElement>('type');
+  const typeWrap = $('typeWrap');
+  const extras = $<HTMLInputElement>('extras');
+  const strava = root.dataset.tool === 'fit-strava';
 
   const MAX_ENTRY = 100 * 1024 * 1024;
   let picked: File[] = [];
@@ -68,7 +75,7 @@ const strava = tool === 'fit-strava';
       list.append(li);
     }
     const any = picked.length > 0;
-    opts.hidden = !any;
+    if (opts) opts.hidden = !any;
     actions.hidden = !any;
     go.disabled = !any;
     hideDone(doneEl);
@@ -77,6 +84,7 @@ const strava = tool === 'fit-strava';
   }
 
   function fillTypes(map: Map<string, ActivityInfo>) {
+    if (!typeSel || !typeWrap) return;
     const types = [...new Set([...map.values()].map((v) => v.type).filter((t): t is string => Boolean(t)))].sort();
     typeSel.innerHTML = '';
     const all = document.createElement('option');
@@ -158,7 +166,7 @@ const strava = tool === 'fit-strava';
     try {
       const { items, infoMap } = await collect(picked);
       fillTypes(infoMap);
-      const want = typeSel.value;
+      const want = typeSel?.value ?? 'all';
       const jobs = items.filter((it) => want === 'all' || it.info?.type === want);
       if (!jobs.length) {
         status.textContent = '';
@@ -175,7 +183,7 @@ const strava = tool === 'fit-strava';
         if (it.size > MAX_ENTRY) { bad++; continue; }
         let bytes: Uint8Array;
         try { bytes = await it.read(); } catch { bad++; continue; }
-        const r = convert(it.path, bytes, { name: it.info?.name, type: it.info?.type, extras: extras.checked });
+        const r = convert(it.path, bytes, { name: it.info?.name, type: it.info?.type, extras: extras?.checked ?? true });
         if (!r.gpx) { if (r.skip === 'no-gps') noGps++; else bad++; continue; }
         outs.push({ name: outName(it.info, it.path, 'gpx'), data: new TextEncoder().encode(r.gpx) });
       }
@@ -220,5 +228,58 @@ const strava = tool === 'fit-strava';
     renderPicked();
   });
 
-  go.addEventListener('click', doConvert);
+  /** FIT, .fit.gz and TCX dropped as loose files: convert each one and name it after the file. */
+  async function doFitGpx() {
+    if (!picked.length) return;
+    go.disabled = true;
+    err.hidden = true;
+    status.textContent = '';
+    try {
+      const outs: { name: string; data: Uint8Array }[] = [];
+      let noGps = 0, bad = 0;
+      for (let i = 0; i < picked.length; i++) {
+        const f = picked[i];
+        status.textContent = `Reading file ${i + 1} of ${picked.length}...`;
+        const base = baseName(baseName(f.name));
+        let bytes: Uint8Array;
+        try { bytes = new Uint8Array(await f.arrayBuffer()); } catch { bad++; continue; }
+        const r = convert(f.name, bytes, { name: base, extras: true });
+        if (!r.gpx) { if (r.skip === 'no-gps') noGps++; else bad++; continue; }
+        outs.push({ name: `${base}.gpx`, data: new TextEncoder().encode(r.gpx) });
+      }
+
+      if (!outs.length) {
+        status.textContent = '';
+        err.textContent = 'No activities with a GPS track were found.' + skipLine(noGps, bad);
+        err.hidden = false;
+        return;
+      }
+
+      let line: string;
+      let again: () => void;
+      if (outs.length === 1) {
+        const blob = new Blob([outs[0].data as BlobPart], { type: 'application/gpx+xml' });
+        again = () => save(blob, outs[0].name, 'application/gpx+xml');
+        line = summary(1, noGps, bad);
+        save(blob, outs[0].name, 'application/gpx+xml');
+      } else {
+        const w = zipWriter();
+        for (const o of outs) w.add(o.name, o.data);
+        const blob = w.finish();
+        again = () => save(blob, 'gpx-files.zip', 'application/zip');
+        line = summary(outs.length, noGps, bad);
+        save(blob, 'gpx-files.zip', 'application/zip');
+      }
+      status.textContent = line;
+      showDone({ el: doneEl, slug: root.dataset.slug!, line, again });
+    } catch {
+      status.textContent = '';
+      err.textContent = 'Those files could not be read.';
+      err.hidden = false;
+    } finally {
+      go.disabled = picked.length === 0;
+    }
+  }
+
+  go.addEventListener('click', () => { if (strava) doConvert(); else doFitGpx(); });
 </script>

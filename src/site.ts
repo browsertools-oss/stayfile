@@ -50,7 +50,8 @@ export type Tool =
   | 'csv-to-sql'
   | 'xlsx-to-sql'
   | 'json-to-yaml'
-  | 'fit-strava';
+  | 'fit-strava'
+  | 'fit-gpx';
 
 export type Group = 'PDF' | 'Images' | 'Spreadsheets and data' | 'Fitness files';
 
@@ -3531,6 +3532,46 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Is this made by Strava?',
         a: 'No. Stayfile is not affiliated with Strava. The page reads the archive file that Strava lets you download from your account.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'fit-to-gpx',
+    tool: 'fit-gpx',
+    group: 'Fitness files',
+    card: 'FIT to GPX',
+    blurb: 'Many FIT files to GPX at once',
+    title: 'Convert FIT files to GPX, many at once, no upload',
+    h1: 'Convert FIT files to GPX',
+    lede: 'This page turns FIT files from a watch or bike computer into GPX for maps and other apps, many at once. It reads .fit.gz and TCX files too, and the work happens on your device, so nothing is uploaded.',
+    description: 'Turn FIT files from a watch or bike computer into GPX for maps and other apps. Many at once, .fit.gz and TCX included, and nothing is uploaded.',
+    more: {
+      h2: 'What a GPX file keeps from a FIT file',
+      paras: [
+        'FIT is a compact binary file that most sport watches and bike computers record. You cannot read it in a text editor, and many map apps do not open it. GPX is plain text that almost every map, route and training app reads. A phone app can show the result, and so can a route planner or a watch that takes GPX uploads.',
+        'The conversion keeps the track points, their times and elevation, plus heart rate and cadence when the file has them. Laps, power and photos are not kept, because GPX has no standard place for them.',
+        'Files that came zipped as .fit.gz are unpacked first, and TCX files from apps are read the same way. Indoor activities have no GPS track, so they are skipped and counted at the end.',
+        'The GPX files are named after the files you drop. One file saves as a single .gpx; several are packed into gpx-files.zip, with numbered names when two activities share one.',
+      ],
+    },
+    steps: [
+      'Drop one or more FIT, .fit.gz or TCX files.',
+      'Press Convert to GPX.',
+      'Save the .gpx file, or gpx-files.zip when you dropped several.',
+    ],
+    faq: [
+      {
+        q: 'Can I convert many files at once?',
+        a: 'Yes. Drop as many as you like and they are read one after another. One file saves on its own; several arrive in gpx-files.zip.',
+      },
+      {
+        q: 'What about .fit.gz files?',
+        a: 'They are unpacked first and then read the same way as a plain FIT file. You can drop both kinds together.',
+      },
+      {
+        q: 'Why is my GPX empty?',
+        a: 'The activity probably had no GPS track, which happens in a treadmill run, a trainer ride or a pool swim. Those activities are skipped and counted in the result. A FIT file with a damaged header is counted as unreadable.',
       },
       PRIVATE,
     ],
