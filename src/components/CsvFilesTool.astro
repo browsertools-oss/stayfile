@@ -20,9 +20,11 @@ const merge = tool === 'csv-merge';
           <div class="seg" role="radiogroup" aria-label="How to split">
             <label><input type="radio" name="mode" value="rows" checked /><span>Rows per file</span></label>
             <label><input type="radio" name="mode" value="files" /><span>Number of files</span></label>
+            <label><input type="radio" name="mode" value="column" /><span>One file per value</span></label>
           </div>
           <label id="rowsWrap">Rows per file <input type="number" id="rows" min="1" value="100000" /></label>
           <label id="filesWrap" hidden>Number of files <input type="number" id="files" min="1" value="2" /></label>
+          <label id="colWrap" hidden>Column <select id="col"></select></label>
           <label><input type="checkbox" id="header" checked /> First row is a header, repeat it in every file</label>
         </>}
   </div>
@@ -41,7 +43,7 @@ const merge = tool === 'csv-merge';
   import { save, zip, baseName, withBom } from '../lib/save';
   import { savedLine } from '../lib/route';
   import { showDone, hideDone } from '../lib/done';
-  import { makeSplitter, mergeCsv, partName, rowsPerPartFor } from '../lib/csvfiles';
+  import { makeSplitter, makeValueSplitter, valuePartName, mergeCsv, partName, rowsPerPartFor } from '../lib/csvfiles';
 
   const root = document.querySelector<HTMLElement>('.tool')!;
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
@@ -52,6 +54,7 @@ const merge = tool === 'csv-merge';
   const rows = $<HTMLInputElement>('rows');
   const files = $<HTMLInputElement>('files');
   const rowsWrap = $('rowsWrap'), filesWrap = $('filesWrap');
+  const colWrap = $('colWrap'), colSel = $<HTMLSelectElement>('col');
   const header = $<HTMLInputElement>('header');
   const addName = $<HTMLInputElement>('addName');
   const mode = () => document.querySelector<HTMLInputElement>('input[name="mode"]:checked')?.value ?? 'rows';
@@ -62,9 +65,18 @@ const merge = tool === 'csv-merge';
 
   function syncMode() {
     if (merge || !rowsWrap || !filesWrap) return;
-    const byRows = mode() === 'rows';
-    rowsWrap.hidden = !byRows;
-    filesWrap.hidden = byRows;
+    const m = mode();
+    rowsWrap.hidden = m !== 'rows';
+    filesWrap.hidden = m !== 'files';
+    if (colWrap) colWrap.hidden = m !== 'column' || !colSel?.options.length;
+    if (header) {
+      if (m === 'column') {
+        header.checked = true;
+        header.disabled = true;
+      } else {
+        header.disabled = false;
+      }
+    }
   }
 
   function showFile(f: File) {
@@ -82,6 +94,70 @@ const merge = tool === 'csv-merge';
     hideDone(doneEl);
     err.hidden = true;
     status.textContent = '';
+    fillColumns(f);
+  }
+
+  /** Fill the column picker from the first row of the file. */
+  function fillColumns(f: File) {
+    if (!colSel || !colWrap) return;
+    colSel.innerHTML = '';
+    colWrap.hidden = true;
+    Papa.parse<string[]>(f as unknown as string, {
+      preview: 1,
+      complete: (res) => {
+        const first = (res.data as string[][])[0] ?? [];
+        first.forEach((name, i) => {
+          const raw = name ?? '';
+          const cell = raw.charCodeAt(0) === 0xfeff ? raw.slice(1) : raw;
+          const o = document.createElement('option');
+          o.value = String(i);
+          o.textContent = cell || `Column ${i + 1}`;
+          colSel.append(o);
+        });
+        syncMode();
+      },
+      error: () => {
+        colWrap.hidden = true;
+      },
+    });
+  }
+
+  /** Read the file again and hand back one CSV string per value in one column. */
+  function splitByValue(f: File, column: number, bom: boolean): Promise<{ parts: { value: string; csv: string }[]; rows: number }> {
+    return new Promise((resolve, reject) => {
+      const parts: { value: string; csv: string }[] = [];
+      let dataRows = 0;
+      let first = true;
+      const splitter = makeValueSplitter({
+        column,
+        onPart: (value, csv) => {
+          status.textContent = `Writing ${value || 'blank'}...`;
+          parts.push({ value, csv });
+        },
+      });
+      Papa.parse<string[]>(f as unknown as string, {
+        skipEmptyLines: true,
+        chunk: (res) => {
+          const data = res.data as string[][];
+          for (const row of data) {
+            if (header?.checked && first) {
+              const cell = row[0] ?? '';
+              if (cell.charCodeAt(0) === 0xfeff) row[0] = cell.slice(1);
+              first = false;
+              continue;
+            }
+            first = false;
+            if (!(row.length === 1 && (row[0] ?? '') === '')) dataRows++;
+          }
+          splitter.push(data);
+        },
+        complete: () => {
+          splitter.end();
+          resolve({ parts, rows: dataRows });
+        },
+        error: (e: unknown) => reject(e),
+      });
+    });
   }
 
   async function hasBom(f: File): Promise<boolean> {
@@ -265,27 +341,38 @@ const merge = tool === 'csv-merge';
 
     try {
       const bom = await hasBom(f);
-      let per: number;
-      if (mode() === 'files') {
-        status.textContent = 'Counting rows...';
-        const total = await countRows(f);
-        per = rowsPerPartFor(total, Math.max(1, Number(files.value) || 2));
+      const base = baseName(f.name);
+      let out: { name: string; data: Blob }[];
+      let dataRows: number;
+      if (mode() === 'column') {
+        const column = Math.max(0, Number(colSel?.value) || 0);
+        const res = await splitByValue(f, column, bom);
+        dataRows = res.rows;
+        out = res.parts.map((p) => ({
+          name: valuePartName(base, p.value),
+          data: new Blob([(bom ? BOM_CHAR : '') + p.csv], { type: 'text/csv' }),
+        }));
       } else {
-        per = Math.max(1, Math.floor(Number(rows.value) || 100000));
+        let per: number;
+        if (mode() === 'files') {
+          status.textContent = 'Counting rows...';
+          const total = await countRows(f);
+          per = rowsPerPartFor(total, Math.max(1, Number(files.value) || 2));
+        } else {
+          per = Math.max(1, Math.floor(Number(rows.value) || 100000));
+        }
+        const { parts, rows: n } = await splitFile(f, per, bom);
+        dataRows = n;
+        out = parts.map((csv, i) => ({
+          name: partName(base, i + 1, parts.length),
+          data: new Blob([csv], { type: 'text/csv' }),
+        }));
       }
-
-      const { parts, rows: dataRows } = await splitFile(f, per, bom);
-      if (!parts.length) {
+      if (!out.length) {
         err.textContent = 'No rows were found in that file.';
         err.hidden = false;
         return;
       }
-
-      const base = baseName(f.name);
-      const out = parts.map((csv, i) => ({
-        name: partName(base, i + 1, parts.length),
-        data: new Blob([csv], { type: 'text/csv' }),
-      }));
 
       let again: () => void;
       let line: string;
@@ -303,8 +390,11 @@ const merge = tool === 'csv-merge';
       status.textContent = `${dataRows} rows into ${out.length} file${out.length === 1 ? '' : 's'}.`;
       again();
       showDone({ el: doneEl, slug: root.dataset.slug!, line, again, result });
-    } catch {
-      err.textContent = 'That file could not be read as CSV.';
+    } catch (e) {
+      err.textContent =
+        e instanceof Error && e.message.startsWith('That column has')
+          ? e.message
+          : 'That file could not be read as CSV.';
       err.hidden = false;
     } finally {
       go.disabled = false;

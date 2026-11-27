@@ -1,6 +1,6 @@
 import { describe, test, expect } from 'vitest';
 import Papa from 'papaparse';
-import { partName, makeSplitter, rowsPerPartFor, mergeCsv } from '../src/lib/csvfiles';
+import { partName, makeSplitter, makeValueSplitter, valuePartName, rowsPerPartFor, mergeCsv } from '../src/lib/csvfiles';
 
 function split(rows: string[][], rowsPerPart: number, header: boolean): string[][] {
   const parts: string[][] = [];
@@ -72,6 +72,71 @@ describe('makeSplitter', () => {
   test('empty rows are skipped', () => {
     const parts = split([['a'], [''], ['1'], ['']], 10, true);
     expect(parts[0]).toEqual([['a'], ['1']]);
+  });
+});
+
+describe('makeValueSplitter', () => {
+  function byValue(rows: string[][], column: number): Map<string, string[][]> {
+    const parts = new Map<string, string[][]>();
+    const s = makeValueSplitter({
+      column,
+      onPart: (value, csv) => parts.set(value, Papa.parse(csv).data as string[][]),
+    });
+    s.push(rows);
+    s.end();
+    return parts;
+  }
+
+  test('three values give three parts, each with the header', () => {
+    const parts = byValue(
+      [
+        ['name', 'month', 'total'],
+        ['Ann', 'May', '1'],
+        ['Ben', 'June', '2'],
+        ['Cat', 'May', '3'],
+      ],
+      1,
+    );
+    expect([...parts.keys()]).toEqual(['May', 'June']);
+    expect(parts.get('May')).toEqual([
+      ['name', 'month', 'total'],
+      ['Ann', 'May', '1'],
+      ['Cat', 'May', '3'],
+    ]);
+    expect(parts.get('June')).toEqual([
+      ['name', 'month', 'total'],
+      ['Ben', 'June', '2'],
+    ]);
+  });
+
+  test('a quoted cell with a comma stays whole', () => {
+    const parts = byValue(
+      [
+        ['name', 'city'],
+        ['Ann', 'Oslo, Norway'],
+        ['Ben', 'Oslo, Norway'],
+      ],
+      1,
+    );
+    expect(parts.get('Oslo, Norway')).toEqual([
+      ['name', 'city'],
+      ['Ann', 'Oslo, Norway'],
+      ['Ben', 'Oslo, Norway'],
+    ]);
+  });
+
+  test('more than 500 different values throws', () => {
+    const rows = [['id', 'group'], ...Array.from({ length: 501 }, (_, i) => [String(i), `g${i}`])];
+    const s = makeValueSplitter({ column: 1, onPart: () => {} });
+    expect(() => s.push(rows)).toThrow('That column has more than 500 different values.');
+  });
+});
+
+describe('valuePartName', () => {
+  test('cleans unsafe characters and falls back to blank', () => {
+    expect(valuePartName('sales', 'A/B')).toBe('sales-A-B.csv');
+    expect(valuePartName('sales', '')).toBe('sales-blank.csv');
+    expect(valuePartName('sales', '  x  ')).toBe('sales-x.csv');
   });
 });
 

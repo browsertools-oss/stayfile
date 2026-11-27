@@ -3419,19 +3419,20 @@ export const PAGES: ToolPage[] = [
     blurb: 'Cut a big CSV into parts, header repeated',
     title: 'Split a CSV file into smaller files, header in each',
     h1: 'Split a large CSV file',
-    lede: 'This page cuts a CSV file into smaller files of a set number of rows, or into a set number of files, with the header row repeated in each one. Excel stops at 1,048,576 rows, so a bigger file has to be split before it opens fully; the file is read in your browser and never uploaded.',
-    description: 'Split a large CSV into smaller files by row count or file count, with the header row repeated in every part. Nothing is uploaded.',
+    lede: 'This page cuts a CSV file into smaller files of a set number of rows, into a set number of files, or into one file per value in a column, with the header row repeated in each one. Excel stops at 1,048,576 rows, so a bigger file has to be split before it opens fully; the file is read in your browser and never uploaded.',
+    description: 'Split a large CSV into smaller files by row count, file count or a column value, with the header row repeated in every part. Nothing is uploaded.',
     more: {
       h2: 'How big a file it takes',
       paras: [
         'The file is read in pieces, not all at once, so there is no set size or part limit on the input. The finished parts are held in the browser memory until you save them, though, so a file of several hundred MB can fail on a phone or a small laptop. Split that one on a computer with more memory, or cut it in two with a text editor first.',
         'Quoted cells with commas or line breaks stay in one row, because the file is parsed as CSV rather than split on newlines. Each part breaks between rows, so no row is cut in half.',
-        'The part names follow the original: data.csv becomes data-part-1.csv, data-part-2.csv and so on, padded to the same width when there are ten or more. With several parts you get one zip file to download. If the file has no header row, untick the box and every part starts with data.',
+        'The part names follow the original: data.csv becomes data-part-1.csv, data-part-2.csv and so on, padded to the same width when there are ten or more. With one file per value, each part is named after its value instead, such as sales-May.csv. With several parts you get one zip file to download. If the file has no header row, untick the box and every part starts with data.',
       ],
     },
     steps: [
       'Drop one CSV file.',
-      'Choose rows per file, or the number of files.',
+      'Choose rows per file, the number of files, or One file per value.',
+      'To get one file per customer or month, pick One file per value and the column.',
       'Tick the header box if the first row is a header.',
       'Split and save the parts.',
     ],
@@ -3451,6 +3452,10 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Can I join the parts again?',
         a: 'Yes. Save the parts, then drop them on the Merge CSV page and it writes them back into one file with a single header row.',
+      },
+      {
+        q: 'Can I split by a column, one file per customer?',
+        a: 'Yes. Pick One file per value and choose the column. Every row with the same value goes into one file named after it, with the header on top. Up to 500 different values.',
       },
       PRIVATE,
     ],

@@ -57,6 +57,52 @@ export function makeSplitter(o: {
   };
 }
 
+/**
+ * Collects parsed rows and hands out one CSV string per distinct value in a
+ * column. The first non-empty row is the header and goes on top of every part.
+ */
+export function makeValueSplitter(o: {
+  column: number;
+  onPart: (value: string, csv: string) => void;
+}): Splitter {
+  let header: string[] | null = null;
+  const groups = new Map<string, string[][]>();
+
+  const isEmpty = (r: string[]) => r.length === 0 || (r.length === 1 && (r[0] ?? '') === '');
+
+  return {
+    push(rows: string[][]) {
+      for (const row of rows) {
+        if (isEmpty(row)) continue;
+        if (!header) {
+          header = row;
+          continue;
+        }
+        const value = row[o.column] ?? '';
+        const group = groups.get(value);
+        if (group) {
+          group.push(row);
+        } else {
+          if (groups.size >= 500) throw new Error('That column has more than 500 different values.');
+          groups.set(value, [row]);
+        }
+      }
+    },
+    end() {
+      if (!header) return;
+      for (const [value, rows] of groups) {
+        o.onPart(value, Papa.unparse([header, ...rows], { newline: '\r\n' }));
+      }
+    },
+  };
+}
+
+/** sales-A-B.csv for "A/B": unsafe characters become -, trimmed, cut to 60, empty is blank. */
+export function valuePartName(base: string, value: string): string {
+  const clean = value.replace(/[/\\:*?"<>|\x00-\x1f\x7f]/g, '-').trim().slice(0, 60);
+  return `${base}-${clean || 'blank'}.csv`;
+}
+
 /** The rows for each file when a row count is split into a set number of files. */
 export function rowsPerPartFor(total: number, files: number): number {
   const n = files > 0 ? Math.ceil(total / files) : total;
