@@ -2,6 +2,10 @@
 
 One dated entry per agent run.
 
+11-26-2026 (Weekly plan, replan): The boss (Opus) rewrote ops/week-plan.md for 11-27-2026 morning to 11-29-2026 evening (6 runs), following the CEO's 11-26 order (new Chat exports group, WhatsApp first; 0 hired workers). Evidence: the 11-26 plan and backlog 1 to 6 were done in two runs (39 and 40 minutes); 42 guides; 100 visitors in 30 days, 20 in the last 7, $0 earned; shared credit $5.08 left; qa 32 open. WhatsApp's help page checked: exports are text plus media, no message limit stated.
+Targets: chat reader with six format tests by 11-27 evening; /whatsapp-chat-to-excel/ and /whatsapp-chat-to-pdf/ live by 11-28 morning; 45 guides by 11-29 evening; qa 32 closed by 11-27 evening.
+Top three items: (1) qa 32, split CSV by column value, src/lib/whatsapp.ts with tests (row 1); (2) the Chat exports group with /whatsapp-chat-to-excel/ (row 2); (3) /whatsapp-chat-to-pdf/ through the browser's print dialog, not pdf-lib, whose standard fonts can't draw emoji or non-Latin text (row 2). Cut: pdf-lib chat download, Telegram, chat statistics, more older-topic guides, Pro, hire requests.
+
 2026-11-26 (ops run, evening, 18:48 Pacific / 11-27 02:48 UTC): Checked first. npm test passed (359 tests) and npm run build passed (134 pages) at the start; the run ends at 385 tests and 145 pages, guides 42.
 Row 2 was already DONE, so I took row 3 and kept going down the table. Row 3: the Fitness files group (Group type, GROUPS, GROUP_ID, GROUP_SHORT, PAGES block, the fit- family and heading in ToolPage.astro, the guides topic, silhouette) with /strava-archive-to-gpx/ (e506329), then the new src/components/FitnessTool.astro and /fit-to-gpx/ (e0520bf).
 Row 4: /fit-gz-to-fit/ with the "Can I get FIT files instead?" FAQ on the Strava page (01d2fc9), then /garmin-export-to-gpx/ reading inner zips with fflate unzipSync and a Save as GPX or FIT radio (f131c80). Row 5: /fit-to-csv/ with Papa and withBom, one row per point, shown as "N rows, columns: ..." (aaed8e2).
