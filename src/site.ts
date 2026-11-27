@@ -52,7 +52,8 @@ export type Tool =
   | 'json-to-yaml'
   | 'fit-strava'
   | 'fit-gpx'
-  | 'fit-gz';
+  | 'fit-gz'
+  | 'fit-garmin';
 
 export type Group = 'PDF' | 'Images' | 'Spreadsheets and data' | 'Fitness files';
 
@@ -3618,6 +3619,47 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Is this made by Strava or Garmin?',
         a: 'No. Stayfile is not affiliated with Strava or Garmin. The page reads the archive file that Strava lets you download from your account, and the files it saves are the ones inside it.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'garmin-export-to-gpx',
+    tool: 'fit-garmin',
+    group: 'Fitness files',
+    card: 'Garmin export to GPX',
+    blurb: 'Get every activity out of a Garmin data export',
+    title: 'Get the FIT and GPX files out of a Garmin data export',
+    h1: 'Get your activities out of a Garmin data export',
+    lede: 'The export zip Garmin sends hides the activity FIT files inside more zips in the DI_CONNECT folder. Drop the whole export and get every activity as GPX or as FIT files in one zip, on your device.',
+    description: 'Open a Garmin data export and get every activity out as GPX or FIT files in one zip. The FIT files hide in inner zips; this page finds them on your device.',
+    more: {
+      h2: 'Where the activity files are in the export',
+      paras: [
+        'Garmin does not put the activities at the top of the zip. They sit in a DI_CONNECT folder, in subfolders, and the FIT files are packed into more zip files under a folder with Uploaded in its name.',
+        'This page reads the outer zip in pieces, finds those inner zips, and opens each one in memory while it is read. The FIT files go through the same converter as the other fitness pages, or come out unchanged when you pick Save the FIT files.',
+        'An export also holds JSON files about health, sleep and the account. They are left alone; only the activity FIT files are read.',
+        'The results are named after the FIT files, which carry the date and time of each activity. Upload them to Garmin Connect or another app at your own pace.',
+      ],
+    },
+    steps: [
+      "Request the export from Garmin's account data page and download the zip when the email arrives.",
+      'Drop the whole zip on this page.',
+      'Pick Save as GPX or Save the FIT files.',
+      'Press Save and keep garmin-gpx.zip or garmin-fit.zip.',
+    ],
+    faq: [
+      {
+        q: "Why can't I find my activities in the export?",
+        a: 'Garmin keeps them inside inner zip files in the DI_CONNECT folder, not at the top level. Drop the whole export zip here and this page looks through it for you.',
+      },
+      {
+        q: 'Does it read health data like sleep or steps?',
+        a: 'No. It reads only the activity FIT files. The JSON files about sleep, steps and the account are skipped.',
+      },
+      {
+        q: 'Is this made by Garmin?',
+        a: 'No. Stayfile is not affiliated with Garmin. The page reads the export file that Garmin lets you download from your account.',
       },
       PRIVATE,
     ],

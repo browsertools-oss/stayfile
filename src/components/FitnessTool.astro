@@ -7,6 +7,7 @@ const { tool, slug } = Astro.props;
 const strava = tool === 'fit-strava';
 const fitGpx = tool === 'fit-gpx';
 const fitGz = tool === 'fit-gz';
+const fitGarmin = tool === 'fit-garmin';
 ---
 
 <section class="tool" data-tool={tool} data-slug={slug}>
@@ -17,6 +18,9 @@ const fitGz = tool === 'fit-gz';
   {fitGpx && (
     <Drop accept=".fit,.gz,.tcx" multiple main="Drop FIT files here, or <u>choose files</u>" sub="FIT, .fit.gz and TCX files" />
   )}
+  {fitGarmin && (
+    <Drop accept=".zip,application/zip" main="Drop your Garmin export zip here, or <u>choose it</u>" sub="The zip from Garmin's Export Your Data" />
+  )}
 
   {strava && (
     <div class="opts" id="opts" hidden>
@@ -26,9 +30,17 @@ const fitGz = tool === 'fit-gz';
       <label><input type="checkbox" id="extras" checked /> Include heart rate and cadence</label>
     </div>
   )}
+  {fitGarmin && (
+    <div class="opts" id="opts" hidden>
+      <div class="seg" role="radiogroup" aria-label="What to save">
+        <label><input type="radio" name="mode" value="gpx" checked /><span>Save as GPX</span></label>
+        <label><input type="radio" name="mode" value="fit" /><span>Save the FIT files</span></label>
+      </div>
+    </div>
+  )}
 
   <div class="actions" id="actions" hidden>
-    <button type="button" class="primary" id="go" disabled>{fitGz ? 'Unpack' : 'Convert to GPX'}</button>
+    <button type="button" class="primary" id="go" disabled>{fitGarmin ? 'Save' : fitGz ? 'Unpack' : 'Convert to GPX'}</button>
     <span class="status" id="status" aria-live="polite"></span>
   </div>
 
@@ -39,8 +51,9 @@ const fitGz = tool === 'fit-gz';
 <script>
   import { save, baseName } from '../lib/save';
   import { showDone, hideDone } from '../lib/done';
+  import { unzipSync } from 'fflate';
   import { fileSource, listZip, readEntry, zipWriter } from '../lib/zipread';
-  import { readActivitiesCsv, isActivityPath, outName, convert, unpack, type ActivityInfo } from '../lib/fitness';
+  import { readActivitiesCsv, isActivityPath, outName, convert, unpack, garminFitPaths, type ActivityInfo } from '../lib/fitness';
 
   const root = document.querySelector<HTMLElement>('.tool')!;
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
@@ -54,6 +67,7 @@ const fitGz = tool === 'fit-gz';
   const extras = $<HTMLInputElement>('extras');
   const strava = root.dataset.tool === 'fit-strava';
   const fitGz = root.dataset.tool === 'fit-gz';
+  const fitGarmin = root.dataset.tool === 'fit-garmin';
 
   const MAX_ENTRY = 100 * 1024 * 1024;
   let picked: File[] = [];
@@ -335,5 +349,90 @@ const fitGz = tool === 'fit-gz';
     }
   }
 
-  go.addEventListener('click', () => { if (strava) doConvert(); else if (fitGz) doFitGz(); else doFitGpx(); });
+  /** Open a Garmin export and pull the activity FIT files out of its inner zips. */
+  async function doGarmin() {
+    if (!picked.length) return;
+    go.disabled = true;
+    err.hidden = true;
+    status.textContent = 'Reading the export...';
+    try {
+      const src = fileSource(picked[0]);
+      const entries = await listZip(src);
+      const byName = new Map(entries.map((e) => [e.name, e]));
+      const { fits, inner } = garminFitPaths(entries);
+      const wantFit = (document.querySelector<HTMLInputElement>('input[name="mode"]:checked')?.value ?? 'gpx') === 'fit';
+      const w = zipWriter();
+      let saved = 0, noGps = 0, bad = 0;
+      const jobs: { path: string; bytes: Uint8Array }[] = [];
+
+      for (const name of fits) {
+        const e = byName.get(name);
+        if (!e) continue;
+        if (e.size > MAX_ENTRY) { bad++; continue; }
+        try { jobs.push({ path: name, bytes: await readEntry(src, e) }); } catch { bad++; }
+      }
+
+      for (let i = 0; i < inner.length; i++) {
+        status.textContent = `Opening part ${i + 1} of ${inner.length}...`;
+        const e = byName.get(inner[i]);
+        if (!e) continue;
+        if (e.size > MAX_ENTRY) { bad++; continue; }
+        let z: Record<string, Uint8Array>;
+        try { z = unzipSync(await readEntry(src, e)); } catch { bad++; continue; }
+        for (const [k, v] of Object.entries(z)) {
+          if (k.endsWith('/') || !/\.fit$/i.test(k)) continue;
+          jobs.push({ path: k, bytes: v });
+        }
+      }
+
+      if (!jobs.length) {
+        status.textContent = '';
+        err.textContent = 'No activity FIT files were found in that export.' + skipLine(0, bad);
+        err.hidden = false;
+        return;
+      }
+
+      for (let n = 0; n < jobs.length; n++) {
+        const job = jobs[n];
+        status.textContent = `Reading activity ${n + 1} of ${jobs.length}...`;
+        const base = baseName(job.path);
+        if (wantFit) {
+          w.add(`${base}.fit`, job.bytes);
+          saved++;
+          continue;
+        }
+        const r = convert(job.path, job.bytes, { extras: true });
+        if (!r.gpx) { if (r.skip === 'no-gps') noGps++; else bad++; continue; }
+        w.add(`${base}.gpx`, new TextEncoder().encode(r.gpx));
+        saved++;
+      }
+
+      if (!saved) {
+        status.textContent = '';
+        err.textContent = 'No activities with a GPS track were found.' + skipLine(noGps, bad);
+        err.hidden = false;
+        return;
+      }
+      const blob = w.finish();
+      const name = wantFit ? 'garmin-fit.zip' : 'garmin-gpx.zip';
+      const again = () => save(blob, name, 'application/zip');
+      const line = summary(saved, noGps, bad);
+      save(blob, name, 'application/zip');
+      status.textContent = line;
+      showDone({ el: doneEl, slug: root.dataset.slug!, line, again });
+    } catch {
+      status.textContent = '';
+      err.textContent = 'That file could not be read as a zip archive.';
+      err.hidden = false;
+    } finally {
+      go.disabled = picked.length === 0;
+    }
+  }
+
+  go.addEventListener('click', () => {
+    if (strava) doConvert();
+    else if (fitGarmin) doGarmin();
+    else if (fitGz) doFitGz();
+    else doFitGpx();
+  });
 </script>
