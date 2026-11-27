@@ -1,0 +1,53 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = "What's in your Strava archive, and how to open it";
+const description = 'The bulk export from Strava holds activities.csv and an activities folder of .fit.gz, GPX and TCX files. What each one is and how to open it.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-26',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/strava-archive-whats-inside/" jsonld={jsonld}>
+  <h1>What's in your Strava archive, and how to open it</h1>
+  <p class="lede">The bulk export from Strava is one zip file holding every activity you have recorded, a spreadsheet of the details, and the original files from your watch or phone. This guide shows where to request it, what each part is for, and how to open the activity files.</p>
+
+  <h2>Request the archive from your account</h2>
+  <p>The export is made from the Strava website, not the phone app. Sign in on strava.com, open Settings, then My Account, and find the section called Download or Delete Your Account. Under it, Request Your Archive starts the job. Menu names can differ a little between app versions.</p>
+  <p>Strava then emails you a link to a zip file. The email can take a while, from a short wait for a small account to much longer for one with years of activities and posted photos. When it arrives, download the zip and keep it somewhere you can find again, because the link can expire.</p>
+
+  <h2>What is inside the zip</h2>
+  <p>Unzip the download and you find three main parts. One is activities.csv, a spreadsheet with one row per activity. One is an activities folder holding the recorded file for each activity. The rest is more CSV files about the account, such as the profile and the follower list, plus a media folder when you have posted photos with activities.</p>
+  <p>The activities folder is the part most people are after. It is also the part that is easiest to misunderstand, because the files inside are not all the same kind.</p>
+
+  <h2>What activities.csv holds</h2>
+  <p>Open activities.csv in a spreadsheet and each row is one activity. The columns include the activity id, its date, its name, its type such as Run or Ride, the distance, and the file name in the activities folder. Some of the summary numbers can be Strava's own estimates rather than values from the recording device, so treat the file as a summary and not as the raw data.</p>
+  <p>The file name column is the useful one when you want to match a row to a file. It looks like activities/1234567890.fit.gz, and the number in the middle is the same activity id as the first column. That makes it possible to sort the folder by date even when the file names themselves are only numbers.</p>
+
+  <h2>Why the activity files end in .fit.gz</h2>
+  <p>Most watches and bike computers record in FIT, a small binary format, and the archive stores those files with gzip compression, which adds .gz to the name. A Mac opens a .gz file with a double click. Windows File Explorer may not open one on its own, and a free archive tool handles it. The compressed file is not damaged; the FIT file is simply packed inside, and the .gz step adds no data of its own.</p>
+  <p>The archive once held GPX files for every activity. Now you get the original file in the format the device recorded: .fit.gz from most watches and bike computers, and .gpx or .tcx, sometimes .tcx.gz, from apps and phones. The original keeps more than a converted GPX would, such as laps, power and the device details.</p>
+
+  <h2>Turn the whole archive into GPX</h2>
+  <p>If you want the activities as GPX for a map, a route planner or another training app, <a href="/strava-archive-to-gpx/">Strava archive to GPX</a> takes the zip as it came. Drop it on the page and every activity with a GPS track becomes a GPX file named by date and activity name, saved in one zip. It unpacks the .gz files for you and skips indoor activities, which have no track, counting them at the end.</p>
+  <p>A menu on that page lists the activity types found in the CSV, so you can convert only rides or only runs when that is all you need. The page reads the archive in pieces on your own computer, so a large export with years of photos does not have to fit in memory at once.</p>
+
+  <h2>Unpack the files for Garmin Connect</h2>
+  <p>Garmin Connect's import page takes .fit, .gpx and .tcx activity files, not the .gz files in a Strava archive. <a href="/fit-gz-to-fit/">.fit.gz to FIT</a> unpacks every activity into a plain file named by date and activity, in one zip. The FIT bytes are not changed; only the .gz wrapper is removed. You can then upload the .fit files to Garmin Connect in batches.</p>
+  <p>FIT keeps the most data, so it is the best of the three to upload when the activity started on a Garmin device.</p>
+
+  <h2>Open one activity in detail</h2>
+  <p>For a single activity, <a href="/fit-to-csv/">FIT to CSV</a> writes one row per recorded point with time, position, altitude, heart rate, cadence, distance, speed, power and temperature where the file has them. The CSV opens in Excel and the times are in UTC. <a href="/fit-to-gpx/">FIT to GPX</a> does the same job for a map: drop a FIT file or a .fit.gz file and get a GPX back. It reads TCX files from apps too.</p>
+
+  <h2>The summary in Excel</h2>
+  <p>To look at the whole history in a spreadsheet, open activities.csv directly. It can land in one column if your spreadsheet reads the separator wrongly; <a href="/guides/csv-opens-in-one-column-in-excel/">Why a CSV opens in one column in Excel</a> covers the fix, which is the From Text/CSV import rather than a double click.</p>
+  <p>Keep the original zip. The CSV is a summary and the activity files are the record, and both are worth keeping if you move between training apps later.</p>
+  <p>See also: <a href="/guides/csv-opens-in-one-column-in-excel/">Why a CSV opens in one column in Excel</a> and the guide to <a href="/fit-gz-to-fit/">.fit.gz files for Garmin Connect</a>.</p>
+</Base>

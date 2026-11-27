@@ -3501,6 +3501,7 @@ export const PAGES: ToolPage[] = [
     slug: 'strava-archive-to-gpx',
     tool: 'fit-strava',
     group: 'Fitness files',
+    guide: 'strava-archive-whats-inside',
     card: 'Strava archive to GPX',
     blurb: 'Every activity in your export as a GPX file',
     title: 'Convert a Strava archive to GPX files, all at once',
@@ -3930,5 +3931,11 @@ export const GUIDES: { slug: string; title: string; blurb: string; topic: string
     topic: 'Photos and images',
     title: 'Why a photo shows sideways after upload, and how to fix it',
     blurb: 'A rotation tag tells viewers how to turn a phone photo. Programs that ignore it show it sideways, and removing metadata can drop it.',
+  },
+  {
+    slug: 'strava-archive-whats-inside',
+    topic: 'Fitness files',
+    title: "What's in your Strava archive, and how to open it",
+    blurb: 'What the zip holds, what .fit.gz means, and how to open the activity files.',
   },
 ];
