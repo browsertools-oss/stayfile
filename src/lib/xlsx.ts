@@ -11,6 +11,15 @@ export function csvToXlsx(text: string, o: CsvOptions & { sheetName?: string } =
   return new Uint8Array(XLSX.write(wb, { type: 'array', bookType: 'xlsx', compression: true }) as ArrayBuffer);
 }
 
+/** One-sheet .xlsx from rows in memory. Strings stay text, so a message like =1+1 is not a formula. */
+export function rowsToXlsx(rows: string[][], sheetName = 'Chat', widths?: number[]): Uint8Array {
+  const ws = XLSX.utils.aoa_to_sheet(rows as unknown[][]);
+  if (widths) ws['!cols'] = widths.map((wch) => ({ wch }));
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, sheetName.replace(/[\\/?*[\]:]/g, ' ').slice(0, 31));
+  return new Uint8Array(XLSX.write(wb, { type: 'array', bookType: 'xlsx', compression: true }) as ArrayBuffer);
+}
+
 /** One sheet of an .xlsx as CSV text (the named sheet when it exists, else the first), plus every sheet name. */
 export function xlsxToCsv(bytes: Uint8Array, sheet?: string): { csv: string; sheets: string[] } {
   let wb: XLSX.WorkBook;
