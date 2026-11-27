@@ -8,6 +8,7 @@ const strava = tool === 'fit-strava';
 const fitGpx = tool === 'fit-gpx';
 const fitGz = tool === 'fit-gz';
 const fitGarmin = tool === 'fit-garmin';
+const fitCsv = tool === 'fit-csv';
 ---
 
 <section class="tool" data-tool={tool} data-slug={slug}>
@@ -20,6 +21,9 @@ const fitGarmin = tool === 'fit-garmin';
   )}
   {fitGarmin && (
     <Drop accept=".zip,application/zip" main="Drop your Garmin export zip here, or <u>choose it</u>" sub="The zip from Garmin's Export Your Data" />
+  )}
+  {fitCsv && (
+    <Drop accept=".fit,.gz" multiple main="Drop FIT files here, or <u>choose files</u>" sub="FIT and .fit.gz files" />
   )}
 
   {strava && (
@@ -40,7 +44,7 @@ const fitGarmin = tool === 'fit-garmin';
   )}
 
   <div class="actions" id="actions" hidden>
-    <button type="button" class="primary" id="go" disabled>{fitGarmin ? 'Save' : fitGz ? 'Unpack' : 'Convert to GPX'}</button>
+    <button type="button" class="primary" id="go" disabled>{fitCsv ? 'Convert to CSV' : fitGarmin ? 'Save' : fitGz ? 'Unpack' : 'Convert to GPX'}</button>
     <span class="status" id="status" aria-live="polite"></span>
   </div>
 
@@ -49,11 +53,13 @@ const fitGarmin = tool === 'fit-garmin';
 </section>
 
 <script>
-  import { save, baseName } from '../lib/save';
   import { showDone, hideDone } from '../lib/done';
+  import Papa from 'papaparse';
   import { unzipSync } from 'fflate';
+  import { save, baseName, withBom } from '../lib/save';
   import { fileSource, listZip, readEntry, zipWriter } from '../lib/zipread';
   import { readActivitiesCsv, isActivityPath, outName, convert, unpack, garminFitPaths, type ActivityInfo } from '../lib/fitness';
+  import { readFit, fitToCsvRows } from '../lib/fit';
 
   const root = document.querySelector<HTMLElement>('.tool')!;
   const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
@@ -68,6 +74,7 @@ const fitGarmin = tool === 'fit-garmin';
   const strava = root.dataset.tool === 'fit-strava';
   const fitGz = root.dataset.tool === 'fit-gz';
   const fitGarmin = root.dataset.tool === 'fit-garmin';
+  const fitCsv = root.dataset.tool === 'fit-csv';
 
   const MAX_ENTRY = 100 * 1024 * 1024;
   let picked: File[] = [];
@@ -429,10 +436,69 @@ const fitGarmin = tool === 'fit-garmin';
     }
   }
 
+  /** One row per recorded FIT point, as a CSV for Excel. */
+  async function doFitCsv() {
+    if (!picked.length) return;
+    go.disabled = true;
+    err.hidden = true;
+    status.textContent = '';
+    try {
+      const outs: { name: string; data: string }[] = [];
+      let bad = 0, singleInfo = '';
+      for (let i = 0; i < picked.length; i++) {
+        const f = picked[i];
+        status.textContent = `Reading file ${i + 1} of ${picked.length}...`;
+        let bytes: Uint8Array;
+        try { bytes = new Uint8Array(await f.arrayBuffer()); } catch { bad++; continue; }
+        let u: { path: string; bytes: Uint8Array };
+        try { u = unpack(f.name, bytes); } catch { bad++; continue; }
+        const rows = fitToCsvRows(readFit(u.bytes));
+        if (rows.length < 2 || rows[0].length === 0) { bad++; continue; }
+        const csv = withBom(Papa.unparse(rows, { newline: '\r\n' }));
+        const base = baseName(baseName(f.name));
+        outs.push({ name: `${base}.csv`, data: csv });
+        singleInfo = `${rows.length - 1} rows, columns: ${rows[0].join(', ')}`;
+      }
+
+      if (!outs.length) {
+        status.textContent = '';
+        err.textContent = 'No FIT records were found in those files.' + skipLine(0, bad);
+        err.hidden = false;
+        return;
+      }
+
+      let line: string;
+      let again: () => void;
+      if (outs.length === 1) {
+        const blob = new Blob([outs[0].data], { type: 'text/csv' });
+        again = () => save(blob, outs[0].name, 'text/csv');
+        line = `Saved ${outs[0].name}. ${singleInfo}`;
+        save(blob, outs[0].name, 'text/csv');
+      } else {
+        const w = zipWriter();
+        const enc = new TextEncoder();
+        for (const o of outs) w.add(o.name, enc.encode(o.data));
+        const blob = w.finish();
+        again = () => save(blob, 'fit-csv.zip', 'application/zip');
+        line = summary(outs.length, 0, bad);
+        save(blob, 'fit-csv.zip', 'application/zip');
+      }
+      status.textContent = line;
+      showDone({ el: doneEl, slug: root.dataset.slug!, line, again });
+    } catch {
+      status.textContent = '';
+      err.textContent = 'Those files could not be read as FIT files.';
+      err.hidden = false;
+    } finally {
+      go.disabled = picked.length === 0;
+    }
+  }
+
   go.addEventListener('click', () => {
     if (strava) doConvert();
     else if (fitGarmin) doGarmin();
     else if (fitGz) doFitGz();
+    else if (fitCsv) doFitCsv();
     else doFitGpx();
   });
 </script>

@@ -102,6 +102,7 @@ export function nextTools(slug: string): Route[] {
   // After a data tool saves a file, offer the next step in the data chain. One click carries the file over.
   const dataNext: Record<string, Route[]> = {
     'split-csv': [{ slug: 'csv-to-excel', label: 'Turn a part into Excel' }],
+    'fit-to-csv': [{ slug: 'csv-to-excel', label: 'Turn it into Excel' }],
     'merge-csv': [{ slug: 'csv-to-excel', label: 'Turn it into Excel' }],
     'csv-to-json': [{ slug: 'json-to-excel', label: 'Open it in Excel' }, { slug: 'json-to-csv', label: 'Convert back to CSV' }],
     'tsv-to-json': [{ slug: 'json-to-excel', label: 'Open it in Excel' }],

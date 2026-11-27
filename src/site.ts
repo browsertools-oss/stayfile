@@ -53,7 +53,8 @@ export type Tool =
   | 'fit-strava'
   | 'fit-gpx'
   | 'fit-gz'
-  | 'fit-garmin';
+  | 'fit-garmin'
+  | 'fit-csv';
 
 export type Group = 'PDF' | 'Images' | 'Spreadsheets and data' | 'Fitness files';
 
@@ -3660,6 +3661,46 @@ export const PAGES: ToolPage[] = [
       {
         q: 'Is this made by Garmin?',
         a: 'No. Stayfile is not affiliated with Garmin. The page reads the export file that Garmin lets you download from your account.',
+      },
+      PRIVATE,
+    ],
+  },
+  {
+    slug: 'fit-to-csv',
+    tool: 'fit-csv',
+    group: 'Fitness files',
+    card: 'FIT to CSV',
+    blurb: 'Every second of an activity in a spreadsheet',
+    title: 'Convert a FIT file to CSV for Excel, no upload',
+    h1: 'Convert a FIT file to CSV',
+    lede: 'This page writes one row per recorded point with time, position, altitude, heart rate, cadence, distance, speed, power and temperature where the file has them. The CSV opens in Excel, and the work happens on your device.',
+    description: 'Turn a FIT file into a CSV with one row per recorded point: time, position, altitude, heart rate, cadence, distance, speed, power and temperature.',
+    more: {
+      h2: 'The columns in the CSV',
+      paras: [
+        'Each row is one recorded point, usually one per second. The columns follow the order in the FIT file: time, latitude, longitude, altitude_m, heart_rate, cadence, distance_m, speed_m_s, power_w and temperature_c.',
+        'A column only appears when at least one point has a value for it, so an activity without a power meter gives a shorter header. Altitude and distance are in metres, speed in metres per second, power in watts and temperature in Celsius. Heart rate is in beats per minute and cadence in revolutions per minute.',
+        'Times are written as UTC, which is how the FIT file stores them, so they can look a few hours off from the clock on your watch. The CSV is saved as UTF-8 with the marker Excel needs, so a double click opens it in the right columns.',
+        'Laps and device settings are not part of this table. It holds the recorded points and nothing else.',
+      ],
+    },
+    steps: [
+      'Drop one or more FIT or .fit.gz files.',
+      'Press Convert to CSV.',
+      'Open the .csv in Excel, or unzip fit-csv.zip when you converted several.',
+    ],
+    faq: [
+      {
+        q: 'Why are the times off by some hours?',
+        a: 'The times are in UTC, the time zone the FIT file records them in. Your spreadsheet shows the same clock time, so it can look a few hours away from your local time. Add or subtract your offset in the spreadsheet if you need local times.',
+      },
+      {
+        q: 'Can I convert many files?',
+        a: 'Yes. Drop as many as you like. One file saves as a .csv; several arrive in fit-csv.zip.',
+      },
+      {
+        q: 'Will Excel open it?',
+        a: 'Yes. The file is saved as UTF-8 with the marker Excel needs, so a double click opens it in the right columns. To turn it into an .xlsx workbook instead, use /csv-to-excel/.',
       },
       PRIVATE,
     ],
