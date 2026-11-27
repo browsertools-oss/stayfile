@@ -1,0 +1,224 @@
+---
+import Drop from './Drop.astro';
+import type { Tool } from '../site';
+
+interface Props { tool: Tool; slug: string }
+const { tool, slug } = Astro.props;
+const strava = tool === 'fit-strava';
+---
+
+<section class="tool" data-tool={tool} data-slug={slug}>
+  <ul class="files" id="list"></ul>
+  {strava && (
+    <Drop accept=".zip,.fit,.gz,.tcx,.gpx,.csv,application/zip" multiple main="Drop your Strava export zip here, or <u>choose it</u>" sub="The zip Strava emails you, or the files from its activities folder" />
+  )}
+
+  <div class="opts" id="opts" hidden>
+    <label id="typeWrap" hidden>Activity types
+      <select id="type"><option value="all">All types</option></select>
+    </label>
+    <label><input type="checkbox" id="extras" checked /> Include heart rate and cadence</label>
+  </div>
+
+  <div class="actions" id="actions" hidden>
+    <button type="button" class="primary" id="go" disabled>Convert to GPX</button>
+    <span class="status" id="status" aria-live="polite"></span>
+  </div>
+
+  <div class="done" id="done" role="status" hidden></div>
+  <p class="error" id="err" role="alert" hidden></p>
+</section>
+
+<script>
+  import { save } from '../lib/save';
+  import { showDone, hideDone } from '../lib/done';
+  import { fileSource, listZip, readEntry, zipWriter } from '../lib/zipread';
+  import { readActivitiesCsv, isActivityPath, outName, convert, type ActivityInfo } from '../lib/fitness';
+
+  const root = document.querySelector<HTMLElement>('.tool')!;
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T | null;
+  const list = $('list')!;
+  const drop = $('drop')!;
+  const go = $<HTMLButtonElement>('go')!;
+  const opts = $('opts')!, actions = $('actions')!, status = $('status')!;
+  const err = $('err')!, doneEl = $('done')!;
+  const typeSel = $<HTMLSelectElement>('type')!;
+  const typeWrap = $('typeWrap')!;
+  const extras = $<HTMLInputElement>('extras')!;
+
+  const MAX_ENTRY = 100 * 1024 * 1024;
+  let picked: File[] = [];
+
+  type Item = { path: string; info?: ActivityInfo; size: number; read: () => Promise<Uint8Array> };
+
+  function infoFor(map: Map<string, ActivityInfo>, path: string): ActivityInfo | undefined {
+    const lower = path.toLowerCase();
+    const base = lower.split('/').pop() ?? lower;
+    return map.get(lower) ?? map.get('activities/' + base);
+  }
+
+  function renderPicked() {
+    list.innerHTML = '';
+    for (const f of picked) {
+      const li = document.createElement('li');
+      const name = document.createElement('span');
+      name.className = 'name';
+      name.textContent = f.name;
+      li.append(name);
+      list.append(li);
+    }
+    const any = picked.length > 0;
+    opts.hidden = !any;
+    actions.hidden = !any;
+    go.disabled = !any;
+    hideDone(doneEl);
+    err.hidden = true;
+    status.textContent = '';
+  }
+
+  function fillTypes(map: Map<string, ActivityInfo>) {
+    const types = [...new Set([...map.values()].map((v) => v.type).filter((t): t is string => Boolean(t)))].sort();
+    typeSel.innerHTML = '';
+    const all = document.createElement('option');
+    all.value = 'all';
+    all.textContent = 'All types';
+    typeSel.append(all);
+    for (const t of types) {
+      const o = document.createElement('option');
+      o.value = t;
+      o.textContent = t;
+      typeSel.append(o);
+    }
+    typeWrap.hidden = types.length === 0;
+  }
+
+  /** List the activity files in the dropped zip or files, and read activities.csv for names and dates. */
+  async function collect(files: File[]): Promise<{ items: Item[]; infoMap: Map<string, ActivityInfo> }> {
+    const infoMap = new Map<string, ActivityInfo>();
+    const items: Item[] = [];
+    const zips = files.filter((f) => /\.zip$/i.test(f.name) || f.type === 'application/zip');
+    const loose = files.filter((f) => /\.(fit|tcx|gpx)(\.gz)?$/i.test(f.name));
+    const csvFile = files.find((f) => /(^|\/)activities\.csv$/i.test(f.name));
+    let csvSeen = false;
+
+    for (const z of zips) {
+      const src = fileSource(z);
+      const entries = await listZip(src);
+      if (!csvSeen) {
+        const e = entries.find((x) => {
+          const l = x.name.toLowerCase();
+          return l === 'activities.csv' || l.endsWith('/activities.csv');
+        });
+        if (e) {
+          const bytes = await readEntry(src, e);
+          for (const [k, v] of readActivitiesCsv(new TextDecoder().decode(bytes))) infoMap.set(k, v);
+          csvSeen = true;
+        }
+      }
+      for (const e of entries) {
+        if (!isActivityPath(e.name)) continue;
+        items.push({ path: e.name, info: infoFor(infoMap, e.name), size: e.size, read: () => readEntry(src, e) });
+      }
+    }
+
+    if (csvFile) {
+      for (const [k, v] of readActivitiesCsv(await csvFile.text())) {
+        infoMap.set('activities/' + (k.split('/').pop() ?? k), v);
+      }
+      for (const it of items) it.info = infoFor(infoMap, it.path);
+    }
+
+    for (const f of loose) {
+      items.push({
+        path: f.name,
+        info: infoFor(infoMap, f.name),
+        size: f.size,
+        read: async () => new Uint8Array(await f.arrayBuffer()),
+      });
+    }
+    return { items, infoMap };
+  }
+
+  function skipLine(noGps: number, bad: number): string {
+    const parts: string[] = [];
+    if (noGps) parts.push(`${noGps} without a GPS track (indoor activities)`);
+    if (bad) parts.push(`${bad} that could not be read`);
+    return parts.length ? ` Skipped ${parts.join(' and ')}.` : '';
+  }
+
+  function summary(saved: number, noGps: number, bad: number): string {
+    return `Saved ${saved} file${saved === 1 ? '' : 's'}.` + skipLine(noGps, bad);
+  }
+
+  async function doConvert() {
+    if (!picked.length) return;
+    go.disabled = true;
+    err.hidden = true;
+    status.textContent = 'Reading the archive...';
+    try {
+      const { items, infoMap } = await collect(picked);
+      fillTypes(infoMap);
+      const want = typeSel.value;
+      const jobs = items.filter((it) => want === 'all' || it.info?.type === want);
+      if (!jobs.length) {
+        status.textContent = '';
+        err.textContent = 'No activity files were found in those files.';
+        err.hidden = false;
+        return;
+      }
+
+      const outs: { name: string; data: Uint8Array }[] = [];
+      let noGps = 0, bad = 0;
+      for (let i = 0; i < jobs.length; i++) {
+        const it = jobs[i];
+        status.textContent = `Reading activity ${i + 1} of ${jobs.length}...`;
+        if (it.size > MAX_ENTRY) { bad++; continue; }
+        let bytes: Uint8Array;
+        try { bytes = await it.read(); } catch { bad++; continue; }
+        const r = convert(it.path, bytes, { name: it.info?.name, type: it.info?.type, extras: extras.checked });
+        if (!r.gpx) { if (r.skip === 'no-gps') noGps++; else bad++; continue; }
+        outs.push({ name: outName(it.info, it.path, 'gpx'), data: new TextEncoder().encode(r.gpx) });
+      }
+
+      if (!outs.length) {
+        status.textContent = '';
+        err.textContent = 'No activities with a GPS track were found.' + skipLine(noGps, bad);
+        err.hidden = false;
+        return;
+      }
+
+      let line: string;
+      let again: () => void;
+      if (outs.length === 1) {
+        const blob = new Blob([outs[0].data as BlobPart], { type: 'application/gpx+xml' });
+        again = () => save(blob, outs[0].name, 'application/gpx+xml');
+        line = summary(1, noGps, bad);
+        save(blob, outs[0].name, 'application/gpx+xml');
+      } else {
+        const w = zipWriter();
+        for (const o of outs) w.add(o.name, o.data);
+        const blob = w.finish();
+        again = () => save(blob, 'strava-gpx.zip', 'application/zip');
+        line = summary(outs.length, noGps, bad);
+        save(blob, 'strava-gpx.zip', 'application/zip');
+      }
+      status.textContent = line;
+      showDone({ el: doneEl, slug: root.dataset.slug!, line, again });
+    } catch {
+      status.textContent = '';
+      err.textContent = 'That file could not be read as a zip archive.';
+      err.hidden = false;
+    } finally {
+      go.disabled = picked.length === 0;
+    }
+  }
+
+  drop.addEventListener('files', (e) => {
+    const files = [...(e as CustomEvent<File[]>).detail];
+    if (!files.length) return;
+    picked = files;
+    renderPicked();
+  });
+
+  go.addEventListener('click', doConvert);
+</script>

@@ -49,9 +49,10 @@ export type Tool =
   | 'csv-to-yaml'
   | 'csv-to-sql'
   | 'xlsx-to-sql'
-  | 'json-to-yaml';
+  | 'json-to-yaml'
+  | 'fit-strava';
 
-export type Group = 'PDF' | 'Images' | 'Spreadsheets and data';
+export type Group = 'PDF' | 'Images' | 'Spreadsheets and data' | 'Fitness files';
 
 export interface Preset {
   split?: 'extract' | 'ranges' | 'every' | 'remove';
@@ -3491,13 +3492,56 @@ export const PAGES: ToolPage[] = [
       PRIVATE,
     ],
   },
+  // ---------- Fitness files ----------
+  {
+    slug: 'strava-archive-to-gpx',
+    tool: 'fit-strava',
+    group: 'Fitness files',
+    card: 'Strava archive to GPX',
+    blurb: 'Every activity in your export as a GPX file',
+    title: 'Convert a Strava archive to GPX files, all at once',
+    h1: 'Convert your Strava archive to GPX',
+    lede: 'Drop the export zip Strava emails you and every activity becomes a GPX file named by date and activity name, saved in one zip. The archive is read on your device piece by piece and never uploaded, and Stayfile is not affiliated with Strava.',
+    description: 'Turn every activity in a Strava export into a GPX file named by date and name, saved in one zip. Files are read on your device and never uploaded.',
+    more: {
+      h2: 'What the archive holds and what the GPX keeps',
+      paras: [
+        'The Strava export puts each activity in an activities folder, in the format it was recorded. Watch and bike computer files are usually .fit.gz, and activities recorded through an app can be .gpx or .tcx.gz. This page unpacks the .gz step and reads every one of those files.',
+        'The activities.csv file in the export gives each activity a name, a date and a type. The GPX files take their names from it, so the folder you get sorts by date.',
+        'Every activity carries a type in that CSV, such as Run or Ride. The Activity types menu converts just one kind, which is handy when you only want rides for a route app or only runs for a training log.',
+        'A GPX file keeps the track points, their times, elevation, and heart rate and cadence when the checkbox is on. Laps, power and photos are not kept, because GPX has no standard place for them.',
+        'Indoor activities have no GPS track. They are skipped and counted at the end, so you know what was left out and why.',
+      ],
+    },
+    steps: [
+      'Request your archive in your Strava account settings and wait for the email with the download link.',
+      'Drop the zip on this page, or the files from its activities folder.',
+      'Pick an activity type if you only want some of them.',
+      'Press Convert to GPX and save strava-gpx.zip.',
+    ],
+    faq: [
+      {
+        q: 'How big an archive can it take?',
+        a: 'The zip is read in pieces, one activity at a time, so the photos and other files in it are never loaded at once. Archives over 4 GB work for the same reason. The GPX files are built in memory, so the download grows with the number of activities you convert.',
+      },
+      {
+        q: 'Why were some activities skipped?',
+        a: 'A skipped activity had no GPS track, which usually means a treadmill run, a trainer ride or a pool swim recorded without position. The count at the end separates those from files that could not be read at all.',
+      },
+      {
+        q: 'Is this made by Strava?',
+        a: 'No. Stayfile is not affiliated with Strava. The page reads the archive file that Strava lets you download from your account.',
+      },
+      PRIVATE,
+    ],
+  },
 ];
 
-export const GROUPS: Group[] = ['PDF', 'Images', 'Spreadsheets and data'];
+export const GROUPS: Group[] = ['PDF', 'Images', 'Spreadsheets and data', 'Fitness files'];
 
 // Anchor ids on the home page and short labels for the header nav.
-export const GROUP_ID: Record<Group, string> = { PDF: 'pdf', Images: 'images', 'Spreadsheets and data': 'data' };
-export const GROUP_SHORT: Record<Group, string> = { PDF: 'PDF', Images: 'Images', 'Spreadsheets and data': 'Data' };
+export const GROUP_ID: Record<Group, string> = { PDF: 'pdf', Images: 'images', 'Spreadsheets and data': 'data', 'Fitness files': 'fitness' };
+export const GROUP_SHORT: Record<Group, string> = { PDF: 'PDF', Images: 'Images', 'Spreadsheets and data': 'Data', 'Fitness files': 'Fitness' };
 
 // Guides under /guides/. A guide goes in only when it is finished and passes the word-count test.
 export const GUIDES: { slug: string; title: string; blurb: string; topic: string }[] = [
