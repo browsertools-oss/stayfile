@@ -1,0 +1,48 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = "WhatsApp chat as evidence: what a PDF of the export shows and doesn't";
+const description = 'What a WhatsApp export file holds, what it leaves out, and what a PDF made from it can and cannot show. Not legal advice.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-27',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/whatsapp-chat-as-evidence/" jsonld={jsonld}>
+  <h1>WhatsApp chat as evidence: what a PDF of the export shows and doesn't</h1>
+  <p class="lede">This page explains what the file holds. It is not legal advice; a lawyer or the court can tell you what they accept.</p>
+
+  <h2>What the export file holds</h2>
+  <p>WhatsApp can save a chat as a plain text file, plus the photos and other media when you choose to include them. Each message in the text has its date, its time, the sender and the message itself, along with the name of any attachment. That is the whole record: a line of text per message and a list of file names.</p>
+  <p>The sender is the name saved in the contacts of the phone that did the export. When a number is not saved there, the sender is the number instead. The same person can therefore appear under different names in two exports, and a number can appear where a name would be expected.</p>
+  <p>Times are written in the time zone and clock format of the phone that exported the chat. An export made while travelling, or on a phone set to another time zone, carries that clock, not the clock where the messages were first sent.</p>
+
+  <h2>What it does not hold</h2>
+  <p>The file does not record read receipts or the blue ticks, and it does not record delivery times. It has no message IDs. The text of a deleted message is not in the file, only a short notice that a message was deleted. View once messages and disappearing messages are not exported at all, because WhatsApp's help page says they are left out.</p>
+  <p>That means a gap in the file can be a real gap in the conversation, or it can be a message that WhatsApp never wrote down. The export alone does not tell you which. Attachments are named but not always included, depending on the choice made at export time.</p>
+
+  <h2>What a PDF of the export can show</h2>
+  <p>Any text editor can open the export file, and any text editor can change it. A PDF made from the file shows what the file says. It is not, by itself, proof that the messages were sent, because the text it came from can be edited before or after the export.</p>
+  <p>What the PDF does well is make the file readable. The <a href="/whatsapp-chat-to-pdf/">WhatsApp chat to PDF page</a> lays the messages out in date order with each sender, time and message, and shows the photos in place when the export zip has them. Its header names the export file, the message count, the date range and the date the page was made, so the printed copy carries the same details as the file it came from.</p>
+  <p>For a long chat, a PDF is easier to read and to search than a text file, and it keeps the order of the conversation in one place. If you need a table instead, the <a href="/whatsapp-chat-to-excel/">WhatsApp chat to Excel page</a> turns the same export into one row per message with the date, time, sender and text in separate columns.</p>
+
+  <h2>Screenshots or a PDF</h2>
+  <p>A screenshot shows the phone's screen with its colours, its battery icon and its layout. It shows what the screen looked like at that moment, and it is easy to take. The drawback is that a long chat needs many screenshots, the order can be hard to keep, and the text cannot be searched.</p>
+  <p>A PDF of the export is plain text laid out in order. It is easier to read from start to finish and easier to search for a name or a phrase. It does not carry the look of the phone, so it shows the messages rather than the app around them. The two records answer different questions, and it often helps to have both.</p>
+
+  <h2>Keep the original file</h2>
+  <p>Keep the export file exactly as WhatsApp wrote it, next to any PDF you make from it. The PDF is a copy for reading. The original is the record, so leave it unchanged and do not edit it to tidy the layout.</p>
+  <p>Note when you exported the chat and from which phone. That note explains the sender names and the clock in the file, which can otherwise look wrong on a different phone or in another country. Export without a date filter so the file covers the whole chat, because a filtered export can look as if the conversation started later than it did.</p>
+  <p>Keep the phone as well. The export is a copy, and the phone is where the chat itself lives, so a copy without the phone is harder to check. The guide to <a href="/guides/export-whatsapp-chat/">exporting a WhatsApp chat</a> covers the steps on an iPhone, on Android and on the web, including the choice about media.</p>
+
+  <h2>Put the file in order</h2>
+  <p>Start from the export, not from a screenshot. Read the first and last message to see the range the file covers, then check the sender names against the people in the chat. If a name looks unfamiliar, it may be a number that was never saved in the exporting phone's contacts.</p>
+  <p>Keep the PDF and the export together, with the note about when and where the export was made. That set is easier to read, easier to search and easier to explain than a folder of screenshots, and it leaves the original record untouched.</p>
+</Base>

@@ -3764,7 +3764,7 @@ export const PAGES: ToolPage[] = [
     slug: 'whatsapp-chat-to-pdf',
     tool: 'chat-pdf',
     group: 'Chat exports',
-    guide: 'export-whatsapp-chat',
+    guide: ['export-whatsapp-chat', 'whatsapp-chat-as-evidence'],
     card: 'WhatsApp chat to PDF',
     blurb: 'A clean printable copy of a chat, photos included',
     title: 'Save a WhatsApp chat as a PDF, photos included',
@@ -4068,5 +4068,11 @@ export const GUIDES: { slug: string; title: string; blurb: string; topic: string
     topic: 'Chat exports',
     title: 'How to export a WhatsApp chat on iPhone or Android',
     blurb: 'Where the Export chat option is, what the file holds, and how to open it as a spreadsheet or a PDF.',
+  },
+  {
+    slug: 'whatsapp-chat-as-evidence',
+    topic: 'Chat exports',
+    title: "WhatsApp chat as evidence: what a PDF shows and doesn't",
+    blurb: 'What the export file records, what it leaves out, and what a PDF made from it can show. Not legal advice.',
   },
 ];
