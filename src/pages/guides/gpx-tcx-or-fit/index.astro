@@ -1,0 +1,49 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'GPX, TCX or FIT: which activity file should you use?';
+const description = 'GPX is for maps, TCX is Garmin XML with laps, and FIT keeps the most in the smallest file. What each one holds and which to pick.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-26',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/gpx-tcx-or-fit/" jsonld={jsonld}>
+  <h1>GPX, TCX or FIT: which activity file should you use?</h1>
+  <p class="lede">The three formats all record a workout, and the differences decide which apps will open the file and how much of the workout survives. GPX suits maps, TCX keeps laps and heart rate in a text file, and FIT keeps the most in the smallest file. This guide helps you pick the right one for the job.</p>
+
+  <h2>The short answer</h2>
+  <p>Use GPX to share a route or put a track on a map. Use FIT to move activities between training platforms. Use TCX when an app asks for it, which usually means an older training service or a treadmill-style import screen that lists TCX as one of its formats.</p>
+  <p>If you are not sure, FIT is the safest of the three to keep, because it holds everything the device recorded. GPX is the safest to hand to a stranger, because almost every app opens it.</p>
+
+  <h2>GPX: plain XML for maps and routes</h2>
+  <p>GPX is plain XML text. It holds positions, times and elevation, and that is most of what it does. Almost every map, route and training app reads it, which is why it is the usual format for sharing a track.</p>
+  <p>Heart rate and cadence can appear in GPX, but only through extensions, and some apps ignore those extensions. Laps have no standard place in GPX at all. A GPX made from a ride with power and laps keeps the track and drops the rest.</p>
+
+  <h2>TCX: Garmin's XML with laps</h2>
+  <p>TCX is also XML text, and it is Garmin's own format. It has fields for laps, heart rate and cadence, so it keeps more of a workout than a plain GPX with no extensions. A training app that shows charts of a run often accepts TCX.</p>
+  <p>The trade is that fewer apps read TCX than GPX. Some people also report upload errors with TCX that go away when the same activity is sent as FIT, which is one reason to try FIT first when a service takes several formats.</p>
+
+  <h2>FIT: small, binary, keeps the most</h2>
+  <p>FIT is a binary format, so a text editor shows only symbols. That is the trade for its size: it is the smallest of the three and it keeps the most. A FIT file holds the track points with time, position, altitude, heart rate, cadence, speed and power, plus laps and the device details.</p>
+  <p>Most sport watches and bike computers record in FIT, so it is the format closest to what the device actually saw. The guide to <a href="/guides/what-is-a-fit-file/">what a FIT file is</a> goes through the contents and the ways to open one.</p>
+
+  <h2>Which one to pick</h2>
+  <p>Pick GPX when the destination is a map, a route planner or a site that draws a track. Pick FIT when the destination is a training platform that will take it, because the laps and power will survive. Pick TCX when an import screen lists only TCX and GPX, or when a service asks for it by name.</p>
+  <p>If a device gave you a file and you are keeping it for the future, keep the original. Converting loses details that the original had, and you can always make a GPX from a FIT later.</p>
+
+  <h2>Convert between them</h2>
+  <p><a href="/fit-to-gpx/">FIT to GPX</a> turns FIT files into GPX for maps, one file or several at once. <a href="/strava-archive-to-gpx/">Strava archive to GPX</a> does the same for a whole Strava export, if the activity files are still zipped in the folder Strava sent. <a href="/fit-gz-to-fit/">.fit.gz to FIT</a> unpacks compressed FIT files back to the plain format, which is the step before uploading to a service that will not take the .gz name.</p>
+  <p>All three run in the browser: the file is read on your computer and nothing is uploaded to a server.</p>
+
+  <h2>Keeping the right file</h2>
+  <p>A simple rule works for most people. Keep FIT as the master copy of an activity, make GPX when you need to put it on a map or send it to someone, and make TCX only when a service asks. That way the most detailed file stays in your hands and the conversions are copies.</p>
+  <p>See also: <a href="/guides/what-is-a-fit-file/">What is a FIT file</a> and <a href="/guides/strava-archive-whats-inside/">What's in your Strava archive</a>.</p>
+</Base>

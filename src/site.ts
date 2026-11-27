@@ -3959,4 +3959,10 @@ export const GUIDES: { slug: string; title: string; blurb: string; topic: string
     title: 'What is a FIT file, and how do you open one?',
     blurb: 'The compact binary file most sport watches record, why a text editor cannot read it, and how to open or convert one.',
   },
+  {
+    slug: 'gpx-tcx-or-fit',
+    topic: 'Fitness files',
+    title: 'GPX, TCX or FIT: which activity file should you use?',
+    blurb: 'GPX is for maps, TCX is Garmin XML with laps, and FIT keeps the most in the smallest file.',
+  },
 ];
