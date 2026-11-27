@@ -1,0 +1,49 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to get your Strava data into Excel';
+const description = 'Open activities.csv for one row per activity, or turn a FIT file into a CSV with one row per second. How to get both into Excel.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-26',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/strava-data-in-excel/" jsonld={jsonld}>
+  <h1>How to get your Strava data into Excel</h1>
+  <p class="lede">There are two levels of Strava data, and Excel can hold both. The archive's activities.csv gives one row per activity for a whole history. A FIT file gives one row per recorded second for a single activity. This guide covers both routes and the few snags along the way.</p>
+
+  <h2>The files you need</h2>
+  <p>Start with the Strava archive, which you request from your account on strava.com. The zip holds activities.csv, a spreadsheet with one row per activity, and an activities folder with the recorded file for each activity. The guide to <a href="/guides/strava-archive-whats-inside/">what is in a Strava archive</a> explains the layout.</p>
+  <p>For a summary of the whole history, you only need activities.csv. For per-second detail of one activity, you need that activity's FIT file as well.</p>
+  <p>Neither file is a live feed. They are a copy from the day you requested the archive, so request a fresh one when you want the activities you have added since.</p>
+
+  <h2>Open activities.csv in Excel</h2>
+  <p>Unzip the archive and find activities.csv at the top level of the folder. In most cases a double click opens it in Excel with the columns already split, because the file uses commas and Excel reads that separator. Each row is one activity, with columns such as the id, the date, the name, the type and the distance.</p>
+  <p>If the whole file lands in a single column, Excel did not read the separator. Instead of double clicking, use Data and then From Text/CSV, choose the file, and set the delimiter to comma in the import window. The guide to <a href="/guides/csv-opens-in-one-column-in-excel/">why a CSV opens in one column in Excel</a> walks through the import step by step.</p>
+
+  <h2>Why some columns appear twice</h2>
+  <p>Some columns in activities.csv appear twice, such as two distance columns. That is not a mistake in the export. Strava stores both its own summary value and the value recorded by the device, and the two can differ slightly, so both are written to the file. Pick the one you trust and ignore or hide the other.</p>
+  <p>Because the column names repeat, a formula that refers to the second distance column needs care. Check which column your chart or pivot table is reading before you build on it.</p>
+  <p>When you build a pivot table, Excel keeps the repeated names apart as separate fields, so a chart can still use either one. Read a couple of rows to see which value matches the device before you settle on a column.</p>
+
+  <h2>One row per second from a FIT file</h2>
+  <p>For the detail behind one activity, take its FIT file from the activities folder. The files there often end in .fit.gz, which is a FIT file with gzip compression around it. <a href="/fit-to-csv/">FIT to CSV</a> unpacks it and writes one row per recorded point with time, position, altitude, heart rate, cadence, distance, speed, power and temperature where the file has them.</p>
+  <p>Drop one file or several. One file saves as a .csv; several arrive in a zip. A column only appears if at least one point has a value for it, so an activity without a power meter gives a shorter header. The CSV opens in Excel with the columns already split.</p>
+
+  <h2>Times are in UTC</h2>
+  <p>The times in the FIT CSV are in UTC, because that is the time zone the FIT file records. A run at eight in the morning local time can show as an hour or several hours earlier or later, depending on where you are. If you need local times, add or subtract your offset in a new column.</p>
+  <p>The dates in activities.csv are already the local date Strava shows, so the two files use different clock conventions. Keep that in mind when you line up a summary row with its per-second file.</p>
+  <p>For a chart over a long activity, the clock shift is only a label change: the gaps between points stay the same, so the shape of the line does not change. Convert the times only when the hour on the clock matters, such as matching a ride to the time of day.</p>
+
+  <h2>Put it together</h2>
+  <p>A useful workbook often has the summary from activities.csv on one sheet and the per-second detail on another. Sort the summary by date, then pull the FIT CSV for the activities you want to study in depth, such as a race or a ride where the heart rate moved oddly.</p>
+  <p>To turn either CSV into an .xlsx workbook with more than one sheet, <a href="/csv-to-excel/">CSV to Excel</a> reads a CSV in the browser and writes an Excel file without uploading it. If you only want the activities as GPX for a map, <a href="/strava-archive-to-gpx/">Strava archive to GPX</a> converts the whole archive at once instead.</p>
+  <p>See also: <a href="/guides/csv-opens-in-one-column-in-excel/">Why a CSV opens in one column in Excel</a> and <a href="/guides/strava-archive-whats-inside/">What's in your Strava archive</a>.</p>
+</Base>

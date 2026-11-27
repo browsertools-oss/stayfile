@@ -3673,6 +3673,7 @@ export const PAGES: ToolPage[] = [
     slug: 'fit-to-csv',
     tool: 'fit-csv',
     group: 'Fitness files',
+    guide: 'strava-data-in-excel',
     card: 'FIT to CSV',
     blurb: 'Every second of an activity in a spreadsheet',
     title: 'Convert a FIT file to CSV for Excel, no upload',
@@ -3964,5 +3965,11 @@ export const GUIDES: { slug: string; title: string; blurb: string; topic: string
     topic: 'Fitness files',
     title: 'GPX, TCX or FIT: which activity file should you use?',
     blurb: 'GPX is for maps, TCX is Garmin XML with laps, and FIT keeps the most in the smallest file.',
+  },
+  {
+    slug: 'strava-data-in-excel',
+    topic: 'Fitness files',
+    title: 'How to get your Strava data into Excel',
+    blurb: 'activities.csv gives one row per activity; a FIT file gives one row per second. How to open both in Excel.',
   },
 ];
