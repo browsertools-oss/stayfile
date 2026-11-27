@@ -2138,7 +2138,7 @@ export const PAGES: ToolPage[] = [
       },
       {
         q: 'What about HEIC or PNG?',
-        a: 'HEIC photos from an iPhone are not read here. Convert to JPG at /heic-to-jpg/ first; the JPG made there has no location data. PNG photos are read too, and the rotation tag is a JPG tag, so it only applies to JPG.',
+        a: 'HEIC photos from an iPhone are not read here. Convert to JPG on the HEIC to JPG page first; the JPG made there has no location data. PNG photos are read too, and the rotation tag is a JPG tag, so it only applies to JPG.',
       },
       {
         q: 'Does it remove the location from photos already posted?',
@@ -3450,7 +3450,7 @@ export const PAGES: ToolPage[] = [
       },
       {
         q: 'Can I join the parts again?',
-        a: 'Yes. Save the parts, then drop them on /merge-csv/ and it writes them back into one file with a single header row.',
+        a: 'Yes. Save the parts, then drop them on the Merge CSV page and it writes them back into one file with a single header row.',
       },
       PRIVATE,
     ],
@@ -3491,7 +3491,7 @@ export const PAGES: ToolPage[] = [
       },
       {
         q: 'Can I merge Excel files?',
-        a: 'Save each one as CSV first with /excel-to-csv/, which can also save every sheet in a workbook. Then drop the CSV files here.',
+        a: 'Save each one as CSV first with the Excel to CSV page, which can also save every sheet in a workbook. Then drop the CSV files here.',
       },
       PRIVATE,
     ],
@@ -3535,7 +3535,7 @@ export const PAGES: ToolPage[] = [
       },
       {
         q: 'Can I get FIT files instead?',
-        a: 'Yes. If you want the original FIT files for Garmin Connect or another app, /fit-gz-to-fit/ unpacks the same archive without converting anything.',
+        a: 'Yes. If you want the original FIT files for Garmin Connect or another app, the .fit.gz to FIT page unpacks the same archive without converting anything.',
       },
       {
         q: 'Is this made by Strava?',
@@ -3705,7 +3705,7 @@ export const PAGES: ToolPage[] = [
       },
       {
         q: 'Will Excel open it?',
-        a: 'Yes. The file is saved as UTF-8 with the marker Excel needs, so a double click opens it in the right columns. To turn it into an .xlsx workbook instead, use /csv-to-excel/.',
+        a: 'Yes. The file is saved as UTF-8 with the marker Excel needs, so a double click opens it in the right columns. To turn it into an .xlsx workbook instead, use the CSV to Excel page.',
       },
       PRIVATE,
     ],

@@ -48,7 +48,7 @@ const fitCsv = tool === 'fit-csv';
     <span class="status" id="status" aria-live="polite"></span>
   </div>
 
-  <div class="done" id="done" role="status" hidden></div>
+  <div class="done" id="done" hidden></div>
   <p class="error" id="err" role="alert" hidden></p>
 </section>
 
@@ -237,7 +237,7 @@ const fitCsv = tool === 'fit-csv';
       showDone({ el: doneEl, slug: root.dataset.slug!, line, again });
     } catch {
       status.textContent = '';
-      err.textContent = 'That file could not be read as a zip archive.';
+      err.textContent = 'Those files could not be read.';
       err.hidden = false;
     } finally {
       go.disabled = picked.length === 0;
@@ -349,7 +349,7 @@ const fitCsv = tool === 'fit-csv';
       showDone({ el: doneEl, slug: root.dataset.slug!, line, again });
     } catch {
       status.textContent = '';
-      err.textContent = 'That file could not be read as a zip archive.';
+      err.textContent = 'Those files could not be read.';
       err.hidden = false;
     } finally {
       go.disabled = picked.length === 0;
@@ -429,7 +429,7 @@ const fitCsv = tool === 'fit-csv';
       showDone({ el: doneEl, slug: root.dataset.slug!, line, again });
     } catch {
       status.textContent = '';
-      err.textContent = 'That file could not be read as a zip archive.';
+      err.textContent = 'Those files could not be read.';
       err.hidden = false;
     } finally {
       go.disabled = picked.length === 0;

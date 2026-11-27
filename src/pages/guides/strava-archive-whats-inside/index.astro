@@ -33,7 +33,7 @@ const jsonld = [
 
   <h2>Why the activity files end in .fit.gz</h2>
   <p>Most watches and bike computers record in FIT, a small binary format, and the archive stores those files with gzip compression, which adds .gz to the name. A Mac opens a .gz file with a double click. Windows File Explorer may not open one on its own, and a free archive tool handles it. The compressed file is not damaged; the FIT file is simply packed inside, and the .gz step adds no data of its own.</p>
-  <p>The archive once held GPX files for every activity. Now you get the original file in the format the device recorded: .fit.gz from most watches and bike computers, and .gpx or .tcx, sometimes .tcx.gz, from apps and phones. The original keeps more than a converted GPX would, such as laps, power and the device details.</p>
+  <p>You get the original file in the format the device recorded: .fit.gz from most watches and bike computers, and .gpx or .tcx, sometimes .tcx.gz, from apps and phones. The original keeps more than a converted GPX would, such as laps, power and the device details.</p>
 
   <h2>Turn the whole archive into GPX</h2>
   <p>If you want the activities as GPX for a map, a route planner or another training app, <a href="/strava-archive-to-gpx/">Strava archive to GPX</a> takes the zip as it came. Drop it on the page and every activity with a GPS track becomes a GPX file named by date and activity name, saved in one zip. It unpacks the .gz files for you and skips indoor activities, which have no track, counting them at the end.</p>
@@ -48,6 +48,4 @@ const jsonld = [
 
   <h2>The summary in Excel</h2>
   <p>To look at the whole history in a spreadsheet, open activities.csv directly. It can land in one column if your spreadsheet reads the separator wrongly; <a href="/guides/csv-opens-in-one-column-in-excel/">Why a CSV opens in one column in Excel</a> covers the fix, which is the From Text/CSV import rather than a double click.</p>
-  <p>Keep the original zip. The CSV is a summary and the activity files are the record, and both are worth keeping if you move between training apps later.</p>
-  <p>See also: <a href="/guides/csv-opens-in-one-column-in-excel/">Why a CSV opens in one column in Excel</a> and the guide to <a href="/fit-gz-to-fit/">.fit.gz files for Garmin Connect</a>.</p>
-</Base>
+  <p>Keep the original zip. The CSV is a summary and the activity files are the record, and both are worth keeping if you move between training apps later.</p></Base>
