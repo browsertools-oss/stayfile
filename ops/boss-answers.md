@@ -288,3 +288,37 @@ Follow the plan's guide rules for both. Done for each: `npm test` and `npm run b
 - **Links:** /remove-exif-data/, /compress-jpg/, /resize-jpg/, /heic-to-jpg/, and the guides `remove-location-from-photo` and `check-photo-metadata`.
 - **On remove-exif-data:** add this slug to the end of its `guide` list.
 - **Done:** `npm test` and `npm run build` pass and `dist/guides/photo-sideways-after-upload/index.html` exists. Make one commit with explicit paths, then log it and add a line to ops/next.md.
+
+## 2026-11-27T15:26:47Z
+
+**Q:** Morning run 11-27: all six rows of ops/week-plan.md and backlog 1 to 3 are DONE (last commit 9aaec89). The Chat exports group, /whatsapp-chat-to-excel/, /whatsapp-chat-to-pdf/, four Chat exports guides, home drop routing and the reader edge tests are in; 424 tests, 151 pages, 46 guides. Backlog 4 says ask you once for next work. There are about 15 minutes left in this run. What should this run and the next take next?
+
+**A:** The plan and backlog are both finished, so I'm giving the agent two new guides for the Chat exports group.
+
+---
+
+**Steps for both runs:** Follow `## Guide rules` in ops/week-plan.md. Use one Write call per guide, add a `GUIDES` entry in src/site.ts with topic "Chat exports", and make one commit with explicit paths. Done means `npm test` and `npm run build` pass and `dist/guides/<slug>/index.html` exists. Put the guide count in the log.
+
+**This run: start the guide now.** If it isn't committed by the time limit, run `git checkout --` on the files and log that it is unfinished.
+- Slug `whatsapp-chat-dates-wrong-in-excel`. Title "WhatsApp chat dates wrong in Excel: day and month swapped".
+- Phrases: "whatsapp export date format excel", "whatsapp chat dates wrong".
+- Facts, only from `## Chat spec` steps 4 and 5:
+  - phones write dates in their own region's order;
+  - 03/04 can be read two ways;
+  - the page checks every date in the file, and a first number over 12 means day first, a second number over 12 means month first;
+  - otherwise the page asks;
+  - the output date is year-month-day so it sorts, and the time is 24 hour.
+- Excel opening the raw .txt "often" swaps the dates.
+- Links: /whatsapp-chat-to-excel/, and the guides `export-whatsapp-chat`, `whatsapp-messages-per-person-excel` and `csv-opens-in-one-column-in-excel`.
+
+**Next run:**
+- Slug `print-whatsapp-messages`. Title "How to print WhatsApp messages from iPhone or Android".
+- Phrases: "print whatsapp messages", "print whatsapp chat".
+- Facts, only from row 2 step (4):
+  - export the chat with media;
+  - drop the .zip on /whatsapp-chat-to-pdf/ and press Print;
+  - up to 300 photos show in place, and voice notes and videos are listed by name;
+  - on a phone, Print is in the browser's share or menu button.
+- Links: /whatsapp-chat-to-pdf/, and the guides `export-whatsapp-chat` and `whatsapp-chat-as-evidence`.
+
+Don't ask again before the weekly replan. If both are done, log it and stop.
