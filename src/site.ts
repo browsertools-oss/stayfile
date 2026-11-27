@@ -3548,6 +3548,7 @@ export const PAGES: ToolPage[] = [
     slug: 'fit-to-gpx',
     tool: 'fit-gpx',
     group: 'Fitness files',
+    guide: 'what-is-a-fit-file',
     card: 'FIT to GPX',
     blurb: 'Many FIT files to GPX at once',
     title: 'Convert FIT files to GPX, many at once, no upload',
@@ -3951,5 +3952,11 @@ export const GUIDES: { slug: string; title: string; blurb: string; topic: string
     topic: 'Fitness files',
     title: 'Where the FIT files are in a Garmin data export',
     blurb: 'The activities hide inside inner zips under DI_CONNECT. Where to look and how to get them out.',
+  },
+  {
+    slug: 'what-is-a-fit-file',
+    topic: 'Fitness files',
+    title: 'What is a FIT file, and how do you open one?',
+    blurb: 'The compact binary file most sport watches record, why a text editor cannot read it, and how to open or convert one.',
   },
 ];

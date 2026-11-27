@@ -1,0 +1,50 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'What is a FIT file, and how do you open one?';
+const description = 'FIT is the compact file most sport watches record. What it holds, why a text editor cannot read it, and how to open or convert one.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-26',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/what-is-a-fit-file/" jsonld={jsonld}>
+  <h1>What is a FIT file, and how do you open one?</h1>
+  <p class="lede">A FIT file is the recording a sport watch or bike computer makes of an activity. It holds the track, the times and the sensor readings in one compact binary file, and most training apps can open it. This guide explains what is inside and the ways to read one on a computer.</p>
+
+  <h2>What a FIT file is</h2>
+  <p>FIT stands for Flexible and Interoperable Data Transfer. It is a compact binary format from Garmin that most sport watches and bike computers record in. When you finish a run, a ride or a swim, the device writes one FIT file for the activity, and the phone app or the watch sends that file to a training service.</p>
+  <p>The format is small on purpose. A long ride can fit in a few megabytes, which is why watches with limited storage can keep months of activities. The small size comes at the cost of being unreadable to a person.</p>
+
+  <h2>Why a text editor shows only symbols</h2>
+  <p>Open a FIT file in Notepad, TextEdit or any text editor and you see a jumble of characters and odd symbols. That is not damage. The file is binary: it stores numbers as raw bytes, not as the digits and letters a text editor expects to show. There is no setting that makes a text editor display it as a table.</p>
+  <p>You need a program that knows the FIT layout to read it. Training apps and watch software do. So do a few small converters, which is the route this guide takes.</p>
+
+  <h2>What is inside a FIT file</h2>
+  <p>A FIT file holds a series of records, one for each moment the device recorded. Each record can carry the time, the position as latitude and longitude, the altitude, the heart rate, the cadence, the speed and the power. Not every device records every value: a watch without a power meter leaves power out, and an indoor activity has no position.</p>
+  <p>Beyond the points, the file holds details about the session, such as the sport, and about the device that wrote it. Laps are stored as their own records. That is why a FIT file keeps more than a GPX file made from the same activity: GPX has a place for the track and very little else.</p>
+
+  <h2>Open it in a training app</h2>
+  <p>The simplest way to read a FIT file is to upload it to the training service you already use. Most of them accept a FIT file from their import or upload option and show the activity as if it had come from a watch. That gives you the map, the charts and the laps in the app you know.</p>
+  <p>This works well for one activity. For a folder of files, or for a service that will not take the format you have, a converter is quicker.</p>
+
+  <h2>Turn it into GPX for a map</h2>
+  <p>GPX is plain text that almost every map, route and training app reads. <a href="/fit-to-gpx/">FIT to GPX</a> converts one FIT file or several at once, and writes the track points, their times and elevation, with heart rate and cadence where the file has them. The result opens in a route planner or on a map site that takes GPX uploads.</p>
+  <p>One file saves on its own; several are packed into one zip. The conversion runs in the browser, so the file does not go to a server.</p>
+
+  <h2>Turn it into a CSV for a spreadsheet</h2>
+  <p>For a spreadsheet, <a href="/fit-to-csv/">FIT to CSV</a> writes one row per recorded point. The columns are time, latitude, longitude, altitude, heart rate, cadence, distance, speed, power and temperature, and a column only appears when at least one point has a value for it. The CSV opens in Excel with the text already split into columns.</p>
+  <p>This is the route for anyone who wants to chart a heart rate, compare two rides second by second, or keep a record outside a training service. The times in the CSV are in UTC, because that is how the FIT file stores them.</p>
+
+  <h2>Files that arrive as .fit.gz</h2>
+  <p>Some services hand out FIT files with gzip compression around them, which adds .gz to the name. The file inside is an ordinary FIT file; the wrapper only makes it smaller. <a href="/fit-gz-to-fit/">.fit.gz to FIT</a> unpacks them back to plain FIT files, named by date and activity, without changing the bytes inside.</p>
+  <p>If the files came from a Strava download, the guide to <a href="/guides/strava-archive-whats-inside/">what is in a Strava archive</a> explains the folder layout and which file belongs to which activity.</p>
+  <p>See also: <a href="/guides/strava-archive-whats-inside/">What's in your Strava archive</a> and <a href="/fit-to-gpx/">FIT to GPX</a>.</p>
+</Base>
