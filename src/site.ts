@@ -4075,4 +4075,10 @@ export const GUIDES: { slug: string; title: string; blurb: string; topic: string
     title: "WhatsApp chat as evidence: what a PDF shows and doesn't",
     blurb: 'What the export file records, what it leaves out, and what a PDF made from it can show. Not legal advice.',
   },
+  {
+    slug: 'read-whatsapp-chat-export-on-computer',
+    topic: 'Chat exports',
+    title: 'How to read a WhatsApp chat export on a computer',
+    blurb: 'How to unzip the export, open _chat.txt on Windows or Mac, and read the chat with its photos or as a table.',
+  },
 ];

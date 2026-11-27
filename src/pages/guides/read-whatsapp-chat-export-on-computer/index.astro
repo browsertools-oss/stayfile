@@ -1,0 +1,46 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'How to read a WhatsApp chat export on a computer';
+const description = 'How to unzip a WhatsApp export, find _chat.txt on Windows or Mac, and read the chat with its photos, or turn it into a table.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-27',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/read-whatsapp-chat-export-on-computer/" jsonld={jsonld}>
+  <h1>How to read a WhatsApp chat export on a computer</h1>
+  <p class="lede">A WhatsApp export is a text file, sometimes inside a ZIP, and a computer can open it without WhatsApp. This guide shows what is in the folder, how to read the file, and how to see the chat with its photos.</p>
+
+  <h2>Unzip the export first</h2>
+  <p>An export from an iPhone is a ZIP file. On a Mac, a double click usually unpacks it into a folder. On Windows, right click the file and choose Extract All, then confirm the folder. The same applies to an export from Android when the app you sent it to zipped the files together.</p>
+  <p>Unpack the ZIP before you try to open anything inside it. Windows can preview some files inside a ZIP without unpacking, but the preview is limited and the photo files may not open at all. A real folder on the desktop is easier to work with. A ZIP that will not open is often an incomplete download, so download it again from the app or email that sent it.</p>
+
+  <h2>What is inside the folder</h2>
+  <p>Inside the folder is one text file and, when the export included media, a set of photos and other files. From an iPhone the text file is called <code>_chat.txt</code>. From Android it is named after the chat, such as <code>WhatsApp Chat with Anna.txt</code>. Both are plain text, so any editor can open them.</p>
+  <p>The media files keep the names the phones gave them. An iPhone photo often looks like <code>00000012-PHOTO-2026-11-20-14-06-00.jpg</code>, and an Android photo like <code>IMG-20261120-WA0003.jpg</code>. The numbers carry the date and time the photo was sent, which helps when you match a file back to a message. The text file itself stays small, even for a long chat, because it holds text and file names rather than the photos.</p>
+
+  <h2>Open the text file in Notepad or TextEdit</h2>
+  <p>Double click the text file on Windows to open it in Notepad, or on a Mac to open it in TextEdit. Each message starts with its date and time, then the sender, then the message. The whole conversation is one long document, so you scroll from top to bottom.</p>
+  <p>Photos appear only as file names in this view, so a chat with many photos is hard to follow. You read a message about a picture and then have to find the named file in the folder. For a long chat, that back and forth gets slow.</p>
+  <p>Older text editors can show emoji as empty boxes or question marks. That is the editor, not the export. A newer editor, or one set to a font with emoji, shows them properly. The text itself is not damaged.</p>
+
+  <h2>Read it as a chat with the photos in place</h2>
+  <p>To see the conversation the way it looked on the phone, with each message in order and its photo beside it, drop the ZIP on the <a href="/whatsapp-chat-to-pdf/">WhatsApp chat to PDF page</a>. It reads the export in your browser and shows a dated page with each sender, time and message, and the photos from the ZIP in place. You can read it on screen or use the browser print dialog to save it as a PDF.</p>
+  <p>The page does not upload the file, so the chat and its photos stay on your computer. When the ZIP holds the photos, they are shown up to a limit, and any other attachments are listed by name. For a chat with only text, the text file is enough and the page lays it out in order.</p>
+
+  <h2>Search, sort or count the messages</h2>
+  <p>If you want to search for a word, sort by sender or count the messages, a table is easier than a text file. Drop the ZIP or text file on the <a href="/whatsapp-chat-to-excel/">WhatsApp chat to Excel page</a>. It writes one row per message with the date, time, sender, message and attachment name, and saves an Excel or CSV file.</p>
+  <p>In Excel you can use the filter on the sender column to read one person's messages, or sort by date to be sure of the order. A search in Excel looks at every row at once, which is quicker than scrolling a long text file. The sender column also makes it easy to see who wrote the most, without reading the whole chat. The guide to <a href="/guides/whatsapp-chat-as-evidence/">a WhatsApp chat as evidence</a> explains what the file records and what it leaves out.</p>
+
+  <h2>Keep the export file</h2>
+  <p>Keep the original ZIP or text file after you make a PDF or a spreadsheet. Those are copies for reading, and the export is the record as WhatsApp wrote it. If you need to check a name or a date later, the original is the file to open.</p>
+  <p>The guide to <a href="/guides/export-whatsapp-chat/">exporting a WhatsApp chat</a> covers the steps on an iPhone, Android and the web, including the choice about media. Once you have the file on the computer, the rest is just choosing how you want to read it.</p>
+</Base>
