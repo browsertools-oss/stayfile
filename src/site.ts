@@ -3630,6 +3630,7 @@ export const PAGES: ToolPage[] = [
     slug: 'garmin-export-to-gpx',
     tool: 'fit-garmin',
     group: 'Fitness files',
+    guide: 'garmin-export-fit-files',
     card: 'Garmin export to GPX',
     blurb: 'Get every activity out of a Garmin data export',
     title: 'Get the FIT and GPX files out of a Garmin data export',
@@ -3944,5 +3945,11 @@ export const GUIDES: { slug: string; title: string; blurb: string; topic: string
     topic: 'Fitness files',
     title: 'How to move your Strava history to Garmin Connect',
     blurb: 'The export is the way across: unpack the .fit.gz files and import the FIT files into Garmin Connect.',
+  },
+  {
+    slug: 'garmin-export-fit-files',
+    topic: 'Fitness files',
+    title: 'Where the FIT files are in a Garmin data export',
+    blurb: 'The activities hide inside inner zips under DI_CONNECT. Where to look and how to get them out.',
   },
 ];

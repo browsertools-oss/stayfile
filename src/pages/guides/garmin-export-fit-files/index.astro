@@ -1,0 +1,50 @@
+---
+import Base from '../../../layouts/Base.astro';
+import { SITE } from '../../../site';
+const title = 'Where the FIT files are in a Garmin data export';
+const description = 'A Garmin export hides the activity FIT files in inner zips under DI_CONNECT. Where they are, why you unzip twice, and how to get them out.';
+const jsonld = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: title,
+    description,
+    datePublished: '2026-11-26',
+    author: { '@type': 'Organization', name: 'Stayfile' },
+    publisher: { '@type': 'Organization', name: 'Stayfile' },
+  },
+];
+---
+<Base title={`${title} | ${SITE.name}`} description={description} path="/guides/garmin-export-fit-files/" jsonld={jsonld}>
+  <h1>Where the FIT files are in a Garmin data export</h1>
+  <p class="lede">A full Garmin data export does not put your activities at the top of the zip. The FIT files sit inside a DI_CONNECT folder, packed into more zip files, so a first look at the download makes it seem as if the activities are missing. This guide shows where they are and the shortest way to get them out.</p>
+
+  <h2>Request the export from Garmin</h2>
+  <p>The full export is requested from the account data management page of your Garmin account, where the option is called Export Your Data. Sign in on the Garmin website, find that page, and ask for the export. Menu names can differ a little between app versions.</p>
+  <p>Garmin emails you a link when the export is ready. For a large history this can take days, so there is nothing wrong if the email does not arrive the same day. Download the zip when the link comes and keep it somewhere you can find again.</p>
+
+  <h2>Open the zip and find DI_CONNECT</h2>
+  <p>Unzip the download once and you get a set of folders. The one you want is called DI_CONNECT. It holds many subfolders, most of which have names that say little about what is inside. The activities are not loose in the top of DI_CONNECT; they are one level further in.</p>
+  <p>This is the point where people give up, because the obvious folders hold JSON files about the account rather than activity files. It helps to know that the activity files take one more unzip before they appear.</p>
+
+  <h2>The inner zips hold the activities</h2>
+  <p>Inside DI_CONNECT there is a folder named DI-Connect-Uploaded-Files. Some people report a slightly different name for it, so look for the folder with Uploaded in its name. In that folder are more zip files, with names like UploadedFiles_0-_Part1.zip.</p>
+  <p>Each of those inner zips holds activity files, and the ones you want end in .fit. A large history is split across several parts, so there can be more than one of these zips to open. Unzip each one and the FIT files are there, with names built from the date and time of the activity.</p>
+
+  <h2>Unzip twice, or use a browser page</h2>
+  <p>By hand, the job is two unzips: the outer export, then each part in DI-Connect-Uploaded-Files. A free archive tool can do the second step for each part, and you end up with a folder of FIT files.</p>
+  <p><a href="/garmin-export-to-gpx/">Garmin export to GPX</a> does both steps in one go. Drop the whole export zip on the page and it reads the outer zip in pieces, finds the inner zips, opens each one in memory, and pulls out every FIT file. You can save the FIT files as they are or as GPX, in one zip, named after each activity. The file stays on your computer; nothing is uploaded.</p>
+
+  <h2>What the other folders hold</h2>
+  <p>Most of the rest of DI_CONNECT is JSON files about the account, health, sleep and steps. They are useful if you are moving every record out of Garmin, but they are not activity files and no map or training app will open them as a workout. The page that pulls out the FIT files leaves them alone.</p>
+  <p>If you only want the activities, you can ignore the JSON folders completely and go straight to DI-Connect-Uploaded-Files.</p>
+
+  <h2>Download one activity at a time</h2>
+  <p>For a single activity, you do not need the full export. Open the activity's page in Garmin Connect on the web and look for the download or export option there, which lets you save that one activity. Menu names can differ a little between app versions. This is quicker for one file, but slow for a history of hundreds.</p>
+  <p>Once you have a FIT file, <a href="/fit-to-gpx/">FIT to GPX</a> turns it into a GPX for a map or route app, and <a href="/fit-to-csv/">FIT to CSV</a> writes every recorded point into a spreadsheet with time, position, heart rate and the rest.</p>
+
+  <h2>After you have the FIT files</h2>
+  <p>Keep the extracted folder until you have imported or converted what you need, because the export link can expire and a second download means waiting again. FIT keeps more than a converted GPX: laps, power and device details stay in the file.</p>
+  <p>If you are also moving data from Strava, the guide to <a href="/guides/strava-archive-whats-inside/">what is in a Strava archive</a> explains the other half of the job.</p>
+  <p>See also: <a href="/guides/strava-archive-whats-inside/">What's in your Strava archive</a> and <a href="/garmin-export-to-gpx/">Garmin export to GPX</a>.</p>
+</Base>
