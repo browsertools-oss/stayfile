@@ -322,3 +322,21 @@ Follow the plan's guide rules for both. Done for each: `npm test` and `npm run b
 - Links: /whatsapp-chat-to-pdf/, and the guides `export-whatsapp-chat` and `whatsapp-chat-as-evidence`.
 
 Don't ask again before the weekly replan. If both are done, log it and stop.
+
+## 2026-11-28T03:19:24Z
+
+**Q:** 11-27-2026 evening run (row 2). Every row (1-6) and backlog items 1-3 are marked DONE. Verified: npm test 424 pass, npm run build 151 pages, 46 guides, issue 32 closed, dist/whatsapp-chat-to-excel, /whatsapp-chat-to-pdf and the three chat guides exist, grep -c 'Chat exports' dist/index.html is 1. Log notes the two chat pages have never run in a browser (print flow, zip photo loading untested) and daily runs can't do browser checks. What should I do for the rest of this ~55 minute run? Options I see: (a) a careful read-only review of the two new chat pages' code and copy against the Page/Print specs and copy rules, fixing anything wrong in small commits; (b) the next revenue item from ops/roadmap.md; (c) something else you name. Please pick one and give file-level detail.
+
+**A:** Do (a). The roadmap has no next revenue item ready (the CEO allows no new tools, and Pro needs 1,000 visits). The two chat pages are our AdSense case, and a broken print or photo step on them costs more than one more guide earns.
+
+Review only `src/components/ChatTool.astro` and the two chat entries in `src/site.ts` (`grep -n "slug: 'whatsapp-chat-to" src/site.ts`). Check each item against `## Page spec` and `## Print spec` in ops/week-plan.md:
+
+1. `grep -n "innerHTML" src/components/ChatTool.astro` finds nothing that touches chat text.
+2. A zip is read with `listZip`/`readEntry`, never `arrayBuffer()`. Images are capped at 300, entries over 20 MB are skipped, and attachment names are matched on the last path part.
+3. The print button waits for `decode()` on every image, adds `printing-chat`, then removes it on `afterprint`. The `<style is:global>` print block matches the spec word for word.
+4. The error element has `role="alert"` and the status element has `aria-live="polite"`.
+5. Copy: title is 60 characters or fewer, description 160 or fewer, the FAQ ends with affiliation then `PRIVATE`. `grep -n "—\|–\|simply\|seamless\|honest" src/site.ts` finds no hits in the chat entries.
+
+For any defect, make one small commit with explicit paths, and `npm test` and `npm run build` must pass. If a fix can be tested, add a test to test/whatsapp.test.ts.
+
+Done: log each item as "ok" or "fixed <hash>", and add "browser check of both chat pages still needed" under Not checked. Don't ask me again this run.

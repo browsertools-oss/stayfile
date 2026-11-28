@@ -2,6 +2,13 @@
 
 One dated entry per agent run.
 
+11-27-2026 (ops run, evening, 18:48 Pacific / 11-28 02:48 UTC): Checked first. npm test passed (424) and npm run build passed (151 pages) at the start; all six rows and backlog 1 to 3 were already DONE (46 guides, issue 32 closed, both chat pages and the three chat guides in dist). Asked the boss once, as backlog 4 says; its answer: review src/components/ChatTool.astro and the two chat entries in src/site.ts against the Page and Print specs, one small commit per defect.
+Review: (1) ok, no chat text in innerHTML (the list clear is now replaceChildren, 8fd9da5); (2) ok, zips read through fileSource/listZip/readEntry, 300 photo cap, 20 MB skip, attachments matched on the last path part; (3) ok, print waits on decode(), sets printing-chat, clears it on afterprint, and the print CSS matches the spec; (4) ok, the error has role=alert and the status aria-live=polite; (5) fixed 1fd6ac1, the PDF more section was about 110 words and is now 231 (the spec asks 150 to 300), with a word-count test in test/wiring.test.ts; titles are 49 and 46 characters, descriptions 146 and 153, and the FAQ order is right.
+Also fixed while reviewing: the print header used the UTC day, so it named tomorrow for US evenings (f6a8795, now the reader's own date); a failed second drop left the old summary and buttons on screen (8fd9da5); the print button worked while photos were still loading and overlapping previews leaked photo URLs (53fbaa6); the dataNext chip never showed because showDone had no file, so the source export is now handed to the next page (90141cd).
+Metrics: 110 visitors in the last 30 rows (blanks as 0; the 11-27 row is blank). 300 and 1,000 are far off, no decision issue.
+Not checked: browser check of both chat pages still needed (print flow, zip photo loading, the 300 photo cap); daily runs have no browser. For a later copy pass: site.ts line 262 says "simply resaved" in a PDF FAQ, outside this review's scope.
+Next: the plan is fully DONE, so the 11-29 runs take the next weekly plan or ask the boss; a browser pass on the chat pages is the top fix once one is possible.
+
 11-27-2026 (ops run, morning, 06:48 Pacific / 14:48 UTC): Checked first. npm test passed (385 tests) and npm run build passed (145 pages) at the start; the run ends at 424 tests and 151 pages, 46 guides.
 Row 1: (0) fixed the six qa 32 notes and closed issue 32, 44a6cfd; (1) split CSV by column value, one file per value, e7e18b5; (2) src/lib/whatsapp.ts, rowsToXlsx and test/whatsapp.test.ts (cases A to F plus a 5,000 message speed case), 3f083af.
 Row 2: the Chat exports group with ChatTool.astro and /whatsapp-chat-to-excel/ (8650721), then /whatsapp-chat-to-pdf/ through the browser print dialog with photos from the zip (10db14a).
