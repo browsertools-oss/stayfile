@@ -139,6 +139,13 @@ const print = tool === 'chat-pdf';
     rightSel.value = chat.senders.includes(current) ? current : '';
   }
 
+  /** The reader's own calendar day, not the UTC one. */
+  function localDate(): string {
+    const d = new Date();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    return `${d.getFullYear()}-${month}-${String(d.getDate()).padStart(2, '0')}`;
+  }
+
   /** Build the printable copy of the chat, photos in place where the zip has them. */
   async function renderPreview() {
     if (!preview || !chat) return;
@@ -161,7 +168,7 @@ const print = tool === 'chat-pdf';
 
     const made = document.createElement('p');
     made.className = 'chat-meta';
-    made.textContent = `Made on stayfile.app from the WhatsApp export file ${fileName} on ${new Date().toISOString().slice(0, 10)}. Stayfile is not affiliated with WhatsApp.`;
+    made.textContent = `Made on stayfile.app from the WhatsApp export file ${fileName} on ${localDate()}. Stayfile is not affiliated with WhatsApp.`;
     preview.append(made);
 
     const byBase = new Map<string, ZipEntry>();
