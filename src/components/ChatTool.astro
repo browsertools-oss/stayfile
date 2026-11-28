@@ -246,6 +246,7 @@ const print = tool === 'chat-pdf';
     preview.hidden = false;
 
     let done = 0;
+    let photoFailed = false;
     for (const job of imageJobs) {
       if (token !== renderToken) return;
       done++;
@@ -264,7 +265,7 @@ const print = tool === 'chat-pdf';
         const url = URL.createObjectURL(new Blob([bytes], { type }));
         imageUrls.push(url);
         const img = document.createElement('img');
-        img.alt = name.split('/').pop() ?? name;
+        img.alt = 'Photo from the chat: ' + (name.split('/').pop() ?? name);
         img.src = url;
         job.el.append(img);
       } catch {
@@ -272,11 +273,15 @@ const print = tool === 'chat-pdf';
         p.className = 'chat-attach';
         p.textContent = `[Attachment: ${job.entry.name.split('/').pop() ?? job.entry.name}]`;
         job.el.append(p);
+        photoFailed = true;
+        status.textContent = 'One photo could not be shown; it is listed by name.';
       }
     }
     if (token !== renderToken) return;
     if (btnPrint) btnPrint.disabled = false;
-    status.textContent = imageJobs.length ? 'Ready to print.' : '';
+    status.textContent = photoFailed
+      ? 'One photo could not be shown; it is listed by name.'
+      : imageJobs.length ? 'Ready to print.' : '';
   }
 
   async function readFile(file: File) {
