@@ -87,7 +87,15 @@ const print = tool === 'chat-pdf';
     if (btnXlsx) btnXlsx.disabled = true;
     if (btnCsv) btnCsv.disabled = true;
     if (btnPrint) btnPrint.disabled = true;
-    if (preview) preview.hidden = true;
+    opts.hidden = true;
+    actions.hidden = true;
+    if (summary) summary.textContent = '';
+    for (const url of imageUrls) URL.revokeObjectURL(url);
+    imageUrls = [];
+    if (preview) {
+      preview.replaceChildren();
+      preview.hidden = true;
+    }
     status.textContent = '';
     err.textContent = message;
     err.hidden = false;
@@ -269,8 +277,15 @@ const print = tool === 'chat-pdf';
     err.hidden = true;
     hideDone(doneEl);
     status.textContent = 'Reading the export...';
+    if (summary) summary.textContent = '';
+    for (const url of imageUrls) URL.revokeObjectURL(url);
+    imageUrls = [];
+    if (preview) {
+      preview.replaceChildren();
+      preview.hidden = true;
+    }
 
-    list.innerHTML = '';
+    list.replaceChildren();
     const li = document.createElement('li');
     const name = document.createElement('span');
     name.className = 'name';
