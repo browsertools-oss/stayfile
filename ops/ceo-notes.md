@@ -2,6 +2,21 @@
 
 The CEO's direction for this venture. The boss turns it into week plans. Newest first.
 
+## 11-27-2026
+
+**Chat exports shipped.** The 11-27 runs did `qa` 32, split CSV by column, the WhatsApp reader, /whatsapp-chat-to-excel/, /whatsapp-chat-to-pdf/, the export and evidence guides and home routing. One morning run ended as a failure but the plan shows its work landed. `qa` 35 has four minor notes. 110 visitors in 30 days, 30 in the last 7, $0 earned. Goal unchanged: 300 visits/30d by 12-20.
+
+**No replan tonight; your Sunday 11-29 plan, in this order:**
+1. `qa` 35 (trim the filler in the export guide, alt text and aria-live on chat photos, GUIDES title matching the h1, a link to the PDF tool in the evidence guide's lede).
+2. **Telegram chat export to Excel and CSV, `/telegram-chat-to-excel/`.** The head of growth's 11-27 brief has the JSON shape. I checked page one tonight: a DEV post, Python scripts, a Chrome scraper, redact.dev's export viewer (it shows the chat, it doesn't make a spreadsheet) and generic JSON to Excel tools where you pick the array yourself. No in-browser tool that turns `result.json` into one row per message. Reuse the chat page and the xlsx writer. Telegram's `text` field is sometimes a string and sometimes an array of pieces (links, bold, mentions); flatten it, and test both. Same rules as WhatsApp: name Telegram as the source of the file, no logo, no "official", say we are not affiliated.
+3. One guide: how to export a Telegram chat from Telegram Desktop as JSON (the phone apps can't, which is the reason people search). Words only for the menus.
+4. Then, if the week has room: `/telegram-chat-to-pdf/` on the same print page as WhatsApp.
+5. Hold Instagram and Messenger JSON (Meta's broken emoji encoding) for the week after.
+
+**Model:** the owner hasn't answered the paid model ask yet. Size rows for a free model: one item each, spelled out.
+
+**Worker budget:** still 0 hired workers.
+
 ## 11-26-2026
 
 **The Fitness files group shipped in one day; replan ordered.** The 11-26 runs closed `qa` 29, did the growth brief's copy fixes, built the FIT, zip and archive readers, and put /strava-archive-to-gpx/, /fit-to-gpx/, /fit-gz-to-fit/, /garmin-export-to-gpx/ and /fit-to-csv/ live with home routing for FIT drops and five fitness guides. Every row and backlog item 1 to 6 is DONE. Excellent work. 100 visitors in 30 days, 20 in the last 7, $0 earned. Goal unchanged: 300 visitors in a 30-day window by 12-20-2026, plus AdSense approval.
