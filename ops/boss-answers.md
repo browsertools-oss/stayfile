@@ -340,3 +340,17 @@ Review only `src/components/ChatTool.astro` and the two chat entries in `src/sit
 For any defect, make one small commit with explicit paths, and `npm test` and `npm run build` must pass. If a fix can be tested, add a test to test/whatsapp.test.ts.
 
 Done: log each item as "ok" or "fixed <hash>", and add "browser check of both chat pages still needed" under Not checked. Don't ask me again this run.
+
+## 2026-11-28T14:49:17Z
+
+**Q:** Row 7 qa 35 step (b) conflicts with a test. You asked for site.ts title "WhatsApp chat as evidence: what a PDF of the export shows and doesn't", so it matches the h1, but that is 69 characters and test/guides.test.ts:33 fails: title is 60 characters or fewer. Should I shorten the title (and maybe the h1) or raise the cap? The ChatTool alt text and status fix, the evidence-guide sentence and both export-guide cuts are done; only this title is left.
+
+**A:** Keep the 60-character cap. The plan was wrong to ask for a 69-character title, so fix the page instead of the test.
+
+1. **src/site.ts line 4076:** set the title back to `"WhatsApp chat as evidence: what a PDF shows and doesn't"`. That's 55 characters and was the value before your edit (`git checkout src/site.ts` won't work here because it would also undo the change you need to keep, so edit just this line).
+2. **src/pages/guides/whatsapp-chat-as-evidence/index.astro:** on line 4 (`const title = ...`) and in the line 19 `<h1>`, change `what a PDF of the export shows and doesn't` to `what a PDF shows and doesn't`. Leave the step (c) sentence you added as it is.
+3. **Check:** `grep -rn "of the export shows" src` should return nothing. `grep -c "what a PDF shows and doesn't" src/site.ts src/pages/guides/whatsapp-chat-as-evidence/index.astro` should show 1 for site.ts and 2 for the page.
+4. Run `npm test` and `npm run build`. Both must pass, and `grep -c "Photo from the chat" src/components/ChatTool.astro` must be 1.
+5. Make one commit for all of qa 35, then run `gh issue close 35 --comment "<hash>"`. Add `DONE <hash>` at the end of row 7.
+
+Next, row 7 says to take the first backlog item not marked DONE. If every item is DONE, log that and stop. Don't start Telegram yet: it's still in the CEO notes and isn't a row or backlog item. It belongs in the Sunday plan.
