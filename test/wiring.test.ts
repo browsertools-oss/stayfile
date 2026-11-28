@@ -38,6 +38,19 @@ describe('route.ts next-step maps', () => {
   });
 });
 
+describe('Chat exports page copy', () => {
+  // The page spec asks each chat page for a more section of 150 to 300 words.
+  for (const slug of ['whatsapp-chat-to-excel', 'whatsapp-chat-to-pdf']) {
+    test(`${slug} more section is 150 to 300 words`, () => {
+      const page = PAGES.find((p) => p.slug === slug)!;
+      expect(page.more, `${slug} has no more section`).toBeTruthy();
+      const words = page.more!.paras.join(' ').split(/\s+/).filter(Boolean);
+      expect(words.length).toBeGreaterThanOrEqual(150);
+      expect(words.length).toBeLessThanOrEqual(300);
+    });
+  }
+});
+
 describe('DataTool.astro', () => {
   test('every data-family page tool has a Download label', () => {
     // The calendar and contacts pages have their own components.

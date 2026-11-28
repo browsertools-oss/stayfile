@@ -3774,9 +3774,10 @@ export const PAGES: ToolPage[] = [
     more: {
       h2: 'What the PDF shows, and the limits',
       paras: [
-        'The header names the export file and the date the page was made. Times are the ones the exporting phone wrote, and the messages keep their line breaks.',
-        'The chat text is read whole, because an export is a text file and usually only a few MB. Photos are read one at a time from the zip, and up to 300 are shown in place. Any other photos, and every video, voice note and document, are listed by name.',
-        'The PDF is made by your browser print dialog, which keeps every language and emoji right. On a phone the print option is in the browser share or menu button. Menu names can differ a little between browsers.',
+        'The top of the printed page has the chat title and the number of messages with the first and last date. Under that it names the export file it was made from, the day you made it, and the note that Stayfile is not affiliated with WhatsApp.',
+        'Each message shows the time in the form the exporting phone wrote it, the sender in bold, and the text with its line breaks. The page starts a new date heading whenever the day changes. If you pick a sender under Show on the right, their messages sit on the right with a light background, the way a chat app shows them. System lines, such as the encryption notice, are hidden unless you tick the box.',
+        'The chat text is read whole, because an export is a text file and usually only a few MB. Photos are read one at a time from the zip and shown in place, up to 300 photos, each up to 20 MB. Any further photos, and every video, voice note and document, are listed by name, so the page still shows that something was sent.',
+        'The PDF is made by your browser print dialog, which keeps every language and emoji right and keeps the text searchable. On a phone the print option is in the browser share or menu button. Menu names can differ a little between browsers.',
       ],
     },
     steps: [
