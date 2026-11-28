@@ -76,6 +76,7 @@ const print = tool === 'chat-pdf';
   const sysPrint = $<HTMLInputElement>('sysPrint');
 
   let fileName = '';
+  let sourceFile: File | null = null;
   let rawText = '';
   let chat: Chat | null = null;
   let zipData: { src: ByteSource; entries: ZipEntry[] } | null = null;
@@ -281,6 +282,7 @@ const print = tool === 'chat-pdf';
   async function readFile(file: File) {
     renderToken++;
     fileName = file.name;
+    sourceFile = file;
     rawText = '';
     zipData = null;
     order = undefined;
@@ -365,7 +367,7 @@ const print = tool === 'chat-pdf';
       const again = () => save(bytes, name, type);
       again();
       status.textContent = savedLine(name);
-      showDone({ el: doneEl, slug: root.dataset.slug!, line: savedLine(name), again });
+      showDone({ el: doneEl, slug: root.dataset.slug!, line: savedLine(name), again, ...(sourceFile ? { result: sourceFile } : {}) });
     } catch {
       showError('The workbook could not be built.');
     }
@@ -380,7 +382,7 @@ const print = tool === 'chat-pdf';
     const again = () => save(blob, name, 'text/csv');
     again();
     status.textContent = savedLine(name);
-    showDone({ el: doneEl, slug: root.dataset.slug!, line: savedLine(name), again });
+    showDone({ el: doneEl, slug: root.dataset.slug!, line: savedLine(name), again, ...(sourceFile ? { result: sourceFile } : {}) });
   });
 
   sysPrint?.addEventListener('change', () => {
