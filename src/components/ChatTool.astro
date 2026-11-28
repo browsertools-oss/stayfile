@@ -81,9 +81,12 @@ const print = tool === 'chat-pdf';
   let zipData: { src: ByteSource; entries: ZipEntry[] } | null = null;
   let order: 'dmy' | 'mdy' | undefined;
   let imageUrls: string[] = [];
+  // Bumped by every new read or preview build, so an older photo loop stops instead of mixing in.
+  let renderToken = 0;
 
   function showError(message: string) {
     chat = null;
+    renderToken++;
     if (btnXlsx) btnXlsx.disabled = true;
     if (btnCsv) btnCsv.disabled = true;
     if (btnPrint) btnPrint.disabled = true;
@@ -157,6 +160,8 @@ const print = tool === 'chat-pdf';
   /** Build the printable copy of the chat, photos in place where the zip has them. */
   async function renderPreview() {
     if (!preview || !chat) return;
+    const token = ++renderToken;
+    if (btnPrint) btnPrint.disabled = true;
     for (const url of imageUrls) URL.revokeObjectURL(url);
     imageUrls = [];
     const right = rightSel?.value ?? '';
@@ -241,10 +246,12 @@ const print = tool === 'chat-pdf';
 
     let done = 0;
     for (const job of imageJobs) {
+      if (token !== renderToken) return;
       done++;
       status.textContent = `Adding photo ${done} of ${imageJobs.length}...`;
       try {
         const bytes = await readEntry(zipData!.src, job.entry);
+        if (token !== renderToken) return;
         const name = job.entry.name;
         const type = /\.png$/i.test(name)
           ? 'image/png'
@@ -266,10 +273,13 @@ const print = tool === 'chat-pdf';
         job.el.append(p);
       }
     }
+    if (token !== renderToken) return;
+    if (btnPrint) btnPrint.disabled = false;
     status.textContent = imageJobs.length ? 'Ready to print.' : '';
   }
 
   async function readFile(file: File) {
+    renderToken++;
     fileName = file.name;
     rawText = '';
     zipData = null;
